@@ -6,16 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives: 2022 | ShouRou</title>
+  <title>Build and configure a personal blog via hexo and yilia | ShouRou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="jsonContent">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ShouRou">
-<meta property="og:url" content="http://example.com/archives/2022/index.html">
+  <meta name="description" content="PreliminaryStatic vs dynamic blogthere are 2 types of mainstream personal blog: static and dynamic     Static blog Dynamic blog    Price low, 0 cost when the traffic is relatively low High, server is">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build and configure a personal blog via hexo and yilia">
+<meta property="og:url" content="http://example.com/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/index.html">
 <meta property="og:site_name" content="ShouRou">
-<meta property="og:description" content="jsonContent">
+<meta property="og:description" content="PreliminaryStatic vs dynamic blogthere are 2 types of mainstream personal blog: static and dynamic     Static blog Dynamic blog    Price low, 0 cost when the traffic is relatively low High, server is">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-02-22T08:15:03.000Z">
+<meta property="article:modified_time" content="2022-02-22T10:33:08.105Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="learn">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
@@ -144,36 +147,108 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Build-and-configure-a-personal-blog-via-hexo-and-yilia" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/" class="archive-article-date">
-  	<time datetime="2022-02-22T08:15:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/">Build and configure a personal blog via hexo and yilia</a>
+    <h1 class="article-title" itemprop="name">
+      Build and configure a personal blog via hexo and yilia
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/" class="archive-article-date">
+  	<time datetime="2022-02-22T08:15:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-22</time>
+</a>
+        
+      </header>
+    
+    <!--
+    <div align="center" class="post-count">
+        字数：406字 | 预计阅读时长：2分钟
+    </div>
+    -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Preliminary"><a href="#Preliminary" class="headerlink" title="Preliminary"></a>Preliminary</h2><h3 id="Static-vs-dynamic-blog"><a href="#Static-vs-dynamic-blog" class="headerlink" title="Static vs dynamic blog"></a>Static vs dynamic blog</h3><p>there are 2 types of mainstream personal blog: static and dynamic</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">Static blog</th>
+<th align="left">Dynamic blog</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Price</td>
+<td align="left">low, 0 cost when the traffic is relatively low</td>
+<td align="left">High, server is needed, cloud server of  high performance is usually very expensive.</td>
+</tr>
+<tr>
+<td align="left">Features</td>
+<td align="left">Limited, only third-party services can be used to complete certain “dynamic” functions, such as comments</td>
+<td align="left">Rich, in WordPress for example, basically any kind of plugins can be found. Featuers such as auto-resizing, media players, multiple authors, scheduled posts, user analysis can be easily realize.</td>
+</tr>
+<tr>
+<td align="left">Speed</td>
+<td align="left">Fast</td>
+<td align="left">Slow</td>
+</tr>
+<tr>
+<td align="left">Maintainance</td>
+<td align="left">0</td>
+<td align="left">Need to care about the sever</td>
+</tr>
+<tr>
+<td align="left">Markdown</td>
+<td align="left">Supported yet it’s the only choice</td>
+<td align="left">not supported</td>
+</tr>
+<tr>
+<td align="left">Geeky</td>
+<td align="left">YES</td>
+<td align="left">No</td>
+</tr>
+</tbody></table>
+<p>Static is recommanded considering its simplicity, 0 maintainance and 0 safety worry. And I chose it because I’m geeky (poor of money) results-driven (lazy to spend time on maintaining)</p>
+<h3 id="Build-a-static-blog-via-hexo"><a href="#Build-a-static-blog-via-hexo" class="headerlink" title="Build a static blog via hexo"></a>Build a static blog via hexo</h3><h4 id="set-environment"><a href="#set-environment" class="headerlink" title="set environment"></a>set environment</h4><p>machine infomation: macOS on M1 macbook</p>
+<p>Install Nodejs, including node and npm</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
+<p>download LTS macOS installer</p>
+</blockquote>
+<p>Install Git</p>
+<blockquote>
+<p>Aready installed</p>
+</blockquote>
+<p>Open terminal, check node, npm and git versions</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash">npm -v</span></span><br><span class="line">8.3.1</span><br><span class="line"><span class="meta">$ </span><span class="language-bash">node -v</span></span><br><span class="line">v16.14.0</span><br><span class="line"><span class="meta">$ </span><span class="language-bash">git --version</span></span><br><span class="line">git version 2.32.0 (Apple Git-132)</span><br></pre></td></tr></table></figure>
+
+<h4 id="initializie-blog"><a href="#initializie-blog" class="headerlink" title="initializie blog"></a>initializie blog</h4><p>install hexo via npm</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash">sudo npm install -g hexo-cli</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">$ </span><span class="language-bash">hexo -v</span></span><br><span class="line">INFO  Validating config</span><br><span class="line">hexo: 6.0.0</span><br><span class="line">hexo-cli: 4.3.0</span><br><span class="line">os: darwin 21.2.0 12.1</span><br><span class="line"></span><br><span class="line">node: 16.14.0</span><br><span class="line">v8: 9.4.146.24-node.20</span><br><span class="line">uv: 1.43.0</span><br><span class="line">zlib: 1.2.11</span><br><span class="line">brotli: 1.0.9</span><br><span class="line">ares: 1.18.1</span><br><span class="line">modules: 93</span><br><span class="line">nghttp2: 1.45.1</span><br><span class="line">napi: 8</span><br><span class="line">llhttp: 6.0.4</span><br><span class="line">openssl: 1.1.1m+quic</span><br><span class="line">cldr: 40.0</span><br><span class="line">icu: 70.1</span><br><span class="line">tz: 2021a3</span><br><span class="line">unicode: 14.0</span><br><span class="line">ngtcp2: 0.1.0-DEV</span><br><span class="line">nghttp3: 0.1.0-DEV</span><br></pre></td></tr></table></figure>
+
+<p>create a new folder in terminal and initialize the blog</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">cd</span> ~/Documents/</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash">makedir self_blog</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">cd</span> self_blog/</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash">hexo init</span></span><br><span class="line">INFO  Cloning hexo-starter https://github.com/hexojs/hexo-starter.git</span><br><span class="line">INFO  Install dependencies</span><br><span class="line">⸨#########⠂⠂⠂⠂⠂⠂⠂⠂⠂⸩ ⠹ idealTree:hexo-front-matter: timing idealTree:node_modules/hexo-front-matter Completed in 212ms</span><br><span class="line">INFO  Start blogging with Hexo!</span><br><span class="line"><span class="meta">$ </span><span class="language-bash">hexo s</span></span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/ . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+
+<h4 id="write-first-blog"><a href="#write-first-blog" class="headerlink" title="write first blog"></a>write first blog</h4><p>write a new blog</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash">hexo n <span class="string">&#x27;Hello ShouRou&#x27;</span></span></span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Created: ~/Documents/self_blog/source/_posts/Hello-ShouRou.md</span><br><span class="line"><span class="meta">$ </span><span class="language-bash">open ~/Documents/self_blog/source/_posts/Hello-ShouRou.md</span></span><br></pre></td></tr></table></figure>
+
+<p>the blog can be written on any editor, typro for example.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash">hexo c</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="deploy-to-remote"><a href="#deploy-to-remote" class="headerlink" title="deploy to remote"></a>deploy to remote</h4><h3 id="Customize-blog"><a href="#Customize-blog" class="headerlink" title="Customize blog"></a>Customize blog</h3><h4 id="change-theme-to-yillia"><a href="#change-theme-to-yillia" class="headerlink" title="change theme to yillia"></a>change theme to yillia</h4><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a target="_blank" rel="noopener" href="https://weblog.masukomi.org/2015/10/18/static-vs-dynamic-blogging/">https://weblog.masukomi.org/2015/10/18/static-vs-dynamic-blogging/</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -185,57 +260,55 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/22/Hello-ShouRou/" class="archive-article-date">
-  	<time datetime="2022-02-22T02:44:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-22</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/02/22/Hello-ShouRou/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello ShouRou</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/22/Hello-ShouRou/">Hello ShouRou</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">First Blog</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -258,8 +331,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
