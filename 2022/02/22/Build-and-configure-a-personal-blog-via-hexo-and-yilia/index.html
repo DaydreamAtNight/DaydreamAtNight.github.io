@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://example.com/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/can">
 <meta property="og:image" content="http://example.com/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu%20console.png">
 <meta property="article:published_time" content="2022-02-22T08:15:03.000Z">
-<meta property="article:modified_time" content="2022-02-23T09:34:23.418Z">
+<meta property="article:modified_time" content="2022-02-23T09:39:34.300Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="learn">
 <meta name="twitter:card" content="summary">
@@ -213,7 +213,7 @@
     <!-- navigatol -->
     <!--
     <div align="center" class="post-count">
-        字数：3.4k字 | 预计阅读时长：20分钟
+        字数：3.5k字 | 预计阅读时长：20分钟
     </div>
     -->
     <div class="article-entry" itemprop="articleBody">
@@ -395,6 +395,7 @@
 <p>8.Go to Google Search Console, in the left panel, click <code>Sitemaps</code>, enter your sitemap URL <code>sitemap.xml</code> </p>
 <img src="can't fetch sitemap.png" alt="can't fetch sitemap" style="zoom:50%;" />
 
+<p>Googlebot won’t download the sitemap immediately. Give it time. </p>
 <p>9.add robots.txt</p>
 <blockquote>
 <p>A robots.txt file tells search engine crawlers which URLs the crawler can access on your site. This is used mainly to avoid overloading your site with requests; <strong>it is not a mechanism for keeping a web page out of Google</strong>. To keep a web page out of Google, <a target="_blank" rel="noopener" href="https://developers.google.com/search/docs/advanced/crawling/block-indexing">block indexing with <code>noindex</code></a> or password-protect the page.</p>
@@ -402,9 +403,7 @@
 </blockquote>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Allow: /</span><br><span class="line">Allow: /archives/</span><br><span class="line">Allow: /tags/</span><br><span class="line">Allow: /categories/</span><br><span class="line">Allow: /about/</span><br><span class="line">Allow: /guestbook/</span><br><span class="line">Allow: /others/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disallow: /js/</span><br><span class="line">Disallow: /css/</span><br><span class="line">Disallow: /lib/</span><br><span class="line"></span><br><span class="line">Sitemap: https://daydreamatnight.github.io/sitemap.xml</span><br><span class="line">Sitemap: https://daydreamatnight.github.io/baidusitemap.xml</span><br></pre></td></tr></table></figure>
 
-
-
-<h3 id="allow-baidu-to-index-find-this-Blog"><a href="#allow-baidu-to-index-find-this-Blog" class="headerlink" title="allow baidu to index(find) this Blog"></a>allow baidu to index(find) this Blog</h3><p>go to the console </p>
+<h3 id="allow-baidu-to-index-find-this-Blog"><a href="#allow-baidu-to-index-find-this-Blog" class="headerlink" title="allow baidu to index(find) this Blog"></a>allow baidu to index(find) this Blog</h3><p>go to the <a target="_blank" rel="noopener" href="https://ziyuan.baidu.com/site/index">baidu search console</a> , </p>
 <img src="Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu console.png" alt="baidu console" style="zoom:50%;" />
 
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://weblog.masukomi.org/2015/10/18/static-vs-dynamic-blogging/">https://weblog.masukomi.org/2015/10/18/static-vs-dynamic-blogging/</a></p>
