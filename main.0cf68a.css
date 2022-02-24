@@ -45,3 +45,11 @@
   opacity: 1;
 }
 /* code copy button end */
+/*stylesheet for the delcare*/
+.declare {
+  background-color: #eaeaea;
+  margin-top: 2em;
+  border-left: 3px solid #ff1700;
+  padding: .5em 1em; 
+}
+/*stylesheet for the delcare end*/
