@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/</loc>
+    <lastmod>2022-02-28</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/</loc>
     <lastmod>2022-02-24</lastmod>
   </url>
