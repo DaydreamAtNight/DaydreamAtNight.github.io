@@ -5,13 +5,13 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://example.com">
+  <link rel="dns-prefetch" href="https://daydreamatnight.github.io">
   <title>Hello ShouRou | ShouRou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="WelcomeThis is the first blog on ShouRou. The name of the website is extracted from the cute nikenames between a pair of good-looking lovers. Shoushou the dumb and his girl Rourou the clever, cute and">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello ShouRou">
-<meta property="og:url" content="http://example.com/2022/02/22/Hello-ShouRou/index.html">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/02/22/Hello-ShouRou/index.html">
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="WelcomeThis is the first blog on ShouRou. The name of the website is extracted from the cute nikenames between a pair of good-looking lovers. Shoushou the dumb and his girl Rourou the clever, cute and">
 <meta property="og:locale" content="en_US">
@@ -44,6 +44,11 @@
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="mymenucontainer" onclick="myFunction(this)">
+	  <div class="bar1"></div>
+	  <div class="bar2"></div>
+	  <div class="bar3"></div>
+	</div>
     <div class="left-col" q-class="show:isShow">
       
 <div class="overlay" style="background: #ece0cf"></div>
@@ -72,7 +77,7 @@
 		</nav>
 		<nav>
 			<span class="post-count">3 articles
-			<span>8.3k</span> words</span>
+			<span>8.9k</span> words</span>
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -516,4 +521,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 <script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type="text/javascript" src="/clipboard_use.js"></script>
 </body>
+<script>
+    var hide = false;
+    function myFunction(x) {
+        x.classList.toggle("change");
+        if(hide == false){
+            $(".left-col").css('display', 'none');
+            $(".mid-col").css("left", 6);
+            $(".tools-col").css('display', 'none');
+            $(".tools-col.hide").css('display', 'none');
+            hide = true;
+        }else{
+            $(".left-col").css('display', '');
+            $(".mid-col").css("left", 300);
+            $(".tools-col").css('display', '');
+            $(".tools-col.hide").css('display', '');
+            hide = false;
+        }
+    }
+</script>
 </html>
