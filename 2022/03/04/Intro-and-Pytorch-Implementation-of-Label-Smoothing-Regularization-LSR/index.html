@@ -6,15 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://daydreamatnight.github.io">
-  <title>Archives: 2022/2 | ShouRou</title>
+  <title>Intro and Pytorch Implementation of Label Smoothing Regularization (LSR) | ShouRou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ShouRou">
-<meta property="og:url" content="https://daydreamatnight.github.io/archives/2022/02/index.html">
+  <meta name="description" content="Recently, I joined a Kaggle image classification competition, I used the pretrained ResNet50 plus other tricks and here is to record some of them I’ve learned for now.    Soft label is a commonly use">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/index.html">
 <meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Recently, I joined a Kaggle image classification competition, I used the pretrained ResNet50 plus other tricks and here is to record some of them I’ve learned for now.    Soft label is a commonly use">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/hard%20label.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/soft%20label.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Cross%20entropy%20loss%20function.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Label%20smoothing%20feature%20norm.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20applying%20label%20smoothing.png">
+<meta property="article:published_time" content="2022-03-04T05:59:58.000Z">
+<meta property="article:modified_time" content="2022-03-08T18:41:23.239Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="deep learning tricks">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
   
@@ -159,152 +173,246 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/" class="archive-article-date">
-  	<time datetime="2022-02-28T14:30:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-28</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/">install d2l module on apple m1 chip for deep learning</a>
+    <h1 class="article-title" itemprop="name">
+      Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/" class="archive-article-date">
+  	<time datetime="2022-03-04T05:59:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-04</time>
+</a>
+        
+      </header>
+    
+    <!-- navigator -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">...</span>
+            </p>
+      <div id="toc-article" class="toc-article">
+          <span id="toc-close" class="toc-close" title="hide navigator" onclick="showBtn();">×</span>
+          <strong class="toc-title">navigator</strong>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction-from-hard-label-to-soft-label"><span class="toc-number">1.</span> <span class="toc-text">Introduction: from hard label to soft label</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Simple-explanation-How-loss-function-lost-information"><span class="toc-number">2.</span> <span class="toc-text">Simple explanation: How loss function lost information?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Effectiveness-Visualization"><span class="toc-number">3.</span> <span class="toc-text">Effectiveness: Visualization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Experiment-apply-in-competition"><span class="toc-number">4.</span> <span class="toc-text">Experiment: apply in competition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">5.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+          </div>
+    <script type="text/javascript">
+      function showToc(){
+          var toc_article = document.getElementById("toc-article");
+          var show_toc_btn = document.getElementById("show-toc-btn");
+          toc_article.setAttribute("style","display:block");
+          show_toc_btn.setAttribute("style","display:none");
+          };
+      function showBtn(){
+          var toc_article = document.getElementById("toc-article");
+          var show_toc_btn = document.getElementById("show-toc-btn");
+          toc_article.setAttribute("style","display:none");
+          show_toc_btn.setAttribute("style","display:block");
+          };
+    </script>
+        
+    <!-- navigator end -->
+    <!--
+    <div align="center" class="post-count">
+        字数：1.2k字 | 预计阅读时长：7分钟
+    </div>
+    -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Recently, I joined a <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, I used the pretrained ResNet50 plus other tricks and here is to record some of them I’ve learned for now. </p>
+</blockquote>
+<blockquote>
+<p>Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory to implementation of it.</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="Introduction-from-hard-label-to-soft-label"><a href="#Introduction-from-hard-label-to-soft-label" class="headerlink" title="Introduction: from hard label to soft label"></a>Introduction: from hard label to soft label</h3><p>In deep learning, the neural network is basically a super powerful non-linear regression machine aimed to fit a function between the input and the label. And the result is always called label.</p>
+<p>Hard label, in another word:  the one-hot vector, is the most commonly type of label that is used. For example, in this <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, to digitalize the different name of the leaves, it is intuitive to encode the leaves categories as: 0, 1, 2, 3. And the factorized target labels would be somehow like [1,3,0…] where each element stands for the categories of the data. With the resulting category dictionary, it can be easily decoded after the training.</p>
+<img src="leave%20class%20code.png" alt="leave class code" style="zoom:22%;" />
+
+<p>Actually, there is a slightly difference in the binary world. What usually do is, the previously factorized label will be extended to be a 2-dimensional “on-hot” matrix where the elements stands for the probability of each class. And the network is aimed to train itself to make inference label nearest to the target label.</p>
+<img src="hard%20label.png" alt="hard label" style="zoom:22%;" />
+
+<p>Soft label is just slightly deteriorate the strong one-hot label into a weaker one.</p>
+<img src="soft%20label.png" alt="soft label" style="zoom:22%;" />
+
+<h3 id="Simple-explanation-How-loss-function-lost-information"><a href="#Simple-explanation-How-loss-function-lost-information" class="headerlink" title="Simple explanation: How loss function lost information?"></a>Simple explanation: How loss function lost information?</h3><p>In the cross entropy loss function, where <code>y_inference</code> and <code>y_grountruth</code> stands for inference and target label, n stands for the number of class.</p>
+<img src="Cross%20entropy%20loss%20function.png" alt="Cross entropy loss function" style="zoom:22%;" />
+
+<p>With the one-hot label, the components are 0 except for the true category. In a other word, the <code>y_inference</code> of the wrong category is not considered at all i.e. the information of the wrong category is lost. Which is against the real word classification. </p>
+<h3 id="Effectiveness-Visualization"><a href="#Effectiveness-Visualization" class="headerlink" title="Effectiveness: Visualization"></a>Effectiveness: Visualization</h3><p>In <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1906.02629.pdf">When does label smoothing help?</a>  Hinton shows the feature map difference between without and with LSR:</p>
+<img src="Label%20smoothing%20feature%20norm.png" alt="Label smoothing feature norm" style="zoom:80%;" />
+
+<blockquote>
+<ul>
+<li>When label smoothing is applied, the clusters are much tighter because label smoothing encourages that each example in the training set is to be equidistant from all other class’s templates.</li>
+<li>With hard targets, the clusters for semantically similar classes (for example different breed of dogs in ImageNet), are isotropic whereas, with label smoothing, clusters lie in an arc as shown in the third row. If you mix two semantically similar classes with a third semantically different class, the clusters are still much better than the ones obtained with hard targets as shown in the fourth row.</li>
+</ul>
+</blockquote>
+<h3 id="Experiment-apply-in-competition"><a href="#Experiment-apply-in-competition" class="headerlink" title="Experiment: apply in competition"></a>Experiment: apply in competition</h3><p>Label smoothing can be easily applied in <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalCrossentropy">Tensorflow</a>, but there is no such thing in PyTorch.  So overwrite the Cross-entropy loss function with LSR (implemented in 2 ways): </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LSR</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;NLL loss with label smoothing.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, smoothing=<span class="number">0.0</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Constructor for the LSR module.</span></span><br><span class="line"><span class="string">        :param smoothing: label smoothing factor</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(LSR, self).__init__()</span><br><span class="line">        self.confidence = <span class="number">1.0</span> - smoothing</span><br><span class="line">        self.smoothing = smoothing</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, target</span>):</span><br><span class="line">        logprobs = torch.nn.functional.log_softmax(x, dim=-<span class="number">1</span>)</span><br><span class="line">        nll_loss = -logprobs.gather(dim=-<span class="number">1</span>, index=target.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        nll_loss = nll_loss.squeeze(<span class="number">1</span>)</span><br><span class="line">        smooth_loss = -logprobs.mean(dim=-<span class="number">1</span>)</span><br><span class="line">        loss = self.confidence * nll_loss + self.smoothing * smooth_loss</span><br><span class="line">        <span class="keyword">return</span> loss.mean()</span><br><span class="line">    </span><br><span class="line">loss = LSR(<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LSR2</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, e=<span class="number">0.01</span>,reduction=<span class="string">&#x27;mean&#x27;</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        self.log_softmax = nn.LogSoftmax(dim=<span class="number">1</span>)</span><br><span class="line">        self.e = e</span><br><span class="line">        self.reduction = reduction</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_one_hot</span>(<span class="params">self, labels, classes, value=<span class="number">1</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            Convert labels to one hot vectors</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            labels: torch tensor in format [label1, label2, label3, ...]</span></span><br><span class="line"><span class="string">            classes: int, number of classes</span></span><br><span class="line"><span class="string">            value: label value in one hot vector, default to 1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            return one hot format labels in shape [batchsize, classes]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment">#print(&quot;classes&quot;, classes)</span></span><br><span class="line">        one_hot = torch.zeros(labels.size(<span class="number">0</span>), classes)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># labels and value_added  size must match</span></span><br><span class="line">        labels = labels.view(labels.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">        value_added = torch.Tensor(labels.size(<span class="number">0</span>), <span class="number">1</span>).fill_(value)</span><br><span class="line"></span><br><span class="line">        value_added = value_added.to(labels.device)</span><br><span class="line">        one_hot = one_hot.to(labels.device)</span><br><span class="line"></span><br><span class="line">        one_hot.scatter_add_(<span class="number">1</span>, labels, value_added)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> one_hot</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_smooth_label</span>(<span class="params">self, target, length, smooth_factor</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;convert targets to one-hot format, and smooth</span></span><br><span class="line"><span class="string">        them.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            target: target in form with [label1, label2, label_batchsize]</span></span><br><span class="line"><span class="string">            length: length of one-hot format(number of classes)</span></span><br><span class="line"><span class="string">            smooth_factor: smooth factor for label smooth</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            smoothed labels in one hot format</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment">#print(&quot;length&quot;, length)</span></span><br><span class="line">        <span class="comment">#print(&quot;smooth_fact&quot;, smooth_factor)</span></span><br><span class="line">        one_hot = self._one_hot(target, length, value=<span class="number">1</span> - smooth_factor)</span><br><span class="line">        one_hot += smooth_factor / length</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> one_hot.to(target.device)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, target</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> x.size(<span class="number">0</span>) != target.size(<span class="number">0</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Expected input batchsize (&#123;&#125;) to match target batch_size(&#123;&#125;)&#x27;</span></span><br><span class="line">                             .<span class="built_in">format</span>(x.size(<span class="number">0</span>), target.size(<span class="number">0</span>)))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> x.dim() &lt; <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Expected input tensor to have least 2 dimensions(got &#123;&#125;)&#x27;</span></span><br><span class="line">                             .<span class="built_in">format</span>(x.size(<span class="number">0</span>)))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> x.dim() != <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Only 2 dimension tensor are implemented, (got &#123;&#125;)&#x27;</span></span><br><span class="line">                             .<span class="built_in">format</span>(x.size()))</span><br><span class="line">        <span class="comment">#print(&quot;x: &quot;, x)</span></span><br><span class="line">        <span class="comment">#print(&quot;target&quot;, target)</span></span><br><span class="line"></span><br><span class="line">        smoothed_target = self._smooth_label(target, x.size(<span class="number">1</span>), self.e)</span><br><span class="line">        x = self.log_softmax(x)</span><br><span class="line">        loss = torch.<span class="built_in">sum</span>(- x * smoothed_target, dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> self.reduction == <span class="string">&#x27;none&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> self.reduction == <span class="string">&#x27;sum&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> torch.<span class="built_in">sum</span>(loss)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> self.reduction == <span class="string">&#x27;mean&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> torch.mean(loss)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;unrecognized option, expect reduction to be one of none, mean, sum&#x27;</span>)</span><br><span class="line">            </span><br><span class="line">loss = LSR2(<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Pretrained ResNet50 is in use</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lr, num_epochs, batch_size = 0.01, 10, 256</span><br></pre></td></tr></table></figure>
+
+<img src="accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png" alt="accuracy curve compare label smoothing with hard label" style="zoom:67%;" />
+
+<p>It can bee seen that the under same <code>random seed</code>, <code>batch_size</code>, <code>lr</code>, and <code>num_epochs</code>, the overall accuracy has a fascinating rise of 0.5. </p>
+<p>Then apply the LSR and run 50 epochs, with learning rate 0.005 and batch size 256, the result turns to be:</p>
+<img src="accuracy%20curve%20applying%20label%20smoothing.png" alt="accuracy curve applying label smoothing" style="zoom:67%;" />
+
+<p>It is a exciting improvement, but more tricks still in need.</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>3 disadvantaged of the hard label:</p>
+<ul>
+<li>the relationship between the true label and the others is neglected, tend to be overfitting</li>
+<li>the model is tend to be over confident i.e. less generalizable</li>
+<li>more sensitive to label with noise, wrong labeled for example.</li>
+</ul>
+<p>Several good things about label smoothing:</p>
+<ul>
+<li>data augmentation by add more information, compensates for the lack of supervisory signals </li>
+<li>Improves generalizability</li>
+<li>Improves noise robust</li>
+<li>lower the feature norm</li>
+<li>Improves model calibration</li>
+</ul>
+<p>Bad things about label smoothing:</p>
+<ul>
+<li>label smoothing can’t give real relationship between labels. It simply adds random noise, under fitting might happen under certain scenarios.</li>
+<li>If distill in use, the teach network preforms worse when apply label smoothing, more explanation in  <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1906.02629.pdf">When does label smoothing help?</a></li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p> <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1815786">标签平滑 - Label Smoothing概述 - 云+社区 - 腾讯云 (tencent.com)</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg4MzU1NjQ2Mw==&mid=2247495228&idx=1&sn=ec685adcf8a274e8235c177718868a34&scene=21#wechat_redirect">大道至简：算法工程师炼丹Trick手册 (qq.com)</a> </p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1684298?from=article.detail.1815786">深度学习trick–labelsmooth</a></p>
+<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/hxxjxw/article/details/115298103">Label Smoothing 标签平滑 (Label smooth regularization, LSR)_hxxjxw的博客-CSDN博客</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://medium.com/@nainaakash012/when-does-label-smoothing-help-89654ec75326">When Does Label Smoothing Help?</a></p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/suvojit-0x55aa"> suvojit-0x55aa</a>&#x2F;<a target="_blank" rel="noopener" href="https://gist.github.com/suvojit-0x55aa/0afb3eefbb26d33f54e1fb9f94d6b609">label_smoothing.py</a></p>
+
+      
+      <!-- add copyright statement -->
+        
+            <!--add copyright statement https://github.com/JoeyBling/hexo-theme-yilia-plus/commit/c1215e132f6d5621c5fea83d3c4f7ccbcca074a3-->
+
+
+<!-- #copyright setting：0-close statement; 1-declare statement if declare: true in the article header; 2-always declare the copyright -->
+
+  <div class="declare">
+    <strong class="author">author: </strong>
+    
+      Ryan LI
+    
+    <br>
+    <strong class="create-time">posting date: </strong>
+    2022-03-04 13:03:00
+    <br>
+    <strong class="update-time">last update: </strong>
+    2022-03-09 02:03:23
+    <br>
+    <strong class="article-titles">article title: </strong>
+    <a href="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/" title="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)" target="_blank">Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)</a>
+    <br>
+    <strong class="article-url">article link: </strong>
+    <a href="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/" title="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)" target="_blank">https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/</a>
+    <br>
+    <strong class="copyright">copyright:</strong>
+    This work is licensed under a
+    <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</a>
+    licience 
+    
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"/></a>
+    
+  </div>
+
+<!-- add copyright statement -->
+        
+        <!-- end -->
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">m1 mac</a>
-        		</li>
-      		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">d2l</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">deep learning tricks</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/" class="archive-article-date">
-  	<time datetime="2022-02-22T08:15:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-22</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2022/03/08/learning-rate-schedule/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          learning rate schedule
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">install d2l module on apple m1 chip for deep learning</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/">Build and configure a personal blog via hexo and yilia on github</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">learn</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">git</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/22/Hello-ShouRou/" class="archive-article-date">
-  	<time datetime="2022-02-22T02:44:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/22/Hello-ShouRou/">Hello ShouRou</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">First Blog</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -333,8 +441,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
