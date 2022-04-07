@@ -6,14 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://daydreamatnight.github.io">
-  <title>Tag: deep learning | ShouRou</title>
+  <title>paper reading: AlexNet | ShouRou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ShouRou">
-<meta property="og:url" content="https://daydreamatnight.github.io/tags/deep-learning/index.html">
+  <meta name="description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   It has been 10 years since AlexNet has been brought out. It is o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper reading: AlexNet">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/index.html">
 <meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   It has been 10 years since AlexNet has been brought out. It is o">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-07T14:25:50.000Z">
+<meta property="article:modified_time" content="2022-04-07T15:57:04.385Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
@@ -159,36 +165,97 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-paper-reading-AlexNet" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      paper reading: AlexNet
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/07/paper-reading-AlexNet/" class="archive-article-date">
+
+        
+        <a href="/2022/04/07/paper-reading-AlexNet/" class="archive-article-date">
   	<time datetime="2022-04-07T14:25:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-07</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/07/paper-reading-AlexNet/">paper reading: AlexNet</a>
-    </h1>
-  
+        
+      </header>
+    
+    <!-- navigator -->
+    
+    <!-- navigator end -->
+    <!--
+    <div align="center" class="post-count">
+        字数：395字 | 预计阅读时长：2分钟
+    </div>
+    -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.</p>
+</blockquote>
+<blockquote>
+<p>It has been 10 years since AlexNet has been brought out. It is one of the cornerstones of this surge of deep learning. </p>
+</blockquote>
+<p>paper link: <a target="_blank" rel="noopener" href="https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html">ImageNet Classification with Deep Convolutional Neural Networks</a></p>
+<p>useful link <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ih411J7Kz">https://www.bilibili.com/video/BV1ih411J7Kz</a></p>
+<h2 id="Little-history"><a href="#Little-history" class="headerlink" title="Little history"></a>Little history</h2><p>It hasn’t gotten much attention by the area of machine learning for the first 2-3 years since it got published, because this paper is written rather as a technical report than an academic paper. A good paper needs new thoughts for the model, or at least some explanations, while this paper only presented how they applied 3 tricks and how good their results are. However, there was no doubt an influential hit in the area of computer vision, which has a passion for refreshing the top list. And this influence spread to other areas gradually with deeper studies on it.</p>
+<h2 id="Absturct"><a href="#Absturct" class="headerlink" title="Absturct"></a>Absturct</h2><p>In addition to a brief introduction to the model, the use of GPU is also mentioned in the abstract. Since the emergence of CUDA in 2007, the application of GPU in the ML field in 2012 is not uncommon, and MATLAB is mainly used as a ML tool with a large number of GPU acceleration libraries.</p>
+<p>At last, the result in the ILSVRC-2012 competition is as good as knocking the second to the ground and then showing off with a set of backflips. So personally it might look like a technical report, but it’s still an outstanding paper and absolutly worth reading.</p>
+<h2 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h2><p>In stead of conclusion, this paper leaves a discussion as the last section, which is unsual.</p>
+<blockquote>
+<p>For example, removing any of the middle layers results in a loss of about 2% for the top-1 performance of the network. So the depth really is important for achieving our results</p>
+</blockquote>
+<p>The depth is important, but it is insufficient to be simply concluded from the degradation caused by removing one middle layer, ignoring other effects such as superparameter settings. And, considering only the conculsion, a more complete one might be, depth and width are both very important. The ratio of height and width matters.</p>
+<blockquote>
+<p>To simplify our experiments, we did not use any unsupervised pre-training even though we expect that it will help</p>
+</blockquote>
 
-        <div class="article-info info-on-right">
-          
+      
+      <!-- add copyright statement -->
+        
+            <!--add copyright statement https://github.com/JoeyBling/hexo-theme-yilia-plus/commit/c1215e132f6d5621c5fea83d3c4f7ccbcca074a3-->
+
+
+<!-- #copyright setting：0-close statement; 1-declare statement if declare: true in the article header; 2-always declare the copyright -->
+
+  <div class="declare">
+    <strong class="author">author: </strong>
+    
+      Ryan LI
+    
+    <br>
+    <strong class="create-time">posting date: </strong>
+    2022-04-07 22:04:00
+    <br>
+    <strong class="update-time">last update: </strong>
+    2022-04-07 23:04:38
+    <br>
+    <strong class="article-titles">article title: </strong>
+    <a href="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/" title="paper reading: AlexNet" target="_blank">paper reading: AlexNet</a>
+    <br>
+    <strong class="article-url">article link: </strong>
+    <a href="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/" title="paper reading: AlexNet" target="_blank">https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/</a>
+    <br>
+    <strong class="copyright">copyright:</strong>
+    This work is licensed under a
+    <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</a>
+    licience 
+    
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"/></a>
+    
+  </div>
+
+<!-- add copyright statement -->
+        
+        <!-- end -->
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -204,191 +271,55 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/02/paper-reading-start/" class="archive-article-date">
-  	<time datetime="2022-04-02T13:49:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-02</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/02/paper-reading-start/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">paper reading: start</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/02/paper-reading-start/">paper reading: start</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/03/08/learning-rate-schedule/" class="archive-article-date">
-  	<time datetime="2022-03-08T01:32:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/03/08/learning-rate-schedule/">learning rate schedule</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">deep learning tricks</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/" class="archive-article-date">
-  	<time datetime="2022-03-04T05:59:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/">Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">deep learning tricks</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/" class="archive-article-date">
-  	<time datetime="2022-02-28T14:30:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/">install d2l module on apple m1 chip for deep learning</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">m1 mac</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">d2l</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -417,9 +348,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: false,
