@@ -15,12 +15,15 @@
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   It has been 10 years since AlexNet has been brought out. It is o">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/unsupervise%20learning%20cake.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/paper-reading-AlexNet/alexnet%20results.png">
 <meta property="article:published_time" content="2022-04-07T14:25:50.000Z">
-<meta property="article:modified_time" content="2022-04-07T15:57:04.385Z">
+<meta property="article:modified_time" content="2022-04-08T16:24:57.500Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/unsupervise%20learning%20cake.png">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
   
@@ -78,7 +81,7 @@
 		</nav>
 		<nav>
 			<span class="post-count">7 articles
-			<span>12.8k</span> words</span>
+			<span>13.5k</span> words</span>
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -188,7 +191,7 @@
     <!-- navigator end -->
     <!--
     <div align="center" class="post-count">
-        字数：395字 | 预计阅读时长：2分钟
+        字数：1.1k字 | 预计阅读时长：6分钟
     </div>
     -->
     <div class="article-entry" itemprop="articleBody">
@@ -197,20 +200,62 @@
 <p>This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.</p>
 </blockquote>
 <blockquote>
-<p>It has been 10 years since AlexNet has been brought out. It is one of the cornerstones of this surge of deep learning. </p>
+<p>It has been 10 years since AlexNet has been brought out. It is one of the cornerstones of this surge of deep learning.</p>
 </blockquote>
 <p>paper link: <a target="_blank" rel="noopener" href="https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html">ImageNet Classification with Deep Convolutional Neural Networks</a></p>
-<p>useful link <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ih411J7Kz">https://www.bilibili.com/video/BV1ih411J7Kz</a></p>
+<p>useful link: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ih411J7Kz">https://www.bilibili.com/video/BV1ih411J7Kz</a></p>
 <h2 id="Little-history"><a href="#Little-history" class="headerlink" title="Little history"></a>Little history</h2><p>It hasn’t gotten much attention by the area of machine learning for the first 2-3 years since it got published, because this paper is written rather as a technical report than an academic paper. A good paper needs new thoughts for the model, or at least some explanations, while this paper only presented how they applied 3 tricks and how good their results are. However, there was no doubt an influential hit in the area of computer vision, which has a passion for refreshing the top list. And this influence spread to other areas gradually with deeper studies on it.</p>
-<h2 id="Absturct"><a href="#Absturct" class="headerlink" title="Absturct"></a>Absturct</h2><p>In addition to a brief introduction to the model, the use of GPU is also mentioned in the abstract. Since the emergence of CUDA in 2007, the application of GPU in the ML field in 2012 is not uncommon, and MATLAB is mainly used as a ML tool with a large number of GPU acceleration libraries.</p>
+<h2 id="Notes-by-sections"><a href="#Notes-by-sections" class="headerlink" title="Notes by sections"></a>Notes by sections</h2><h3 id="0-Absturct"><a href="#0-Absturct" class="headerlink" title="0. Absturct"></a>0. Absturct</h3><blockquote>
+<p>To make training faster, we used non-saturating neurons and a very efficient GPU implementation of the convolution operation.</p>
+</blockquote>
+<p>In addition to a brief introduction to the model, the use of GPU is also mentioned in the abstract. And works around GPU are mentioned all the time. It was really a tough engineering job from the perspective of the first writer.  But it is not important for an acdemic paper. Besides, since the emergence of CUDA in 2007, the application of GPU in the ML field in 2012 is not uncommon, and MATLAB is mainly used as a ML tool with a large number of GPU acceleration libraries.</p>
+<blockquote>
+<p>We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the second-best entry</p>
+</blockquote>
 <p>At last, the result in the ILSVRC-2012 competition is as good as knocking the second to the ground and then showing off with a set of backflips. So personally it might look like a technical report, but it’s still an outstanding paper and absolutly worth reading.</p>
-<h2 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h2><p>In stead of conclusion, this paper leaves a discussion as the last section, which is unsual.</p>
+<h3 id="7-Discussion"><a href="#7-Discussion" class="headerlink" title="7. Discussion"></a>7. Discussion</h3><p>In stead of conclusion, this paper leaves a discussion as the last section, which is unsual.</p>
 <blockquote>
 <p>For example, removing any of the middle layers results in a loss of about 2% for the top-1 performance of the network. So the depth really is important for achieving our results</p>
 </blockquote>
 <p>The depth is important, but it is insufficient to be simply concluded from the degradation caused by removing one middle layer, ignoring other effects such as superparameter settings. And, considering only the conculsion, a more complete one might be, depth and width are both very important. The ratio of height and width matters.</p>
 <blockquote>
 <p>To simplify our experiments, we did not use any unsupervised pre-training even though we expect that it will help</p>
+</blockquote>
+<p>Before AlexNet, it was common to warm up the NN with massive unlabelled images before the actual training i.e. use an unsupervised model as an initial. And the goal of the field of machine learning was to extract the features of data through large-scale unsupervised models. However, this sentence steered the entire field from unsupervised to supervised learning, which, according to the machine learning pioneers such as Hinton and LeCun, was a “wrong route”. But with the rise of the pre-trained language models such as Bert, and the contrative learning model in CV field such as MoCo, the unsupervised route is gradually comming back to the foreground. </p>
+<img src="unsupervise learning cake.png" alt="unsupervise learning cake" style="zoom:80%;" />
+
+<blockquote>
+<p>Ultimately we would like to use very large and deep convolutional nets on video sequences where the temporal structure provides very helpful information that is missing or far less obvious in static images.</p>
+</blockquote>
+<p>Actually video sequences are still a tough area beacause of the high computational comsumpution and the copyright issues.</p>
+<h3 id="6-Key-figure"><a href="#6-Key-figure" class="headerlink" title="6. Key figure"></a>6. Key figure</h3><img src="paper-reading-AlexNet/alexnet results.png" alt="alexnet results" style="zoom:67%;" />
+
+<p>The right part is the most important result in this paper, though it isn’t been discussed much in this paper. Actually it shows the last layer feature vectors perform really well in the semantic space i.e. deep neural network is very suitable to extract features from data.</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h3><blockquote>
+<p>To improve their performance, we can collect larger datasets, learn more powerful models, and use better techniques for preventing overfitting.</p>
+</blockquote>
+<p>The paper leads one route of deep learning, which is, with large dataset and model, developing powerful regularization methods to prevent overfitting. However there is a new route, which is focusing on designing good architecture s.t. the overfitting won’t happen with large model.</p>
+<blockquote>
+<p>Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 3.</p>
+</blockquote>
+<blockquote>
+<p>we used several effective techniques for preventing overfitting, which are described in Section 4.</p>
+</blockquote>
+<p>These two are the innovative points. People can then follow their work later, which makes this paper a cornerstone.</p>
+<h3 id="2-Dataset"><a href="#2-Dataset" class="headerlink" title="2. Dataset"></a>2. Dataset</h3><blockquote>
+<p>We did not pre-process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels.</p>
+</blockquote>
+<p>There is one more point that is not emphasized. Previously, features of an image (such as SIFT) were always used as input instead of raw RGB values. Datasets such as ImageNet provided SIFT of their image set as well. The end-to-end nature is the selling point of a series of deep learning papers that follow.</p>
+<h3 id="3-Architecture"><a href="#3-Architecture" class="headerlink" title="3. Architecture"></a>3. Architecture</h3><h4 id="3-1-ReLU"><a href="#3-1-ReLU" class="headerlink" title="3.1. ReLU"></a>3.1. ReLU</h4><p>From a present point of view, ReLU is not that important for speeding up the training process. Other  activation functions still work. It’s the simplicity of ReLU that makes it stick.</p>
+<h3 id="4-Reducing-Overfitting"><a href="#4-Reducing-Overfitting" class="headerlink" title="4. Reducing Overfitting"></a>4. Reducing Overfitting</h3><p>A metaphore of verfitting: In order to get a high score on an exam, you memorize all the answers to the exercises instead of understanding the question.</p>
+<h4 id="4-2-dropout"><a href="#4-2-dropout" class="headerlink" title="4.2 dropout"></a>4.2 dropout</h4><blockquote>
+<p>There is, however, a very efficient version of model combination that only costs about a factor of two during training. The recently-introduced technique, called “dropout”</p>
+</blockquote>
+<p>Here dropout is considered a light version of model ensembling, but later <a target="_blank" rel="noopener" href="https://jmlr.org/papers/volume15/srivastava14a.old/srivastava14a.pdf">study</a> below has shown that the effect of dropout is actually equivalent to weight decay&#x2F;regularization, yet there is no specific weight decay method equivalent to dropout algorithmically.</p>
+<blockquote>
+<blockquote>
+<p>one way to obtain some of the benefits of dropout without stochasticity is to marginalize the noise to obtain a regularizer that does the same thing as the dropout procedure, in expectation. We showed that for linear regression this regularizer is a modified form of L2 regularization. For more complicated models, it is not obvious how to obtain an equivalent regularizer. </p>
+</blockquote>
 </blockquote>
 
       
@@ -231,7 +276,7 @@
     2022-04-07 22:04:00
     <br>
     <strong class="update-time">last update: </strong>
-    2022-04-07 23:04:38
+    2022-04-09 00:04:50
     <br>
     <strong class="article-titles">article title: </strong>
     <a href="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/" title="paper reading: AlexNet" target="_blank">paper reading: AlexNet</a>
