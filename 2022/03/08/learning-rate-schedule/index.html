@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/warmup%20on%20large%20batches.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/experiment.png">
 <meta property="article:published_time" content="2022-03-08T01:32:32.000Z">
-<meta property="article:modified_time" content="2022-04-09T11:40:45.772Z">
+<meta property="article:modified_time" content="2022-04-11T15:17:08.390Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="deep learning tricks">
@@ -86,8 +86,8 @@
 			</ul>
 		</nav>
 		<nav>
-			<span class="post-count">7 articles
-			<span>13.9k</span> words</span>
+			<span class="post-count">8 articles
+			<span>14.9k</span> words</span>
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -221,7 +221,7 @@
     <!-- navigator end -->
     <!--
     <div align="center" class="post-count">
-        字数：2.1k字 | 预计阅读时长：12分钟
+        字数：2.1k字 | 预计阅读时长：13分钟
     </div>
     -->
     <div class="article-entry" itemprop="articleBody">
@@ -285,7 +285,7 @@
   <img src="cyclic%20learning%20rate%20schedule.png" alt="cyclic learning rate schedule" style="zoom:80%;" />
 
 <p>Still there are several choices, but Cosine Cyclical and Cosine Annealing with Warm Restarts are more common.</p>
-<h4 id="learning-rate-warmup"><a href="#learning-rate-warmup" class="headerlink" title="learning rate warmup"></a>learning rate warmup</h4><p>Learning rate warmup is first applied in the famous <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">Resnet</a> paper</p>
+<h4 id="learning-rate-warmup"><a href="#learning-rate-warmup" class="headerlink" title="learning rate warmup"></a>learning rate warmup</h4><p>Learning rate warmup is first applied in the famous <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">Resnet</a> paper in one of its experiments.</p>
 <blockquote>
 <p>In this case, we find that the initial learning rate of 0.1 is slightly too large to start converging5 . So we use 0.01 to warm up the training until the training error is below 80% (about 400 iterations), and then go back to 0.1 and continue training.  </p>
 </blockquote>
@@ -300,6 +300,10 @@
 <p>For example, in <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html">AlexNet</a>, </p>
 <blockquote>
 <p>The heuristic which we followed was to divide the learning rate by 10 when the validation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.</p>
+</blockquote>
+<p>In  <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">Resnet</a> after the warm-up,</p>
+<blockquote>
+<p>The learning rate starts from 0.1 and is divided by 10 when the error plateaus</p>
 </blockquote>
 <h3 id="Apply-learning-rate-scheduling-in-PyTorch"><a href="#Apply-learning-rate-scheduling-in-PyTorch" class="headerlink" title="Apply learning rate scheduling in PyTorch"></a>Apply learning rate scheduling in PyTorch</h3><blockquote>
 <p><code>torch.optim.lr_scheduler</code> provides several methods to adjust the learning rate based on the number of epochs. </p>
@@ -377,7 +381,7 @@
     2022-03-08 09:03:00
     <br>
     <strong class="update-time">last update: </strong>
-    2022-04-09 19:04:77
+    2022-04-11 23:04:39
     <br>
     <strong class="article-titles">article title: </strong>
     <a href="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/" title="learning rate schedule" target="_blank">learning rate schedule</a>
