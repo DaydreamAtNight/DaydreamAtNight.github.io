@@ -20,8 +20,9 @@
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/ResNet%20table%203.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/ResNet%20figure%205.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/ResNet%20table%201.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/ResNet%20table%206.png">
 <meta property="article:published_time" content="2022-04-09T12:42:00.000Z">
-<meta property="article:modified_time" content="2022-04-11T16:20:32.323Z">
+<meta property="article:modified_time" content="2022-04-12T13:04:02.277Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="paper reading">
@@ -84,7 +85,7 @@
 		</nav>
 		<nav>
 			<span class="post-count">8 articles
-			<span>14.9k</span> words</span>
+			<span>15.1k</span> words</span>
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -198,7 +199,7 @@
       <div id="toc-article" class="toc-article">
           <span id="toc-close" class="toc-close" title="hide navigator" onclick="showBtn();">×</span>
           <strong class="toc-title">navigator</strong>
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Notes-by-sections"><span class="toc-number">1.</span> <span class="toc-text">Notes by sections</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-Abstract"><span class="toc-number">1.1.</span> <span class="toc-text">0. Abstract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-figure"><span class="toc-number">1.2.</span> <span class="toc-text">Key figure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Introduction"><span class="toc-number">1.3.</span> <span class="toc-text">1. Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Related-work"><span class="toc-number">1.4.</span> <span class="toc-text">2. Related work</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Residual-representation"><span class="toc-number">1.4.1.</span> <span class="toc-text">Residual representation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shortcut-connections"><span class="toc-number">1.4.2.</span> <span class="toc-text">Shortcut connections</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Deep-Residual-Learning"><span class="toc-number">1.5.</span> <span class="toc-text">3. Deep Residual Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Experiments"><span class="toc-number">1.6.</span> <span class="toc-text">4. Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Identity-vs-Projection-Shortcuts"><span class="toc-number">1.6.1.</span> <span class="toc-text">Identity vs. Projection Shortcuts</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Deeper-Bottleneck-Architectures"><span class="toc-number">1.6.2.</span> <span class="toc-text">Deeper Bottleneck Architectures</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Conclusion</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Notes-by-sections"><span class="toc-number">1.</span> <span class="toc-text">Notes by sections</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-Abstract"><span class="toc-number">1.1.</span> <span class="toc-text">0. Abstract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-figure"><span class="toc-number">1.2.</span> <span class="toc-text">Key figure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Introduction"><span class="toc-number">1.3.</span> <span class="toc-text">1. Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Related-work"><span class="toc-number">1.4.</span> <span class="toc-text">2. Related work</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Residual-representation"><span class="toc-number">1.4.1.</span> <span class="toc-text">Residual representation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shortcut-connections"><span class="toc-number">1.4.2.</span> <span class="toc-text">Shortcut connections</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Deep-Residual-Learning"><span class="toc-number">1.5.</span> <span class="toc-text">3. Deep Residual Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Experiments"><span class="toc-number">1.6.</span> <span class="toc-text">4. Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Identity-vs-Projection-Shortcuts"><span class="toc-number">1.6.1.</span> <span class="toc-text">Identity vs. Projection Shortcuts</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Deeper-Bottleneck-Architectures"><span class="toc-number">1.6.2.</span> <span class="toc-text">Deeper Bottleneck Architectures</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Exploring-Over-1000-layers"><span class="toc-number">1.6.3.</span> <span class="toc-text">Exploring Over 1000 layers</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Some-Reviews"><span class="toc-number">2.</span> <span class="toc-text">Some Reviews</span></a></li></ol>
           </div>
     <script type="text/javascript">
       function showToc(){
@@ -218,7 +219,7 @@
     <!-- navigator end -->
     <!--
     <div align="center" class="post-count">
-        字数：870字 | 预计阅读时长：5分钟
+        字数：1.1k字 | 预计阅读时长：6分钟
     </div>
     -->
     <div class="article-entry" itemprop="articleBody">
@@ -269,7 +270,14 @@
 <p>In ResNet18 and ResNet 34, the standard architecture is fine. But for deeper network, in order to decrease the flops, the bottleneck architectures is deployed. Basically in each residual block, decreasing the number of channel by 1*1 convolution first then expend the channel back to the number of input channel. As can be seen in Table 1, the flops of ResNet34 is similar to that in ResNet50. But this is only theory, in practice ResNet50 is obviously more expensive because of the inefficiency of computing 1*1 conv.</p>
 <img src="  ResNet table 1.png" alt="ResNet table 1" style="zoom:80%;" />
 
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2>
+<h4 id="Exploring-Over-1000-layers"><a href="#Exploring-Over-1000-layers" class="headerlink" title="Exploring Over 1000 layers"></a>Exploring Over 1000 layers</h4><img src="ResNet table 6.png" alt="ResNet table 6" style="zoom:30%;" />
+
+<p>Networks with layer numbers from 20 to 1202 are applied on dataset CIFAR-10 (With only output size 32*32 compared with &gt;300*300 on ImageNet, the networks are slightly modified). And the results shows that even with an aggressive depth on a tiny dataset, no difficulty of optimisation occurs. Yet shown on Table6, the test set classification error goes up compared with the shallower models because of the overfitting.</p>
+<h2 id="Some-Reviews"><a href="#Some-Reviews" class="headerlink" title="Some Reviews"></a>Some Reviews</h2><p>This is a model with relatively simple idea and the authors have a great writing skill to make this paper neat and clear.</p>
+<p>The main contribution of this paper is introducing the residual block and skipping connection in deep learning.</p>
+<p>Although the authors intuitively explain and provide some experiments, the explanation is not currently accepted by the mainstream. Today, the reason why ResNet can achieve better results than ordinary networks is mainly because of its property of preventing vanishing gradients. The ordinary network without the residual framework cannot be trained in the later stage of training.</p>
+<p>It’s still an open question why the 1000-layer network has low level of overfitting on a simple dataset. The same question is good performance on large networks such as the transformer series. One explanation is that despite the large network size, the intrinsic model complexity is low.</p>
+
       
       <!-- add copyright statement -->
         
@@ -288,7 +296,7 @@
     2022-04-09 20:04:00
     <br>
     <strong class="update-time">last update: </strong>
-    2022-04-12 00:04:32
+    2022-04-12 21:04:27
     <br>
     <strong class="article-titles">article title: </strong>
     <a href="https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/" title="paper reading: ResNet" target="_blank">paper reading: ResNet</a>
