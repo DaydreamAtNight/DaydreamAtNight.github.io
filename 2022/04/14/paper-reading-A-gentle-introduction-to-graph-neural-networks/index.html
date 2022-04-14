@@ -15,16 +15,16 @@
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   This is a tech blog written by google research team in 2021 that">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20interative%20archtecture.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20graph%20level%20task.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20graph%20message%20passing.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20interative%20archtecture.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20graph%20level%20task.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20graph%20message%20passing.png">
 <meta property="article:published_time" content="2022-04-14T05:58:38.000Z">
-<meta property="article:modified_time" content="2022-04-14T13:02:05.335Z">
+<meta property="article:modified_time" content="2022-04-14T15:12:14.307Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20interative%20archtecture.png">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN%20interative%20archtecture.png">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
   
@@ -82,7 +82,7 @@
 		</nav>
 		<nav>
 			<span class="post-count">10 articles
-			<span>16.8k</span> words</span>
+			<span>17.1k</span> words</span>
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -192,7 +192,7 @@
     <!-- navigator end -->
     <!--
     <div align="center" class="post-count">
-        字数：316字 | 预计阅读时长：1分钟
+        字数：585字 | 预计阅读时长：3分钟
     </div>
     -->
     <div class="article-entry" itemprop="articleBody">
@@ -208,19 +208,26 @@
 <p>Paper link: <a target="_blank" rel="noopener" href="https://staging.distill.pub/2021/gnn-intro/?ref=https://githubhelp.com">A gentle introduction to graph neural networks</a></p>
 <p>Useful link: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1iT4y1d7zP">https://www.bilibili.com/video/BV1iT4y1d7zP</a></p>
 <h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><p><em>Because this blog has introduced GNN in detail and explained well with the interactive diagrams, it almost leaves me no need for extra notes. As a result, a throughout reading of the <a target="_blank" rel="noopener" href="https://staging.distill.pub/2021/gnn-intro/?ref=https://githubhelp.com">original blog</a> is recommended. And as a result this notes are only in pieces.</em></p>
-<img src="paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN interative archtecture.png" alt="GNN interative archtecture" style="zoom:50%;" />
+<img src=" GNN interative archtecture.png" alt="GNN interative archtecture" style="zoom:50%;" />
 
 <blockquote>
 <h3 id="Graph-level-task"><a href="#Graph-level-task" class="headerlink" title="Graph-level task"></a>Graph-level task</h3><p>In a graph-level task, our goal is to predict the property of an entire graph. For example, for a molecule represented as a graph, we might want to predict what the molecule smells like, or whether it will bind to a receptor implicated in a disease.</p>
-<img src="paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN graph level task.png" alt="GNN graph level task" style="zoom:50%;" />
+<img src=" GNN graph level task.png" alt="GNN graph level task" style="zoom:50%;" />
 </blockquote>
-<p>It is actually a simple task example, and the loops can be detected with ordinary algorithm such as: <a target="_blank" rel="noopener" href="https://codeburst.io/fast-and-slow-pointer-floyds-cycle-detection-algorithm-9c7a8693f491">Fast and Slow Pointer: Floyd’s Cycle Detection Algorithm</a>. But with more complicated task, GNN can be useful. And here is the related Leetcode question: <a target="_blank" rel="noopener" href="https://leetcode.com/problems/linked-list-cycle/description/">No.141: Linked List Cycle</a>.</p>
+<p>The example is actually a simple task example, and the loops can be detected with ordinary algorithm such as: <a target="_blank" rel="noopener" href="https://codeburst.io/fast-and-slow-pointer-floyds-cycle-detection-algorithm-9c7a8693f491">Fast and Slow Pointer: Floyd’s Cycle Detection Algorithm</a>. But with more complicated task, GNN can be useful. And here is the related Leetcode question: <a target="_blank" rel="noopener" href="https://leetcode.com/problems/linked-list-cycle/description/">No.141: Linked List Cycle</a>.</p>
 <blockquote>
-<img src="paper-reading-A-gentle-introduction-to-graph-neural-networks/GNN graph message passing.png" alt="GNN graph message passing" style="zoom:50%;" />
+<img src=" GNN graph message passing.png" alt="GNN graph message passing" style="zoom:50%;" />
 
-<p>This is <strong>reminiscent of standard convolution</strong>: in essence, message passing and convolution are operations to aggregate and process the information of an element’s neighbors in order to update the element’s value. In graphs, the element is a node, and in images, the element is a pixel. However, the number of neighboring nodes in a graph can be variable, unlike in an image where each pixel has a set number of neighboring elements.</p>
+<p>This is <strong>reminiscent of standard convolution</strong>: in essence, message passing and convolution are operations to aggregate and process the information of an element’s neighbors in order to update the element’s value. In graphs, the element is a node, and in images, the element is a pixel. <strong>However</strong>, the number of neighboring nodes in a graph can be variable, unlike in an image where each pixel has a set number of neighboring elements.</p>
 </blockquote>
-<p>When introducing the message passing method, </p>
+<p>When introducing the message passing method, this blog makes an analogy with the convolution. And in addition to the however part mentioned in this blog, another difference is that in convolution, each element’s value is weighted differently while in the aggregation method they are all the same. </p>
+<p>Interestingly, similar weights can be achieved with Graph Attention Networks, which is introduced in later section.</p>
+<blockquote>
+<p>Another way of communicating information between graph attributes is via attention. For example, when we consider the sum-aggregation of a node and its 1-degree neighboring nodes we could also consider using a weighted sum.</p>
+<p>A common scoring function is the inner product and nodes are often transformed before scoring into query and key vectors via a linear map to increase the expressivity of the scoring mechanism.</p>
+</blockquote>
+<h2 id="Reviews"><a href="#Reviews" class="headerlink" title="Reviews"></a>Reviews</h2><p>Writing: the whole article is well coherent and fluent, building the knowledge of GNN step by step, from a highly simplified model to the real GNN. The beautiful interactive figures make the article easy to read. Yet lacking mathematics and codes is both pros and cons. Unfortunately, <em>tarting today Distill will be taking a one year hiatus, which may be extended indefinitely.</em> </p>
+<p>Graph neural network: a graph is a powerful tool so that all kinds of data can be described as a graph. But this power leads to a huge difficulty in optimisation. One reason is the sparsity, the dynamic structure makes it difficult the train on CPU or GPU. Another is that GNN is very sensitive to hyper-parameters, just like the experiment section of this blog shows. As such, it is an active research area yet rarely deployed in industry.</p>
 
       
       <!-- add copyright statement -->
@@ -240,7 +247,7 @@
     2022-04-14 13:04:00
     <br>
     <strong class="update-time">last update: </strong>
-    2022-04-14 21:04:33
+    2022-04-14 23:04:30
     <br>
     <strong class="article-titles">article title: </strong>
     <a href="https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/" title="paper reading: A gentle introduction to graph neural networks" target="_blank">paper reading: A gentle introduction to graph neural networks</a>
