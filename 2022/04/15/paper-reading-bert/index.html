@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://daydreamatnight.github.io">
-  <title>Tag: m1 mac | ShouRou</title>
+  <title>paper reading: bert | ShouRou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ShouRou">
-<meta property="og:url" content="https://daydreamatnight.github.io/tags/m1-mac/index.html">
+  <meta name="description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   The BERT is the most important achievement in the NLP field in t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper reading: bert">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/index.html">
 <meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   The BERT is the most important achievement in the NLP field in t">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/BERT%20learnable%20paramters.png">
+<meta property="article:published_time" content="2022-04-15T10:01:32.000Z">
+<meta property="article:modified_time" content="2022-04-16T16:40:35.920Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/BERT%20learnable%20paramters.png">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
   
@@ -159,64 +167,194 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-paper-reading-bert" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/" class="archive-article-date">
-  	<time datetime="2022-02-28T14:30:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-28</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/">install d2l module on apple m1 chip for deep learning</a>
+    <h1 class="article-title" itemprop="name">
+      paper reading: bert
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2022/04/15/paper-reading-bert/" class="archive-article-date">
+  	<time datetime="2022-04-15T10:01:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-15</time>
+</a>
+        
+      </header>
+    
+    <!-- navigator -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">...</span>
+            </p>
+      <div id="toc-article" class="toc-article">
+          <span id="toc-close" class="toc-close" title="hide navigator" onclick="showBtn();">×</span>
+          <strong class="toc-title">navigator</strong>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Notes-by-sections"><span class="toc-number">1.</span> <span class="toc-text">Notes by sections</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-Abstract"><span class="toc-number">1.1.</span> <span class="toc-text">0. Abstract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Conclusion"><span class="toc-number">1.2.</span> <span class="toc-text">6. Conclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Introduction"><span class="toc-number">1.3.</span> <span class="toc-text">1. Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Related-work"><span class="toc-number">1.4.</span> <span class="toc-text">2. Related work</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Bert"><span class="toc-number">1.5.</span> <span class="toc-text">3. Bert</span></a></li></ol></li></ol>
+          </div>
+    <script type="text/javascript">
+      function showToc(){
+          var toc_article = document.getElementById("toc-article");
+          var show_toc_btn = document.getElementById("show-toc-btn");
+          toc_article.setAttribute("style","display:block");
+          show_toc_btn.setAttribute("style","display:none");
+          };
+      function showBtn(){
+          var toc_article = document.getElementById("toc-article");
+          var show_toc_btn = document.getElementById("show-toc-btn");
+          toc_article.setAttribute("style","display:none");
+          show_toc_btn.setAttribute("style","display:block");
+          };
+    </script>
+        
+    <!-- navigator end -->
+    <!--
+    <div align="center" class="post-count">
+        字数：571字 | 预计阅读时长：3分钟
+    </div>
+    -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.</p>
+</blockquote>
+<blockquote>
+<p>The BERT is the most important achievement in the NLP field in the last 4 years. It makes the transfer learning of NLP tasks possible and the transformer framework dominant the NLP field.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Paper link: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">Bert: Pre-training of deep bidirectional transformers for language understanding</a></p>
+<p>Useful links: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1PL411M7eQ">https://www.bilibili.com/video/BV1PL411M7eQ</a></p>
+<p>​                    <a target="_blank" rel="noopener" href="https://youtu.be/UYPa347-DdE">https://youtu.be/UYPa347-DdE</a></p>
+<p>​                    <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.05365">Deep contextualized word representations - arXiv</a></p>
+<h2 id="Notes-by-sections"><a href="#Notes-by-sections" class="headerlink" title="Notes by sections"></a>Notes by sections</h2><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0. Abstract"></a>0. Abstract</h3><p><em>The name of BERT might come from one of its important related work, ELMo. And Elmo and Bert are both characters in a TV show Sesame Street.</em></p>
+<p>The abstract focus on the two related work, ELMo and GPT. The bidirectional feature is in contrast to the unidirectional GPT model. And the “without substantial task specific architecture modifications” feature compares with the RNN-based ELMo model, whose architecture might get modified when training downstream tasks. Yet the ELMo model is bidirectional and GPT model is easy to use.</p>
+<p>When claiming a model is great, it is good to provide both the absolute accuracy and the relative accuracy compared with others. Just like this paper does.</p>
+<h3 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6. Conclusion"></a>6. Conclusion</h3><p>To summarise, this is a classical <strong>A+B</strong> type of research. The idea of BERT is simple, combine the advantages of the bidirectional network with a rather old RNN base (ELMo), and the unidirectional network with a transformer base (GPT). And in detail, 2 pre-training tasks are designed. </p>
+<p>The main contribution of this network is showing that bidirectional information is important.</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h3><p>From the history introduction, it turns out BERT is not the first to apply pre-training on NLP. It’s been a while. But BERT makes it popular. </p>
+<h3 id="2-Related-work"><a href="#2-Related-work" class="headerlink" title="2. Related work"></a>2. Related work</h3><p><strong>2.3 Transfer Learning from Supervised data</strong></p>
+<p>This is what the CV area does most often. Yet it is not effective in NLP. It is partly because of the lacking of data. Another reason might be the existing labeled data focus only on language inference and machine translation, which are too different from other NLP tasks. So BERT and GPT use unlabelled data to pre-train and prove that unsupervised pre-train on a massive data is more effective than supervised pre-train on a relatively small data set. And, interestingly, this trend in NLP gradually effects the CV world. Nowadays unsupervised fine-tuning is becoming more and more popular in CV area.</p>
+<h3 id="3-Bert"><a href="#3-Bert" class="headerlink" title="3. Bert"></a>3. Bert</h3><p>In the first part, the pre-training and fine-tuning framework is briefly covered. A paper should be self-consistent, meaning that if a mechanic is fundamental in your area and essential to your work. It is a good habit to briefly introduce it, even if all the people in the area know it.</p>
+<p>And the architecture is as simple as just take the encoder part of the transformer model.</p>
+<blockquote>
+<p>number of layers (i.e., Transformer blocks) as L, the hidden size as H, and the number of self-attention heads as A.</p>
+<p>BERTBASE(L&#x3D;12, H&#x3D;768, A&#x3D;12, Total Parameters&#x3D;110M) and BERTLARGE(L&#x3D;24, H&#x3D;1024, A&#x3D;16, Total Parameters&#x3D;340M).</p>
+</blockquote>
+<p>While because the hidden size of each multi-head attention sublayer equals 64. And in transformer tradition, H &#x3D; A * 64. So the multi-head number A actually depend on the hidden size d_model H</p>
+<img src="BERT learnable paramters.png" alt="BERT learnable paramters" style="zoom:48%;" />
+
+      
+      <!-- add copyright statement -->
+        
+            <!--add copyright statement https://github.com/JoeyBling/hexo-theme-yilia-plus/commit/c1215e132f6d5621c5fea83d3c4f7ccbcca074a3-->
+
+
+<!-- #copyright setting：0-close statement; 1-declare statement if declare: true in the article header; 2-always declare the copyright -->
+
+  <div class="declare">
+    <strong class="author">author: </strong>
+    
+      Ryan LI
+    
+    <br>
+    <strong class="create-time">posting date: </strong>
+    2022-04-15 18:04:00
+    <br>
+    <strong class="update-time">last update: </strong>
+    2022-04-17 00:04:92
+    <br>
+    <strong class="article-titles">article title: </strong>
+    <a href="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/" title="paper reading: bert" target="_blank">paper reading: bert</a>
+    <br>
+    <strong class="article-url">article link: </strong>
+    <a href="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/" title="paper reading: bert" target="_blank">https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/</a>
+    <br>
+    <strong class="copyright">copyright:</strong>
+    This work is licensed under a
+    <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</a>
+    licience 
+    
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"/></a>
+    
+  </div>
+
+<!-- add copyright statement -->
+        
+        <!-- end -->
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">m1 mac</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">paper reading: A gentle introduction to graph neural networks</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -245,9 +383,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: false,
