@@ -17,7 +17,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/BERT%20learnable%20paramters.png">
 <meta property="article:published_time" content="2022-04-15T10:01:32.000Z">
-<meta property="article:modified_time" content="2022-04-16T16:40:35.920Z">
+<meta property="article:modified_time" content="2022-04-16T17:27:05.716Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="paper reading">
@@ -214,7 +214,7 @@
     <!-- navigator end -->
     <!--
     <div align="center" class="post-count">
-        字数：571字 | 预计阅读时长：3分钟
+        字数：585字 | 预计阅读时长：3分钟
     </div>
     -->
     <div class="article-entry" itemprop="articleBody">
@@ -245,7 +245,7 @@
 <p>number of layers (i.e., Transformer blocks) as L, the hidden size as H, and the number of self-attention heads as A.</p>
 <p>BERTBASE(L&#x3D;12, H&#x3D;768, A&#x3D;12, Total Parameters&#x3D;110M) and BERTLARGE(L&#x3D;24, H&#x3D;1024, A&#x3D;16, Total Parameters&#x3D;340M).</p>
 </blockquote>
-<p>While because the hidden size of each multi-head attention sublayer equals 64. And in transformer tradition, H &#x3D; A * 64. So the multi-head number A actually depend on the hidden size d_model H</p>
+<p>Because the hidden size of each multi-head attention sublayer is set as 64. And in transformer tradition, H &#x3D; A * 64. So the multi-head number A actually depends on the hidden size H. As a result, the way of calculating the number of parameters is shown below.</p>
 <img src="BERT learnable paramters.png" alt="BERT learnable paramters" style="zoom:48%;" />
 
       
@@ -266,7 +266,7 @@
     2022-04-15 18:04:00
     <br>
     <strong class="update-time">last update: </strong>
-    2022-04-17 00:04:92
+    2022-04-17 01:04:71
     <br>
     <strong class="article-titles">article title: </strong>
     <a href="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/" title="paper reading: bert" target="_blank">paper reading: bert</a>
