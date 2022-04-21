@@ -18,8 +18,9 @@
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/BERT%20learnable%20paramters.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/BERT%20segment%20embedding.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/BERT%20alibation%20study%201.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/model%20size%20graph.webp">
 <meta property="article:published_time" content="2022-04-15T10:01:32.000Z">
-<meta property="article:modified_time" content="2022-04-18T07:57:20.713Z">
+<meta property="article:modified_time" content="2022-04-18T08:02:41.398Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="paper reading">
@@ -82,7 +83,7 @@
 		</nav>
 		<nav>
 			<span class="post-count">12 articles
-			<span>18.4k</span> words</span>
+			<span>21.5k</span> words</span>
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -282,7 +283,9 @@
 <p><strong>Microsoft Research Paraphrase Corpus (MRPC) Dataset</strong></p>
 <p>Created by Dolan et al. at 2005, the Microsoft Research Paraphrase Corpus (MRPC) Dataset contains pairs of sentences which have been extracted from news sources on the web, along with human annotations indicating whether each pair captures a paraphrase&#x2F;semantic equivalence relationship., in English language. Containing 5,8 in Text file format.</p>
 </blockquote>
-<p>In the Effect of model size part, they claim with a large model size, huge improvement can be reached.  And this leads a trend of increasing the model size in NLP, for example, the 100 billon GPT-3, and 530 billion model Megatron-Turing Natural Language Generation (MT-NLG). The boundary of NLP will be push further.</p>
+<img src="model size graph.webp" alt="model size graph" style="zoom:50%;" />
+
+<p>In the Effect of model size part, they claim with a large model size, huge improvement can be reached.  And this leads a trend of increasing the model size in NLP, for example, the 100 billon GPT-3, and 500 billion model Megatron-Turing Natural Language Generation (MT-NLG). The boundary of NLP will be push further. </p>
 <h2 id="Reviews"><a href="#Reviews" class="headerlink" title="Reviews"></a>Reviews</h2><p>Writing: The biggest sell point in this paper is chosen as the “bidirectional”. From today’s view, the contributions of BERT are so more than this. Besides, when say to choose a feature, it is better to discuss both the pros and the cons of the choice. For example, compared with GPT, the encoder is used instead of the decoder. The pros are the bidirectional feature, but the cons is the resulting difficulty in applying on generative tasks such as the machine translation. </p>
 <p>Besides, BERT follows a whole ideal path of solving deep learning problems. That is after pre-training on a deep and huge model on a huge unlabelled dataset, the model can be applied to many small tasks with a few steps of fine tuning.</p>
 
@@ -304,7 +307,7 @@
     2022-04-15 18:04:00
     <br>
     <strong class="update-time">last update: </strong>
-    2022-04-18 15:04:71
+    2022-04-18 16:04:39
     <br>
     <strong class="article-titles">article title: </strong>
     <a href="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/" title="paper reading: bert" target="_blank">paper reading: bert</a>
