@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://daydreamatnight.github.io">
-  <title>Archives | ShouRou</title>
+  <title>paper reading: MAE | ShouRou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ShouRou">
-<meta property="og:url" content="https://daydreamatnight.github.io/archives/index.html">
+  <meta name="description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   Published in Dec 2021, this new work by Kaiming He draws a lot o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper reading: MAE">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/index.html">
 <meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a series of paper reading notes, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.   Published in Dec 2021, this new work by Kaiming He draws a lot o">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/MAE%20architecture.png">
+<meta property="article:published_time" content="2022-04-26T18:00:38.000Z">
+<meta property="article:modified_time" content="2022-04-28T14:57:44.881Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/MAE%20architecture.png">
   
     <link rel="alternative" href="/atom.xml" title="ShouRou" type="application/atom+xml">
   
@@ -159,36 +167,159 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-paper-reading-MAE" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      paper reading: MAE
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/27/paper-reading-MAE/" class="archive-article-date">
+
+        
+        <a href="/2022/04/27/paper-reading-MAE/" class="archive-article-date">
   	<time datetime="2022-04-26T18:00:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-27</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/27/paper-reading-MAE/">paper reading: MAE</a>
-    </h1>
+        
+      </header>
+    
+    <!-- navigator -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">...</span>
+            </p>
+      <div id="toc-article" class="toc-article">
+          <span id="toc-close" class="toc-close" title="hide navigator" onclick="showBtn();">×</span>
+          <strong class="toc-title">navigator</strong>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Abstract"><span class="toc-number">1.</span> <span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">3.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relate-work"><span class="toc-number">4.</span> <span class="toc-text">Relate work</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Approach"><span class="toc-number">5.</span> <span class="toc-text">Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ImageNet-experiments"><span class="toc-number">6.</span> <span class="toc-text">ImageNet experiments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transfer-learning-experiments"><span class="toc-number">7.</span> <span class="toc-text">Transfer learning experiments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+          </div>
+    <script type="text/javascript">
+      function showToc(){
+          var toc_article = document.getElementById("toc-article");
+          var show_toc_btn = document.getElementById("show-toc-btn");
+          toc_article.setAttribute("style","display:block");
+          show_toc_btn.setAttribute("style","display:none");
+          };
+      function showBtn(){
+          var toc_article = document.getElementById("toc-article");
+          var show_toc_btn = document.getElementById("show-toc-btn");
+          toc_article.setAttribute("style","display:none");
+          show_toc_btn.setAttribute("style","display:block");
+          };
+    </script>
+        
+    <!-- navigator end -->
+    <!--
+    <div align="center" class="post-count">
+        字数：1k字 | 预计阅读时长：6分钟
+    </div>
+    -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>This is a <a href="https://daydreamatnight.github.io/2022/04/02/paper-reading-start/">series of paper reading notes</a>, hopefully, to push me to read paper casually and to leave some record of what I’ve learned.</p>
+</blockquote>
+<blockquote>
+<p>Published in Dec 2021, this new work by Kaiming He draws a lot of attention from the community. The astounding result of unsupervised transfer learning and the capability of reconstructing highly masked (up to 90%) images might herald a new era in CV. </p>
+</blockquote>
+<span id="more"></span>
+
+<p>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2111.06377">Masked autoencoders are scalable vision learners</a></p>
+<p>Useful link: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1sq4y1q77t/">https://www.bilibili.com/video/BV1sq4y1q77t/</a></p>
+<h3 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h3><p>Inspired by BERT and ViT, this paper proposes an asymmetric, transformer-based, denoising auto-encoder architecture. The unsupervised pre-training task is to reconstruct highly masked input images. The pre-training time is reduced by 3 times with competitive accuracy. The transfer performance is even better than the supervised pre-training models.</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>The results show that MAE makes scaleable unsupervised pre-training in CV applicable, a similar route to that of NLP. </p>
+<p>They claim the semantic density difference between text and image leads to different masking operations. The patch masking operation and reconstruction deal with non-semantic entities, yet the results show that the model manages to learn semantics.</p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Although yielding excellent success in NLP, applying scalable unsupervised models in CV is still a challenging problem. But why? i.e. **what makes masked autoencoding different between vision and language? **3 reasons are discussed:</p>
+<ul>
+<li><p>The architecture difference between convolution and transformer: it’s hard to integrate masked embedding or positional embedding to the convolution layer. –addressed by ViT.</p>
+</li>
+<li><p>The information density difference between text and image: Unlike high-semantic text, natural signals in images possess heavy spatial redundancy. –addressed by masking a very high portion of random patches.</p>
+</li>
+<li><p>Decoder difference: in NLP, take BERT as an example, a simple linear projection is used as a decoder, while in vision, a simple decoder is not powerful enough to reconstruct the semantic level information – addressed by substituting linear projection with transformer layers.</p>
+</li>
+</ul>
+<p>Then, the idea of MAE is on the front door. The encoder processes only the unmasked patches, while the lightweight decoder reconstructs the whole image from the encoded latent representation and the [mask] tokens. With a very high masking ratio(e.g. 75%), the pre-training time can be reduced by 3 times.</p>
+<p>Besides, the data capacity and generalisation performance are great. SOTA accuracy is achieved with fine tuning on a medium-sized dataset.</p>
+<h3 id="Relate-work"><a href="#Relate-work" class="headerlink" title="Relate work"></a>Relate work</h3><p>Works in 4 areas are briefly reviewed. </p>
+
+    <div class="markmap-container" style="height:300px">
+      <svg data='{"t":"root","d":0,"v":"","c":[{"t":"list_item","d":2,"p":{"lines":[0,1]},"v":"<strong>Masked language modelling:</strong>","c":[{"t":"list_item","d":4,"p":{"lines":[2,3]},"v":"<a href=\"https://arxiv.org/abs/1810.04805\">BERT</a>"},{"t":"list_item","d":4,"p":{"lines":[4,5]},"v":"<a href=\"https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf\">GPT</a>"}]},{"t":"list_item","d":2,"p":{"lines":[5,6]},"v":"<strong>Auto-encoding:</strong>","c":[{"t":"list_item","d":4,"p":{"lines":[7,8]},"v":"<a href=\"https://proceedings.neurips.cc/paper/1993/hash/9e3cfc48eccf81a0d57663e129aef3cb-Abstract.html\">classic autoencoders</a>: PCA, k-means"},{"t":"list_item","d":4,"p":{"lines":[9,10]},"v":"<a href=\"https://dl.acm.org/doi/abs/10.1145/1390156.1390294\">denoising autoencoders(DAE)</a>"}]},{"t":"list_item","d":2,"p":{"lines":[10,11]},"v":"<strong>Masked image encoding:</strong>","c":[{"t":"list_item","d":4,"p":{"lines":[12,13]},"v":"classic","c":[{"t":"list_item","d":6,"p":{"lines":[13,14]},"v":"pioneer work <a href=\"https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf?ref=https://githubhelp.com\">SDAE</a>"},{"t":"list_item","d":6,"p":{"lines":[14,15]},"v":"<a href=\"http://openaccess.thecvf.com/content_cvpr_2016/html/Pathak_Context_Encoders_Feature_CVPR_2016_paper.html\">context encoder</a>"}]},{"t":"list_item","d":4,"p":{"lines":[16,17]},"v":"transformer based:","c":[{"t":"list_item","d":6,"p":{"lines":[17,18]},"v":"<a href=\"http://proceedings.mlr.press/v119/chen20s.html\">iGPT</a>"},{"t":"list_item","d":6,"p":{"lines":[18,19]},"v":"<a href=\"https://arxiv.org/abs/2010.11929\">ViT</a>"},{"t":"list_item","d":6,"p":{"lines":[19,20]},"v":"<a href=\"https://arxiv.org/abs/2106.08254\">BEiT</a>"}]}]},{"t":"list_item","d":2,"p":{"lines":[20,21]},"v":"<strong>Self-supervised learning:</strong>","c":[{"t":"list_item","d":4,"p":{"lines":[21,22]},"v":"CNN based:","c":[{"t":"list_item","d":6,"p":{"lines":[22,23]},"v":"<a href=\"http://openaccess.thecvf.com/content_iccv_2015/html/Wang_Unsupervised_Learning_of_ICCV_2015_paper.html\">Unsupervised learning of visual representations using videos</a>"},{"t":"list_item","d":6,"p":{"lines":[23,24]},"v":"<a href=\"https://link.springer.com/chapter/10.1007/978-3-319-46466-4_5\">CFN</a>"},{"t":"list_item","d":6,"p":{"lines":[24,25]},"v":"<a href=\"https://link.springer.com/chapter/10.1007/978-3-319-46487-9_40\">Colorful Image Colorization</a>"},{"t":"list_item","d":6,"p":{"lines":[25,26]},"v":"<a href=\"https://arxiv.org/abs/1803.07728\">Unsupervised representation learning by predicting image rotations</a>"}]},{"t":"list_item","d":4,"p":{"lines":[26,27]},"v":"Transformer based:","c":[{"t":"list_item","d":6,"p":{"lines":[27,28]},"v":"<a href=\"https://arxiv.org/abs/2010.11929\">ViT</a>"}]},{"t":"list_item","d":4,"p":{"lines":[28,29]},"v":"Contrastive learning based:","c":[{"t":"list_item","d":6,"p":{"lines":[29,30]},"v":"<a href=\"http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html\">Unsupervised feature learning via non-parametric instance discrimination</a>"},{"t":"list_item","d":6,"p":{"lines":[30,31]},"v":"<a href=\"https://arxiv.org/abs/1807.03748\">Representation learning with contrastive predictive coding</a>"},{"t":"list_item","d":6,"p":{"lines":[31,32]},"v":"<a href=\"http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html\">MOCO</a>"}]}]}],"p":{}}'></svg>
+    </div>
   
 
-        <div class="article-info info-on-right">
-          
+<h3 id="Approach"><a href="#Approach" class="headerlink" title="Approach"></a>Approach</h3><p>The architecture and the training approach is briefly covered in the sketch below:</p>
+<img src="MAE architecture.png" alt="MAE architecture" style="zoom:40%;" />
+
+<p>Additional details about the architecture: For per-processing, non-overlapped patching and random uniform masking are adopted. Another position embedding is introduced to the decoder input so that the [mask] tokens locate themselves. But it is unclear whether the positional embedding is performed only on the [mask] tokens or on the whole input, i.e. encoded patches + [mask] tokens. Furthermore, the default decoder has &lt;10% computation per token compared with the encoder.</p>
+<p>Reconstruction target: The decoder aims to recreate the pixels of masked patches. The loss function is the mean squared error (MSE) between the output and the original image, only on the masked region of course. Besides, a variation reconstructing the normalised pixels shows an improvement in representation quality.</p>
+<h3 id="ImageNet-experiments"><a href="#ImageNet-experiments" class="headerlink" title="ImageNet experiments"></a>ImageNet experiments</h3><h3 id="Transfer-learning-experiments"><a href="#Transfer-learning-experiments" class="headerlink" title="Transfer learning experiments"></a>Transfer learning experiments</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">Devlin, J., Chang, M. W., Lee, K., &amp; Toutanova, K. (2018). Bert: Pre-training of deep bidirectional transformers for language understanding. <em>arXiv preprint arXiv:1810.04805</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf">Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). Improving language understanding by generative pre-training.</a></p>
+<p><a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/1993/hash/9e3cfc48eccf81a0d57663e129aef3cb-Abstract.html">Hinton, G. E., &amp; Zemel, R. (1993). Autoencoders, minimum description length and Helmholtz free energy. <em>Advances in neural information processing systems</em>, <em>6</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/1390156.1390294">Vincent, P., Larochelle, H., Bengio, Y., &amp; Manzagol, P. A. (2008, July). Extracting and composing robust features with denoising autoencoders. In <em>Proceedings of the 25th international conference on Machine learning</em> (pp. 1096-1103).</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf?ref=https://githubhelp.com">Vincent, P., Larochelle, H., Lajoie, I., Bengio, Y., Manzagol, P. A., &amp; Bottou, L. (2010). Stacked denoising autoencoders: Learning useful representations in a deep network with a local denoising criterion. <em>Journal of machine learning research</em>, <em>11</em>(12).</a></p>
+<p><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_cvpr_2016/html/Pathak_Context_Encoders_Feature_CVPR_2016_paper.html">Pathak, D., Krahenbuhl, P., Donahue, J., Darrell, T., &amp; Efros, A. A. (2016). Context encoders: Feature learning by inpainting. In <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em> (pp. 2536-2544).</a></p>
+<p><a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v119/chen20s.html">Chen, M., Radford, A., Child, R., Wu, J., Jun, H., Luan, D., &amp; Sutskever, I. (2020, November). Generative pretraining from pixels. In <em>International Conference on Machine Learning</em> (pp. 1691-1703). PMLR.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.11929">Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., … &amp; Houlsby, N. (2020). An image is worth 16x16 words: Transformers for image recognition at scale. <em>arXiv preprint arXiv:2010.11929</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.08254">Bao, H., Dong, L., &amp; Wei, F. (2021). Beit: Bert pre-training of image transformers. <em>arXiv preprint arXiv:2106.08254</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_iccv_2015/html/Wang_Unsupervised_Learning_of_ICCV_2015_paper.html">Wang, X., &amp; Gupta, A. (2015). Unsupervised learning of visual representations using videos. In <em>Proceedings of the IEEE international conference on computer vision</em> (pp. 2794-2802).</a></p>
+<p><a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-319-46466-4_5">Noroozi, M., &amp; Favaro, P. (2016, October). Unsupervised learning of visual representations by solving jigsaw puzzles. In <em>European conference on computer vision</em> (pp. 69-84). Springer, Cham.</a></p>
+<p><a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-319-46487-9_40">Zhang, R., Isola, P., &amp; Efros, A. A. (2016, October). Colorful image colorization. In <em>European conference on computer vision</em> (pp. 649-666). Springer, Cham.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1803.07728">Gidaris, S., Singh, P., &amp; Komodakis, N. (2018). Unsupervised representation learning by predicting image rotations. <em>arXiv preprint arXiv:1803.07728</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html">Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em> (pp. 3733-3742).</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1807.03748">Oord, A. V. D., Li, Y., &amp; Vinyals, O. (2018). Representation learning with contrastive predictive coding. <em>arXiv preprint arXiv:1807.03748</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html">He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In <em>Proceedings of the IEEE&#x2F;CVF conference on computer vision and pattern recognition</em> (pp. 9729-9738).</a></p>
+
+    <style>.markmap-container{display:flex;justify-content:center;margin:0 auto;width:90%;height:500px}.markmap-container svg{width:100%;height:100%}@media(max-width:768px){.markmap-container{height:400px}}</style>
+    <script src="https://cdn.jsdelivr.net/npm/d3@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-view"></script>
+    <script> document.querySelectorAll('.markmap-container>svg').forEach(mindmap => markmap.Markmap.create(mindmap, null, JSON.parse(mindmap.getAttribute('data'))))</script>
+  
+      
+      <!-- add copyright statement -->
+        
+            <!--add copyright statement https://github.com/JoeyBling/hexo-theme-yilia-plus/commit/c1215e132f6d5621c5fea83d3c4f7ccbcca074a3-->
+
+
+<!-- #copyright setting：0-close statement; 1-declare statement if declare: true in the article header; 2-always declare the copyright -->
+
+  <div class="declare">
+    <strong class="author">author: </strong>
+    
+      Ryan LI
+    
+    <br>
+    <strong class="create-time">posting date: </strong>
+    2022-04-27 02:04:00
+    <br>
+    <strong class="update-time">last update: </strong>
+    2022-04-28 22:04:88
+    <br>
+    <strong class="article-titles">article title: </strong>
+    <a href="https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/" title="paper reading: MAE" target="_blank">paper reading: MAE</a>
+    <br>
+    <strong class="article-url">article link: </strong>
+    <a href="https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/" title="paper reading: MAE" target="_blank">https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</a>
+    <br>
+    <strong class="copyright">copyright:</strong>
+    This work is licensed under a
+    <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</a>
+    licience 
+    
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"/></a>
+    
+  </div>
+
+<!-- add copyright statement -->
+        
+        <!-- end -->
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -204,400 +335,54 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/21/paper-reading-Vision-Transformer/" class="archive-article-date">
-  	<time datetime="2022-04-21T12:42:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-21</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/21/paper-reading-Vision-Transformer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">paper reading: Vision Transformer</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/21/paper-reading-Vision-Transformer/">paper reading: Vision Transformer</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/18/paper-reading-GPT1-3/" class="archive-article-date">
-  	<time datetime="2022-04-18T00:58:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/18/paper-reading-GPT1-3/">paper reading: GPT1-3</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/15/paper-reading-bert/" class="archive-article-date">
-  	<time datetime="2022-04-15T10:01:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/15/paper-reading-bert/">paper reading: bert</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/" class="archive-article-date">
-  	<time datetime="2022-04-14T05:58:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/">paper reading: A gentle introduction to graph neural networks</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/12/paper-reading-transformer/" class="archive-article-date">
-  	<time datetime="2022-04-12T15:31:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/12/paper-reading-transformer/">paper reading: transformer</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/09/paper-reading-ResNet/" class="archive-article-date">
-  	<time datetime="2022-04-09T12:42:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/09/paper-reading-ResNet/">paper reading: ResNet</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/07/paper-reading-AlexNet/" class="archive-article-date">
-  	<time datetime="2022-04-07T14:25:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/07/paper-reading-AlexNet/">paper reading: AlexNet</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/02/paper-reading-start/" class="archive-article-date">
-  	<time datetime="2022-04-02T13:49:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/02/paper-reading-start/">paper reading: start</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">paper reading</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/03/08/learning-rate-schedule/" class="archive-article-date">
-  	<time datetime="2022-03-08T01:32:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/03/08/learning-rate-schedule/">learning rate schedule</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">deep learning tricks</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -627,8 +412,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
