@@ -16,12 +16,12 @@
   <meta name="author" content="daydreamatnight">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Recently, I joined a Kaggle image classification competition, I used the pretrained ResNet50 plus other tricks and here is to record some of them I&#39;ve learned for now.   Soft label is a commonly used">
+    <meta name="description" content="Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)">
 <meta property="og:url" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/index.html">
 <meta property="og:site_name" content="ShouRou">
-<meta property="og:description" content="Recently, I joined a Kaggle image classification competition, I used the pretrained ResNet50 plus other tricks and here is to record some of them I&#39;ve learned for now.   Soft label is a commonly used">
+<meta property="og:description" content="Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/hard%20label.png">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20applying%20label%20smoothing.png">
 <meta property="article:published_time" content="2022-03-04T05:59:58.000Z">
-<meta property="article:modified_time" content="2022-03-08T18:41:23.239Z">
+<meta property="article:modified_time" content="2022-04-30T11:53:11.425Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="deep learning tricks">
@@ -240,16 +240,16 @@
             
               <p class="note note-info">
                 
-                  Last update：2 months ago
+                  Last update：4 minutes ago
                 
               </p>
             
             <div class="markdown-body">
               <blockquote>
-<p>Recently, I joined a <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, I used the pretrained ResNet50 plus other tricks and here is to record some of them I've learned for now.</p>
+<p>Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory to implementation of it.</p>
 </blockquote>
 <blockquote>
-<p>Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory to implementation of it.</p>
+<p>Recently, I joined a <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, I used the pretrained ResNet50 plus other tricks and here is to record some of them I've learned for now.</p>
 </blockquote>
 <span id="more"></span>
 <h3 id="introduction-from-hard-label-to-soft-label">Introduction: from hard label to soft label</h3>
