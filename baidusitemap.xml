@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
-    <lastmod>2022-04-29</lastmod>
+    <loc>https://daydreamatnight.github.io/2022/04/30/Switch-blog-theme-to-FLUID/</loc>
+    <lastmod>2022-04-30</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/</loc>
-    <lastmod>2022-04-29</lastmod>
+    <lastmod>2022-04-30</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
+    <lastmod>2022-04-30</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/02/paper-reading-start/</loc>
