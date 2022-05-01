@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://daydreamatnight.github.io/CV/index.html</loc>
+    
+    <lastmod>2022-05-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
+    
+    <lastmod>2022-05-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/</loc>
     
     <lastmod>2022-05-01</lastmod>
@@ -12,15 +30,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/30/Switch-blog-theme-to-FLUID/</loc>
-    
-    <lastmod>2022-05-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/CV/index.html</loc>
     
     <lastmod>2022-05-01</lastmod>
     
@@ -66,15 +75,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/</loc>
-    
-    <lastmod>2022-04-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
     
     <lastmod>2022-04-30</lastmod>
     
@@ -185,6 +185,13 @@
   </url>
   
   <url>
+    <loc>https://daydreamatnight.github.io/tags/m1-mac/</loc>
+    <lastmod>2022-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
     <lastmod>2022-05-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -193,13 +200,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning-tricks/</loc>
-    <lastmod>2022-05-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/m1-mac/</loc>
     <lastmod>2022-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
