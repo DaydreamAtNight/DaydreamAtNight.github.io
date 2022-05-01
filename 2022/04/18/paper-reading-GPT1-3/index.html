@@ -24,11 +24,6 @@
 <meta property="og:description" content="GPT-3 is the most popular generative language model now. With more than 100 billion parameters, the performance is proved to be great and by now there are more than hundreds of works (commercial or a">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20timeline.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20loss.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20pretraining%20process.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20fine%20tune%20f2.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20fine%20tune%20f1.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20fine%20tune%20loss.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT%20objectives.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/BERT%20result%20with%20GPT.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT2%20performance.png">
@@ -45,7 +40,7 @@
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT3%20gender.png">
 <meta property="og:image" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/GPT3%20race.png">
 <meta property="article:published_time" content="2022-04-18T00:58:59.000Z">
-<meta property="article:modified_time" content="2022-04-30T19:31:08.178Z">
+<meta property="article:modified_time" content="2022-05-01T13:44:14.063Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="paper reading">
@@ -217,7 +212,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      15k words
+      16k words
     </span>
   
 
@@ -226,7 +221,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      52 minutes
+      54 minutes
     </span>
   
 
@@ -259,7 +254,7 @@
             
               <p class="note note-info">
                 
-                  Last update：15 hours ago
+                  Last update：2 minutes ago
                 
               </p>
             
@@ -301,17 +296,27 @@
 <h3 id="framework">Framework</h3>
 <h4 id="unsupervised-learning">Unsupervised learning</h4>
 <p>GPT uses a task that giving the data of u<sub>n-k</sub> to u<sub>n-1</sub> to predict the u<sub>n</sub>. So the likelihood function to be maximised is:</p>
-<p><img src="GPT loss.png" srcset="/img/loading.gif" lazyload alt="GPT loss" style="zoom:25%;" /></p>
-<p>Because the predicting task, the mechanism of the mask multi-head attention of transformer decoder matches the likelihood function perfectly. Because in the first layer of the transformer decoder, the data after u{i} are simply masked to be 0.</p>
+<p><span class="math display">\[
+L_{1}(\mathcal{U})=\sum_{i} \log P\left(u_{i} \mid u_{i-k}, \ldots, u_{i-1} ; \Theta\right)
+\]</span> Because the predicting task, the mechanism of the mask multi-head attention of transformer decoder matches the likelihood function perfectly. Because in the first layer of the transformer decoder, the data after u{i} are simply masked to be 0.</p>
 <p>And the whole pre-training process is like this:</p>
-<p><img src="GPT pretraining process.png" srcset="/img/loading.gif" lazyload alt="GPT pretraining process" style="zoom:30%;" /></p>
-<p>Compared with BERT, the biggest difference is never encoder or decoder, bidirectional or one-way along. The key is the pre-training task they choose, the completion task that Bert use is much easier than GPT's prediction task. Because this is the <strong>difference between interpolation and extrapolation</strong>. Therefore, BERT outperforms GPT on the same number of parameters. But the potential of the GPT series goes far beyond BERT. As a result, it took OpenAI years to develop such an impressive GPT-3 model. On another side, however, GPT's prediction task leads to a different architecture with BERT. And the decoder architecture makes the GPT model hard to be bidirectional from the start. We'll see how it conquer this.</p>
+<p><span class="math display">\[
+\begin{aligned}
+h_{0} &amp;=U W_{e}+W_{p} \\
+h_{l} &amp;=\operatorname{transformer}\_\operatorname{block}\left(h_{l-1}\right) \forall i \in[1, n] \\
+P(u) &amp;=\operatorname{softmax}\left(h_{n} W_{e}^{T}\right)
+\end{aligned}
+\]</span> Compared with BERT, the biggest difference is never encoder or decoder, bidirectional or one-way along. The key is the pre-training task they choose, the completion task that Bert use is much easier than GPT's prediction task. Because this is the <strong>difference between interpolation and extrapolation</strong>. Therefore, BERT outperforms GPT on the same number of parameters. But the potential of the GPT series goes far beyond BERT. As a result, it took OpenAI years to develop such an impressive GPT-3 model. On another side, however, GPT's prediction task leads to a different architecture with BERT. And the decoder architecture makes the GPT model hard to be bidirectional from the start. We'll see how it conquer this.</p>
 <h4 id="supervised-fine-tuning">Supervised fine-tuning</h4>
 <p>The fine-tuning task follows the standard supervise learning process as follows:</p>
-<p><img src="GPT fine tune f2.png" srcset="/img/loading.gif" lazyload alt="GPT fine tune f2" style="zoom:40%;" /></p>
-<p>with <img src="GPT fine tune f1.png" srcset="/img/loading.gif" lazyload alt="GPT fine tune f1" style="zoom:40%;" /></p>
-<p>And the authors find it helpful to optimise the L1 and L2 together as:</p>
-<p><img src="GPT fine tune loss.png" srcset="/img/loading.gif" lazyload alt="GPT fine tune loss" style="zoom:40%;" /></p>
+<p><span class="math display">\[
+L_{2}(\mathcal{C})=\sum_{(x, y)} \log P\left(y \mid x^{1}, \ldots, x^{m}\right)
+\]</span> with <span class="math display">\[
+P\left(y \mid x^{1}, \ldots, x^{m}\right)=\operatorname{softmax}\left(h_{l}^{m} W_{y}\right)
+\]</span> And the authors find it helpful to optimise the L1 and L2 together as:</p>
+<p><span class="math display">\[
+L_{3}(\mathcal{C})=L_{2}(\mathcal{C})+\lambda * L_{1}(\mathcal{C})
+\]</span></p>
 <h4 id="task-specific-input-transformations">Task-specific input transformations</h4>
 <p>The last thing to do is how to apply this framework to different tasks. Similar to with BERT, the pre-trained transformer block doesn't have to be changed.</p>
 <p><img src="GPT objectives.png" srcset="/img/loading.gif" lazyload alt="GPT objectives" style="zoom:40%;" /></p>

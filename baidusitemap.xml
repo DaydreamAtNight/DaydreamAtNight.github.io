@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/</loc>
+    <lastmod>2022-05-01</lastmod>
+  </url>
+  <url>
     <loc>https://daydreamatnight.github.io/2022/04/30/Switch-blog-theme-to-FLUID/</loc>
-    <lastmod>2022-04-30</lastmod>
+    <lastmod>2022-05-01</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/21/paper-reading-Vision-Transformer/</loc>
@@ -22,10 +26,6 @@
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
-    <lastmod>2022-04-30</lastmod>
-  </url>
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/</loc>
     <lastmod>2022-04-30</lastmod>
   </url>
   <url>
