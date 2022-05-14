@@ -16,19 +16,42 @@
   <meta name="author" content="Ryan LI">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Tags">
-<meta property="og:url" content="https://daydreamatnight.github.io/tags/index.html">
+    <meta name="description" content="After ViT, Swin-transformer further demonstrated the potential of transformer in CV. This work has swept all major CV tasks since its publication, including COCO and ADE20K. And it&#39;s awar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper reading: Swin transformer">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/index.html">
 <meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="After ViT, Swin-transformer further demonstrated the potential of transformer in CV. This work has swept all major CV tasks since its publication, including COCO and ADE20K. And it&#39;s awar">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/paper-reading-Swin-transformer.png">
+<meta property="article:published_time" content="2022-05-09T03:37:19.000Z">
+<meta property="article:modified_time" content="2022-05-10T15:05:22.398Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/paper-reading-Swin-transformer.png">
   
   
-  <title>Tags - ShouRou</title>
+  <title>paper reading: Swin transformer - ShouRou</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -148,9 +171,48 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Tag">
+            <span class="h2" id="subtitle" title="paper reading: Swin transformer">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Ryan LI
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-09 11:37" pubdate>
+        May 9, 2022 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      474 words
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      2 minutes
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -163,24 +225,106 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
+      
 
-<div class="text-center tagcloud">
-  <a href="/tags/First-Blog/" style="font-size: 15px; color: #a5865e">First Blog</a> <a href="/tags/blog/" style="font-size: 20px; color: #8c6d49">blog</a> <a href="/tags/deep-learning/" style="font-size: 30px; color: #593c1e">deep learning</a> <a href="/tags/deep-learning-tricks/" style="font-size: 20px; color: #8c6d49">deep learning tricks</a> <a href="/tags/fluid-dynamic/" style="font-size: 15px; color: #a5865e">fluid dynamic</a> <a href="/tags/hexo/" style="font-size: 20px; color: #8c6d49">hexo</a> <a href="/tags/m1-mac/" style="font-size: 15px; color: #a5865e">m1 mac</a> <a href="/tags/paper-reading/" style="font-size: 25px; color: #725533">paper reading</a>
-</div>
-
-              </div>
-            </div>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">paper reading: Swin transformer</h1>
+            
+            <div class="markdown-body">
+              <div class="note note-primary">
+            <p>After ViT, Swin-transformer further demonstrated the potential of transformer in CV. This work has swept all major CV tasks since its publication, including <a target="_blank" rel="noopener" href="https://paperswithcode.com/sota/object-detection-on-coco">COCO</a> and <a target="_blank" rel="noopener" href="https://paperswithcode.com/sota/semantic-segmentation-on-ade20k">ADE20K</a>. And it's awarded as best paper by <a target="_blank" rel="noopener" href="https://iccv2021.thecvf.com/iccv-2021-paper-awards">ICCV2021</a>.</p>
           </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>This is a <a href="https://daydreamatnight.github.io/2022/04/02/paper-reading-start/">series of paper reading notes</a>, hopefully, to push me to read paper casually and to leave some record of what I've learned.</p>
+          </div>
+<p><img src="CoCo and ADE20K SOTA.png" srcset="/img/loading.gif" lazyload alt="CoCo and ADE20K SOTA" style="zoom:100%;" /></p>
+<p><em>Paper link:</em></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</a>(newer version on arXiv)</p>
+<p><em>Useful links:</em></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV13L4y1475U?share_source=copy_web">Paper explanation video</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/Swin-Transformer">Official Github</a></p>
+<h3 id="abstract">Abstract</h3>
+<h3 id="conclusion">Conclusion</h3>
+<h3 id="key-figures">Key figures</h3>
+<h3 id="introduction">Introduction</h3>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/deep-learning/">deep learning</a>
+                    
+                      <a class="hover-with-bg" href="/tags/paper-reading/">paper reading</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    Copyright: This blog is licensed under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Derivation of Integral Fluid Equations</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/03/paper-reading-contrastive-learning-review/">
+                        <span class="hidden-mobile">paper reading: contrastive learning review</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -280,6 +424,8 @@
 
   
     
+      <script  src="/js/img-lazyload.js" ></script>
+    
   
 
 
@@ -287,6 +433,19 @@
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
@@ -310,9 +469,58 @@
 
 
 
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
 
 
 
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({"theme":"default"});
+    }
+  </script>
 
 
 
