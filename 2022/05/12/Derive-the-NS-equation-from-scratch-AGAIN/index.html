@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="Feeling unsafe when deploying CFD algorithms, the best way to alleviate the anxiety is to derive the fundamentals again.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://daydreamatnight.github.io/index/deriving_NS_again.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/deriving_NS_intergral.png">
 <meta property="article:published_time" content="2022-05-12T09:39:18.000Z">
-<meta property="article:modified_time" content="2022-05-14T08:38:42.260Z">
+<meta property="article:modified_time" content="2022-05-16T01:41:30.967Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamic">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://daydreamatnight.github.io/index/deriving_NS_again.png">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/deriving_NS_intergral.png">
   
   
   <title>Derivation of Integral Fluid Equations - ShouRou</title>
@@ -278,7 +278,7 @@ dE=\delta Q-\delta W
 <p>Shown above, given a flow of fluid passing through an infinitesimal control surface (<span class="math inline">\(S\)</span>) with an area of <span class="math inline">\(dA\)</span> at an angle <span class="math inline">\(\theta\)</span> to the surface outward normal <span class="math inline">\(\textbf{n}\)</span>, in time <span class="math inline">\(dt\)</span>, the volume of the flow can be expressed as: <span class="math display">\[
 d \mathcal{V}=V d t d A \cos \theta=(\mathbf{V} \cdot \mathbf{n}) d A d t
 \]</span> Flow rate through surface can be integrated as: <span class="math display">\[
-Q=\int_{S} \frac{\mathrm{d} \mathcal{V}}{\mathrm{d} t}=\int_{S}(\mathbf{V} \cdot \mathbf{n}) d A
+\color{purple}{Q=\int_{S} \frac{\mathrm{d} \mathcal{V}}{\mathrm{d} t}=\int_{S}(\mathbf{V} \cdot \mathbf{n}) d A}
 \]</span> <div class="note note-info">
             <p>Sign of <span class="math inline">\(Q\)</span> is important, inflow = negative, outflow = positive.</p>
           </div></p>
@@ -291,7 +291,7 @@ Q=\int_{S} \frac{\mathrm{d} \mathcal{V}}{\mathrm{d} t}=\int_{S}(\mathbf{V} \cdot
 <h3 id="the-reynolds-transport-theorem">1.2 The Reynolds Transport Theorem</h3>
 <p>The theorem refers to the relationship between (a) time derivative of a system property and (b) the rate of change of that property within a region of interest.</p>
 <p>Let <span class="math inline">\(B\)</span> be the property (e.g. mass, energy, momentum) and <span class="math inline">\(\beta\)</span> be the amount of <span class="math inline">\(B\)</span> per unit mass <span class="math inline">\(\mathrm{d}B/\mathrm{d}m\)</span>, often called the <em>intensive value</em>. The Reynolds Transport Theorem stats that: <span class="math display">\[
-\frac{\mathrm{d}}{\mathrm{d} t}\left(B_{s}\right)=\frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \beta \rho d \mathcal{V}\right)+\int_{C S} \beta \rho(\mathbf{V} \cdot \mathbf{n}) d A
+\color{purple}{\frac{\mathrm{d}}{\mathrm{d} t}\left(B_{s}\right)=\frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \beta \rho d \mathcal{V}\right)+\int_{C S} \beta \rho(\mathbf{V} \cdot \mathbf{n}) d A}
 \]</span></p>
 <h4 id="concise-proof">1.2.1 concise proof</h4>
 <p>Consider a fixed control volume with fluid moving through it shown as below. The control mass (particles) of interest move from the area surrounded by the solid circle to the area surrounded by dashed line within a time interval of <span class="math inline">\(dt\)</span>.</p>
@@ -314,7 +314,7 @@ B_{C V}=\int_{C V} \beta d m=\int_{C V} \beta \rho d \mathcal{V}
 \]</span> <div class="note note-info">
             <p>Though this equation seems intuitive, more steps are needed to prove this from the idea of limits.</p>
           </div></p>
-<p>As a result the Reynolds transport theorem is arrived.</p>
+<p>As a result, the Reynolds transport theorem is arrived.</p>
 <h2 id="conservation-of-mass-and-momentum">2 Conservation of Mass and Momentum</h2>
 <p>The Reynolds transport theorem (RTT) establishes the relation between control mass and control volume, we already have control mass laws in <a href="#laws-of-mechanics">1.1.2 Laws of Mechanics</a>. To have the laws of fluid mechanics, the only thing needed is bringing <a href="#the-reynolds-transport-theorem">RTT</a> into laws of mechanics.</p>
 <pre><code class=" mermaid">classDiagram
@@ -323,13 +323,13 @@ direction LR
     RTT --&gt; fluid
     class mechanical&#123;
     	+Conservation of Mass 
-    	+Momentom equation
+    	+Newton&#x27;s 2nd law
     	+Theomal equation
     &#125;
     class fluid&#123;
-    	+Conservation of Mass 
-    	+Momentom equation
-    	+Theomal equation
+    	+Continuity equation
+    	+Momentum equation
+    	+Energy equation
     &#125;</code></pre>
 <h3 id="conservation-of-mass">2.1 Conservation of Mass</h3>
 <p>We have RTT together with: <span class="math display">\[
@@ -337,11 +337,11 @@ B=m, \\
 \Rightarrow \beta=\frac{\mathrm{d}m}{\mathrm{d}m}=1, \\
 \frac{\mathrm{d}m}{\mathrm{d}t}=0
 \]</span> As a result, <span class="math display">\[
-\frac{\mathrm{d}}{\mathrm{d} t}\left(m\right)=0=\frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \rho d \mathcal{V}\right)+\int_{C S} \rho(\mathbf{V} \cdot \mathbf{n}) d A
+\color{purple}{\frac{\mathrm{d}}{\mathrm{d} t}\left(m\right)=0=\frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \rho d \mathcal{V}\right)+\int_{C S} \rho(\mathbf{V} \cdot \mathbf{n}) d A}
 \]</span></p>
 <h4 id="simplification">2.1.1 simplification</h4>
 <ol type="1">
-<li><p>In the case of a fixed <span class="math inline">\(CV\)</span>, the equation becomes, <span class="math display">\[
+<li><p>In the case of a <strong>fixed <span class="math inline">\(CV\)</span></strong>, the equation becomes, <span class="math display">\[
 \int_{C V} \frac{\partial}{\partial t}\rho d \mathcal{V}+\int_{C S} \rho(\mathbf{V} \cdot \mathbf{n}) d A=0
 \]</span> <div class="note note-info">
             <p>Note that if <span class="math inline">\(CV\)</span> is deformable, <span class="math inline">\({\color{red}\frac{\mathrm{d}}{\mathrm{d} t}}\left(\int_{C V} \beta d \mathcal{V}\right)\neq \left(\int_{C V} {\color{red}\frac{\partial}{\partial t}}\beta d \mathcal{V}\right)\)</span>.</p>
@@ -349,14 +349,14 @@ B=m, \\
 <div class="note note-info">
             <p>Note that instead of <span class="math inline">\(\frac{\mathrm{d}}{\mathrm{d} t}\)</span>, <span class="math inline">\(\frac{\partial}{\partial t}\)</span> is used when moving into the integration sign <span class="math inline">\(\int_{CS}\)</span>, because inside the integration, <span class="math inline">\(\beta=\beta(x,y,z,t)\)</span>.</p>
           </div></li>
-<li><p>Steady flow <span class="math inline">\(\frac{\partial}{\partial t}\rho=0\)</span>, then <span class="math display">\[
+<li><p><strong>Steady flow</strong> <span class="math inline">\(\frac{\partial}{\partial t}\rho=0\)</span>, then <span class="math display">\[
 \int_{C S} \rho(\mathbf{V} \cdot \mathbf{n}) d A=0
 \]</span> it also means the rate of mass entering the <span class="math inline">\(CV\)</span> equals that of leaving it i.e. <span class="math display">\[
 \sum_{i}\left(\dot{m}_{i}\right)_{i n}=\sum_{i}\left(\dot{m}_{i}\right)_{o u t}
 \]</span> as a result <span class="math display">\[
 \dot{m}_{CS} = \int_{C S} \rho(\mathbf{V} \cdot \mathbf{n}) d A
 \]</span></p></li>
-<li><p>Incompressible flow <span class="math inline">\(rho=Constant\)</span>, then</p>
+<li><p><strong>Incompressible flow</strong> <span class="math inline">\(rho=Constant\)</span>, then</p>
 <div class="note note-info">
             <p>it happens when a steady flow has a speed &lt; 0.3 Ma</p>
           </div>
@@ -370,7 +370,7 @@ B=m, \\
 \Rightarrow \beta=\frac{\mathrm{d}m\mathbf{V}}{\mathrm{d}m}=\mathbf{V}, \\
 \textbf{F}  = \frac{d}{dt}(m\textbf{V})
 \]</span> therefore: <span class="math display">\[
-\sum\mathbf{F} = \frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \mathbf{V} \rho d \mathcal{V}\right)+\int_{C S} \mathbf{V} \rho(\mathbf{V} \cdot \mathbf{n}) d A
+\color{purple}{\sum\mathbf{F} = \frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \mathbf{V} \rho d \mathcal{V}\right)+\int_{C S} \mathbf{V} \rho(\mathbf{V} \cdot \mathbf{n}) d A}
 \]</span> <div class="note note-info">
             <p>Some comments on this equation:</p><ul><li><p>this is a vector equation that can be divided into 3 directions, e.g. in x direction: <span class="math display">\[\sum\mathbf{F_{x}} = \frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} \mathbf{V} \rho d \mathcal{V}\right)+\int_{C S} \mathbf{V} \rho(\mathbf{V} \cdot \mathbf{n}) d A\]</span></p></li><li><p><span class="math inline">\(\sum \mathbf{F}\)</span> includes forces acting on the boundary (pressure and viscous stress forces) and body force (gravity).</p></li><li><p>inertial (non-accelerating) frame of reference is needed</p></li></ul>
           </div></p>
@@ -439,10 +439,10 @@ d \dot{W}_{v}=-\tau \cdot \mathbf{V} d A
 \]</span> Combine the left 3<sup>rd</sup> term, with the most right term: <span class="math display">\[
 \dot{Q}-\dot{W}_{s}-\dot{W}_{v}=\frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{C V} e\rho d \mathcal{V}\right)+\int_{C S} \left(e+\frac{p}{\rho}\right)\rho(\mathbf{V} \cdot \mathbf{n}) d A
 \]</span> Substitute into <span class="math inline">\(e=\hat{u}+\frac{u^{2}}{2}+gz\)</span>, and <span class="math inline">\(\hat{h}=\hat{u}+\frac{p}{\rho}\)</span>, here is the final form of the energy equation: <span class="math display">\[
-\begin{aligned}
+\color{purple}{\begin{aligned}
 \dot{Q}-\dot{W}_{s}-\dot{W}_{v} &amp;=\frac{\mathrm{d}}{\mathrm{d} t}\left[\int_{C V}\left(\hat{u}+\frac{1}{2} V^{2}+g z\right) \rho d \mathcal{V}\right] \\
 &amp;+\int_{C S}\left(\hat{h}+\frac{1}{2} V^{2}+g z\right) \rho(\mathbf{V} \cdot \mathbf{n}) d A
-\end{aligned}
+\end{aligned}}
 \]</span> <div class="note note-info">
             <p>Enthalpy: The amount of heat content used or released in a system of constant pressure <span class="math display">\[\hat{h}=\hat{u}+\frac{p}{\rho}\]</span></p>
           </div></p>
@@ -515,12 +515,12 @@ F_{B}+F_{S} &amp;=\int_{C S} V \rho(\mathbf{V} \cdot \mathbf{n}) d A \\
 \]</span> Substitute the forces: <span class="math display">\[
 \begin{aligned}
 -\rho gAd z -A d p=\rho AVd V \\ 
-gd z +\frac{d p}{\rho}+Vd V =0
+\color{purple}{gd z +\frac{d p}{\rho}+Vd V =0}
 \end{aligned}
 \]</span> Integrated <strong>along a streamline</strong>: <span class="math display">\[
 \begin{aligned}
 \int_{S}gd z +\int_{S}\frac{d p}{\rho}+\int_{S}Vd V =0 \\
-gz+\frac{p}{\rho}+\frac{1}{2}V^{2}=C
+\color{purple}{gz+\frac{p}{\rho}+\frac{1}{2}V^{2}=C}
 \end{aligned}
 \]</span> <div class="note note-info">
             <p>Assumptions below are made:</p><ul><li>steady flow</li><li>incompressible, typically <span class="math inline">\(Ma&lt;0.3\)</span></li><li>frictionless</li><li>flow along a single streamline</li></ul>
@@ -551,6 +551,12 @@ gz+\frac{p}{\rho}+\frac{1}{2}V^{2}=C
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/05/14/Derivation-of-Differential-Fluid-Equations/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Derivation of Differential Fluid Equations</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
