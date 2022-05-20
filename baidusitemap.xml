@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://daydreamatnight.github.io/2022/05/20/Derivation-of-Non-dimensional-NS-Equations/</loc>
+    <lastmod>2022-05-20</lastmod>
+  </url>
+  <url>
     <loc>https://daydreamatnight.github.io/2022/05/14/Derivation-of-Differential-Fluid-Equations/</loc>
-    <lastmod>2022-05-19</lastmod>
+    <lastmod>2022-05-20</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/</loc>

@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/deriving_NS_again.png">
 <meta property="article:published_time" content="2022-05-14T08:54:02.000Z">
-<meta property="article:modified_time" content="2022-05-19T18:51:46.695Z">
+<meta property="article:modified_time" content="2022-05-20T09:45:41.818Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamic">
 <meta name="twitter:card" content="summary_large_image">
@@ -697,16 +697,16 @@ u &amp; v &amp; w
 \begin{aligned}
 \int_1^2\left[\frac{\partial\mathbf{V}}{\partial t} + \boldsymbol{\nabla}\left(\frac{1}{2} V^2\right)-
 \mathbf{g} +\frac{1}{\rho}\boldsymbol{\nabla}\left(p\right)\right]ds=0 \\
-\int_1^2\frac{\partial\mathbf{V}}{\partial t}ds + \left(\frac{1}{2} V_2^2-\frac{1}{2} V_1^2\right) + g(z_1-z_2) +\int_1^2\frac{1}{\rho}\left(dp\right)=0
+\int_1^2\frac{\partial\mathbf{V}}{\partial t}ds + \left(\frac{1}{2} V_2^2-\frac{1}{2} V_1^2\right) + g(z_2-z_1) +\int_1^2\frac{1}{\rho}\left(dp\right)=0
 \end{aligned}
 \]</span> Rearrange to get the <strong>unsteady Bernoulli equation for compressible flow</strong>: <span class="math display">\[
-\color{purple}\int_1^2\frac{\partial\mathbf{V}}{\partial t}ds+\int_1^2\frac{1}{\rho}\left(dp\right)+ \left(\frac{1}{2} V_2^2-\frac{1}{2} V_1^2\right) + g(z_1-z_2)=0
+\color{purple}\int_1^2\frac{\partial\mathbf{V}}{\partial t}ds+\int_1^2\frac{1}{\rho}\left(dp\right)+ \left(\frac{1}{2} V_2^2-\frac{1}{2} V_1^2\right) + g(z_2-z_1)=0
 \]</span> Plus the <strong>steady and incompressible</strong> conditions, the function reduced to the familiar expression: <span class="math display">\[
 \color{purple}
-\frac{p}{\rho}+\frac{1}{2}V^2-gz = Const,~\mathrm{~along~a~streamline}
+\frac{p}{\rho}+\frac{1}{2}V^2+gz = Const,~\mathrm{~along~a~streamline}
 \]</span> Plus the <strong>irrotational</strong> condition, the 3rd term remains 0 regardless the trajectory, the function becomes: <span class="math display">\[
 \color{purple}
-\frac{p}{\rho}+\frac{1}{2}V^2-gz = Const,~\mathrm{~everywhere}
+\frac{p}{\rho}+\frac{1}{2}V^2+gz = Const,~\mathrm{~everywhere}
 \]</span></p>
 <h3 id="velocity-potential">4.4 Velocity potential</h3>
 <p>Vector analysis tells us that if the curl of a vector field is zero then that vector field must itself be the gradient of a scalar function. That is,</p>
@@ -781,7 +781,7 @@ d(d \boldsymbol{s})=d \boldsymbol{s}_{1}-d \boldsymbol{s}_{0} &amp;=\left(\bolds
 <h4 id="aerofoil-lift-and-kutta-joukowski-theorem">5.2.1 Aerofoil lift and Kutta-Joukowski Theorem</h4>
 <p>One application of the Kelvin Circulation Theorem is in explaining the lift attained by an aerofoil during the shedding of the starting vortex.</p>
 <p>Consider a stationary aerofoil shown in the diagram below.</p>
-<p><img src="Derivation-of-Differential-Fluid-Equations/Aerofoil vortex shedding.png" srcset="/img/loading.gif" lazyload alt="Aerofoil vortex shedding" style="zoom:50%;" /></p>
+<p><img src="Aerofoil vortex shedding.png" srcset="/img/loading.gif" lazyload alt="Aerofoil vortex shedding" style="zoom:50%;" /></p>
 <p>At time <span class="math inline">\(t = 0\)</span>, the aerofoil is stationary, there is no vorticity and around the path <span class="math inline">\(C(t)\)</span> the circulation is <span class="math inline">\(\Gamma = 0\)</span>. As the flow velocity increases, vorticity is shed behind the aerofoil leading to positive <span class="math inline">\(\Gamma\)</span>.</p>
 <p>By Kelvin’s circulation theorem, the circulation <span class="math inline">\(\Gamma_0\)</span> around <span class="math inline">\(C(t)\)</span> is independent of time. Therefore, there must be negative <span class="math inline">\(\Gamma_1\)</span> around the aerofoil, which leads to lift by the Kutta-Joukowski theorem (<span class="math inline">\(L&#39; = −\rho u\Gamma\)</span>).</p>
 <h3 id="helmholtz-theorems">5.3 Helmholtz Theorems</h3>
@@ -822,6 +822,12 @@ d(d \boldsymbol{s})=d \boldsymbol{s}_{1}-d \boldsymbol{s}_{0} &amp;=\left(\bolds
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/05/20/Derivation-of-Non-dimensional-NS-Equations/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Derivation of Non-dimensional NS Equations</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
