@@ -2,18 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://daydreamatnight.github.io/2022/06/05/Lesson-note-Patterns-Machine-learning-for-fluids-dynamics/</loc>
+    <loc>https://daydreamatnight.github.io/googlea90d7e873607f04a.html</loc>
     
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://daydreamatnight.github.io/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/</loc>
+    <loc>https://daydreamatnight.github.io/2022/06/18/FVM-schemes-fundamentals/</loc>
     
-    <lastmod>2022-06-05</lastmod>
+    <lastmod>2022-06-23</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -22,7 +22,151 @@
   <url>
     <loc>https://daydreamatnight.github.io/2022/05/26/External-flow-fundamentals/</loc>
     
-    <lastmod>2022-06-01</lastmod>
+    <lastmod>2022-06-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</loc>
+    
+    <lastmod>2022-06-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/21/paper-reading-Vision-Transformer/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/12/paper-reading-transformer/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/06/09/Build-OpenFOAM-from-source-on-M1-Mac/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/02/22/Hello-ShouRou/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/</loc>
+    
+    <lastmod>2022-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/</loc>
+    
+    <lastmod>2022-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/06/05/Lesson-note-Patterns-Machine-learning-for-fluids-dynamics/</loc>
+    
+    <lastmod>2022-06-08</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -39,87 +183,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/21/paper-reading-Vision-Transformer/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/12/paper-reading-transformer/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/</loc>
-    
-    <lastmod>2022-05-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/04/09/paper-reading-ResNet/</loc>
     
     <lastmod>2022-05-28</lastmod>
     
@@ -173,15 +236,6 @@
   </url>
   
   <url>
-    <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
-    
-    <lastmod>2022-05-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/</loc>
     
     <lastmod>2022-05-02</lastmod>
@@ -217,28 +271,10 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/</loc>
-    
-    <lastmod>2022-04-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/02/22/Hello-ShouRou/</loc>
-    
-    <lastmod>2022-02-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://daydreamatnight.github.io/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -246,56 +282,56 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/blog/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/OpenFOAM/</loc>
+    <lastmod>2022-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/mac/</loc>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
-    <lastmod>2022-06-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/First-Blog/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning-tricks/</loc>
-    <lastmod>2022-06-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/m1-mac/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/paper-reading/</loc>
-    <lastmod>2022-06-08</lastmod>
+    <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
