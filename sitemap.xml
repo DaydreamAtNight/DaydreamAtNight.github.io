@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://daydreamatnight.github.io/googlea90d7e873607f04a.html</loc>
-    
-    <lastmod>2022-06-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://daydreamatnight.github.io/2022/06/18/FVM-schemes-fundamentals/</loc>
     
     <lastmod>2022-06-23</lastmod>
@@ -281,14 +272,7 @@
 
   
   <url>
-    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
-    <lastmod>2022-06-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
+    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
     <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -309,7 +293,14 @@
   </url>
   
   <url>
-    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
+    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
+    <lastmod>2022-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
     <lastmod>2022-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
