@@ -1,0 +1,806 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Last blog is only 1-equation. In this blog we are going to multi-equation.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numerical schemes fundamentals 2">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/06/28/FVM-schemes-fundamentals2/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Last blog is only 1-equation. In this blog we are going to multi-equation.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
+<meta property="article:published_time" content="2022-06-28T14:48:37.000Z">
+<meta property="article:modified_time" content="2022-08-20T19:04:12.422Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
+  
+  
+  <title>Numerical schemes fundamentals 2 - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"♪"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/article_banner.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Numerical schemes fundamentals 2">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Ryan LI
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-06-28 22:48" pubdate>
+        June 28, 2022 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      13k words
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      43 minutes
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Numerical schemes fundamentals 2</h1>
+            
+            <div class="markdown-body">
+              <div class="note note-primary">
+            <p><a href="/2022/06/18/FVM-schemes-fundamentals/">Last blog</a> is only 1-equation. In this blog we are going to multi-equation.</p>
+          </div>
+<span id="more"></span>
+<p>overview:</p>
+
+<div class="markmap-container" style="height:300px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#scalar-conservation-laws\&quot;&gt;1-equation PDE theories (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#numerical-representation-of-discontinuities\&quot;&gt;Schemes for 1-equation PDE (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;a href=\&quot;#systems-of-conservation-laws\&quot;&gt;Multi-equation PDE theories&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-form\&quot;&gt;Characteristic form method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;a href=\&quot;#euler-equation\&quot;&gt;Euler equation&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-forms-of-euler-equation\&quot;&gt;Characteristic forms&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;a href=\&quot;#closure-of-euler-equation\&quot;&gt;Closure&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristics-method-of-euler-equation\&quot;&gt;Characteristics method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;&lt;a href=\&quot;#shock-tube-solution-for-euler-equations\&quot;&gt;Shock tube solution&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes-for-non-linear-conservation-laws\&quot;&gt;Schemes for multi-equation PDE&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes-for-multi-dimensional-problems\&quot;&gt;Schemes for multi-dimensional problems&lt;/a&gt;&quot;}],&quot;p&quot;:{}}"></svg>
+</div>
+
+<h2 id="systems-of-conservation-laws">Systems of conservation laws</h2>
+<div class="note note-info">
+            <p>Jacobian matrices, linearised equations, conservative and characteristic variables. Rankine-Hugoniot jump conditions. Boundary conditions.</p>
+          </div>
+<p>After dealing with the one-equation task, let's expand to a more general form, recall the 1D inviscid Euler equation in a form of vectors:</p>
+<h3 id="characteristic-form">Characteristic form</h3>
+<p>Before moving forward, recall some linear algebra, consider a general 1<sup>st</sup> order hyperbolic PDE, <span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\mathbf{A}\frac{\partial\mathbf{U}}{\partial x}=0
+\]</span> with a square matrix <span class="math inline">\(\mathbf{A}\)</span>,</p>
+<div class="note note-info">
+            <p>The PDE is</p><ul><li>linear if <span class="math inline">\(\mathbf{A} = const\)</span>,</li><li>quasi-linear if <span class="math inline">\(\mathbf{A} = f(\mathbf{U},x,t)\)</span></li></ul>
+          </div>
+<p>The equation is hyperbolic, then <span class="math inline">\(\mathbf{A}\)</span> is diagonalisable, which means <span class="math display">\[
+\exists \mathbf{R}:  \mathbf{R^{-1} A R=\Lambda}, \quad\text{where } \mathbf{\Lambda} \text{ is diagonal matrix}
+\]</span> and the diagonal elements <span class="math inline">\(\lambda_i\)</span> is the eigenvalues / <font color=#75147c>characteristic values</font> of <span class="math inline">\(\mathbf{A}\)</span>, and <span class="math inline">\(\mathbf{R}\)</span> is a matrix whose columns <span class="math inline">\(\mathbf{r_i}\)</span> are the right eigenvectors / <font color=#75147c>characteristic vectors</font> of <span class="math inline">\(\mathbf{A}\)</span>. Therefore, multiply by <span class="math inline">\(\mathbf{R^{-1}}\)</span> both sides of the PDE above to obtain: <span class="math display">\[
+\mathbf{R^{-1}}\frac{\partial \mathbf{U}}{\partial t}+\mathbf{R^{-1}}\mathbf{A}\frac{\partial\mathbf{U}}{\partial x}=0
+\]</span> Define the <font color=#75147c>characteristic variables</font> <span class="math inline">\(\mathbf{V}\)</span> as <span class="math inline">\(d\mathbf{V} = \mathbf{R^{-1}}d\mathbf{U}\)</span>, we have the <font color=#75147c>characteristic form</font> equation: <span class="math display">\[
+\begin{aligned}
+\frac{\partial \mathbf{V}}{\partial t}+\mathbf{R^{-1}}\mathbf{A}\mathbf{R}\frac{\partial\mathbf{V}}{\partial x}=0 \\
+\frac{\partial \mathbf{V}}{\partial t}+\mathbf{\Lambda}\frac{\partial\mathbf{V}}{\partial x}=0
+\end{aligned}
+\]</span> It is a wave form and be can decompose the system of PDE into a set of independent equations, such as the <span class="math inline">\(i^{th}\)</span> equation: <span class="math display">\[
+\frac{\partial \mathbf{V_i}}{\partial t}+\lambda_i\frac{\partial\mathbf{V_i}}{\partial x}=0
+\]</span> so that we can treat the equation as a set (3 for 3D, one for each equation) of independent advection equations, <font color=#75147c>method of characteristics </font>analysis we talked about before can be carried out for each sub-equations. <span class="math display">\[
+\begin{aligned}
+\text{Characterstics/wavefronts: } \qquad &amp;dx = \lambda_idt,\\
+\text{Characterstic speeds/wave speeds: } \qquad&amp; \lambda_i
+\end{aligned}
+\]</span> <div class="note note-info">
+            <p>So far we have 3 forms:</p><p>non-conservative form: no obvious advantage,</p><p>conservative form: locate the shock well,</p><p>characteristic form: decompose a system of equations into set of independent equations</p>
+          </div></p>
+<h3 id="euler-equation">Euler equation</h3>
+<p>Its time to introduce the 1D Euler equations: NS equations with 0 viscosity or heat conduction terms:</p>
+<ul>
+<li><p>Conservation form: <span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0
+\]</span> for the quantity vector <span class="math inline">\(\mathbf{U}\)</span> with the flux vector <span class="math inline">\(\mathbf{F}\)</span>, <span class="math display">\[
+\mathbf{U}=\left[\begin{array}{l}
+\rho \\
+\rho u \\
+\rho E
+\end{array}\right] = \left[\begin{array}{l}
+u_1 \\
+u_2 \\
+u_3
+\end{array}\right] 
+\quad\text{and}\quad
+\mathbf{F(U)}=\left[\begin{array}{l}
+\rho u \\
+\rho u^{2}+P \\
+\rho u\left(E+\frac{P}{\rho}\right)
+\end{array}\right] = \left[\begin{array}{l}
+F_1 \\
+F_2 \\
+F_3
+\end{array}\right]
+\]</span></p></li>
+<li><p>Primitive form: <span class="math display">\[
+\frac{\partial \mathbf{W}}{\partial t}+\mathbf{C}\frac{\partial \mathbf{W}}{\partial x}=0
+\]</span> where: <span class="math display">\[
+\mathbf{W}=\left[\begin{array}{l}
+\rho \\
+u \\
+p
+\end{array}\right]
+\quad\text{and}\quad
+\mathbf{C}=\left[\begin{array}{ccc}
+u &amp; p &amp; \\
+ &amp;u &amp; \frac{1}{\rho}\\
+&amp; \rho c^2 &amp; u
+\end{array}\right]
+\]</span> and <span class="math inline">\(c=\sqrt{\frac{\gamma p}{\rho}}\)</span>, speed of sound.</p></li>
+</ul>
+<h4 id="characteristic-forms-of-euler-equation">Characteristic forms of Euler equation</h4>
+<h5 id="from-conservative-form">From conservative form</h5>
+<p>Along with previous method, we can construct the matrix <span class="math inline">\(\mathbf{A}\)</span> for the conservative Euler equation, <span class="math display">\[
+\mathbf{A}(\mathbf{U})=\frac{d \mathbf{F}}{d \mathbf{U}}=\left[\begin{array}{ccc}
+0 &amp; 1 &amp; 0 \\
+\frac{\gamma-3}{2} u^{2} &amp; (3-\gamma) u &amp; \gamma-1 \\
+-\gamma u E+(\gamma-1) u^{3} &amp; \gamma E-\frac{3}{2}(\gamma-1) u^{2} &amp; \gamma u
+\end{array}\right]
+\]</span> and we have a non-conservation form of the Euler equation, same as the general equation above: <span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\mathbf{A}\frac{\partial\mathbf{U}}{\partial x}=0
+\]</span> <div class="note note-secondary">
+            <p>It is actually non-linear PDE, but we can apply a linear approximation when dealing with small variations around mean values, and the linear approximation form is exactly the same as the non-linear form.</p><p>Linear approximation steps:</p><p><span class="math inline">\(\mathbf{U}\)</span> can be expressed as a constant mean flow <span class="math inline">\(\mathbf{U_0}\)</span> with a small perturbation <span class="math inline">\(\mathbf{\tilde{U}}\)</span>, substitute the expression into the conservative form of equation: <span class="math display">\[\begin{aligned}\frac{\partial \mathbf{(U_0 + \tilde{U})}}{\partial t}+\frac{\partial\mathbf{F(U_0 + \tilde{U})}}{\partial x}=0 \\\frac{\partial \mathbf{U_0}}{\partial t}+\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\frac{\partial\mathbf{F(U_0 + \tilde{U})}}{\partial x}=0 \\\frac{\partial \mathbf{U_0}}{\partial t}+\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\frac{\partial\left(\mathbf{F}\left(\mathbf{U}_{0}\right)+\left.\frac{\partial \mathbf{F}}{\partial \mathbf{U}}\right|_{\mathbf{U}_{0}} \tilde{\mathbf{U}}\right)}{\partial x}=0 \\\underbrace{\frac{\partial \mathbf{U_0}}{\partial t}+\frac{\partial\mathbf{F}\left(\mathbf{U}_{0}\right)}{\partial x}}_{0}+\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\mathbf{\left.A\right|_{U_0}}\frac{\partial\tilde{\mathbf{U}}}{\partial x}=0 \\\end{aligned}\]</span> As a result, with <span class="math inline">\(\mathbf{A_0=A|_{U_0}}\)</span>: <span class="math display">\[\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\mathbf{A_0}\frac{\partial\tilde{\mathbf{U}}}{\partial x}=0\]</span></p>
+          </div></p>
+<p>With some further tedious calculations, we have <span class="math display">\[
+\mathbf{R}=\left[\begin{array}{ccc}
+1 &amp; \frac{\rho}{2 c} &amp; -\frac{\rho}{2 c} \\
+u &amp; \frac{\rho}{2 c}(u+c) &amp; -\frac{\rho}{2 c}(u-c) \\
+\frac{u^{2}}{2} &amp; \frac{\rho}{2 c}\left(\frac{u^{2}}{2}+\frac{c^{2}}{\gamma-1}+c u\right) &amp; -\frac{\rho}{2 c}\left(\frac{u^{2}}{2}+\frac{c^{2}}{\gamma-1}-c u\right)
+\end{array}\right]
+\]</span> where <span class="math inline">\(c=\sqrt{\frac{\gamma p}{\rho}}\)</span>, speed of sound,</p>
+<p>and <span class="math inline">\(\mathbf{\Lambda}\)</span>: <span class="math display">\[
+\mathbf{\Lambda}=\left[\begin{array}{ccc}
+u &amp;  &amp; \\
+ &amp;u+c &amp; \\
+&amp; &amp; u-c
+\end{array}\right]
+\]</span></p>
+<h5 id="from-primitive-form">From primitive form</h5>
+<p>The same <span class="math inline">\(\mathbf{\Lambda}\)</span> can also be obtained by the primitive form of the Euler equation:</p>
+<p>We have <span class="math inline">\(\mathbf{Q^{-1}CQ=\Lambda}\)</span> with， <span class="math display">\[
+\mathbf{Q}=\left[\begin{array}{ccc}
+1 &amp; \frac{\rho}{2 c} &amp; -\frac{\rho}{2 c} \\
+0 &amp; \frac{1}{2} &amp; \frac{1}{2} \\
+0 &amp; \frac{\rho c}{2} &amp; -\frac{\rho c}{2}
+\end{array}\right] \quad \text { and } \quad \mathbf{Q}^{-1}=\left[\begin{array}{ccc}
+1 &amp; 0 &amp; -\frac{1}{c^{2}} \\
+0 &amp; 1 &amp; \frac{1}{\rho c} \\
+0 &amp; 1 &amp; -\frac{1}{\rho c}
+\end{array}\right]
+\]</span> Therefore the characteristic equations <span class="math inline">\(d \mathbf{V}=\mathbf{Q}^{-1} d \mathbf{W}\)</span> become <span class="math display">\[
+\begin{aligned}
+&amp;d V_{1}=d \rho-\frac{d p}{c^{2}}=0 \quad &amp;\text{for} \quad \frac{d x}{d t}=u \\
+&amp;d V_{2}=d u+\frac{d p}{\rho c}=0 \quad &amp;\text{for} \quad \frac{d x}{d t}=u+c \\
+&amp;d V_{3}=d u-\frac{d p}{\rho c}=0 \quad &amp;\text{for}\quad \frac{d x}{d t}=u-c
+\end{aligned}
+\]</span> Integrating we get <span class="math display">\[
+\begin{aligned}
+&amp;V_{1}=const\quad &amp;\text{for}\quad \frac{d x}{d t}=u \quad(\text { entropy wave) } \\
+&amp;V_{2}=u+\int \frac{d p}{\rho c}=const \quad &amp;\text{for} \quad \frac{d x}{d t}=u+c \text { (acoustic wave) } \\
+&amp;V_{3}=u-\int \frac{d p}{\rho c}=const \quad &amp;\text{for} \quad \frac{d x}{d t}=u-c \text { (acoustic wave) }
+\end{aligned}
+\]</span> These 3 equations can not be solved properly, unless we introduce assumptions.</p>
+<h4 id="closure-of-euler-equation">Closure of Euler equation</h4>
+<p>For the first equation <span class="math inline">\(V_1\)</span>, we need <font color=#75147c>perfect gas</font>. The equation of state can be used to quantify the specific entropy <span class="math inline">\(s\)</span> <span class="math display">\[
+s=c_{v} \ln (p)-c_{p} \ln (\rho)
+\]</span> with <span class="math inline">\(c^{2}=\frac{\gamma p}{\rho}\)</span>, the ratio of specific heats with <span class="math inline">\(\gamma=\frac{c_{p}}{c_{v}}\)</span>, the constant pressure specific heat <span class="math inline">\(c_{P}\)</span> and the constant volume specific heat <span class="math inline">\(c_{v}\)</span>. We have <span class="math display">\[
+d s=-\frac{c_{p}}{\rho}\left(d \rho-\frac{d p}{c^{2}}\right)=-\frac{c_{p}}{\rho} d V_{1}
+\]</span> <span class="math inline">\(d V_{1}=0 \Rightarrow\)</span> entropy is constant along a path line <span class="math inline">\(\frac{d x}{d t}=u\)</span> The other 2 characteristic equations <span class="math inline">\(V_2, V_3\)</span> can not be analytically integrated, unless further assumptions are made.</p>
+<p>For example, assume the flow is <font color=#75147c>homentropic</font>, which means that the entropy is constant everywhere. Inviscid flows are often homoentropic (except at shocks). We have <span class="math display">\[
+p=A \rho^{\gamma} \quad c=B \rho^{(\gamma-1) / 2} \quad \text { with } \quad \frac{A}{B^{2}}=\frac{1}{\gamma}
+\]</span> We can show that <span class="math inline">\(\int \frac{d p}{\rho c}=\frac{2 c}{\gamma-1}+const.\)</span> which lead to <span class="math display">\[
+\begin{aligned} 
+&amp;S=const &amp;\text{ for }\quad \frac{d x}{d t}=u \text { (entropy wave) } \\
+&amp;V_{2}=u+\frac{2 c}{\gamma-1}=const \quad &amp;\text{ for }\quad \frac{d x}{d t}=u+c \text { (acoustic wave) } \\
+&amp;V_{3}=u-\frac{2 c}{\gamma-1}=\text { const } \quad &amp;\text{ for } \quad \frac{d x}{d t}=u-c \quad(\text { acoustic wave) }
+\end{aligned}
+\]</span> The characteristics <span class="math inline">\(V_{2}\)</span> and <span class="math inline">\(V_{3}\)</span> are also known as Riemann invariants. But <span class="math inline">\(V_{2}\)</span> and <span class="math inline">\(V_{3}\)</span> have <font color=#75147c>no physical meaning</font>. And this will be a problem in later section.</p>
+<p>At this point, the characteristics analysis can be applied, such as:</p>
+<ul>
+<li>Courant number checking</li>
+<li>Rankine-Hugoniot jump condition</li>
+</ul>
+<h4 id="characteristics-method-of-euler-equation">Characteristics method of Euler equation</h4>
+<p><img src="Euler fuction characteristics.png" srcset="/img/loading.gif" lazyload alt="Euler fuction characteristics, in supersonic (left) and subsonic (right) flows." style="zoom:67%;" /></p>
+<p>We have three families of characteristics:</p>
+<ol type="1">
+<li>Characteristics which travel with the local flow speed <span class="math inline">\(u\)</span></li>
+<li>Characteristics which travel with the local flow speed <span class="math inline">\(+\)</span> the local speed of sound <span class="math inline">\(u+c\)</span></li>
+<li>Characteristics which travel with the local flow speed <span class="math inline">\(-\)</span> the local speed of sound $u-c $</li>
+</ol>
+<p>The signal carried out by acoustic waves does not correspond to any well-known physical quantity. In a supersonic context, all the waves travel in the same direction (it is impossible to have a conversation in supersonic flows). Numerical methods can be easily chose.</p>
+<p>In a subsonic context, two wave speeds are positive and one wave speed is negative. That means we have to very carefully to design a numerical scheme considering information from all the directions.</p>
+<h5 id="boundary-conditions-problem">Boundary conditions problem</h5>
+<p>Given the characteristics in supersonic and subsonic flows, the boundary condition must be carefully designed. As shown below, in the supersonic flow, <span class="math inline">\(V_1,V_2,V_3\)</span> only need inlet boundary conditions. There is not a big problem. But in the subsonic condition, <span class="math inline">\(V_1,V_2\)</span> need the inlet boundary conditions, while <span class="math inline">\(V_3\)</span> needs the outlet boundary condition. Here comes the nightmare. <font color=#75147c>In a subsonic regime, we can't asset the boundary condition for <span class="math inline">\(V_1,V_2\)</span> and <span class="math inline">\(V_3\)</span> exactly what they need, because they are non-physical.</font> We don't have direct access of the Riemann variables, the only available conditions are just velocities and pressures. So the characteristic information might have to be defined in an iterative or approximate way</p>
+<p><img src="Euler equation boundary condition problem.png" srcset="/img/loading.gif" lazyload alt="Euler equation boundary condition problem" style="zoom:67%;" /></p>
+<h3 id="shock-tube-solution-for-euler-equations">Shock tube solution for Euler equations</h3>
+<p><img src="shock tube regime.png" srcset="/img/loading.gif" lazyload alt="shock tube regime" style="zoom:67%;" /></p>
+<p>The famous shock tube have 3 regimes:</p>
+<ul>
+<li><p>Moving shock / shock wave: For the ID Euler equations, the second law of thermodynamics requires that the Mach number <span class="math inline">\(M = u/c\)</span> must decrease from greater than one to less than one in a coordinate system moving with the shock.</p></li>
+<li><p>Centred expansion fan / rarefaction wave: expansion wave in which all characteristics originate from a single point in the <span class="math inline">\(x—t\)</span> plane</p></li>
+<li><p>Contact discontinuity: occurs when the wave speed <span class="math inline">\(\lambda_1 = u\)</span> and pressure are continuous while other flow properties jump. In other words, for a contact discontinuity <span class="math display">\[
+u_L=u_R \quad and \quad p_L=p_R
+\]</span> In multidimensional flows, contact discontinuities are also called <font color=#75147c>slip lines</font> or <font color=#75147c>vortex sheets</font>. Like shocks, contact discontinuities obey the Rankine-Hugoniot relations. Unlike shocks, contacts cannot form spontaneously.</p></li>
+</ul>
+<p><img src="shock tube solution.png" srcset="/img/loading.gif" lazyload alt="shock tube solution" style="zoom:67%;" /></p>
+<h2 id="numerical-schemes-for-non-linear-conservation-laws">Numerical schemes for non-linear conservation laws</h2>
+<div class="note note-info">
+            <p>It is still an active research area and these are the classical methods:</p><p>Centred schemes: one-step and two-step Lax Wendroff, MacCormack predictor-corrector. Artificial dissipation. Upwind schemes: flux vector and flux difference splitting. Monotone schemes: Godunov and Harten theorems. Exact and approximate Riemann solvers. High-order upwind schemes: the TVD property. The construction of TVD schemes using slope and flux limiters. WENO schemes: weighted essentially non-oscillatory methods</p>
+          </div>
+<h3 id="numerical-schemes-for-euler-equations">Numerical schemes for Euler equations</h3>
+<h4 id="cases-to-be-tested">Cases to be tested</h4>
+<h5 id="case-1-linear-advection-fuu-of-a-sine-wave">Case 1: linear advection (<span class="math inline">\(f(u)=u\)</span>) of a sine wave:</h5>
+<p><span class="math display">\[
+\frac{\partial u}{\partial r}+\frac{\partial u}{\partial x} = 0, \quad \text{with } u(x,0)=-sin(\pi x)
+\]</span></p>
+<p>Test on <span class="math inline">\(t=30\)</span>, i.e. <span class="math inline">\(u(x,30)=u(x,0)\)</span></p>
+<h5 id="case-2-burger-equation-fufrac12u2-with-riemann-problem">Case 2: Burger equation (<span class="math inline">\(f(u)=\frac{1}{2}u^2\)</span>) with Riemann problem,</h5>
+<p><span class="math display">\[
+\frac{\partial u}{\partial r}+\frac{\partial}{\partial x}\left(\frac{1}{2}u^2\right) = 0, \quad \text{with } u(x, 0)=\left\{\begin{array}{ccc}
+1 &amp; \text { if } &amp; |x|&lt;\frac{1}{3} \\
+-1 &amp; \text { if } &amp; \frac{1}{3}&lt;|x| \leq 1
+\end{array}\right.
+\]</span></p>
+<h5 id="case-3-euler-equation-with-riemann-problem">Case 3: Euler equation with Riemann problem</h5>
+<p><span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0
+\]</span></p>
+<p><span class="math display">\[
+\mathbf{U}=\left[\begin{array}{l}
+\rho \\
+\rho u \\
+\rho E
+\end{array}\right] = \left[\begin{array}{l}
+u_1 \\
+u_2 \\
+u_3
+\end{array}\right] 
+\quad\text{and}\quad
+\mathbf{F(U)}=\left[\begin{array}{l}
+\rho u \\
+\rho u^{2}+P \\
+\rho u\left(E+\frac{P}{\rho}\right)
+\end{array}\right] = \left[\begin{array}{l}
+F_1 \\
+F_2 \\
+F_3
+\end{array}\right]
+\]</span></p>
+<p>and <span class="math inline">\(c=\sqrt{\frac{\gamma p}{\rho}}\)</span>, speed of sound, <span class="math inline">\(p=(\gamma-1)\rho(E-\frac{u^2}{2})\)</span>. <span class="math display">\[
+\begin{gathered}
+\mathbf{W}(x, 0)=\left\{\begin{array}{c}
+\mathbf{W}_{\mathbf{L}} \text { if } x&lt;0 \\
+\mathbf{W}_{\mathbf{R}} \text { if } x \geq 0
+\end{array}\right. \\
+\mathbf{W}_{L}=\left[\begin{array}{c}
+\rho_{L} \\
+u_{L} \\
+p_{L}
+\end{array}\right]=\left[\begin{array}{c}
+1 K g / m^{3} \\
+0 \mathrm{~m} / \mathrm{s} \\
+100,000 \mathrm{~N} / \mathrm{m}^{2}
+\end{array}\right] \quad \mathbf{W}_{R}=\left[\begin{array}{c}
+\rho_{R} \\
+u_{R} \\
+p_{R}
+\end{array}\right]=\left[\begin{array}{c}
+0.010 \mathrm{~kg} / \mathrm{m}^{3} \\
+0 \mathrm{~m} / \mathrm{s} \\
+1,000 \mathrm{~N} / \mathrm{m}^{2}
+\end{array}\right]
+\end{gathered}
+\]</span></p>
+<h4 id="centred-schemes-lax-friedrichs-method">Centred Schemes: Lax-Friedrichs Method</h4>
+<p><span class="math display">\[
+U^{n+1}_i = \frac{U^n_{i+1}+U^n_{i-1}}{2} - \frac{\Delta t}{\Delta x}\left(\frac{F^n_{i+1}-F^n_{i-1}}{2} \right)
+\]</span></p>
+<h2 id="numerical-schemes-for-multi-dimensional-problems">Numerical schemes for multi-dimensional problems</h2>
+<div class="note note-info">
+            <p>Finite differences and finite volume. Computational domain and boundary conditions.</p>
+          </div>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/fluid-dynamics/">fluid dynamics</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    Copyright: This blog is provided under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/29/FVM-schemes-comparison-on-OpenFOAM/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">FVM schemes comparison on OpenFOAM</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/18/FVM-schemes-fundamentals/">
+                        <span class="hidden-mobile">Numerical schemes fundamentals</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            Toal views: 
+            <span id="busuanzi_value_site_pv"></span>
+             
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            Total visiters: 
+            <span id="busuanzi_value_site_uv"></span>
+            
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({"theme":"default"});
+    }
+  </script>
+
+
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+<script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
+<script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
+
+
+<style>
+.markmap-container{
+  display:flex;
+  justify-content:center;
+  margin:0 auto;
+  width:90%;
+  height:500px
+}
+.markmap-container svg{
+  width:100%;height:100%
+}
+@media(max-width:768px){
+  .markmap-container{
+    height:400px
+  }
+}</style>
+<script>
+function initMarkMap(){
+  document.querySelectorAll('.markmap-container>svg').forEach(el =>{
+    markmap.Markmap.create(el, null, JSON.parse(el.getAttribute('data')))
+  })
+};
+initMarkMap();
+
+</script></body>
+</html>

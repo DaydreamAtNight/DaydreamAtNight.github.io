@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://daydreamatnight.github.io/2022/09/02/CUDA-fundamental-6/</loc>
+    <lastmod>2022-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/09/01/CUDA-fundamental-5/</loc>
+    <lastmod>2022-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/08/02/CUDA-fundamental-2/</loc>
+    <lastmod>2022-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/08/25/CUDA-fundamental-3/</loc>
+    <lastmod>2022-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/08/30/CUDA-fundamental-4/</loc>
+    <lastmod>2022-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/07/15/CUDA-fundamental-1/</loc>
+    <lastmod>2022-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/07/01/Play-with-CUDA/</loc>
+    <lastmod>2022-09-01</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/</loc>
+    <lastmod>2022-09-01</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/06/28/FVM-schemes-fundamentals2/</loc>
+    <lastmod>2022-08-20</lastmod>
+  </url>
+  <url>
     <loc>https://daydreamatnight.github.io/2022/06/18/FVM-schemes-fundamentals/</loc>
-    <lastmod>2022-06-27</lastmod>
+    <lastmod>2022-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/06/29/FVM-schemes-comparison-on-OpenFOAM/</loc>
+    <lastmod>2022-08-20</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</loc>
