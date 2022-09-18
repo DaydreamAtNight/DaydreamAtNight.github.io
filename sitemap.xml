@@ -2,6 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</loc>
+    
+    <lastmod>2022-09-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</loc>
+    
+    <lastmod>2022-09-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/</loc>
+    
+    <lastmod>2022-09-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/09/15/CUDA-example-particles/</loc>
+    
+    <lastmod>2022-09-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://daydreamatnight.github.io/2022/09/09/CUDA-fundamental-7/</loc>
     
     <lastmod>2022-09-09</lastmod>
@@ -23,15 +59,6 @@
     <loc>https://daydreamatnight.github.io/about/index.html</loc>
     
     <lastmod>2022-09-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</loc>
-    
-    <lastmod>2022-09-06</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -93,15 +120,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/2022/07/01/Play-with-CUDA/</loc>
-    
-    <lastmod>2022-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/</loc>
     
     <lastmod>2022-09-01</lastmod>
     
@@ -201,15 +219,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
-    
-    <lastmod>2022-06-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</loc>
     
     <lastmod>2022-06-09</lastmod>
     
@@ -382,7 +391,7 @@
 
   <url>
     <loc>https://daydreamatnight.github.io/</loc>
-    <lastmod>2022-09-09</lastmod>
+    <lastmod>2022-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -390,70 +399,70 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/OpenFOAM/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/C/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/CUDA/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
-    <lastmod>2022-09-09</lastmod>
+    <lastmod>2022-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/mac/</loc>
-    <lastmod>2022-09-09</lastmod>
+    <lastmod>2022-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/CUDA/</loc>
+    <lastmod>2022-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
+    <lastmod>2022-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
+    <lastmod>2022-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
+    <lastmod>2022-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/C/</loc>
+    <lastmod>2022-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/paper-reading/</loc>
-    <lastmod>2022-09-09</lastmod>
+    <lastmod>2022-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning-tricks/</loc>
-    <lastmod>2022-09-09</lastmod>
+    <lastmod>2022-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/paper-reading/</loc>
+    <lastmod>2022-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

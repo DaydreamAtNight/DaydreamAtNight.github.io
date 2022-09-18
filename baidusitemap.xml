@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</loc>
+    <lastmod>2022-09-18</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</loc>
+    <lastmod>2022-09-18</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/</loc>
+    <lastmod>2022-09-18</lastmod>
+  </url>
+  <url>
+    <loc>https://daydreamatnight.github.io/2022/09/15/CUDA-example-particles/</loc>
+    <lastmod>2022-09-18</lastmod>
+  </url>
+  <url>
     <loc>https://daydreamatnight.github.io/2022/09/09/CUDA-fundamental-7/</loc>
     <lastmod>2022-09-09</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/08/15/A-collection-of-stupid-Errors/</loc>
     <lastmod>2022-09-09</lastmod>
-  </url>
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</loc>
-    <lastmod>2022-09-06</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/09/02/CUDA-fundamental-6/</loc>
@@ -38,10 +50,6 @@
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/07/01/Play-with-CUDA/</loc>
-    <lastmod>2022-09-01</lastmod>
-  </url>
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/</loc>
     <lastmod>2022-09-01</lastmod>
   </url>
   <url>
@@ -82,10 +90,6 @@
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/27/paper-reading-MAE/</loc>
-    <lastmod>2022-06-09</lastmod>
-  </url>
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</loc>
     <lastmod>2022-06-09</lastmod>
   </url>
   <url>
