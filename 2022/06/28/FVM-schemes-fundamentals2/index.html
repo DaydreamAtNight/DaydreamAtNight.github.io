@@ -16,20 +16,20 @@
   <meta name="author" content="Ryan LI">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Last blog is only 1-equation. In this blog we are going to multi-equation.">
+    <meta name="description" content="Last blog is only 1-equation. In this blog we are going to multi-equation and artificial viscosity.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Numerical schemes fundamentals 2">
 <meta property="og:url" content="https://daydreamatnight.github.io/2022/06/28/FVM-schemes-fundamentals2/index.html">
 <meta property="og:site_name" content="ShouRou">
-<meta property="og:description" content="Last blog is only 1-equation. In this blog we are going to multi-equation.">
+<meta property="og:description" content="Last blog is only 1-equation. In this blog we are going to multi-equation and artificial viscosity.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes2.png">
 <meta property="article:published_time" content="2022-06-28T14:48:37.000Z">
-<meta property="article:modified_time" content="2022-09-18T10:38:42.750Z">
+<meta property="article:modified_time" content="2022-09-18T17:54:38.063Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamics">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/fdm_schemes2.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -221,7 +221,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          13k words
+          25k words
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
           <!-- compatible with older versions-->
-          43 minutes
+          84 minutes
         
       </span>
     
@@ -277,13 +277,13 @@
               <div class="markdown-body">
                 
                 <div class="note note-primary">
-            <p><a href="/2022/06/18/FVM-schemes-fundamentals/">Last blog</a> is only 1-equation. In this blog we are going to multi-equation.</p>
+            <p><a href="/2022/06/18/FVM-schemes-fundamentals/">Last blog</a> is only 1-equation. In this blog we are going to multi-equation and artificial viscosity.</p>
           </div>
 <span id="more"></span>
 <p>overview:</p>
 
 <div class="markmap-container" style="height:300px">
-  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#scalar-conservation-laws\&quot;&gt;1-equation PDE theories (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#numerical-representation-of-discontinuities\&quot;&gt;Schemes for 1-equation PDE (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;a href=\&quot;#systems-of-conservation-laws\&quot;&gt;Multi-equation PDE theories&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-form\&quot;&gt;Characteristic form method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;a href=\&quot;#euler-equation\&quot;&gt;Euler equation&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-forms-of-euler-equation\&quot;&gt;Characteristic forms&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;a href=\&quot;#closure-of-euler-equation\&quot;&gt;Closure&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristics-method-of-euler-equation\&quot;&gt;Characteristics method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;&lt;a href=\&quot;#shock-tube-solution-for-euler-equations\&quot;&gt;Shock tube solution&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes-for-non-linear-conservation-laws\&quot;&gt;Schemes for multi-equation PDE&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes-for-multi-dimensional-problems\&quot;&gt;Schemes for multi-dimensional problems&lt;/a&gt;&quot;}],&quot;p&quot;:{}}"></svg>
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#scalar-conservation-laws\&quot;&gt;1-equation PDE theories (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#numerical-representation-of-discontinuities\&quot;&gt;Schemes for 1-equation PDE (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;a href=\&quot;#systems-of-conservation-laws\&quot;&gt;Multi-equation PDE theories&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-form\&quot;&gt;Characteristic form method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;a href=\&quot;#euler-equation\&quot;&gt;Euler equation&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-forms-of-euler-equation\&quot;&gt;Characteristic forms&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;a href=\&quot;#closure-of-euler-equation\&quot;&gt;Closure&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristics-method-of-euler-equation\&quot;&gt;Characteristics method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;&lt;a href=\&quot;#shock-tube-solution-for-euler-equations\&quot;&gt;Shock tube solution&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes-for-non-linear-conservation-laws\&quot;&gt;Schemes for multi-equation PDE&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;&lt;a href=\&quot;#cases-to-be-tested\&quot;&gt;3 test cases illustration&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-friedrichs-method\&quot;&gt;Lax Friedrich&#39;s method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-friedrichs-method\&quot;&gt;Lax Wendroff family&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-wendroff-method\&quot;&gt;Lax Wendroff&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;&lt;a href=\&quot;#two-step-lax-wendroff-method-richtmyer-method\&quot;&gt;Richtmyer method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;&lt;a href=\&quot;#two-step-maccormacks-method\&quot;&gt;MacCormack’s method&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity\&quot;&gt;Artificial Viscosity&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity-for-scalar-conservation-law\&quot;&gt;Scalar equation&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[20,21]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity-form\&quot;&gt;Artificial viscosity form&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[21,22]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity-for-system-of-conservation-laws\&quot;&gt;System of laws&lt;/a&gt;&quot;}]}],&quot;p&quot;:{}}"></svg>
 </div>
 
 <h2 id="systems-of-conservation-laws">Systems of conservation laws</h2>
@@ -523,14 +523,184 @@ p_{R}
 \end{array}\right]
 \end{gathered}
 \]</span></p>
-<h4 id="centred-schemes-lax-friedrichs-method">Centred Schemes: Lax-Friedrichs Method</h4>
-<p><span class="math display">\[
+<h4 id="lax-friedrichs-method">Lax-Friedrichs Method</h4>
+<p>Recall <a href="/2022/06/18/FVM-schemes-fundamentals/#lax-friedrichs-scheme">last time derivation</a></p>
+<p>for case 1 and 2: <span class="math display">\[
 U^{n+1}_i = \frac{U^n_{i+1}+U^n_{i-1}}{2} - \frac{\Delta t}{\Delta x}\left(\frac{F^n_{i+1}-F^n_{i-1}}{2} \right)
 \]</span></p>
-<h2 id="numerical-schemes-for-multi-dimensional-problems">Numerical schemes for multi-dimensional problems</h2>
+<p>for case 3: <span class="math display">\[
+\begin{gathered}
+\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0 \Rightarrow \frac{\partial \mathbf{U}}{\partial t}+\mathbf{A}(\mathbf{U}) \frac{\partial \mathbf{U}}{\partial x}=0 \\
+\mathbf{U}_i^{n+1}=\frac{1}{2}\left(\mathbf{U}_{i+1}^n+\mathbf{U}_{i-1}^n\right)-\frac{\Delta t}{2 \Delta x} \mathbf{\Lambda}\left(\mathbf{U}_{i+1}^n-\mathbf{U}_{i-1}^n\right)
+\end{gathered}
+\]</span></p>
+<h5 id="case-1-result">case 1 result</h5>
+<p><img src="Lax Friedrichs result on linear advection of a sine wave.png" srcset="/img/loading.gif" lazyload alt="Lax Friedrichs result on linear advection of a sine wave" style="zoom:23%;" /></p>
+<p>The dissipation effect is huge, but from last blog, we know it can be controlled with higher resolution of <span class="math inline">\(\Delta x, \Delta t\)</span>. (consistent, diffusivity controlled by CFL)</p>
 <div class="note note-info">
-            <p>Finite differences and finite volume. Computational domain and boundary conditions.</p>
+            <p>How to control the diffusivity? We can write the scheme in the artificial viscosity form, which will be discussed later.</p>
           </div>
+<h5 id="case-2-result">case 2 result</h5>
+<p><img src="Lax-Friedrichs Method on Burger equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="Lax-Friedrichs Method on Burger equation with Riemann problem" style="zoom:25%;" /></p>
+<p>Odd-even oscillations exist, but no over/under shoot.</p>
+<h5 id="case-3-results">case 3 results</h5>
+<p><img src="Lax-Friedrichs Method on Euler equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="Lax-Friedrichs Method on Euler equation with Riemann problem" style="zoom:48%;" /></p>
+<p>Odd-even oscillations exist. The results are smoothed out. It's difficult to capture the discontinuity of density and pressure. But the results will be fine with increased resolution.</p>
+<h4 id="lax-wendroff-method">Lax-Wendroff Method</h4>
+<p>Recall the <a href="/2022/06/18/FVM-schemes-fundamentals/#lax-wendroff-scheme">derivation last time</a>, consider a Taylor serie for <span class="math inline">\(\mathrm{U}(x, t+\Delta t)\)</span> <span class="math display">\[
+\mathbf{U}(x, t+\Delta t)=\mathbf{U}(x, t)+\Delta t \frac{\partial \mathbf{U}(x, t)}{\partial t}+\frac{\Delta t^2}{2} \frac{\partial^2 \mathbf{U}(x, t)}{\partial t^2}+O\left(\Delta t^3\right)
+\]</span> The temporal derivative can be transformed in spatial derivative using the original conservation laws <span class="math display">\[
+\frac{\partial \mathbf{U}(x, t)}{\partial t}=-\frac{\partial \mathbf{F(U)}}{\partial x} = -\mathbf{A}(\mathbf{U}) \frac{\partial \mathbf{U}}{\partial x}\\
+\]</span> <span class="math display">\[
+\begin{aligned}
+\frac{\partial^2 \mathbf{U}(x, t)}{\partial t^2}=\frac{\partial}{\partial t}\left(\frac{\partial \mathbf{U}}{\partial t}\right)=-\frac{\partial}{\partial t}\left(\frac{\partial \mathbf{F(U)}}{\partial x}\right) &amp;=-\frac{\partial}{\partial x}\left(\frac{\partial \mathbf{F(U)}}{\partial t}\right) \\
+&amp;=-\frac{\partial}{\partial x}\left(\mathbf{A(U)} \frac{\partial \mathbf{U}}{\partial t}\right) \\
+&amp;=\frac{\partial}{\partial x}\left(\mathbf{A(U)} \frac{\partial \mathbf{F(U）}}{\partial x}\right)
+\end{aligned}
+\]</span> Put the two expressions into the Taylor series, discretise using central differences: <span class="math display">\[
+\begin{aligned}
+\mathbf{U}^{n+1}_i=&amp;\mathbf{U}^n_i-\Delta t \frac{\mathbf{F}(\mathbf{U}^n_{i+1})-\mathbf{F}(\mathbf{U}^n_{i-1})}{2\Delta x}+ \\
+&amp;\frac{\Delta t^2}{2} \frac{\mathbf{A}_{i+1 / 2}^n\frac{\mathbf{F}(\mathbf{U}^n_{i+1})-\mathbf{F}(\mathbf{U}^n_{i})}{\Delta x}
+-\mathbf{A}_{i-1 / 2}^n\frac{\mathbf{F}(\mathbf{U}^n_{i})-\mathbf{F}(\mathbf{U}^n_{i-1})}{\Delta x}}
+{\Delta x^2}
+\end{aligned}
+\]</span> There are two choice of defininig <span class="math inline">\(\mathbf{A}_{i+1 / 2}^n\)</span>, <span class="math inline">\(\mathbf{A}\left(\mathbf{U}_{i+\frac{1}{2}}^n\right)\)</span> or <span class="math inline">\(\frac{1}{2}\left(\mathbf{A}_i^n+\mathbf{A}_{i+1}^n\right)\)</span>, taking <span class="math inline">\(\mathbf{U}_{i+\frac{1}{2}}\)</span> to calculate <span class="math inline">\(\mathbf{A}\)</span> or average <span class="math inline">\(\mathbf{A}\)</span> from the its neighbouring time steps.</p>
+<p>Recall that <span class="math inline">\(\mathbf{A}\)</span> is a matrix with 9 elements, and it is a function of <span class="math inline">\(x\)</span> and <span class="math inline">\(t\)</span>. i.e. <span class="math inline">\(\mathbf{A}\)</span> updates with every time step at every nodes. And <strong>this will lead to a cost problem</strong></p>
+<div class="note note-info">
+            <p>In the Lax-Wendroff method, the average wave speeds <span class="math inline">\(\mathbf{A}_{i+1 / 2}^n\)</span> may be defined in a variety of different ways. It is actually an entire class of methods depending on the choice of the wave speeds.</p>
+          </div>
+<p>Furthermore, we write the Lax-Wendroff method in conservation form: <span class="math display">\[
+\mathbf{U}_i^{n+1}=\mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left(\mathbf{F}_{i+\frac{1}{2}}^n-\mathbf{F}_{i-\frac{1}{2}}^n\right)
+\]</span> with <span class="math display">\[
+\mathbf{F}_{i+\frac{1}{2}}^n=\frac{\mathbf{F}\left(\mathbf{U}_i^n\right)+\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)}{2}-\frac{\Delta t}{2 \Delta x} \mathbf{A}_{i+\frac{1}{2}}^n\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right)
+\]</span> for case1 and 2, the linear advection equation, <span class="math inline">\(f(u)=a u\)</span> it takes the form <span class="math display">\[
+u_i^{n+1}=u_i^n-\frac{\sigma}{2}\left(u_{i+1}^n-u_{i-1}^n\right)+\frac{\sigma^2}{2}\left(u_{i+1}^n-2 u_i+u_{i-1}^n\right)
+\]</span> where <span class="math inline">\(\sigma=a \frac{\Delta t}{\Delta x}\)</span>. The corresponding conservative flux is <span class="math display">\[
+F_{i+\frac{1}{2}}^n=a \frac{u_i^n+u_{i+1}^n}{2}-\frac{\Delta t}{2 \Delta x} a^2\left(u_{i+1}^n-u_i^n\right)
+\]</span></p>
+<h5 id="case-1-result-1">case 1 result</h5>
+<p><img src="Lax Wendroff result on linear advection of a sine wave.png" srcset="/img/loading.gif" lazyload alt="Lax Wendroff result on linear advection of a sine wave" style="zoom:25%;" /></p>
+<p>The Lax Wendroff result slightly shifted (delay), because the schemes is not consistent as discussed in last blog. It can beed seen that the Lax Wendroff method is not suitable for simple non-discontinue problems.</p>
+<h5 id="case-2-result-1">case 2 result</h5>
+<p><img src="Lax Wendroff Method on Burger equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="Lax Wendroff Method on Burger equation with Riemann problem" style="zoom:25%;" /></p>
+<p>Here the rarefaction wave is not captured, WRONG SOLUTION! As discussed before, the conservation form locates the shock perfectly but the result cannot be guaranteed as physical. And it is not suitable for system of conservation.</p>
+<p>There is no need to test case 3 because we know it will have a slight delay, and wrong solution.</p>
+<h4 id="two-step-lax-wendroff-method-richtmyer-method">Two-step Lax-Wendroff Method (Richtmyer method)</h4>
+<p>This is an optimisation of Lax-Wendroff. The idea is to reduce the cost by the <span class="math inline">\(\mathbf{A}\)</span> matrix</p>
+<p>There are two options:</p>
+<ul>
+<li>Option 1: Approximate matrix <span class="math inline">\(\mathbf{A}\)</span>: Still too expensive.</li>
+<li>Option 2: Avoid computation of matrix <span class="math inline">\(\mathbf{A}\)</span> (Jacobian free methods): Richtmyer method introducing intermedia time steps <span class="math inline">\(n+\frac{1}{2}\)</span> as follows</li>
+</ul>
+<p>Step 1 <span class="math display">\[
+\begin{aligned}
+&amp;\mathbf{U}_{i+1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_{i+1}^n+\mathbf{U}_i^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right) \\
+&amp;\mathbf{U}_{i-1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_i^n+\mathbf{U}_{i-1}^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_i^n\right)-\mathbf{F}\left(\mathbf{U}_{i-1}^n\right)\right)
+\end{aligned}
+\]</span> Step 2 <span class="math display">\[
+\mathbf{U}_i^{n+1}=\mathbf{U}_i^n + \Delta t \frac{\partial\mathbf{U}_{i}^{n+1 / 2}}{\partial t} = \mathbf{U}_i^n-\Delta t\frac{\partial\mathbf{F}_{i}^{n+1 / 2}}{\partial x} = \mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left[\mathbf{F}\left(\mathbf{U}_{i+1 / 2}^{n+1 / 2}\right)-\mathbf{F}\left(\mathbf{U}_{i-1 / 2}^{n+1 / 2}\right)\right]
+\]</span> Conservative form are used to avoid the calculation of <span class="math inline">\(\mathbf{A}\)</span> matrix.</p>
+<ul>
+<li>This first step is called the <strong>predictor</strong> (here Lax-Friedriechs method)</li>
+<li>The second step is called the <strong>corrector</strong> (here Leapfrog method)</li>
+</ul>
+<p><img src="Idea of the two step Lax wendroff method.png" srcset="/img/loading.gif" lazyload alt="Idea of the two step Lax wendroff method" style="zoom:20%;" /></p>
+<p>The idea is inspired from the <a target="_blank" rel="noopener" href="https://epubs.siam.org/doi/abs/10.1137/0728062">Two-step runge–kutta methods</a> for ordinary differential equations. Apart from the standard grid <span class="math inline">\(x_i\)</span>; another the staggered grid <span class="math inline">\(x_{i+ 1/2} = (x_{i+1} + x_i )/2\)</span> lies halfway between the standard grid points.</p>
+<div class="note note-info">
+            <p>Staggered grids are extremely common in predictor-corrector methods.</p>
+          </div>
+<h5 id="case-3-results-1">case 3 results</h5>
+<p><img src="two step Lax Wendroff Method on Euler equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="two step Lax Wendroff Method on Euler equation with Riemann problem" style="zoom:48%;" /></p>
+<p>The result is highly diffusive on the shock. For velocity, although the shock and rarefaction wave are captured, oscillations exist because of the second order. For pressure, a slight overshoot also exit on the upstream of the shock.</p>
+<div class="note note-info">
+            <p>Note the scheme is upwind, so if there is a bidirectional supersonic flow, this scheme will not work well.</p>
+          </div>
+<h4 id="two-step-maccormacks-method">Two-step MacCormack’s method</h4>
+<p>This is another variance of the two step lax wandroff method, and it is one of the most used method for compressible flow.</p>
+<p>The idea is to combine upwind and downwind method so that the bidirectional supersonic wave can be evaluated well.</p>
+<p>Predictor step: 1<sup>st</sup> order upwind (first guess) <span class="math display">\[
+\mathbf{U}_i^*=\mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right)
+\]</span> Corrector step: 1<sup>st</sup> order down wind <span class="math display">\[
+\mathbf{\hat U}_i=
+\mathbf{U}_i^* + \Delta t \frac{\partial\mathbf{U}_i^*}{\partial t}=
+\mathbf{U}_i^* - \Delta t \frac{\partial\mathbf{F}(\mathbf{U}_i^*)}{\partial t}
+=\mathbf{U}_i^*-\frac{\Delta t}{\Delta x}\left[\mathbf{F}\left(\mathbf{U}_i^*\right)-\mathbf{F}\left(\mathbf{U}_{i-1}^*\right)\right]
+\]</span> Finally step, average <span class="math display">\[
+\mathbf{U}_i^n = (\mathbf{\hat{U}}_{i}+\mathbf{U}_{i}^{*})/2
+\]</span> The predictor and corrector in MacCormack’s method can be reversed depending if we have left-running or right-running waves. The two versions of MacCormack’s method are often combined to a mix of left and right running waves.</p>
+<p>The predictor or corrector are both unconditionally unstable, yet the sequence is stable if <span class="math inline">\(CFL&lt;1\)</span>.</p>
+<div class="note note-info">
+            <p>The MacCormack’s method is still second order although two two steps are first order.</p><p>Even with the sophisticated methods available today, many people still turn to MacCormack’s method first, especially in the absence of shocks, mainly because of its simplicity and efficiency.</p>
+          </div>
+<h5 id="case-3-result">case 3 result</h5>
+<p><img src="MacCormack's Method on Euler equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="MacCormack's Method on Euler equation with Riemann problem" style="zoom:48%;" /></p>
+<p>Oscillation with shocks because the second order.</p>
+<h3 id="artificial-viscosity">Artificial viscosity</h3>
+<h4 id="artificial-viscosity-for-scalar-conservation-law">Artificial viscosity for Scalar Conservation Law</h4>
+<p><img src="Difference between diffusion and dispersion.png" srcset="/img/loading.gif" lazyload alt="Difference between diffusion and dispersion" style="zoom:30%;" /></p>
+<p>Firstly, recall the difference between diffusion and dispersion. Diffusion(left) means the smearing effect with convection, while dispersion(right) represents the effect of oscillation. We are seeking a method to control the balance of diffusion and dispersion of a numerical method.</p>
+<p>The idea of artificial viscosity is that, there is no viscous terms in Euler equations but we can have some viscous effect (diffusive effects) inside numerical methods.</p>
+<p>For example, a scalar conservation law with a viscous-like term (like in N-S): A conservative forward <span class="math display">\[
+\frac{\partial u}{\partial t}+\frac{\partial f(u)}{\partial x}=\frac{\partial}{\partial x}\left(d(u) \frac{\partial u}{\partial x}\right)\\
+\]</span> where <span class="math inline">\(d(u)\)</span> is the viscous term and it should be as small as possible. Besides, unlike the constant real viscosity in the N-S, <span class="math inline">\(d\)</span> can be non-constant locally.</p>
+<p>Use central difference to discretise this formula as: <span class="math display">\[
+\frac{u_i^{n+1}-u_i^n}{\Delta t}+\frac{f\left(u_{i+1}^n\right)-f\left(u_{i-1}^n\right)}{2 \Delta x}=\frac{d_{i+1 / 2} \frac{u_{i+1}^n-u_i^n}{\Delta x} - d_{i-1 / 2} \frac{u_i^n-u_{i-1}^n}{\Delta x}}{\Delta x}
+\]</span> <div class="note note-info">
+            <p>A oscillatory scheme can be controlled by introducing diffusion, i.e. artificial viscosity.</p>
+          </div></p>
+<h4 id="artificial-viscosity-form">Artificial Viscosity Form</h4>
+<p>Take The Lax-Friedrich's method as an example, the conservative form can be written in the artificial viscosity form.</p>
+<p>Non-conservative form: <span class="math display">\[
+u_i^{n+1}=\frac{1}{2}\left(u_{i-1}^n+u_{i+1}^n\right)-\frac{\Delta t}{2 \Delta x}\left[f\left(u_{i+1}^n\right)-f\left(u_{i-1}^n\right)\right]
+\]</span> Conservative form: <span class="math display">\[
+u_i^{n+1}=u_i^n-\frac{\Delta t}{\Delta x}\left[F_{i+1 / 2}^n-F_{i-1 / 2}^n\right]$ with $F_{i+1 / 2}^n=\frac{\Delta x}{2 \Delta t}\left(u_i^n-u_{i+1}^n\right)+\frac{1}{2}\left[f\left(u_i^n\right)+f\left(u_{i+1}^n\right)\right]
+\]</span></p>
+<p>Artificial viscosity form: <span class="math display">\[
+u_i^{n+1}=u_i^n-\frac{\Delta t}{2 \Delta x}\left[f\left(u_{i+1}^n\right)-f\left(u_{i-1}^n\right)\right]+\frac{\Delta t}{2 \Delta x}\left[d_{i+1 / 2}\left(u_{i+1}^n-u_i^n\right)-d_{i-1 / 2}\left(u_i^n-u_{i-1}^n\right)\right]
+\]</span> with <span class="math inline">\(d_{i+1 / 2}=\frac{\Delta x}{\Delta t}\)</span>,</p>
+<div class="note note-primary">
+            <p>Most of the schemes can be written in artificial viscosity form so that one can quantify the diffusivity by inspecting the <span class="math inline">\(d_{i+1 / 2}\)</span>. We can as a result analysis, then control the diffusivity of a scheme.</p><p>For example for Lax-Friedrich's method:</p><ul><li><p>reduce $x $, the diffusivity will be reduced.</p></li><li><p>reduce <span class="math inline">\(\Delta t\)</span> the diffusivity will be increased.</p></li></ul><p>The dissipation can be easily controlled by increasing the space resolution, or selecting the highest possible CFL number.</p>
+          </div>
+<p>Some points:</p>
+<ul>
+<li>The discretisation of this term does not need to be acurate; all we want is to have desirable numerical effects.</li>
+<li>Implicit artificial viscosity: arises naturally as part of the discretisation of the first derivative.</li>
+<li>Explicit artificial viscosity: added on purpose to remove oscillations.</li>
+</ul>
+<h4 id="artificial-viscosity-for-system-of-conservation-laws">Artificial Viscosity for System of Conservation Laws</h4>
+<p>For systems of conservation laws, the artificial dissipation term can be considered a discretisation of <span class="math display">\[
+\frac{\partial}{\partial x}\left(\mathbf{D(u)} \frac{\partial \mathbf{U}}{\partial x}\right)\\
+\]</span> where <span class="math inline">\(\mathbf{D}\)</span> is used to add explicit artificial dissipation on the scheme to control the high-frequency oscilations. This is analogous to <span class="math display">\[
+\frac{\partial}{\partial x}\left(d(u) \frac{\partial u}{\partial x}\right)\\
+\]</span></p>
+<p>for scalar conservation laws as seen in previous subsection.</p>
+<h4 id="requirement-for-artificial-dissipation">Requirement for artificial dissipation</h4>
+<p>The (explicit) dissipation matrix <span class="math inline">\(\mathbf{D}\)</span> should satisfy:</p>
+<ul>
+<li>The dimensions of <span class="math inline">\(\mathbf{D}\)</span> are those of <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li>Its influence in smooth regions should be negligible. It should act only around discontinuities (i.e in areas with strong gradients).</li>
+<li>It should be non-linear, i.e. depends on <span class="math inline">\(\mathbf{U}\)</span></li>
+<li><span class="math inline">\(\mathbf{D}\)</span> should be proportional to, at least, <span class="math inline">\(\Delta x\)</span> in order to maintain second-order accuracy.</li>
+<li>Different schemes may need different levels of dissipation.</li>
+<li>Explicit artificial dissipation terms are added to the numerical flux.</li>
+</ul>
+<p>For example, the Richtmyer method with this sort of artificial viscosity becomes</p>
+<p>Step 1, not changed <span class="math display">\[
+\begin{aligned}
+&amp;\mathbf{U}_{i+1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_{i+1}^n+\mathbf{U}_i^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right) \\
+&amp;\mathbf{U}_{i-1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_i^n+\mathbf{U}_{i-1}^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_i^n\right)-\mathbf{F}\left(\mathbf{U}_{i-1}^n\right)\right)
+\end{aligned}
+\]</span> Step 2, add artificial viscosity <span class="math display">\[
+\mathbf{U}_i^{n+1}= \mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left[\mathbf{F}\left(\mathbf{U}_{i+1 / 2}^{n+1 / 2}\right)-\mathbf{F}\left(\mathbf{U}_{i-1 / 2}^{n+1 / 2}\right)\right]
++d[\mathbf{U}_{i+1}^n-\mathbf{U}_{i}^n+\mathbf{U}_{i-1}^n]
+\]</span> But both Richtmyer and MacCormack’s methods remain oscillate with artificial viscosity.</p>
+<blockquote>
+<ul>
+<li>For the Euler equations, without artificial viscosity, neither MacCormack’s method nor the Richtmyer method can complete the first time step without overshooting and creating negative pressures.</li>
+<li>Both methods take two time steps with a constant coefficient of second-order artificial viscosity d = 0.02. After the first two time steps have smoothed the initial conditions, both methods are able to continue without artificial viscosity.</li>
+<li>Overshoots and oscillations without continued use of artificial viscosity.</li>
+</ul>
+</blockquote>
 
                 
               </div>

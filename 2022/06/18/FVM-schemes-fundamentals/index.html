@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
 <meta property="article:published_time" content="2022-06-18T10:08:24.000Z">
-<meta property="article:modified_time" content="2022-08-20T18:07:37.634Z">
+<meta property="article:modified_time" content="2022-09-18T13:10:40.603Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamics">
 <meta name="twitter:card" content="summary_large_image">
@@ -794,24 +794,21 @@ u(x,0)=
 <p><img src="./two solutions for reverse Riemann problem.png" srcset="/img/loading.gif" lazyload alt="two solutions for reverse Riemann problem, rarefaction wave (left) and stationary discontinuity (right)" style="zoom:67%;" /></p>
 <h4 id="numerical-schemes">Numerical schemes</h4>
 <p>we set 2 different initial conditions:</p>
-<ul>
-<li><p><span class="math display">\[
+<p><span class="math display">\[
 u_i^0= 
 \begin{cases}  
 -1 &amp;i\leq0 \\ 
 1 &amp; i&gt;0
 \end{cases}
-\]</span></p></li>
-<li></li>
-<li><p><span class="math display">\[
+\]</span></p>
+<p><span class="math display">\[
 u_i^0= 
 \begin{cases}  
 -1 &amp;i&lt;0 \\ 
 0 &amp;i=0 \\ 
 1 &amp; i&gt;0
 \end{cases}
-\]</span></p></li>
-</ul>
+\]</span></p>
 <p>And use the first order upwind scheme as <span class="math display">\[
 \frac{\partial u}{\partial t}=\frac{u_i^{n+1}-u_i^{n}}{\Delta t}, \qquad 
 \frac{\partial (1/2u^2)}{\partial x}= 
