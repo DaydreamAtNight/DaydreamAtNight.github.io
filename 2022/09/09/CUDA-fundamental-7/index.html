@@ -32,30 +32,27 @@
 <meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_7.png">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
   <title>CUDA Performance - ShouRou</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
@@ -64,15 +61,31 @@
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"♪"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
@@ -81,8 +94,13 @@
 
 
 <body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 30vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>ShouRou</strong>
@@ -152,6 +170,7 @@
               &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
@@ -164,62 +183,76 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/article_banner.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="CUDA Performance">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      Ryan LI
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-09-09 23:04" pubdate>
-        September 9, 2022 pm
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      18k words
-    </span>
   
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      59 minutes
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CUDA Performance"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-09 23:04" pubdate>
+          September 9, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          18k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          59 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -228,16 +261,22 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">CUDA Performance</h1>
             
-            <div class="markdown-body">
-              <p><div class="note note-primary">
+            
+              <div class="markdown-body">
+                
+                <p><div class="note note-primary">
             <p>The limits of performance and way of optimisation are introduced with examples, mostly memory optimisation and warp divergence.</p>
           </div></p>
 <span id="more"></span>
@@ -300,14 +339,7 @@
 <h5 id="conditions">conditions</h5>
 <p>When a warp requests 32 aligned, 4-byte words, there are several conditions:</p>
 <table>
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 44%" />
-<col style="width: 5%" />
-<col style="width: 8%" />
-<col style="width: 17%" />
-<col style="width: 11%" />
-</colgroup>
+
 <thead>
 <tr class="header">
 <th>warp word requested</th>
@@ -427,7 +459,7 @@
 </ul>
 <p><img src="share memory bank illustration.png" srcset="/img/loading.gif" lazyload alt="share memory bank illustration" style="zoom: 50%;" /></p>
 <h5 id="example-1">example</h5>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];</code></pre></div>
 <p><img src="share memory bank storage example.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage example, note the bank illustration is transposed as the upper one" style="zoom:25%;" /></p>
 <h4 id="bank-conflict">Bank Conflict</h4>
 <p>Two simultaneous accesses to the same bank, but not the same address,</p>
@@ -448,13 +480,13 @@
 <ol type="1">
 <li>Access to different banks by a warp executes in parallel.</li>
 </ol>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
 <span class="hljs-type">int</span> tidx = threadidx.x;
 <span class="hljs-type">float</span> foo = tile[tidx] - <span class="hljs-number">3</span>;</code></pre></div>
 <p><img src="share memory bank storage requested concecutively.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested concecutively" style="zoom:15%;" /></p>
 <ol start="2" type="1">
 <li><p>Access to same element of bank by a warp executes in parallel.</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
 <span class="hljs-type">int</span> tidx = threadidx.x;
 <span class="hljs-type">int</span> bar = tile[tidx - tidx % <span class="hljs-number">2</span>];</code></pre></div>
 <p><img src="same element in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="same element in share memory bank storage requested" style="zoom:15%;" /></p></li>
@@ -462,7 +494,7 @@
 <ul>
 <li>2-way conflict</li>
 </ul>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
 <span class="hljs-type">int</span> tidx = threadidx.x;
 <span class="hljs-type">int</span> bar = tile[tidx + tidx % <span class="hljs-number">2</span> * <span class="hljs-number">31</span>];</code></pre></div>
 <p><img src="different elements in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested, 2-way conflict" style="zoom:15%;" /></p></li>
@@ -483,7 +515,7 @@
 <p>Simple to implement</p>
 <p><img src="Matrix transpose illustration.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose illustration" style="zoom:67%;" /></p>
 <h4 id="cpu">CPU</h4>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; rows; i++)
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; rows; i++)
 &#123;
 	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; cols; j++)
     &#123;
@@ -494,7 +526,7 @@
 <li>O(n2 ) slow</li>
 </ul>
 <h4 id="gpu-v1">GPU V1</h4>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTranspose</span><span class="hljs-params">(<span class="hljs-type">float</span> *_A, <span class="hljs-type">float</span> *_A_t)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTranspose</span><span class="hljs-params">(<span class="hljs-type">float</span> *_A, <span class="hljs-type">float</span> *_A_t)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-type">int</span> row = blockDim.y*blockIdx.y+threadIdx.y;
 	<span class="hljs-type">int</span> col = blockDim.x*blockIdx.x+threadIdx.x;
@@ -528,7 +560,7 @@
 </ol>
 <p><img src="memory access modes on READ and WRITE via share memory.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE via share memory" style="zoom:60%;" /></p>
 <p><img src="Matrix transpose via share memory.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose via share memory" style="zoom:60%;" /></p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTransposeShared</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span> *_a, <span class="hljs-type">float</span> *_b)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTransposeShared</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span> *_a, <span class="hljs-type">float</span> *_b)</span></span>
 <span class="hljs-function"></span>&#123;
     __shared__ <span class="hljs-type">float</span> mat[BLOCK_SIZE_Y][BLOCK_SIZE_X];
     <span class="hljs-type">int</span> bx = blockIdx.x * BLOCK_SIZE_X;
@@ -556,12 +588,12 @@
 <ul>
 <li>32-way conflict</li>
 </ul>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y];</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs c++">b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y];</code></pre></div>
 <p><img src="different elements in share memory bank storage requested 32 way conflict.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested 32 way conflict" style="zoom:15%;" /></p>
 <h5 id="improvement-1">Improvement</h5>
 <p>Resolving bank conflict by stuffing blank element at the end of each bank.</p>
 <h4 id="gpu-v3">GPU V3</h4>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// __shared__ float mat[BLOCK_SIZE_Y][BLOCK_SIZE_X];</span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// __shared__ float mat[BLOCK_SIZE_Y][BLOCK_SIZE_X];</span>
 __shared__ <span class="hljs-type">float</span> mat[BLOCK_SIZE_Y][BLOCK_SIZE_X + <span class="hljs-number">1</span>];
 <span class="hljs-comment">// ...</span>
 b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
@@ -592,10 +624,7 @@ b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
 <p><img src="loop unrolled illustration.PNG" srcset="/img/loading.gif" lazyload alt="loop unrolled illustration" style="zoom:80%;" /></p></li>
 </ul>
 <table>
-<colgroup>
-<col style="width: 32%" />
-<col style="width: 67%" />
-</colgroup>
+
 <thead>
 <tr class="header">
 <th>HOST</th>
@@ -625,7 +654,7 @@ b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
 </tr>
 </tbody>
 </table>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">int</span> TILE, <span class="hljs-type">int</span> SIDE&gt; <span class="hljs-comment">//TILE = 32, SIDE = 8</span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">int</span> TILE, <span class="hljs-type">int</span> SIDE&gt; <span class="hljs-comment">//TILE = 32, SIDE = 8</span>
 <span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTransposeUnrolled</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* a, <span class="hljs-type">float</span>* b)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">//Allocate appropriate shared memory (avoid bank conflict)</span>
@@ -720,7 +749,7 @@ s = \sum_ {i=0}^N a_i
 <div class="note note-secondary">
             <p>We only modify Parts 2 and 3 for optimization</p>
           </div>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// step 1</span>
     <span class="hljs-comment">// Dynamic allocation of shared memory - See kernel call in host code</span>
@@ -791,12 +820,12 @@ s = \sum_ {i=0}^N a_i
 <p>For <code>warpSize = 32</code>,</p>
 <ul>
 <li><p>the code below will cause divergence inside a warp.</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (threadIdx.x &gt; <span class="hljs-number">15</span>)
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (threadIdx.x &gt; <span class="hljs-number">15</span>)
 &#123;
 	<span class="hljs-comment">// ...</span>
 &#125;</code></pre></div></li>
 <li><p>the code below suffers no from the branch divergence</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (threadIdx.x &gt; warpSize - <span class="hljs-number">1</span>)
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (threadIdx.x &gt; warpSize - <span class="hljs-number">1</span>)
 &#123;
 	<span class="hljs-comment">// ...</span>
 &#125;</code></pre></div>
@@ -819,7 +848,7 @@ s = \sum_ {i=0}^N a_i
 <li><p>Too many divergent branches</p></li>
 </ul>
 <p>Now we are dealing with the second one.</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// step 1 and 2 ...</span>
     <span class="hljs-comment">// step 3</span>
@@ -842,7 +871,7 @@ s = \sum_ {i=0}^N a_i
 </ul>
 <h4 id="gpu-v3-sequential-addressing">GPU V3: Sequential Addressing</h4>
 <p>Now we are dealing with the first problem.</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// step 1 and 2 ...</span>
     <span class="hljs-comment">// step 3</span>
@@ -873,11 +902,7 @@ s = \sum_ {i=0}^N a_i
 <p><img src="Algorithms comparison.PNG" srcset="/img/loading.gif" lazyload alt="Algorithms comparison" style="zoom:80%;" /></p>
 <p>Given the knowledge of warp partitioning</p>
 <table>
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 42%" />
-<col style="width: 44%" />
-</colgroup>
+
 <thead>
 <tr class="header">
 <th>Pass number</th>
@@ -933,7 +958,7 @@ s = \sum_ {i=0}^N a_i
 <li>Or keep shared memory same and do more work per block</li>
 </ul></li>
 </ul>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// step 1  </span>
     <span class="hljs-comment">// step 2</span>
@@ -965,7 +990,7 @@ s = \sum_ {i=0}^N a_i
 </ul></li>
 </ul>
 <h4 id="gpu-v4.2-multiple-adds-on-load">GPU V4.2: Multiple adds on load</h4>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// step 1  </span>
     <span class="hljs-comment">// step 2</span>
@@ -992,7 +1017,7 @@ s = \sum_ {i=0}^N a_i
 <p>Unroll the last warp</p>
 <h4 id="gpu-v5.1-last-warp-unroll">GPU V5.1: Last warp unroll</h4>
 <p>Split the step 3 into 2 steps:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// step 1 and 2 ...</span>
     <span class="hljs-comment">// step 3</span>
@@ -1015,7 +1040,7 @@ s = \sum_ {i=0}^N a_i
     <span class="hljs-comment">// step 4 ...</span>
 &#125;</code></pre></div>
 <p>with</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">warpReduce</span><span class="hljs-params">(<span class="hljs-keyword">volatile</span> <span class="hljs-type">float</span>* smem, <span class="hljs-type">int</span> tid)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">warpReduce</span><span class="hljs-params">(<span class="hljs-keyword">volatile</span> <span class="hljs-type">float</span>* smem, <span class="hljs-type">int</span> tid)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">//Write code for warp reduce here</span>
     smem[tid] += smem[tid + <span class="hljs-number">32</span>];
@@ -1039,7 +1064,7 @@ s = \sum_ {i=0}^N a_i
 <li><p>Use Templates</p></li>
 <li><p>CUDA supports C++ template parameters on device and host functions</p></li>
 <li><p>Specify block size as a function template parameter:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">reduce_v5&lt;threads&gt;&lt;&lt;&lt;dims.dimBlocks,
+<div class="code-wrapper"><pre><code class="hljs c++">reduce_v5&lt;threads&gt;&lt;&lt;&lt;dims.dimBlocks,
 					 dims.dimThreads,
 					 <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>) * dims.dimThreads
                    &gt;&gt;&gt;
@@ -1050,7 +1075,7 @@ s = \sum_ {i=0}^N a_i
 <li>Only a limited number of <code>if</code> conditions we have to write</li>
 </ul>
 <p>Also make block sizes power of 2 (preferably multiples of 32).</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span>(blockSize &gt;= <span class="hljs-number">1024</span>)
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span>(blockSize &gt;= <span class="hljs-number">1024</span>)
 &#123;
 	<span class="hljs-keyword">if</span>(threadIdx.x &lt; <span class="hljs-number">512</span>) &#123; smem[tid] += smem[tid + <span class="hljs-number">512</span>]; &#125; __syncthreads();
 &#125;
@@ -1123,33 +1148,75 @@ s = \sum_ {i=0}^N a_i
 <p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf">CUDA C++ Programming Guide - NVIDIA Developer</a></p>
 <p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/pdf/CUDA_C_Best_Practices_Guide.pdf">CUDA C++ Best Practices Guide - NVIDIA Developer</a></p>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/CUDA/">CUDA</a>
-                    
-                  </div>
                 
               </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    Copyright: This blog is provided under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CUDA Performance</div>
+      <div>https://daydreamatnight.github.io/2022/09/09/CUDA-fundamental-7/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 9, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
               
               
-                <div class="post-prevnext">
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/15/CUDA-example-particles/">
+                      <a href="/2022/09/15/CUDA-example-particles/" title="CUDA example particles">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">CUDA example particles</span>
                         <span class="visible-mobile">Previous</span>
@@ -1159,7 +1226,7 @@ s = \sum_ {i=0}^N a_i
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/02/CUDA-fundamental-6/">
+                      <a href="/2022/09/02/CUDA-fundamental-6/" title="CUDA programming 2">
                         <span class="hidden-mobile">CUDA programming 2</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -1175,19 +1242,69 @@ s = \sum_ {i=0}^N a_i
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
 
 
     
@@ -1212,59 +1329,61 @@ s = \sum_ {i=0}^N a_i
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-  <div class="statistics">
-    
-    
-
-    
-      
-        <!-- 不蒜子统计PV -->
-        <span id="busuanzi_container_site_pv" style="display: none">
-            Toal views: 
-            <span id="busuanzi_value_site_pv"></span>
-             
-          </span>
-      
-      
-        <!-- 不蒜子统计UV -->
-        <span id="busuanzi_container_site_uv" style="display: none">
-            Total visiters: 
-            <span id="busuanzi_value_site_uv"></span>
-            
-          </span>
-      
-    
-  </div>
-
-
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
   
 
   
-</footer>
-
-
-  <!-- SCRIPTS -->
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -1275,15 +1394,27 @@ s = \sum_ {i=0}^N a_i
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -1295,99 +1426,146 @@ s = \sum_ {i=0}^N a_i
 
 
 
-  
-
-
 
   
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
 
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-  
-
-  
-    <!-- MathJax -->
-    <script>
-      MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-        loader: {
-          load: ['ui/lazy']
-        },
-        options: {
-          renderActions: {
-            findScript: [10, doc => {
-              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-                const display = !!node.type.match(/; *mode=display/);
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                const text = document.createTextNode('');
-                node.parentNode.replaceChild(text, node);
-                math.start = { node: text, delim: '', n: 0 };
-                math.end = { node: text, delim: '', n: 0 };
-                doc.math.push(math);
-              });
-            }, '', false],
-            insertedScript: [200, () => {
-              document.querySelectorAll('mjx-container').forEach(node => {
-                let target = node.parentNode;
-                if (target.nodeName.toLowerCase() === 'li') {
-                  target.parentNode.classList.add('has-jax');
-                }
-              });
-            }, '', false]
-          }
-        }
-      };
-    </script>
-
-    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
-
-  
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
-  <script>
-    if (window.mermaid) {
-      mermaid.initialize({"theme":"default"});
-    }
-  </script>
-
-
 
 
 
@@ -1399,9 +1577,15 @@ s = \sum_ {i=0}^N a_i
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

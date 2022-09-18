@@ -33,30 +33,27 @@
 <meta name="twitter:image" content="https://daydreamatnight.github.io/index/paper-reading-contrastive-learning-review.png">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
   <title>Contrastive learning review - ShouRou</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
@@ -65,15 +62,31 @@
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"♪"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
@@ -82,8 +95,13 @@
 
 
 <body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 30vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>ShouRou</strong>
@@ -153,6 +171,7 @@
               &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
@@ -165,62 +184,76 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/article_banner.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Contrastive learning review">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      Ryan LI
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-05-03 01:21" pubdate>
-        May 3, 2022 am
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      22k words
-    </span>
   
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      72 minutes
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Contrastive learning review"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-03 01:21" pubdate>
+          May 3, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          22k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          72 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -229,16 +262,22 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Contrastive learning review</h1>
             
-            <div class="markdown-body">
-              <div class="note note-primary">
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
             <p>As a form of unsupervised learning, contrastive learning plays an ever more important role in deep learning. Here's a review of contrastive learning in CV since 2018, including 4 stages and 14 papers. This blog is written following the lead of this <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV19S4y1M7hm/">review video</a>.</p>
           </div>
 <span id="more"></span>
@@ -248,7 +287,7 @@
 <p>Since, 2018, the development of contrastive learning can be concluded in 4 stages, and an overview is shown below:</p>
 
 <div class="markmap-container" style="height:300px">
-  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;Wild growth&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,4]},&quot;v&quot;:&quot;InstDisc&lt;sup id=\&quot;fnref:1\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:1\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Wu, Z., Xiong, Y., Yu, S. X., &amp;amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).\n\&quot;&gt;[1]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,6]},&quot;v&quot;:&quot;InvaSpread&lt;sup id=\&quot;fnref:2\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:2\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Ye, M., Zhang, X., Yuen, P. C., &amp;amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 6210-6219).\n\&quot;&gt;[2]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[6,8]},&quot;v&quot;:&quot;CPC&lt;sup id=\&quot;fnref:3\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:3\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Van den Oord, A., Li, Y., &amp;amp; Vinyals, O. (2018). Representation learning with contrastive predictive coding. arXiv e-prints, arXiv-1807.\n\&quot;&gt;[3]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[8,10]},&quot;v&quot;:&quot;CMC&lt;sup id=\&quot;fnref:4\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:4\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Tian, Y., Krishnan, D., &amp;amp; Isola, P. (2020, August). Contrastive multiview coding. In European conference on computer vision (pp. 776-794). Springer, Cham.\n\&quot;&gt;[4]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;Two heroes&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[11,13]},&quot;v&quot;:&quot;MoCo v1&lt;sup id=\&quot;fnref:5\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:5\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;He, K., Fan, H., Wu, Y., Xie, S., &amp;amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).\n\&quot;&gt;[5]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,15]},&quot;v&quot;:&quot;SimCLR v1&lt;sup id=\&quot;fnref:6\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:6\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Chen, T., Kornblith, S., Norouzi, M., &amp;amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.\n\&quot;&gt;[6]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[15,17]},&quot;v&quot;:&quot;MoCo v2&lt;sup id=\&quot;fnref:7\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:7\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Chen, X., Fan, H., Girshick, R., &amp;amp; He, K. (2020). Improved baselines with momentum contrastive learning. arXiv preprint arXiv:2003.04297.\n\&quot;&gt;[7]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[17,19]},&quot;v&quot;:&quot;SimCLR v2&lt;sup id=\&quot;fnref:8\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:8\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Chen, T., Kornblith, S., Swersky, K., Norouzi, M., &amp;amp; Hinton, G. E. (2020). Big self-supervised models are strong semi-supervised learners. Advances in neural information processing systems, 33, 22243-22255.\n\&quot;&gt;[8]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[19,21]},&quot;v&quot;:&quot;SwAV&lt;sup id=\&quot;fnref:9\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:9\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., &amp;amp; Joulin, A. (2020). Unsupervised learning of visual features by contrasting cluster assignments. Advances in Neural Information Processing Systems, 33, 9912-9924.\n\&quot;&gt;[9]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[21,22]},&quot;v&quot;:&quot;No negative samples&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[22,24]},&quot;v&quot;:&quot;BYOL&lt;sup id=\&quot;fnref:10\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:10\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp;amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. Advances in Neural Information Processing Systems, 33, 21271-21284.\n\&quot;&gt;[10]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[24,25]},&quot;v&quot;:&quot;Explanation&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[25,27]},&quot;v&quot;:&quot;BYOL v2&lt;sup id=\&quot;fnref:11\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:11\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Richemond, P. H., Grill, J. B., Altché, F., Tallec, C., Strub, F., Brock, A., ... &amp;amp; Valko, M. (2020). BYOL works even without batch statistics. arXiv preprint arXiv:2010.10241.\n\&quot;&gt;[11]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[28,30]},&quot;v&quot;:&quot;SimSiam&lt;sup id=\&quot;fnref:12\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:12\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Chen, X., &amp;amp; He, K. (2021). Exploring simple siamese representation learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 15750-15758).\n\&quot;&gt;[12]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[31,32]},&quot;v&quot;:&quot;Transformer based&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[32,34]},&quot;v&quot;:&quot;MoCo v3&lt;sup id=\&quot;fnref:13\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:13\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Chen, X., Xie, S., &amp;amp; He, K. (2021). An empirical study of training self-supervised vision transformers. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 9640-9649).\n\&quot;&gt;[13]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[34,36]},&quot;v&quot;:&quot;DINO&lt;sup id=\&quot;fnref:14\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:14\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., &amp;amp; Joulin, A. (2021). Emerging properties in self-supervised vision transformers. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 9650-9660).\n\&quot;&gt;[14]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]}],&quot;p&quot;:{}}"></svg>
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;Wild growth&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;InstDisc&lt;sup id=\&quot;fnref:1\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:1\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)\&quot;&gt;[1]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;InvaSpread&lt;sup id=\&quot;fnref:2\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:2\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 6210-6219).](http://openaccess.thecvf.com/content_CVPR_2019/html/Ye_Unsupervised_Embedding_Learning_via_Invariant_and_Spreading_Instance_Feature_CVPR_2019_paper.html)\&quot;&gt;[2]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;CPC&lt;sup id=\&quot;fnref:3\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:3\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Van den Oord, A., Li, Y., &amp; Vinyals, O. (2018). Representation learning with contrastive predictive coding. *arXiv e-prints*, arXiv-1807.](https://ui.adsabs.harvard.edu/abs/2018arXiv180703748V/abstract)\&quot;&gt;[3]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;CMC&lt;sup id=\&quot;fnref:4\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:4\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Tian, Y., Krishnan, D., &amp; Isola, P. (2020, August). Contrastive multiview coding. In *European conference on computer vision* (pp. 776-794). Springer, Cham.](https://link.springer.com/chapter/10.1007/978-3-030-58621-8_45)\&quot;&gt;[4]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;Two heroes&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;MoCo v1&lt;sup id=\&quot;fnref:5\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:5\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)\&quot;&gt;[5]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;SimCLR v1&lt;sup id=\&quot;fnref:6\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:6\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In *International conference on machine learning* (pp. 1597-1607). PMLR.](http://proceedings.mlr.press/v119/chen20j.html)\&quot;&gt;[6]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;MoCo v2&lt;sup id=\&quot;fnref:7\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:7\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. *arXiv preprint arXiv:2003.04297*.](https://arxiv.org/abs/2003.04297)\&quot;&gt;[7]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;SimCLR v2&lt;sup id=\&quot;fnref:8\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:8\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Chen, T., Kornblith, S., Swersky, K., Norouzi, M., &amp; Hinton, G. E. (2020). Big self-supervised models are strong semi-supervised learners. *Advances in neural information processing systems*, *33*, 22243-22255.](https://proceedings.neurips.cc/paper/2020/hash/fcbc95ccdd551da181207c0c1400c655-Abstract.html)\&quot;&gt;[8]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;SwAV&lt;sup id=\&quot;fnref:9\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:9\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., &amp; Joulin, A. (2020). Unsupervised learning of visual features by contrasting cluster assignments. *Advances in Neural Information Processing Systems*, *33*, 9912-9924.](https://proceedings.neurips.cc/paper/2020/hash/70feb62b69f16e0238f741fab228fec2-Abstract.html)\&quot;&gt;[9]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;No negative samples&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;BYOL&lt;sup id=\&quot;fnref:10\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:10\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. *Advances in Neural Information Processing Systems*, *33*, 21271-21284.](https://proceedings.neurips.cc/paper/2020/hash/f3ada80d5c4ee70142b17b8192b2958e-Abstract.html)\&quot;&gt;[10]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;Explanation&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;BYOL v2&lt;sup id=\&quot;fnref:11\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:11\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Richemond, P. H., Grill, J. B., Altché, F., Tallec, C., Strub, F., Brock, A., ... &amp; Valko, M. (2020). BYOL works even without batch statistics. *arXiv preprint arXiv:2010.10241*.](https://arxiv.org/abs/2010.10241)\&quot;&gt;[11]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[17,18]},&quot;v&quot;:&quot;SimSiam&lt;sup id=\&quot;fnref:12\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:12\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Chen, X., &amp; He, K. (2021). Exploring simple siamese representation learning. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 15750-15758).](http://openaccess.thecvf.com/content/CVPR2021/html/Chen_Exploring_Simple_Siamese_Representation_Learning_CVPR_2021_paper.html)\&quot;&gt;[12]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;Transformer based&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[20,21]},&quot;v&quot;:&quot;MoCo v3&lt;sup id=\&quot;fnref:13\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:13\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Chen, X., Xie, S., &amp; He, K. (2021). An empirical study of training self-supervised vision transformers. In *Proceedings of the IEEE/CVF International Conference on Computer Vision* (pp. 9640-9649).](http://openaccess.thecvf.com/content/ICCV2021/html/Chen_An_Empirical_Study_of_Training_Self-Supervised_Vision_Transformers_ICCV_2021_paper.html)\&quot;&gt;[13]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[21,22]},&quot;v&quot;:&quot;DINO&lt;sup id=\&quot;fnref:14\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:14\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., &amp; Joulin, A. (2021). Emerging properties in self-supervised vision transformers. In *Proceedings of the IEEE/CVF International Conference on Computer Vision* (pp. 9650-9660).](http://openaccess.thecvf.com/content/ICCV2021/html/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.html)\&quot;&gt;[14]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]}],&quot;p&quot;:{}}"></svg>
 </div>
 
 <h2 id="brief-introduction">Brief introduction</h2>
@@ -259,38 +298,28 @@
 <p>The idea is intuitive, given 3 pictures above; 2 cats and 1 dog. The goal of contrastive learning is to discriminate the cats from the dog by comparing the pixel similarity of them. Dive into the model, inputing <span class="math inline">\(X_{cat1}, X_{cat2}, X_{dog}\)</span> to a neural network. The distance between the resulting latent features of the 2 cats <span class="math inline">\(L(f_{cat1}, f_{cat2})\)</span> should approach 0 while those between the cats and the dog <span class="math inline">\(L(f_{cat}, f_{dog})\)</span> should approach infinity.</p>
 <p>Contrastive learning is a very portable and flexible technique. It can be used anywhere as long as you can design a rule (<strong>preset task</strong>) to define which data are similar (<strong>positive sample</strong>) and which are different (<strong>negative sample</strong>). In the above example, one defines the pictures of the same species as positive, and those of different species as negative.</p>
 <p>Actually, although it is usually seen as an unsupervised technique, contrastive learning is not meant to be unsupervised. As we can see above, under that context (<strong>preset task</strong>), it is more like a supervised constrained clustering. The model still relies on labeled datasets containing pictures of each species. But people manage to make this technique unsupervised or self-supervised in CV by designing clever <strong>preset tasks</strong>. For example, the <strong>instance discrimination</strong> we are about to see below.</p>
-<p>Except from designing of the <strong>preset task</strong>, another key point is the design of <strong>loss function</strong>. The preset task sets the goal of training while the loss function defines how to do it. Unlike the loss functions that are often used in discrimination learning (cross entropy) or generative learning (L1-L2 loss), contrastive losses measure the similarity of each feature, which varies as the encoded features keep updating with epochs<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).
-">[5]</span></a></sup> . Different kinds of loss functions are developed by follow up papers to improve the training efficiency and stability.</p>
+<p>Except from designing of the <strong>preset task</strong>, another key point is the design of <strong>loss function</strong>. The preset task sets the goal of training while the loss function defines how to do it. Unlike the loss functions that are often used in discrimination learning (cross entropy) or generative learning (L1-L2 loss), contrastive losses measure the similarity of each feature, which varies as the encoded features keep updating with epochs<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)">[5]</span></a></sup> . Different kinds of loss functions are developed by follow up papers to improve the training efficiency and stability.</p>
 <h2 id="stage-1-wild-growth-2019mid">Stage 1: Wild growth(-2019mid)</h2>
 <p>At this stage, preset tasks, loss function, model and research area are not unified.</p>
-<h3 id="instdisc1">InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup></h3>
+<h3 id="instdisc1">InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup></h3>
 <h4 id="preset-task">Preset task</h4>
 <p><img src="Instdisc idea.png" srcset="/img/loading.gif" lazyload alt="Instdisc idea" style="zoom:50%;" /></p>
 <p>The figure above perfectly explains the motive and goal of the instance discrimination. Just as the name suggests, it extends the discrimination task from the previous class level to the instance level i.e. every single instance is a class.</p>
 <h4 id="method">Method</h4>
 <p><img src="Instdisc method.png" srcset="/img/loading.gif" lazyload alt="Instdisc method" style="zoom:100%;" /></p>
-<p>As shown above, InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup> proposes a CNN (ResNet50) based model that encodes a batch (batch size 256) of figures into a latent feature space(128D), where the distance between each figure are maximised. The way of training such a model is through contrastive learning. For one feature encoded from a particular image, the <strong>positive samples</strong> are the features encoded from the augmentations of the picture and the <strong>negative samples</strong> are obtained by sampling(4096) the set of features encoded from all the other images. In this way, the model becomes self-supervised. To modify the general example above, instance discrimination task can be illustrated as below.</p>
+<p>As shown above, InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup> proposes a CNN (ResNet50) based model that encodes a batch (batch size 256) of figures into a latent feature space(128D), where the distance between each figure are maximised. The way of training such a model is through contrastive learning. For one feature encoded from a particular image, the <strong>positive samples</strong> are the features encoded from the augmentations of the picture and the <strong>negative samples</strong> are obtained by sampling(4096) the set of features encoded from all the other images. In this way, the model becomes self-supervised. To modify the general example above, instance discrimination task can be illustrated as below.</p>
 <p><img src="instance discrimination illustration.png" srcset="/img/loading.gif" lazyload alt="instance discrimination illustration" style="zoom:27%;" /></p>
 <p>Besides, in order to save all the negative features without blowing up the memory, a memory bank is proposed. In every epoch, 4098 negative features are sampled from the memory bank. And the memory bank is updated with features in each epoch, under a method of proximal regularisation.</p>
 <h4 id="loss-function">Loss function</h4>
 <p><strong>Noise Contrastive Estimation</strong>(NCE) loss is applied to push away the negatives while clustering the positives..</p>
 <h4 id="comment">Comment</h4>
-<p>This paper proposes the fundamental preset task instance discrimination. Together with the NCE loss, a fine result is achieved. Besides, the idea of saving a bounden of negative samples with other data structures, the proximal regularisation (momentum updated memory bank) method inspires the following queue method and the momentum updated decoder<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).
-">[5]</span></a></sup> Even the super-parameter setting is also typical and a lot of work follows, including MoCo v1<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).
-">[5]</span></a></sup>.</p>
-<h3 id="invaspread2">InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 6210-6219).
-">[2]</span></a></sup></h3>
-<p>Less influential as it is, this paper can be seen as a preliminary work of the SimCLR v1<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.
-">[6]</span></a></sup>. Unlike InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup>with additional structure to save negative samples, the positive and negative samples in InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 6210-6219).
-">[2]</span></a></sup> are from the same batch. And only one encoder is used to process the samples.</p>
+<p>This paper proposes the fundamental preset task instance discrimination. Together with the NCE loss, a fine result is achieved. Besides, the idea of saving a bounden of negative samples with other data structures, the proximal regularisation (momentum updated memory bank) method inspires the following queue method and the momentum updated decoder<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)">[5]</span></a></sup> Even the super-parameter setting is also typical and a lot of work follows, including MoCo v1<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)">[5]</span></a></sup>.</p>
+<h3 id="invaspread2">InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 6210-6219).](http://openaccess.thecvf.com/content_CVPR_2019/html/Ye_Unsupervised_Embedding_Learning_via_Invariant_and_Spreading_Instance_Feature_CVPR_2019_paper.html)">[2]</span></a></sup></h3>
+<p>Less influential as it is, this paper can be seen as a preliminary work of the SimCLR v1<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In *International conference on machine learning* (pp. 1597-1607). PMLR.](http://proceedings.mlr.press/v119/chen20j.html)">[6]</span></a></sup>. Unlike InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup>with additional structure to save negative samples, the positive and negative samples in InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 6210-6219).](http://openaccess.thecvf.com/content_CVPR_2019/html/Ye_Unsupervised_Embedding_Learning_via_Invariant_and_Spreading_Instance_Feature_CVPR_2019_paper.html)">[2]</span></a></sup> are from the same batch. And only one encoder is used to process the samples.</p>
 <h4 id="method-1">Method</h4>
 <p><img src="InvaSpread illustration.png" srcset="/img/loading.gif" lazyload alt="InvaSpread illustration" style="zoom:100%;" /></p>
 <p>The preset task is still instance discrimination, while the sampling is done in a different way. As shown above, assuming <span class="math inline">\(x_1\)</span> as the original, the positive sample is <span class="math inline">\([\hat{x}_1]\)</span>, while the negative sample is <span class="math inline">\([x_2,x_3,\hat{x}_2,\hat{x}_3]\)</span>, which means taking batch size as 256, the resulting positive and negative sample sizes are <span class="math inline">\(256\)</span> and <span class="math inline">\((256-1)*2\)</span> respectively.</p>
-<p>Recalling InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup>, the negative sample is from outside this batch and the size can be much larger. Yet the downside part of it is that it requires another encoder for the negatives. Whereas, with positive and negative in one batch, only one encoder is needed and the model thus becomes end-to-end.</p>
+<p>Recalling InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup>, the negative sample is from outside this batch and the size can be much larger. Yet the downside part of it is that it requires another encoder for the negatives. Whereas, with positive and negative in one batch, only one encoder is needed and the model thus becomes end-to-end.</p>
 <p>The loss function employed is a variant of the NCL loss.</p>
 <h4 id="comment-1">Comment</h4>
 <p>Together with the SimCLR series, these papers stand for another route of contrastive learning, which is featured by:</p>
@@ -303,18 +332,15 @@
 <p>This paper is very similar to SimCLR but has rather mediocre performance. There are several reasons:</p>
 <ul>
 <li>The batch size is too small - only 256, not enough negative samples (no TPU, no money)</li>
-<li>No powerful augmentations or the MLP projector that are proposed by SimCLR v1<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.
-">[6]</span></a></sup></li>
+<li>No powerful augmentations or the MLP projector that are proposed by SimCLR v1<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In *International conference on machine learning* (pp. 1597-1607). PMLR.](http://proceedings.mlr.press/v119/chen20j.html)">[6]</span></a></sup></li>
 </ul>
-<h3 id="cpc3">CPC<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Van den Oord, A., Li, Y., &amp; Vinyals, O. (2018). Representation learning with contrastive predictive coding. arXiv e-prints, arXiv-1807.
-">[3]</span></a></sup></h3>
+<h3 id="cpc3">CPC<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Van den Oord, A., Li, Y., &amp; Vinyals, O. (2018). Representation learning with contrastive predictive coding. *arXiv e-prints*, arXiv-1807.](https://ui.adsabs.harvard.edu/abs/2018arXiv180703748V/abstract)">[3]</span></a></sup></h3>
 <p>Apart from instance discrimination, this paper proposes another <strong>pretext task</strong> - contrastive predictive coding, a reminiscence of the difference between discriminative and generative models. And this approach is generalisable enough to copes with audio, images, text, and even reinforcement learning.</p>
 <h4 id="pretext-task">pretext task</h4>
 <p><img src="CPC illustration.png" srcset="/img/loading.gif" lazyload alt="CPC illustration" style="zoom:100%;" /></p>
 <p>Given a temporal sequence, the encoded features of the sequence before time t are fed into an auto-regressive network (RNN or LSTM). The "origin" is defined as the RNN predicted features after time t <span class="math inline">\(\hat{z}_{t+1} - \hat{z}_{t+4}\)</span>, the positive sample <span class="math inline">\(z_{t+1} - z_{t+4}\)</span>, is defined as the features encoded from feature data <span class="math inline">\(x_{t+1} - x_{t+4}\)</span>. The negative samples can be flexible, a typical way is the features encoded from data other than <span class="math inline">\(x_{t+1} - x_{t+4}\)</span>.</p>
 <p>In this way, the input <span class="math inline">\(X\)</span> can vary from picture patches, audio, video etc.</p>
-<h3 id="cmc4">CMC<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Tian, Y., Krishnan, D., &amp; Isola, P. (2020, August). Contrastive multiview coding. In European conference on computer vision (pp. 776-794). Springer, Cham.
-">[4]</span></a></sup></h3>
+<h3 id="cmc4">CMC<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Tian, Y., Krishnan, D., &amp; Isola, P. (2020, August). Contrastive multiview coding. In *European conference on computer vision* (pp. 776-794). Springer, Cham.](https://link.springer.com/chapter/10.1007/978-3-030-58621-8_45)">[4]</span></a></sup></h3>
 <p>CMC propose a more general way of defining positive sample, basically the different view of one instance can be defined as positive.</p>
 <h4 id="motivation">Motivation</h4>
 <p>It is perfectly presented in the abstract, here is just a paraphrase. In the real world, information from different angle of view such as smell, sight and touch describe one thing together. Though these <em>sensory channels</em> might be different, the high level features such as physics, geometry and semantics tend to be same. And this preset task aims to train a view-invariant model.</p>
@@ -324,37 +350,26 @@
 <h4 id="loss-function-1">Loss function</h4>
 <p>The contrastive Learning loss is designed to maximise the mutual information between features of different views.</p>
 <h4 id="comment-2">Comment</h4>
-<p>CMC is one of the first works to apply contrastive learning to multi-view problems. It demonstrates the flexibility of contrastive learning, and the portability of applying it to multi-view problems. As a result, OpenAI developed the famous Clip<sup id="fnref:16" class="footnote-ref"><a href="#fn:16" rel="footnote"><span class="hint--top hint--rounded" aria-label="Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., ... &amp; Sutskever, I. (2021, July). Learning transferable visual models from natural language supervision. In International Conference on Machine Learning (pp. 8748-8763). PMLR
-">[16]</span></a></sup> model, where the image and its language description are seen as a positive pair.</p>
-<p>One slight drawback of multi-view might be the need for different encoders to handle different views. For example, in Clip<sup id="fnref:16" class="footnote-ref"><a href="#fn:16" rel="footnote"><span class="hint--top hint--rounded" aria-label="Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., ... &amp; Sutskever, I. (2021, July). Learning transferable visual models from natural language supervision. In International Conference on Machine Learning (pp. 8748-8763). PMLR
-">[16]</span></a></sup>, ViT and a large scale language model are applied to process different modes. Yet, given the various applications of transformer, this drawback may be addressed by processing multi-model problems via one single transformer model. Here is a example of doing it - MA-CLIP<sup id="fnref:18" class="footnote-ref"><a href="#fn:18" rel="footnote"><span class="hint--top hint--rounded" aria-label="You, H., Zhou, L., Xiao, B., Codella, N. C., Cheng, Y., Xu, R., ... &amp; Yuan, L. (2021). MA-CLIP: Towards Modality-Agnostic Contrastive Language-Image Pre-training.
-">[18]</span></a></sup>.</p>
+<p>CMC is one of the first works to apply contrastive learning to multi-view problems. It demonstrates the flexibility of contrastive learning, and the portability of applying it to multi-view problems. As a result, OpenAI developed the famous Clip<sup id="fnref:16" class="footnote-ref"><a href="#fn:16" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., ... &amp; Sutskever, I. (2021, July). Learning transferable visual models from natural language supervision. In *International Conference on Machine Learning* (pp. 8748-8763). PMLR](http://proceedings.mlr.press/v139/radford21a)">[16]</span></a></sup> model, where the image and its language description are seen as a positive pair.</p>
+<p>One slight drawback of multi-view might be the need for different encoders to handle different views. For example, in Clip<sup id="fnref:16" class="footnote-ref"><a href="#fn:16" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., ... &amp; Sutskever, I. (2021, July). Learning transferable visual models from natural language supervision. In *International Conference on Machine Learning* (pp. 8748-8763). PMLR](http://proceedings.mlr.press/v139/radford21a)">[16]</span></a></sup>, ViT and a large scale language model are applied to process different modes. Yet, given the various applications of transformer, this drawback may be addressed by processing multi-model problems via one single transformer model. Here is a example of doing it - MA-CLIP<sup id="fnref:18" class="footnote-ref"><a href="#fn:18" rel="footnote"><span class="hint--top hint--rounded" aria-label="[You, H., Zhou, L., Xiao, B., Codella, N. C., Cheng, Y., Xu, R., ... &amp; Yuan, L. (2021). MA-CLIP: Towards Modality-Agnostic Contrastive Language-Image Pre-training.](https://openreview.net/forum?id=ROteIE-4A6W)">[18]</span></a></sup>.</p>
 <h2 id="stage-2-two-heroes2019mid-2020mid">Stage 2: Two heroes(2019mid-2020mid)</h2>
 <p>Their are MoCo and SimCLR. In this stage, the development is very fast. The time intervals between each works introduced below are typically 1-2 months, even less than 1 month. And the SOTA on imageNet were refreshed every month. And the model architecture (encoder then projection), loss function(infoNCE), momentum encoder setting, more powerful method augmentation and more epochs tend to come together. And the result trend to the supervised learning accuracy.</p>
-<h3 id="moco-v15">MoCo v1<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).
-">[5]</span></a></sup></h3>
+<h3 id="moco-v15">MoCo v1<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)">[5]</span></a></sup></h3>
 <p>It is the milestone of CV contrastive learning, and it is the first model that outperform supervised learning. It is a breakthrough that rise the confidence of unsupervised learning.</p>
 <h4 id="method-2">Method</h4>
 <p><img src="Moco v1 illustration.png" srcset="/img/loading.gif" lazyload alt="Moco v1 illustration" style="zoom:40%;" /></p>
 <p>As highlighted above, MoCo has two contributions: (1) momentum encoder (2) queue</p>
-<p>MoCo stands for momentum contrast. Compared with InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup>, MoCo updates the encoder with momentum to prevent the encoder changing too rapidly between two batches. Besides, the application of queue instead of memory bank makes sure to update the negative dictionary efficiently.</p>
+<p>MoCo stands for momentum contrast. Compared with InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup>, MoCo updates the encoder with momentum to prevent the encoder changing too rapidly between two batches. Besides, the application of queue instead of memory bank makes sure to update the negative dictionary efficiently.</p>
 <p>Further more, MoCo introduces another loss function called infoNCE, very similar to softmax.</p>
 <h4 id="comment-3">Comment</h4>
-<p>Actually, the details of MoCo almost follows exactly the InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup>, including backbone of ResNet 50, 128D of output size, L2-norm of outputs, 0.07 of loss temperature, the data augmentation setting, 0.03 learning rate and 200 epochs of training. It seems like MoCo is just make some improvements to InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).
-">[1]</span></a></sup>.</p>
-<p>Nevertheless, MoCo is classic. The reason may be the effectiveness and the influential of the improvements. For example, the momentum encoder setting is inherited by following SimCLR <sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.
-">[6]</span></a></sup>, BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. Advances in Neural Information Processing Systems, 33, 21271-21284.
-">[10]</span></a></sup>, even the latest work.</p>
+<p>Actually, the details of MoCo almost follows exactly the InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup>, including backbone of ResNet 50, 128D of output size, L2-norm of outputs, 0.07 of loss temperature, the data augmentation setting, 0.03 learning rate and 200 epochs of training. It seems like MoCo is just make some improvements to InstDisc<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wu, Z., Xiong, Y., Yu, S. X., &amp; Lin, D. (2018). Unsupervised feature learning via non-parametric instance discrimination. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 3733-3742).](http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Unsupervised_Feature_Learning_CVPR_2018_paper.html)">[1]</span></a></sup>.</p>
+<p>Nevertheless, MoCo is classic. The reason may be the effectiveness and the influential of the improvements. For example, the momentum encoder setting is inherited by following SimCLR <sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In *International conference on machine learning* (pp. 1597-1607). PMLR.](http://proceedings.mlr.press/v119/chen20j.html)">[6]</span></a></sup>, BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. *Advances in Neural Information Processing Systems*, *33*, 21271-21284.](https://proceedings.neurips.cc/paper/2020/hash/f3ada80d5c4ee70142b17b8192b2958e-Abstract.html)">[10]</span></a></sup>, even the latest work.</p>
 <p>Furthermore, the way of writing is just beautiful and the scope is much higher than an ordinary work. Instead of presenting those improvements that they made. The authors conclude the preliminary works as a task of dictionary look-up. Personally, I feel like I understand the contrastive learning only until I read through the introduction part of MoCO.</p>
-<h3 id="simclr-v16">SimCLR v1<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.
-">[6]</span></a></sup></h3>
+<h3 id="simclr-v16">SimCLR v1<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In *International conference on machine learning* (pp. 1597-1607). PMLR.](http://proceedings.mlr.press/v119/chen20j.html)">[6]</span></a></sup></h3>
 <p>SimCLR stands for Simple Contrastive learning, it is easy to understand and often used as example in many introduction blogs. The only drawback is the requirement of large batch size.</p>
 <h4 id="method-3">Method</h4>
 <p><img src="SimCLR v1 illustration.png" srcset="/img/loading.gif" lazyload alt="SimCLR v1 illustration" style="zoom:40%;" /></p>
-<p>It is very similar to InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 6210-6219).
-">[2]</span></a></sup>, the positive size is <span class="math inline">\(N\)</span> While the negative size is <span class="math inline">\(2(N-1)\)</span> . The key contribution is a "projection head(mlp with linear then RELU)" after the shared encoder, only applied during the training process. The improvement results in a gain of the accuracy up to 10%.</p>
+<p>It is very similar to InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 6210-6219).](http://openaccess.thecvf.com/content_CVPR_2019/html/Ye_Unsupervised_Embedding_Learning_via_Invariant_and_Spreading_Instance_Feature_CVPR_2019_paper.html)">[2]</span></a></sup>, the positive size is <span class="math inline">\(N\)</span> While the negative size is <span class="math inline">\(2(N-1)\)</span> . The key contribution is a "projection head(mlp with linear then RELU)" after the shared encoder, only applied during the training process. The improvement results in a gain of the accuracy up to 10%.</p>
 <p>A loss function similar to infoNCE is used to maximise the agreement between positive and negative samples.</p>
 <h4 id="data-augmentation-ablation">Data augmentation ablation</h4>
 <p><img src="SimCLR aug.png" srcset="/img/loading.gif" lazyload alt="SimCLR aug" style="zoom:100%;" /></p>
@@ -368,8 +383,7 @@
 <li>The output size makes less difference to the accuracy, so afterwards works tend to choose small size as well. 128 is enough.</li>
 </ul>
 <h4 id="comments" lazyload>Comments</h4>
-<p>The full contributions compared with InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 6210-6219).
-">[2]</span></a></sup> are:</p>
+<p>The full contributions compared with InvaSpread<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Ye, M., Zhang, X., Yuen, P. C., &amp; Chang, S. F. (2019). Unsupervised embedding learning via invariant and spreading instance feature. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 6210-6219).](http://openaccess.thecvf.com/content_CVPR_2019/html/Ye_Unsupervised_Embedding_Learning_via_Invariant_and_Spreading_Instance_Feature_CVPR_2019_paper.html)">[2]</span></a></sup> are:</p>
 <ul>
 <li>More data augmentatinon</li>
 <li>Learnable projection head layer</li>
@@ -380,16 +394,9 @@
 <blockquote>
 <p>We note that almost all individual components of our framework have appeared in previous work, although the specific instantiations may be different. The superiority of our framework relative to previous work is not explained by any single design choice, but by their composition.</p>
 </blockquote>
-<p>However, similar to MoCo<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).
-">[5]</span></a></sup>, the contributions of this paper are also very influential. For example, the projection head after the encoder is adopted in following MoCo v2<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. arXiv preprint arXiv:2003.04297.
-">[7]</span></a></sup> , SwAV<sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., &amp; Joulin, A. (2020). Unsupervised learning of visual features by contrasting cluster assignments. Advances in Neural Information Processing Systems, 33, 9912-9924.
-">[9]</span></a></sup>and BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. Advances in Neural Information Processing Systems, 33, 21271-21284.
-">[10]</span></a></sup>. And the data augmentation scheme is also widely applied. The the LARS optimiser for large batch size appears in BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. Advances in Neural Information Processing Systems, 33, 21271-21284.
-">[10]</span></a></sup> as well.</p>
-<p>And because of the good results of MoCo<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition (pp. 9729-9738).
-">[5]</span></a></sup>, and SimCLR, contrastive learning lead a dominant trend in deep learning from 2020. And ended until the proposing of Vision Transformer.</p>
-<h3 id="moco-v27">MoCo v2<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. arXiv preprint arXiv:2003.04297.
-">[7]</span></a></sup></h3>
+<p>However, similar to MoCo<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)">[5]</span></a></sup>, the contributions of this paper are also very influential. For example, the projection head after the encoder is adopted in following MoCo v2<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. *arXiv preprint arXiv:2003.04297*.](https://arxiv.org/abs/2003.04297)">[7]</span></a></sup> , SwAV<sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., &amp; Joulin, A. (2020). Unsupervised learning of visual features by contrasting cluster assignments. *Advances in Neural Information Processing Systems*, *33*, 9912-9924.](https://proceedings.neurips.cc/paper/2020/hash/70feb62b69f16e0238f741fab228fec2-Abstract.html)">[9]</span></a></sup>and BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. *Advances in Neural Information Processing Systems*, *33*, 21271-21284.](https://proceedings.neurips.cc/paper/2020/hash/f3ada80d5c4ee70142b17b8192b2958e-Abstract.html)">[10]</span></a></sup>. And the data augmentation scheme is also widely applied. The the LARS optimiser for large batch size appears in BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. *Advances in Neural Information Processing Systems*, *33*, 21271-21284.](https://proceedings.neurips.cc/paper/2020/hash/f3ada80d5c4ee70142b17b8192b2958e-Abstract.html)">[10]</span></a></sup> as well.</p>
+<p>And because of the good results of MoCo<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 9729-9738).](http://openaccess.thecvf.com/content_CVPR_2020/html/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.html)">[5]</span></a></sup>, and SimCLR, contrastive learning lead a dominant trend in deep learning from 2020. And ended until the proposing of Vision Transformer.</p>
+<h3 id="moco-v27">MoCo v2<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. *arXiv preprint arXiv:2003.04297*.](https://arxiv.org/abs/2003.04297)">[7]</span></a></sup></h3>
 <p>It is technically a technical report. They note the effectiveness of the projection head and data augmentation method that SimCRL presented. After just less than 1 month, they merge these techniques into MoCo resulting in new SOTA on ImageNet.</p>
 <h4 id="results">Results</h4>
 <p><img src="MoCo v2 ablation.png" srcset="/img/loading.gif" lazyload alt="MoCo v2 ablation" style="zoom:40%;" /></p>
@@ -402,18 +409,14 @@
 </ul>
 <h4 id="comment-4">Comment</h4>
 <p>MoCo v2 may be the most memory friendly method to get a good result with contrastive learning. And it still very useful.</p>
-<h3 id="simclr-v28">SimCLR v2<sup id="fnref:8" class="footnote-ref"><a href="#fn:8" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, T., Kornblith, S., Swersky, K., Norouzi, M., &amp; Hinton, G. E. (2020). Big self-supervised models are strong semi-supervised learners. Advances in neural information processing systems, 33, 22243-22255.
-">[8]</span></a></sup></h3>
+<h3 id="simclr-v28">SimCLR v2<sup id="fnref:8" class="footnote-ref"><a href="#fn:8" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, T., Kornblith, S., Swersky, K., Norouzi, M., &amp; Hinton, G. E. (2020). Big self-supervised models are strong semi-supervised learners. *Advances in neural information processing systems*, *33*, 22243-22255.](https://proceedings.neurips.cc/paper/2020/hash/fcbc95ccdd551da181207c0c1400c655-Abstract.html)">[8]</span></a></sup></h3>
 <p>Actually most part of this paper focus on semi-supervised leaning. The SimCLR v2 part presented 3 points:</p>
 <ul>
 <li>Bigger backbone model size, 153-layer SKnet</li>
 <li>Deeper projection head, 2 layers MLP after a search of layer number</li>
-<li>Momentum encoder inspired by MoCo<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.
-">[6]</span></a></sup><sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. arXiv preprint arXiv:2003.04297.
-">[7]</span></a></sup>, but less effective. And they claim the reason is that the batch size of SimCLR is already big.</li>
+<li>Momentum encoder inspired by MoCo<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020, November). A simple framework for contrastive learning of visual representations. In *International conference on machine learning* (pp. 1597-1607). PMLR.](http://proceedings.mlr.press/v119/chen20j.html)">[6]</span></a></sup><sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, X., Fan, H., Girshick, R., &amp; He, K. (2020). Improved baselines with momentum contrastive learning. *arXiv preprint arXiv:2003.04297*.](https://arxiv.org/abs/2003.04297)">[7]</span></a></sup>, but less effective. And they claim the reason is that the batch size of SimCLR is already big.</li>
 </ul>
-<h3 id="swav9">SwAV<sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., &amp; Joulin, A. (2020). Unsupervised learning of visual features by contrasting cluster assignments. Advances in Neural Information Processing Systems, 33, 9912-9924.
-">[9]</span></a></sup></h3>
+<h3 id="swav9">SwAV<sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., &amp; Joulin, A. (2020). Unsupervised learning of visual features by contrasting cluster assignments. *Advances in Neural Information Processing Systems*, *33*, 9912-9924.](https://proceedings.neurips.cc/paper/2020/hash/70feb62b69f16e0238f741fab228fec2-Abstract.html)">[9]</span></a></sup></h3>
 <p>SwAV abbreviates for Swapped Assignment Views. This another multi-view work, aiming at predicting one view's feature from another view. And it combines contrastive leaning with clustering.</p>
 <h4 id="method-4">Method</h4>
 <p><img src="SwAV illustration.png" srcset="/img/loading.gif" lazyload alt="SwAV illustration" style="zoom:100%;" /></p>
@@ -428,8 +431,7 @@
 <p>As shown above, with only linear probe (froze all but the last layer) the SwAV result is very near to the supervised baseline. And the result converges to the supervised result with the model size.</p>
 <h2 id="stage-3-no-negative-samples">Stage 3: No negative samples</h2>
 <p>Basically around BYOL and at last SimSiam integrates all the contributions before and makes a closure for the CNN based contrastive learning era.</p>
-<h3 id="byol10">BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. Advances in Neural Information Processing Systems, 33, 21271-21284.
-">[10]</span></a></sup></h3>
+<h3 id="byol10">BYOL<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Grill, J. B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., ... &amp; Valko, M. (2020). Bootstrap your own latent-a new approach to self-supervised learning. *Advances in Neural Information Processing Systems*, *33*, 21271-21284.](https://proceedings.neurips.cc/paper/2020/hash/f3ada80d5c4ee70142b17b8192b2958e-Abstract.html)">[10]</span></a></sup></h3>
 <p>Bootstrap Your Own Latent is the longer version. Negative samples are critical for preventing model collapsing (same output regardless the input, loss always 0, learn nothing). In this new approach, no negative is required.</p>
 <h4 id="model">Model</h4>
 <p><img src="BYOL model.png" srcset="/img/loading.gif" lazyload alt="BYOL model" style="zoom:100%;" /></p>
@@ -437,14 +439,7 @@
 <h4 id="analysis">Analysis</h4>
 <p>The result is truly surprising and it resulted in quite a topic. One of the most influencial analytical works is this blog: <a target="_blank" rel="noopener" href="https://generallyintelligent.ai/blog/2020-08-24-understanding-self-supervised-contrastive-learning/">Understanding Self-Supervised and Contrastive Learning with "Bootstrap Your Own Latent" (BYOL)</a>.</p>
 <table>
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 13%" />
-<col style="width: 9%" />
-<col style="width: 7%" />
-<col style="width: 42%" />
-</colgroup>
+
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -518,24 +513,20 @@
 <blockquote>
 <p><strong>the presence of batch normalisation implicitly causes a form of contrastive learning</strong>.</p>
 </blockquote>
-<h3 id="byol-v211">BYOL v2<sup id="fnref:11" class="footnote-ref"><a href="#fn:11" rel="footnote"><span class="hint--top hint--rounded" aria-label="Richemond, P. H., Grill, J. B., Altché, F., Tallec, C., Strub, F., Brock, A., ... &amp; Valko, M. (2020). BYOL works even without batch statistics. arXiv preprint arXiv:2010.10241.
-">[11]</span></a></sup></h3>
+<h3 id="byol-v211">BYOL v2<sup id="fnref:11" class="footnote-ref"><a href="#fn:11" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Richemond, P. H., Grill, J. B., Altché, F., Tallec, C., Strub, F., Brock, A., ... &amp; Valko, M. (2020). BYOL works even without batch statistics. *arXiv preprint arXiv:2010.10241*.](https://arxiv.org/abs/2010.10241)">[11]</span></a></sup></h3>
 <p>The previous blog made a huge influence and the conclusion was widely accepted, exceot the authors. As a result, another article was published entitled "BYOL works <em>even</em> without batch statistics"</p>
 <p><img src="BYOL batch norm ablation.png" srcset="/img/loading.gif" lazyload alt="BYOL batch norm ablation" style="zoom:100%;" /></p>
 <p>In this paper, a more detailed ablation experiment was applied. And it shows the batch norm works as it designed, just a method to improve the stability of training.</p>
 <p>Besides, the authors use a better initialisation (group normalisation) , and the model maintains a similar accuracy without any batch norm layer.</p>
-<h3 id="simsiam12">SimSiam<sup id="fnref:12" class="footnote-ref"><a href="#fn:12" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, X., &amp; He, K. (2021). Exploring simple siamese representation learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 15750-15758).
-">[12]</span></a></sup></h3>
+<h3 id="simsiam12">SimSiam<sup id="fnref:12" class="footnote-ref"><a href="#fn:12" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, X., &amp; He, K. (2021). Exploring simple siamese representation learning. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (pp. 15750-15758).](http://openaccess.thecvf.com/content/CVPR2021/html/Chen_Exploring_Simple_Siamese_Representation_Learning_CVPR_2021_paper.html)">[12]</span></a></sup></h3>
 <p>After all these works, people found the contrastive learning's performance is accumulated by many techniques and tricks, a little too messy. In this context, He et al proposed a simple SimSiam network.</p>
 <p><img src="SimSiam illustration.png" srcset="/img/loading.gif" lazyload alt="SimSiam illustration" style="zoom:40%;" /></p>
 <p>As shown above, SimSiam is basically a BYOL excluding the momentum encoder.</p>
 <p><img src="SimSiam result.png" srcset="/img/loading.gif" lazyload alt="SimSiam results" style="zoom:100%;" /></p>
 <p>And a detailed comparison of results are provided, including classification and downstream tasks. Note that SimCLR and MoCo v2 performs the best on downstream tasks.</p>
 <h2 id="stage-4-transformer-based">Stage 4: Transformer based</h2>
-<p>Because of the popularity of vision transformer<sup id="fnref:15" class="footnote-ref"><a href="#fn:15" rel="footnote"><span class="hint--top hint--rounded" aria-label="Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., ... &amp; Houlsby, N. (2020). An image is worth 16x16 words: Transformers for image recognition at scale. arXiv preprint arXiv:2010.11929.
-">[15]</span></a></sup>, the backbones of the contrastive learning methods are substituted into transformer. And the works aim at analysing and solving the resulting unstable problem.</p>
-<h3 id="moco-v313">MoCo v3<sup id="fnref:13" class="footnote-ref"><a href="#fn:13" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, X., Xie, S., &amp; He, K. (2021). An empirical study of training self-supervised vision transformers. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 9640-9649).
-">[13]</span></a></sup></h3>
+<p>Because of the popularity of vision transformer<sup id="fnref:15" class="footnote-ref"><a href="#fn:15" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., ... &amp; Houlsby, N. (2020). An image is worth 16x16 words: Transformers for image recognition at scale. *arXiv preprint arXiv:2010.11929*.](https://arxiv.org/abs/2010.11929)">[15]</span></a></sup>, the backbones of the contrastive learning methods are substituted into transformer. And the works aim at analysing and solving the resulting unstable problem.</p>
+<h3 id="moco-v313">MoCo v3<sup id="fnref:13" class="footnote-ref"><a href="#fn:13" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Chen, X., Xie, S., &amp; He, K. (2021). An empirical study of training self-supervised vision transformers. In *Proceedings of the IEEE/CVF International Conference on Computer Vision* (pp. 9640-9649).](http://openaccess.thecvf.com/content/ICCV2021/html/Chen_An_Empirical_Study_of_Training_Self-Supervised_Vision_Transformers_ICCV_2021_paper.html)">[13]</span></a></sup></h3>
 <p>Although the title of MoCo v3 includes ViT, it is mostly a architecture that coping with all backbones.</p>
 <h4 id="method-5">Method</h4>
 <p>From the algorithm, the MoCo v3 is a combination of MoCo v2 and SimSam. From the big picture, a query encoder and momentum key encoder with the contrastive loss are inherited from MoCo v2, while in the detail, a prediction mlp layer after the projection layer, a symmetric loss function recall the SimSiam.</p>
@@ -544,8 +535,7 @@
 <p>Because of the popularity of ViT, they substitute the backbone as ViT and find instability in training process. As shown above, the training accuracy tend to drop severely then increase gradually especially with large batch size. In this condition, large batch size has a negative impact on accuracy.</p>
 <h4 id="trick">Trick</h4>
 <p>To alleviate the fluctuation, they retrieves the gradients of each layer and find the huge gradient change always occur on first layer (tokenisation patching layer). As a result, they try froze the first layer after random initialisation, and the problem solved. Note that this trick is useful for both MoCo v3 and BYOL with ViT.</p>
-<h3 id="dino14">DINO<sup id="fnref:14" class="footnote-ref"><a href="#fn:14" rel="footnote"><span class="hint--top hint--rounded" aria-label="Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., &amp; Joulin, A. (2021). Emerging properties in self-supervised vision transformers. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 9650-9660).
-">[14]</span></a></sup></h3>
+<h3 id="dino14">DINO<sup id="fnref:14" class="footnote-ref"><a href="#fn:14" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., &amp; Joulin, A. (2021). Emerging properties in self-supervised vision transformers. In *Proceedings of the IEEE/CVF International Conference on Computer Vision* (pp. 9650-9660).](http://openaccess.thecvf.com/content/ICCV2021/html/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.html)">[14]</span></a></sup></h3>
 <p>Short for self-<strong>di</strong>stillation with <strong>no</strong> labels, DINO is actually a follow-up work of BYOL. The student and teacher networks are same as the query and key network respectively. One contribution is the centring layer in the teacher network. And the algorithm is very similar to MoCo v3, same forward process with slightly different loss function.</p>
 <p><img src="DINO illustration.png" srcset="/img/loading.gif" lazyload alt="DINO illustration" style="zoom:100%;" /></p>
 <h2 id="conclusion">Conclusion</h2>
@@ -800,35 +790,77 @@ class DINO &#123;
 </div>
 </section>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/deep-learning/">deep learning</a>
-                    
-                      <a class="hover-with-bg" href="/tags/paper-reading/">paper reading</a>
-                    
-                  </div>
                 
               </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/paper-reading/">#paper reading</a>
+      
+    </div>
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    Copyright: This blog is provided under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Contrastive learning review</div>
+      <div>https://daydreamatnight.github.io/2022/05/03/paper-reading-contrastive-learning-review/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 3, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
               
               
-                <div class="post-prevnext">
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/05/09/paper-reading-Swin-transformer/">
+                      <a href="/2022/05/09/paper-reading-Swin-transformer/" title="Swin transformer">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Swin transformer</span>
                         <span class="visible-mobile">Previous</span>
@@ -838,7 +870,7 @@ class DINO &#123;
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/04/30/Switch-blog-theme-to-FLUID/">
+                      <a href="/2022/04/30/Switch-blog-theme-to-FLUID/" title="Switch blog theme to FLUID">
                         <span class="hidden-mobile">Switch blog theme to FLUID</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -854,19 +886,69 @@ class DINO &#123;
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
 
 
     
@@ -891,59 +973,61 @@ class DINO &#123;
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-  <div class="statistics">
-    
-    
-
-    
-      
-        <!-- 不蒜子统计PV -->
-        <span id="busuanzi_container_site_pv" style="display: none">
-            Toal views: 
-            <span id="busuanzi_value_site_pv"></span>
-             
-          </span>
-      
-      
-        <!-- 不蒜子统计UV -->
-        <span id="busuanzi_container_site_uv" style="display: none">
-            Total visiters: 
-            <span id="busuanzi_value_site_uv"></span>
-            
-          </span>
-      
-    
-  </div>
-
-
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
   
 
   
-</footer>
-
-
-  <!-- SCRIPTS -->
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -954,15 +1038,27 @@ class DINO &#123;
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -974,99 +1070,146 @@ class DINO &#123;
 
 
 
-  
-
-
 
   
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
 
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-  
-
-  
-    <!-- MathJax -->
-    <script>
-      MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-        loader: {
-          load: ['ui/lazy']
-        },
-        options: {
-          renderActions: {
-            findScript: [10, doc => {
-              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-                const display = !!node.type.match(/; *mode=display/);
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                const text = document.createTextNode('');
-                node.parentNode.replaceChild(text, node);
-                math.start = { node: text, delim: '', n: 0 };
-                math.end = { node: text, delim: '', n: 0 };
-                doc.math.push(math);
-              });
-            }, '', false],
-            insertedScript: [200, () => {
-              document.querySelectorAll('mjx-container').forEach(node => {
-                let target = node.parentNode;
-                if (target.nodeName.toLowerCase() === 'li') {
-                  target.parentNode.classList.add('has-jax');
-                }
-              });
-            }, '', false]
-          }
-        }
-      };
-    </script>
-
-    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
-
-  
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
-  <script>
-    if (window.mermaid) {
-      mermaid.initialize({"theme":"default"});
-    }
-  </script>
-
-
 
 
 
@@ -1078,10 +1221,16 @@ class DINO &#123;
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 
 <script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
 <script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>

@@ -32,30 +32,27 @@
 <meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_6.png">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
   <title>CUDA programming 2 - ShouRou</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
@@ -64,15 +61,31 @@
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"♪"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
@@ -81,8 +94,13 @@
 
 
 <body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 30vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>ShouRou</strong>
@@ -152,6 +170,7 @@
               &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
@@ -164,62 +183,76 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/article_banner.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="CUDA programming 2">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      Ryan LI
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-09-02 21:47" pubdate>
-        September 2, 2022 pm
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      11k words
-    </span>
   
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      36 minutes
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CUDA programming 2"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-02 21:47" pubdate>
+          September 2, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          36 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -228,16 +261,22 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">CUDA programming 2</h1>
             
-            <div class="markdown-body">
-              <div class="note note-primary">
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
             <p>More details of the basics, the matrix multiply example is carefully analysed and a optimised version is coded.</p>
           </div>
 <span id="more"></span>
@@ -275,7 +314,7 @@
 <p>note:</p>
 <ul>
 <li><p><code>__global__</code> and <code>__device__</code> can declare one function</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__host__ __device__ <span class="hljs-title">func</span> <span class="hljs-params">()</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__host__ __device__ <span class="hljs-title">func</span> <span class="hljs-params">()</span></span>
 <span class="hljs-function"></span>&#123;
 <span class="hljs-comment">// …………</span>
 &#125;</code></pre></div></li>
@@ -290,10 +329,10 @@
 <p>Including:</p>
 <p><code>char[1-4]</code>, <code>uchar[1-4]</code>, <code>short[1-4]</code>, <code>ushort[1-4]</code>, <code>int[1-4]</code>, <code>uint[1-4]</code>, <code>longlong[1-4]</code>, <code>ulonglong[1-4]</code>, <code>float[1-4]</code>, <code>double1</code>, <code>double2</code>.</p>
 <p>Instantantiate with function <code>make_&lt;type name&gt;</code>:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">int2 i2 = <span class="hljs-built_in">ake_int2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
+<div class="code-wrapper"><pre><code class="hljs c++">int2 i2 = <span class="hljs-built_in">ake_int2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
 float4 f4 = <span class="hljs-built_in">make_floate4</span>(<span class="hljs-number">1.0f</span>, <span class="hljs-number">2.0f</span>, <span class="hljs-number">3.0f</span>, <span class="hljs-number">4.0f</span>);</code></pre></div>
 <p>Reference with <code>.x</code>, <code>.y</code>, <code>.z</code>, <code>.w</code> :</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">int2 i2 = <span class="hljs-built_in">ake_int2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
+<div class="code-wrapper"><pre><code class="hljs c++">int2 i2 = <span class="hljs-built_in">ake_int2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
 <span class="hljs-type">int</span> x = i2.x;
 <span class="hljs-type">int</span> y = i2.y;</code></pre></div>
 <h3 id="math">Math</h3>
@@ -310,13 +349,13 @@ float4 f4 = <span class="hljs-built_in">make_floate4</span>(<span class="hljs-nu
 <h2 id="threads-synchronizition">Threads Synchronizition</h2>
 <h3 id="recall-thread-hierarchy">Recall Thread hierarchy</h3>
 <p>Recall <a href="#CUDA%20memory%20hierarchy%20in%20GPU">CUDA memory hierarchy in GPU</a>, the thread can be index with <code>blockId</code> and <code>threadId</code>: (1D indexing for example)</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> threadID = blockIdx.x * blockDim.x + threadIdx.x;
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> threadID = blockIdx.x * blockDim.x + threadIdx.x;
 <span class="hljs-type">float</span> x = input[threadID];
 <span class="hljs-type">float</span> y = <span class="hljs-built_in">func</span>(x);
 output[threadID] = y;</code></pre></div>
 <h3 id="synchronizing-threads">Synchronizing threads</h3>
 <p>Threads in the same <strong><em>block (not gird)</em></strong> can be synchronized with function <code>__syncthreads()</code>, this function create a barrier:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">Mds[i] = Md[j];
+<div class="code-wrapper"><pre><code class="hljs c++">Mds[i] = Md[j];
 __syncthreads();
 <span class="hljs-built_in">func</span>(Mds[i], Mds[i+<span class="hljs-number">1</span>]);</code></pre></div>
 <ul>
@@ -325,7 +364,7 @@ __syncthreads();
 </ul>
 <h4 id="problem-of-synchronizing">Problem of synchronizing</h4>
 <p>synchronizing actually breaks the parallelization, and more severely, it can leads to <strong><em>thread deadlock</em></strong>, such as below:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">someFunc</span>())
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">someFunc</span>())
 &#123;
     __syncthreads();
 &#125;
@@ -397,16 +436,7 @@ __syncthreads();
 <h2 id="memory-model">Memory model</h2>
 <h3 id="table">Table</h3>
 <table>
-<colgroup>
-<col style="width: 5%" />
-<col style="width: 3%" />
-<col style="width: 2%" />
-<col style="width: 3%" />
-<col style="width: 14%" />
-<col style="width: 9%" />
-<col style="width: 20%" />
-<col style="width: 38%" />
-</colgroup>
+
 <thead>
 <tr class="header">
 <th>Memory</th>
@@ -542,7 +572,7 @@ __syncthreads();
 <li><code>cudaMemcpyFromSymbol()</code></li>
 </ul>
 <p>Constants is better (previously a must) be declared outside of a function body</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">__constant__ <span class="hljs-type">float</span> constData[<span class="hljs-number">256</span>]; <span class="hljs-comment">// global scope</span>
+<div class="code-wrapper"><pre><code class="hljs c++">__constant__ <span class="hljs-type">float</span> constData[<span class="hljs-number">256</span>]; <span class="hljs-comment">// global scope</span>
 <span class="hljs-type">float</span> data[<span class="hljs-number">256</span>];
 <span class="hljs-built_in">cudaMemcpyToSymbol</span>(constData, data, <span class="hljs-built_in">sizeof</span>(data));
 <span class="hljs-built_in">cudaMemcpyFromSymbol</span>(data, constData, <span class="hljs-built_in">sizeof</span>(data));</code></pre></div>
@@ -572,7 +602,7 @@ __syncthreads();
 <li>Able to use multiple blocks.</li>
 </ul>
 <h5 id="implement-the-kernel">Implement the kernel</h5>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
 <span class="hljs-params"><span class="hljs-function"><span class="hljs-type">float</span>* devP, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// Calculate row and col index of P and M </span>
@@ -593,7 +623,7 @@ __syncthreads();
     devP[row * width + col] = pValue;
 &#125;</code></pre></div>
 <h5 id="invoke-the-kernel">Invoke the kernel</h5>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyOnDevice</span><span class="hljs-params">(<span class="hljs-type">float</span>* hostP,</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyOnDevice</span><span class="hljs-params">(<span class="hljs-type">float</span>* hostP,</span></span>
 <span class="hljs-params"><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">float</span>* hostM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* hostN, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-type">int</span> sizeInBytes = width * width * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>);
@@ -648,7 +678,7 @@ __syncthreads();
 <li>Each phase accumulates Pd using a subset of Md and Nd Each phase accumulates Pd using a subset of Md and Nd</li>
 <li>Each phase has good data locality</li>
 </ul>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
 <span class="hljs-params"><span class="hljs-function"><span class="hljs-type">float</span>* devP, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-comment">// Shared memory of M and N submatrices, size of tile width</span>
@@ -709,7 +739,7 @@ __syncthreads();
 <li>Close to maximum of 346.5 GFLOPS</li>
 </ul>
 <h5 id="first-order-size-considerations">First-order Size Considerations</h5>
-<div class="hljs code-wrapper"><pre><code class="hljs pgsql"><span class="hljs-keyword">Each</span> thread block should have many threads
+<div class="code-wrapper"><pre><code class="hljs pgsql"><span class="hljs-keyword">Each</span> thread block should have many threads
 TILE_WIDTH <span class="hljs-keyword">of</span> <span class="hljs-number">16</span> gives <span class="hljs-number">16</span>*<span class="hljs-number">16</span> = <span class="hljs-number">256</span> threads
 There should be many thread blocks
 A <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span> Pd gives <span class="hljs-number">64</span>*<span class="hljs-number">64</span> = <span class="hljs-number">4096</span> Thread Blocks
@@ -784,33 +814,75 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
 <p>Atomic operations in CUDA generally work for both shared memory and global memory. Atomic operations in shared memory are generally used to prevent race conditions between different threads within the same thread block. Atomic operations in global memory are used to prevent race conditions between two different threads across the blocks.</p>
 </blockquote>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/CUDA/">CUDA</a>
-                    
-                  </div>
                 
               </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    Copyright: This blog is provided under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CUDA programming 2</div>
+      <div>https://daydreamatnight.github.io/2022/09/02/CUDA-fundamental-6/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 2, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
               
               
-                <div class="post-prevnext">
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/09/CUDA-fundamental-7/">
+                      <a href="/2022/09/09/CUDA-fundamental-7/" title="CUDA Performance">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">CUDA Performance</span>
                         <span class="visible-mobile">Previous</span>
@@ -820,7 +892,7 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/01/CUDA-fundamental-5/">
+                      <a href="/2022/09/01/CUDA-fundamental-5/" title="CUDA Programming 1">
                         <span class="hidden-mobile">CUDA Programming 1</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -836,19 +908,69 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
 
 
     
@@ -873,59 +995,61 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-  <div class="statistics">
-    
-    
-
-    
-      
-        <!-- 不蒜子统计PV -->
-        <span id="busuanzi_container_site_pv" style="display: none">
-            Toal views: 
-            <span id="busuanzi_value_site_pv"></span>
-             
-          </span>
-      
-      
-        <!-- 不蒜子统计UV -->
-        <span id="busuanzi_container_site_uv" style="display: none">
-            Total visiters: 
-            <span id="busuanzi_value_site_uv"></span>
-            
-          </span>
-      
-    
-  </div>
-
-
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
   
 
   
-</footer>
-
-
-  <!-- SCRIPTS -->
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -936,15 +1060,27 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -956,99 +1092,146 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
 
 
 
-  
-
-
 
   
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
 
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-  
-
-  
-    <!-- MathJax -->
-    <script>
-      MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-        loader: {
-          load: ['ui/lazy']
-        },
-        options: {
-          renderActions: {
-            findScript: [10, doc => {
-              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-                const display = !!node.type.match(/; *mode=display/);
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                const text = document.createTextNode('');
-                node.parentNode.replaceChild(text, node);
-                math.start = { node: text, delim: '', n: 0 };
-                math.end = { node: text, delim: '', n: 0 };
-                doc.math.push(math);
-              });
-            }, '', false],
-            insertedScript: [200, () => {
-              document.querySelectorAll('mjx-container').forEach(node => {
-                let target = node.parentNode;
-                if (target.nodeName.toLowerCase() === 'li') {
-                  target.parentNode.classList.add('has-jax');
-                }
-              });
-            }, '', false]
-          }
-        }
-      };
-    </script>
-
-    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
-
-  
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
-  <script>
-    if (window.mermaid) {
-      mermaid.initialize({"theme":"default"});
-    }
-  </script>
-
-
 
 
 
@@ -1060,9 +1243,15 @@ Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

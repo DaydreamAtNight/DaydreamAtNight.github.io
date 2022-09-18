@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/fvm_schemes.png">
 <meta property="article:published_time" content="2022-06-28T17:11:00.000Z">
-<meta property="article:modified_time" content="2022-08-20T17:58:41.711Z">
+<meta property="article:modified_time" content="2022-09-18T10:37:14.395Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="OpenFOAM">
 <meta property="article:tag" content="fluid dynamics">
@@ -33,30 +33,27 @@
 <meta name="twitter:image" content="https://daydreamatnight.github.io/index/fvm_schemes.png">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
   <title>FVM schemes comparison on OpenFOAM - ShouRou</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
@@ -65,15 +62,31 @@
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"♪"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
@@ -82,8 +95,13 @@
 
 
 <body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 30vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>ShouRou</strong>
@@ -153,6 +171,7 @@
               &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
@@ -165,62 +184,76 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/article_banner.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="FVM schemes comparison on OpenFOAM">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      Ryan LI
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-06-29 01:11" pubdate>
-        June 29, 2022 am
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      110k words
-    </span>
   
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      366 minutes
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="FVM schemes comparison on OpenFOAM"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-29 01:11" pubdate>
+          June 29, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          110k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          366 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -229,26 +262,32 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">FVM schemes comparison on OpenFOAM</h1>
             
-            <div class="markdown-body">
-              <div class="note note-primary">
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
             <p>1D shockTube case is tested with different schemes on OpenFOAM. And a recommended differencing scheme setting in OpenFOAM is proposed.</p>
           </div>
 <span id="more"></span>
-<p>The velocity profiles are shown interactively based on <a target="_blank" rel="noopener" href="https://echarts.apache.org/">Apache ECharts</a>.</p>
-<div id="echarts2246" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<p>The velocity profiles are shown interactively based on <a target="_blank" rel="noopener" href="https://echarts.apache.org/">Apache ECharts</a>. (It could take some time loading...)</p>
+<div id="echarts9343" style="width: 85%;height: 400px;margin: 0 auto"></div>
 <script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
 <script type="text/javascript" src="https://www.makeapie.com/dep/echarts/map/js/china.js"></script>
 <script type="text/javascript">
   // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('echarts2246'));
+  var myChart = echarts.init(document.getElementById('echarts9343'));
   // 指定图表的配置项和数据
   let legends = ['exact', 'linear', 'upwind', 'linearUpwind', 'QUICK', 'TVD-vanLeer', 'TVD-Minmod', 'TVD-SuperBee']
 let xaxis = [0.0005, 0.0015, 0.0025, 0.0035, 0.0045, 0.0055, 0.0065, 0.0075, 0.0085, 0.0095, 0.0105, 0.0115, 0.0125, 0.0135, 0.0145, 0.0155, 0.0165, 0.0175, 0.0185, 0.0195, 0.0205, 0.0215, 0.0225, 0.0235, 0.0245, 0.0255, 0.0265, 0.0275, 0.0285, 0.0295, 0.0305, 0.0315, 0.0325, 0.0335, 0.0345, 0.0355, 0.0365, 0.0375, 0.0385, 0.0395, 0.0405, 0.0415, 0.0425, 0.0435, 0.0445, 0.0455, 0.0465, 0.0475, 0.0485, 0.0495, 0.0505, 0.0515, 0.0525, 0.0535, 0.0545, 0.0555, 0.0565, 0.0575, 0.0585, 0.0595, 0.0605, 0.0615, 0.0625, 0.0635, 0.0645, 0.0655, 0.0665, 0.0675, 0.0685, 0.0695, 0.0705, 0.0715, 0.0725, 0.0735, 0.0745, 0.0755, 0.0765, 0.0775, 0.0785, 0.0795, 0.0805, 0.0815, 0.0825, 0.0835, 0.0845, 0.0855, 0.0865, 0.0875, 0.0885, 0.0895, 0.0905, 0.0915, 0.0925, 0.0935, 0.0945, 0.0955, 0.0965, 0.0975, 0.0985, 0.0995, 0.1005, 0.1015, 0.1025, 0.1035, 0.1045, 0.1055, 0.1065, 0.1075, 0.1085, 0.1095, 0.1105, 0.1115, 0.1125, 0.1135, 0.1145, 0.1155, 0.1165, 0.1175, 0.1185, 0.1195, 0.1205, 0.1215, 0.1225, 0.1235, 0.1245, 0.1255, 0.1265, 0.1275, 0.1285, 0.1295, 0.1305, 0.1315, 0.1325, 0.1335, 0.1345, 0.1355, 0.1365, 0.1375, 0.1385, 0.1395, 0.1405, 0.1415, 0.1425, 0.1435, 0.1445, 0.1455, 0.1465, 0.1475, 0.1485, 0.1495, 0.1505, 0.1515, 0.1525, 0.1535, 0.1545, 0.1555, 0.1565, 0.1575, 0.1585, 0.1595, 0.1605, 0.1615, 0.1625, 0.1635, 0.1645, 0.1655, 0.1665, 0.1675, 0.1685, 0.1695, 0.1705, 0.1715, 0.1725, 0.1735, 0.1745, 0.1755, 0.1765, 0.1775, 0.1785, 0.1795, 0.1805, 0.1815, 0.1825, 0.1835, 0.1845, 0.1855, 0.1865, 0.1875, 0.1885, 0.1895, 0.1905, 0.1915, 0.1925, 0.1935, 0.1945, 0.1955, 0.1965, 0.1975, 0.1985, 0.1995, 0.2005, 0.2015, 0.2025, 0.2035, 0.2045, 0.2055, 0.2065, 0.2075, 0.2085, 0.2095, 0.2105, 0.2115, 0.2125, 0.2135, 0.2145, 0.2155, 0.2165, 0.2175, 0.2185, 0.2195, 0.2205, 0.2215, 0.2225, 0.2235, 0.2245, 0.2255, 0.2265, 0.2275, 0.2285, 0.2295, 0.2305, 0.2315, 0.2325, 0.2335, 0.2345, 0.2355, 0.2365, 0.2375, 0.2385, 0.2395, 0.2405, 0.2415, 0.2425, 0.2435, 0.2445, 0.2455, 0.2465, 0.2475, 0.2485, 0.2495, 0.2505, 0.2515, 0.2525, 0.2535, 0.2545, 0.2555, 0.2565, 0.2575, 0.2585, 0.2595, 0.2605, 0.2615, 0.2625, 0.2635, 0.2645, 0.2655, 0.2665, 0.2675, 0.2685, 0.2695, 0.2705, 0.2715, 0.2725, 0.2735, 0.2745, 0.2755, 0.2765, 0.2775, 0.2785, 0.2795, 0.2805, 0.2815, 0.2825, 0.2835, 0.2845, 0.2855, 0.2865, 0.2875, 0.2885, 0.2895, 0.2905, 0.2915, 0.2925, 0.2935, 0.2945, 0.2955, 0.2965, 0.2975, 0.2985, 0.2995, 0.3005, 0.3015, 0.3025, 0.3035, 0.3045, 0.3055, 0.3065, 0.3075, 0.3085, 0.3095, 0.3105, 0.3115, 0.3125, 0.3135, 0.3145, 0.3155, 0.3165, 0.3175, 0.3185, 0.3195, 0.3205, 0.3215, 0.3225, 0.3235, 0.3245, 0.3255, 0.3265, 0.3275, 0.3285, 0.3295, 0.3305, 0.3315, 0.3325, 0.3335, 0.3345, 0.3355, 0.3365, 0.3375, 0.3385, 0.3395, 0.3405, 0.3415, 0.3425, 0.3435, 0.3445, 0.3455, 0.3465, 0.3475, 0.3485, 0.3495, 0.3505, 0.3515, 0.3525, 0.3535, 0.3545, 0.3555, 0.3565, 0.3575, 0.3585, 0.3595, 0.3605, 0.3615, 0.3625, 0.3635, 0.3645, 0.3655, 0.3665, 0.3675, 0.3685, 0.3695, 0.3705, 0.3715, 0.3725, 0.3735, 0.3745, 0.3755, 0.3765, 0.3775, 0.3785, 0.3795, 0.3805, 0.3815, 0.3825, 0.3835, 0.3845, 0.3855, 0.3865, 0.3875, 0.3885, 0.3895, 0.3905, 0.3915, 0.3925, 0.3935, 0.3945, 0.3955, 0.3965, 0.3975, 0.3985, 0.3995, 0.4005, 0.4015, 0.4025, 0.4035, 0.4045, 0.4055, 0.4065, 0.4075, 0.4085, 0.4095, 0.4105, 0.4115, 0.4125, 0.4135, 0.4145, 0.4155, 0.4165, 0.4175, 0.4185, 0.4195, 0.4205, 0.4215, 0.4225, 0.4235, 0.4245, 0.4255, 0.4265, 0.4275, 0.4285, 0.4295, 0.4305, 0.4315, 0.4325, 0.4335, 0.4345, 0.4355, 0.4365, 0.4375, 0.4385, 0.4395, 0.4405, 0.4415, 0.4425, 0.4435, 0.4445, 0.4455, 0.4465, 0.4475, 0.4485, 0.4495, 0.4505, 0.4515, 0.4525, 0.4535, 0.4545, 0.4555, 0.4565, 0.4575, 0.4585, 0.4595, 0.4605, 0.4615, 0.4625, 0.4635, 0.4645, 0.4655, 0.4665, 0.4675, 0.4685, 0.4695, 0.4705, 0.4715, 0.4725, 0.4735, 0.4745, 0.4755, 0.4765, 0.4775, 0.4785, 0.4795, 0.4805, 0.4815, 0.4825, 0.4835, 0.4845, 0.4855, 0.4865, 0.4875, 0.4885, 0.4895, 0.4905, 0.4915, 0.4925, 0.4935, 0.4945, 0.4955, 0.4965, 0.4975, 0.4985, 0.4995, 0.5005, 0.5015, 0.5025, 0.5035, 0.5045, 0.5055, 0.5065, 0.5075, 0.5085, 0.5095, 0.5105, 0.5115, 0.5125, 0.5135, 0.5145, 0.5155, 0.5165, 0.5175, 0.5185, 0.5195, 0.5205, 0.5215, 0.5225, 0.5235, 0.5245, 0.5255, 0.5265, 0.5275, 0.5285, 0.5295, 0.5305, 0.5315, 0.5325, 0.5335, 0.5345, 0.5355, 0.5365, 0.5375, 0.5385, 0.5395, 0.5405, 0.5415, 0.5425, 0.5435, 0.5445, 0.5455, 0.5465, 0.5475, 0.5485, 0.5495, 0.5505, 0.5515, 0.5525, 0.5535, 0.5545, 0.5555, 0.5565, 0.5575, 0.5585, 0.5595, 0.5605, 0.5615, 0.5625, 0.5635, 0.5645, 0.5655, 0.5665, 0.5675, 0.5685, 0.5695, 0.5705, 0.5715, 0.5725, 0.5735, 0.5745, 0.5755, 0.5765, 0.5775, 0.5785, 0.5795, 0.5805, 0.5815, 0.5825, 0.5835, 0.5845, 0.5855, 0.5865, 0.5875, 0.5885, 0.5895, 0.5905, 0.5915, 0.5925, 0.5935, 0.5945, 0.5955, 0.5965, 0.5975, 0.5985, 0.5995, 0.6005, 0.6015, 0.6025, 0.6035, 0.6045, 0.6055, 0.6065, 0.6075, 0.6085, 0.6095, 0.6105, 0.6115, 0.6125, 0.6135, 0.6145, 0.6155, 0.6165, 0.6175, 0.6185, 0.6195, 0.6205, 0.6215, 0.6225, 0.6235, 0.6245, 0.6255, 0.6265, 0.6275, 0.6285, 0.6295, 0.6305, 0.6315, 0.6325, 0.6335, 0.6345, 0.6355, 0.6365, 0.6375, 0.6385, 0.6395, 0.6405, 0.6415, 0.6425, 0.6435, 0.6445, 0.6455, 0.6465, 0.6475, 0.6485, 0.6495, 0.6505, 0.6515, 0.6525, 0.6535, 0.6545, 0.6555, 0.6565, 0.6575, 0.6585, 0.6595, 0.6605, 0.6615, 0.6625, 0.6635, 0.6645, 0.6655, 0.6665, 0.6675, 0.6685, 0.6695, 0.6705, 0.6715, 0.6725, 0.6735, 0.6745, 0.6755, 0.6765, 0.6775, 0.6785, 0.6795, 0.6805, 0.6815, 0.6825, 0.6835, 0.6845, 0.6855, 0.6865, 0.6875, 0.6885, 0.6895, 0.6905, 0.6915, 0.6925, 0.6935, 0.6945, 0.6955, 0.6965, 0.6975, 0.6985, 0.6995, 0.7005, 0.7015, 0.7025, 0.7035, 0.7045, 0.7055, 0.7065, 0.7075, 0.7085, 0.7095, 0.7105, 0.7115, 0.7125, 0.7135, 0.7145, 0.7155, 0.7165, 0.7175, 0.7185, 0.7195, 0.7205, 0.7215, 0.7225, 0.7235, 0.7245, 0.7255, 0.7265, 0.7275, 0.7285, 0.7295, 0.7305, 0.7315, 0.7325, 0.7335, 0.7345, 0.7355, 0.7365, 0.7375, 0.7385, 0.7395, 0.7405, 0.7415, 0.7425, 0.7435, 0.7445, 0.7455, 0.7465, 0.7475, 0.7485, 0.7495, 0.7505, 0.7515, 0.7525, 0.7535, 0.7545, 0.7555, 0.7565, 0.7575, 0.7585, 0.7595, 0.7605, 0.7615, 0.7625, 0.7635, 0.7645, 0.7655, 0.7665, 0.7675, 0.7685, 0.7695, 0.7705, 0.7715, 0.7725, 0.7735, 0.7745, 0.7755, 0.7765, 0.7775, 0.7785, 0.7795, 0.7805, 0.7815, 0.7825, 0.7835, 0.7845, 0.7855, 0.7865, 0.7875, 0.7885, 0.7895, 0.7905, 0.7915, 0.7925, 0.7935, 0.7945, 0.7955, 0.7965, 0.7975, 0.7985, 0.7995, 0.8005, 0.8015, 0.8025, 0.8035, 0.8045, 0.8055, 0.8065, 0.8075, 0.8085, 0.8095, 0.8105, 0.8115, 0.8125, 0.8135, 0.8145, 0.8155, 0.8165, 0.8175, 0.8185, 0.8195, 0.8205, 0.8215, 0.8225, 0.8235, 0.8245, 0.8255, 0.8265, 0.8275, 0.8285, 0.8295, 0.8305, 0.8315, 0.8325, 0.8335, 0.8345, 0.8355, 0.8365, 0.8375, 0.8385, 0.8395, 0.8405, 0.8415, 0.8425, 0.8435, 0.8445, 0.8455, 0.8465, 0.8475, 0.8485, 0.8495, 0.8505, 0.8515, 0.8525, 0.8535, 0.8545, 0.8555, 0.8565, 0.8575, 0.8585, 0.8595, 0.8605, 0.8615, 0.8625, 0.8635, 0.8645, 0.8655, 0.8665, 0.8675, 0.8685, 0.8695, 0.8705, 0.8715, 0.8725, 0.8735, 0.8745, 0.8755, 0.8765, 0.8775, 0.8785, 0.8795, 0.8805, 0.8815, 0.8825, 0.8835, 0.8845, 0.8855, 0.8865, 0.8875, 0.8885, 0.8895, 0.8905, 0.8915, 0.8925, 0.8935, 0.8945, 0.8955, 0.8965, 0.8975, 0.8985, 0.8995, 0.9005, 0.9015, 0.9025, 0.9035, 0.9045, 0.9055, 0.9065, 0.9075, 0.9085, 0.9095, 0.9105, 0.9115, 0.9125, 0.9135, 0.9145, 0.9155, 0.9165, 0.9175, 0.9185, 0.9195, 0.9205, 0.9215, 0.9225, 0.9235, 0.9245, 0.9255, 0.9265, 0.9275, 0.9285, 0.9295, 0.9305, 0.9315, 0.9325, 0.9335, 0.9345, 0.9355, 0.9365, 0.9375, 0.9385, 0.9395, 0.9405, 0.9415, 0.9425, 0.9435, 0.9445, 0.9455, 0.9465, 0.9475, 0.9485, 0.9495, 0.9505, 0.9515, 0.9525, 0.9535, 0.9545, 0.9555, 0.9565, 0.9575, 0.9585, 0.9595, 0.9605, 0.9615, 0.9625, 0.9635, 0.9645, 0.9655, 0.9665, 0.9675, 0.9685, 0.9695, 0.9705, 0.9715, 0.9725, 0.9735, 0.9745, 0.9755, 0.9765, 0.9775, 0.9785, 0.9795, 0.9805, 0.9815, 0.9825, 0.9835, 0.9845, 0.9855, 0.9865, 0.9875, 0.9885, 0.9895, 0.9905, 0.9915, 0.9925, 0.9935, 0.9945, 0.9955, 0.9965, 0.9975, 0.9985, 0.9995];
@@ -397,7 +436,7 @@ option = {
 <li>"1.5"-order linearUpwind scheme, usually a good trade off between accuracy and oscillation.</li>
 </ul>
 <p>A typical setting for most of the cases in OpenFOAM is:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">ddtSchemes
+<div class="code-wrapper"><pre><code class="hljs c++">ddtSchemes
 &#123;
   <span class="hljs-keyword">default</span>                         CrankNicolson <span class="hljs-number">0</span>;
 &#125;
@@ -422,7 +461,7 @@ laplacianSchemes
   <span class="hljs-keyword">default</span>                         Gauss linear limited <span class="hljs-number">1</span>;
 &#125;</code></pre></div>
 <p>And also, here is a super stable version, change everything into first-order, it will always push the case to convergence.</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">ddtSchemes
+<div class="code-wrapper"><pre><code class="hljs c++">ddtSchemes
 &#123;
   <span class="hljs-keyword">default</span>                         Euler;
 &#125;
@@ -448,35 +487,77 @@ laplacianSchemes
           </div>
 <p>Echart code is on <a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/echartExamples/blob/main/shockTubeResults.echart">shockTubeResults.echart</a>. Feel free to zoom in/out, check out/in the labels...</p>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/OpenFOAM/">OpenFOAM</a>
-                    
-                      <a class="hover-with-bg" href="/tags/fluid-dynamics/">fluid dynamics</a>
-                    
-                  </div>
                 
               </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OpenFOAM/">#OpenFOAM</a>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    Copyright: This blog is provided under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>FVM schemes comparison on OpenFOAM</div>
+      <div>https://daydreamatnight.github.io/2022/06/29/FVM-schemes-comparison-on-OpenFOAM/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 29, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
               
               
-                <div class="post-prevnext">
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/07/01/Play-with-CUDA/">
+                      <a href="/2022/07/01/Play-with-CUDA/" title="Play with CUDA">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Play with CUDA</span>
                         <span class="visible-mobile">Previous</span>
@@ -486,7 +567,7 @@ laplacianSchemes
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/28/FVM-schemes-fundamentals2/">
+                      <a href="/2022/06/28/FVM-schemes-fundamentals2/" title="Numerical schemes fundamentals 2">
                         <span class="hidden-mobile">Numerical schemes fundamentals 2</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -502,19 +583,69 @@ laplacianSchemes
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
 
 
     
@@ -539,59 +670,61 @@ laplacianSchemes
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-  <div class="statistics">
-    
-    
-
-    
-      
-        <!-- 不蒜子统计PV -->
-        <span id="busuanzi_container_site_pv" style="display: none">
-            Toal views: 
-            <span id="busuanzi_value_site_pv"></span>
-             
-          </span>
-      
-      
-        <!-- 不蒜子统计UV -->
-        <span id="busuanzi_container_site_uv" style="display: none">
-            Total visiters: 
-            <span id="busuanzi_value_site_uv"></span>
-            
-          </span>
-      
-    
-  </div>
-
-
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
   
 
   
-</footer>
-
-
-  <!-- SCRIPTS -->
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -602,15 +735,27 @@ laplacianSchemes
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -622,99 +767,146 @@ laplacianSchemes
 
 
 
-  
-
-
 
   
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
 
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-  
-
-  
-    <!-- MathJax -->
-    <script>
-      MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-        loader: {
-          load: ['ui/lazy']
-        },
-        options: {
-          renderActions: {
-            findScript: [10, doc => {
-              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-                const display = !!node.type.match(/; *mode=display/);
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                const text = document.createTextNode('');
-                node.parentNode.replaceChild(text, node);
-                math.start = { node: text, delim: '', n: 0 };
-                math.end = { node: text, delim: '', n: 0 };
-                doc.math.push(math);
-              });
-            }, '', false],
-            insertedScript: [200, () => {
-              document.querySelectorAll('mjx-container').forEach(node => {
-                let target = node.parentNode;
-                if (target.nodeName.toLowerCase() === 'li') {
-                  target.parentNode.classList.add('has-jax');
-                }
-              });
-            }, '', false]
-          }
-        }
-      };
-    </script>
-
-    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
-
-  
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
-  <script>
-    if (window.mermaid) {
-      mermaid.initialize({"theme":"default"});
-    }
-  </script>
-
-
 
 
 
@@ -726,9 +918,15 @@ laplacianSchemes
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

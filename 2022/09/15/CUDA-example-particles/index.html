@@ -32,30 +32,27 @@
 <meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_example_particle.png">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
   <title>CUDA example particles - ShouRou</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/a11y-light.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
@@ -64,15 +61,31 @@
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"♪"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
@@ -81,8 +94,13 @@
 
 
 <body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 30vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>ShouRou</strong>
@@ -152,6 +170,7 @@
               &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
@@ -164,62 +183,76 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/article_banner.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="CUDA example particles">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      Ryan LI
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-09-15 10:41" pubdate>
-        September 15, 2022 am
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      6.8k words
-    </span>
   
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      23 minutes
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CUDA example particles"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-15 10:41" pubdate>
+          September 15, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          23 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -228,33 +261,35 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">CUDA example particles</h1>
             
-            <div class="markdown-body">
-              <div class="note note-primary">
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
             <p>This is a code review of particle simulation CUDA template . Several changes are also documented afterwards.</p>
           </div>
 <span id="more"></span>
 <div class="note note-secondary">
-            <p>Main references</p><p><a target="_blank" rel="noopener" href="https://developer.download.nvidia.cn/assets/cuda/files/particles.pdf">Particle Simulation using CUDA - NVIDIA</a></p><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/gpugems/gpugems3/part-v-physics-simulation/chapter-29-real-time-rigid-body-simulation-gpus">Chapter 29. Real-Time Rigid Body Simulation on GPUs</a><sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Harada, T.: Real-Time Rigid Body Simulation on GPUs. GPU Gems 3. Addison Wesley, 2007">[1]</span></a></sup></p>
+            <p>Main references</p><p><a target="_blank" rel="noopener" href="https://developer.download.nvidia.cn/assets/cuda/files/particles.pdf">Particle Simulation using CUDA - NVIDIA</a></p><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/gpugems/gpugems3/part-v-physics-simulation/chapter-29-real-time-rigid-body-simulation-gpus">Chapter 29. Real-Time Rigid Body Simulation on GPUs</a><sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Harada, T.: Real-Time Rigid Body Simulation on GPUs. GPU Gems 3. Addison Wesley,  2007">[1]</span></a></sup></p>
           </div>
-<p>This is a Real-Time Particle Simulation implemented in CUDA. <em>Discrete element method(DEM)<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Mishra, B. K. 2003. A Review of Computer Simulation of Tumbling Mills by the Discrete Element Method: Part 1—Contact Mechanics. International Journal of Mineral Processing 71(1), pp. 73–93.
-">[2]</span></a></sup></em> is implemented with uniform grid data structure. Real-time granular materials rendering is applied by openGL.</p>
-<p>This framework can be extended to more complicated problems and methods such as SPH<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan J.: Smoothed particle hydrodynamics. Annu. Rev. Astron. Physics 30 (1992), 543. 12, 13
-">[3]</span></a></sup><sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Müller M., Charypar D., Gross M.: Particle-based fluid simulation for interactive applications. Proceedings of 2003 ACM SIGGRAPH Symposium on Computer Animation (2003), 154–159.
-">[4]</span></a></sup> model for fluid.</p>
-<p>The uniform grid<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Ericson, C., Real-Time Collision Detection, Morgan Kaufmann 2005
-">[5]</span></a></sup> technique could be extended to more sophisticated structures such as hierarchical grids.</p>
+<p>This is a Real-Time Particle Simulation implemented in CUDA. <em>Discrete element method(DEM)<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Mishra, B. K. 2003. A Review of Computer Simulation of Tumbling Mills by the Discrete Element Method: Part 1—Contact Mechanics. International Journal of Mineral Processing 71(1), pp. 73–93.">[2]</span></a></sup></em> is implemented with uniform grid data structure. Real-time granular materials rendering is applied by openGL.</p>
+<p>This framework can be extended to more complicated problems and methods such as SPH<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan J.: Smoothed particle hydrodynamics. Annu. Rev. Astron. Physics 30 (1992), 543.  12, 13">[3]</span></a></sup><sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Müller M., Charypar D., Gross M.: Particle-based fluid simulation for interactive  applications. Proceedings of 2003 ACM SIGGRAPH Symposium on Computer Animation  (2003), 154–159.">[4]</span></a></sup> model for fluid.</p>
+<p>The uniform grid<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Ericson, C., Real-Time Collision Detection, Morgan Kaufmann 2005">[5]</span></a></sup> technique could be extended to more sophisticated structures such as hierarchical grids.</p>
 <h2 id="code-structure">Code structure</h2>
 <h3 id="directory-tree">Directory tree</h3>
 <p>The code directory is rather flat, all the necessaries are located in the <code>root</code>,</p>
-<div class="hljs code-wrapper"><pre><code class="hljs txt">.
+<div class="code-wrapper"><pre><code class="hljs txt">.
 ├── findgllib.mk
 ├── Makefile
 ├── NsightEclipse.xml
@@ -278,8 +313,7 @@
 </div>
 
 <h3 id="class-particlesystem">class: particleSystem</h3>
-<p>This is the main class for particles, including set particle position, updating... The DEM<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan J.: Smoothed particle hydrodynamics. Annu. Rev. Astron. Physics 30 (1992), 543. 12, 13
-">[3]</span></a></sup> method is implemented in the <code>collideSpheres</code> function.</p>
+<p>This is the main class for particles, including set particle position, updating... The DEM<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan J.: Smoothed particle hydrodynamics. Annu. Rev. Astron. Physics 30 (1992), 543.  12, 13">[3]</span></a></sup> method is implemented in the <code>collideSpheres</code> function.</p>
 
 <div class="markmap-container" style="height:400px">
   <svg data="{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;particleSystem&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#8b0000;\&quot;&gt;update&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;integrateSystem&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[4,5],&quot;f&quot;:true},&quot;v&quot;:&quot;integrate_functor&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[5,6],&quot;f&quot;:true},&quot;v&quot;:&quot;vel += params.gravity * deltaTime;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[6,7],&quot;f&quot;:true},&quot;v&quot;:&quot;vel *= params.globalDamping;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[7,8],&quot;f&quot;:true},&quot;v&quot;:&quot;pos += vel * deltaTime;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[8,9],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if &lt;em&gt;out of boundary&lt;/em&gt;&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[9,10],&quot;f&quot;:true},&quot;v&quot;:&quot;pos = &lt;em&gt;boundary position&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[10,11],&quot;f&quot;:true},&quot;v&quot;:&quot;vel *= params.boundaryDamping;&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;(reconstruct grid)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[12,13],&quot;f&quot;:true},&quot;v&quot;:&quot;calcHash&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[13,14],&quot;f&quot;:true},&quot;v&quot;:&quot;calcHashD&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[14,15],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;(get address in grid)&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[15,16],&quot;f&quot;:true},&quot;v&quot;:&quot;calcGridPos&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[16,17],&quot;f&quot;:true},&quot;v&quot;:&quot;calcGridHash&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[17,18],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;(store grid hash and particle index)&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[18,19],&quot;f&quot;:true},&quot;v&quot;:&quot;gridParticleHash&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[19,20],&quot;f&quot;:true},&quot;v&quot;:&quot;gridParticleIndex&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[20,21],&quot;f&quot;:true},&quot;v&quot;:&quot;sortParticles&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[21,22],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;(sort particles based on hash)&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[22,23],&quot;f&quot;:true},&quot;v&quot;:&quot;thrust::sort_by_key()&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[23,24],&quot;f&quot;:true},&quot;v&quot;:&quot;reorderDataAndFindCellStart&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[24,25],&quot;f&quot;:true},&quot;v&quot;:&quot;reorderDataAndFindCellStartD&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[25,26],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;find the first particle in the cell,&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[26,27],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;use the sorted index to reorder the pos and vel&lt;/em&gt;&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[27,28]},&quot;v&quot;:&quot;collide&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[28,29],&quot;f&quot;:true},&quot;v&quot;:&quot;_&lt;em&gt;global&lt;/em&gt;_ collideD&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[29,30],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if &lt;em&gt;within neighbouring cells&lt;/em&gt;&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[30,31],&quot;f&quot;:true},&quot;v&quot;:&quot;force += collideCell&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[31,32],&quot;f&quot;:true},&quot;v&quot;:&quot;force += collideSpheres&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[32,33],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if &lt;em&gt;within collideDistence&lt;/em&gt;&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[33,34],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;spring force(params.spring)&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[34,35],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;dashpot force(params.damping)&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[35,36],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;shear force(params.shear)&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[36,37],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;em&gt;attraction(params.attraction)&lt;/em&gt;&quot;}]}]}]}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[37,38]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#8b0000;\&quot;&gt;reset&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[38,39]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;case CONFIG_RANDOM:&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[39,40],&quot;f&quot;:true},&quot;v&quot;:&quot;m_hPos = &lt;em&gt;random position&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[40,41],&quot;f&quot;:true},&quot;v&quot;:&quot;m_hVel =  &lt;em&gt;0 velocity&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[41,42]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;case CONFIG_GRID:&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[42,43],&quot;f&quot;:true},&quot;v&quot;:&quot;gridSize &lt;em&gt;block, m_numParticles^1/3 in 3 directions&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[43,44],&quot;f&quot;:true},&quot;v&quot;:&quot;initGrid&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[44,45]},&quot;v&quot;:&quot;initGrid&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[45,46]},&quot;v&quot;:&quot;m_hPos = &lt;em&gt;equal space(2 particleRadius) in a block with jitters&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[46,47]},&quot;v&quot;:&quot;m_hVel =  &lt;em&gt;0 velocity&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[47,48]},&quot;v&quot;:&quot;addSphere&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[48,49]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;for block &lt;em&gt;within [-r,r]&lt;/em&gt;&lt;/span&gt;  &lt;em&gt;int r=ballr=10&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[49,50],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if  l &amp;lt;= m_params.particleRadius*2.0f*r:&lt;/span&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[50,51],&quot;f&quot;:true},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if index &amp;lt; m_numParticles&lt;/span&gt; grap particles from existed&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[51,52],&quot;f&quot;:true},&quot;v&quot;:&quot;m_hPos = &lt;em&gt;start pos add relPos&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[52,53],&quot;f&quot;:true},&quot;v&quot;:&quot;m_hVel =  &lt;em&gt;vel input&lt;/em&gt;&quot;}]}]}]}]}"></svg>
@@ -299,27 +333,27 @@
 <h5 id="step-1-setgravity3d">step 1: setGravity3d</h5>
 <p><strong>original</strong></p>
 <p>In original code, the gravity direction is fixed (norm: <span class="math inline">\([0,-1,0]\)</span>), the global variable <code>gravity</code> is defined as scalar (float):</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> gravity = <span class="hljs-number">0.0003f</span>;</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> gravity = <span class="hljs-number">0.0003f</span>;</code></pre></div>
 <p>the function to set gravity is defined in <code>class ParticleSystem</code> as:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setGravity</span><span class="hljs-params">(<span class="hljs-type">float</span> x)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setGravity</span><span class="hljs-params">(<span class="hljs-type">float</span> x)</span></span>
 <span class="hljs-function"></span>&#123;
     m_params.gravity = <span class="hljs-built_in">make_float3</span>(<span class="hljs-number">0.0f</span>, x, <span class="hljs-number">0.0f</span>);
 &#125;</code></pre></div>
 <p>when use it:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">psystem-&gt;<span class="hljs-built_in">setGravity</span>(-gravity)</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs c++">psystem-&gt;<span class="hljs-built_in">setGravity</span>(-gravity)</code></pre></div>
 <p><strong>update</strong></p>
 <p>The good news is that the class variable <code>gravity</code> is defined as <code>float3</code>. we only need to upgraded the class function to be</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setGravity3d</span><span class="hljs-params">(<span class="hljs-type">float</span> x, <span class="hljs-type">float</span> y, <span class="hljs-type">float</span> z)</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setGravity3d</span><span class="hljs-params">(<span class="hljs-type">float</span> x, <span class="hljs-type">float</span> y, <span class="hljs-type">float</span> z)</span></span>
 <span class="hljs-function"></span>&#123;
     m_params.gravity = <span class="hljs-built_in">make_float3</span>(x, y, z);
 &#125;</code></pre></div>
 <p>and the global variable and its usage:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> gravity3d[] = &#123;<span class="hljs-number">0</span>, <span class="hljs-number">-0.001</span>, <span class="hljs-number">0</span>&#125;;</code></pre></div>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">psystem-&gt;<span class="hljs-built_in">setGravity3d</span>(gravity3d[<span class="hljs-number">0</span>], gravity3d[<span class="hljs-number">1</span>], gravity3d[<span class="hljs-number">2</span>]);</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> gravity3d[] = &#123;<span class="hljs-number">0</span>, <span class="hljs-number">-0.001</span>, <span class="hljs-number">0</span>&#125;;</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs c++">psystem-&gt;<span class="hljs-built_in">setGravity3d</span>(gravity3d[<span class="hljs-number">0</span>], gravity3d[<span class="hljs-number">1</span>], gravity3d[<span class="hljs-number">2</span>]);</code></pre></div>
 <h5 id="step-2-rotategravity">step 2: rotateGravity</h5>
 <p><strong>original</strong></p>
 <p>Recall the <a href="#Main-Structure-Overview">Code Structure</a>, the camera rotation is applied in <code>glutDisplayFunc(display)</code>. The code (in function <code>display()</code>) is such as:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> c = <span class="hljs-number">0</span>; c &lt; <span class="hljs-number">3</span>; ++c)
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> c = <span class="hljs-number">0</span>; c &lt; <span class="hljs-number">3</span>; ++c)
 &#123;
     camera_trans_lag[c] += (camera_trans[c] - camera_trans_lag[c]) * inertia;
     camera_rot_lag[c] += (camera_rot[c] - camera_rot_lag[c]) * inertia;
@@ -331,10 +365,10 @@
 <p>The camera rotation is applied by <code>glRotatef(camera_rot_lag[0, 1])</code>, where the camera normal vector is rotated from <span class="math inline">\([0,1,0]\)</span> every time step.</p>
 <p><strong>update</strong></p>
 <p>Define new global variables <code>gravity3dOrg</code> and <code>rotateGravity</code></p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> gravity3dOrg[] = &#123;<span class="hljs-number">0</span>, <span class="hljs-number">-0.001</span>, <span class="hljs-number">0</span>&#125;;
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> gravity3dOrg[] = &#123;<span class="hljs-number">0</span>, <span class="hljs-number">-0.001</span>, <span class="hljs-number">0</span>&#125;;
 <span class="hljs-type">bool</span> rotateGravity = <span class="hljs-literal">false</span>;</code></pre></div>
 <p>Add code to the <code>display()</code>, after the sampled original code above as</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (rotateGravity)
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (rotateGravity)
 &#123;
     <span class="hljs-comment">// rotate gravity if camera rotate</span>
     <span class="hljs-type">float</span> angleX = -M_PI*camera_rot_lag[<span class="hljs-number">0</span>]/<span class="hljs-number">180.0</span>;
@@ -353,7 +387,7 @@
     <span class="hljs-comment">// printf(&quot;\t%.2f\n&quot;,1000*sqrt(gravity3d[0]*gravity3d[0]+gravity3d[1]*gravity3d[1]+gravity3d[2]*gravity3d[2]));</span>
 &#125;</code></pre></div>
 <p>Define functions <code>rotateVectorX</code> and <code>rotateVectorY</code> in a new file <code>vectorRotate.hpp</code></p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;math.h&gt;</span></span>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;math.h&gt;</span></span>
 
 <span class="hljs-comment">//function to calculate rotate vectors</span>
 <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T2</span>&gt;
@@ -373,7 +407,7 @@
 </code></pre></div>
 <h5 id="step3-toggle-rotategravity">step3: toggle rotateGravity</h5>
 <p>Switches can be toggled by keyboard in <code>glutKeyboardFunc(key)</code>. Add another <code>case</code> in <code>key()</code> as:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">      <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;w&#x27;</span>:
+<div class="code-wrapper"><pre><code class="hljs c++">      <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;w&#x27;</span>:
           wireframe = !wireframe;
           <span class="hljs-keyword">break</span>;
 
@@ -386,7 +420,7 @@
           rotateGravity = !rotateGravity;
           <span class="hljs-keyword">break</span>;</code></pre></div>
 <p>In order to add this option to the right button menu, go to <code>initMenus()</code> and add afterwards:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-built_in">glutAddMenuEntry</span>(<span class="hljs-string">&quot;Toggle sliders [h]&quot;</span>, <span class="hljs-string">&#x27;h&#x27;</span>);
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-built_in">glutAddMenuEntry</span>(<span class="hljs-string">&quot;Toggle sliders [h]&quot;</span>, <span class="hljs-string">&#x27;h&#x27;</span>);
 <span class="hljs-built_in">glutAddMenuEntry</span>(<span class="hljs-string">&quot;Toggle active gravity (f)&quot;</span>, <span class="hljs-string">&#x27;f&#x27;</span>);
 <span class="hljs-built_in">glutAttachMenu</span>(GLUT_RIGHT_BUTTON);</code></pre></div>
 <h4 id="algorithm">Algorithm</h4>
@@ -413,7 +447,7 @@ y_2 &amp;= \cos\beta y_1 - \sin\beta z_1 \\
 z_2 &amp;= \sin\beta y_1 + \cos\beta z_1 \\
 \end{aligned}
 \]</span> the code is:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">vector_rotated[<span class="hljs-number">0</span>] = vector_a[<span class="hljs-number">0</span>];
+<div class="code-wrapper"><pre><code class="hljs c++">vector_rotated[<span class="hljs-number">0</span>] = vector_a[<span class="hljs-number">0</span>];
 vector_rotated[<span class="hljs-number">1</span>] = vector_a[<span class="hljs-number">1</span>] * <span class="hljs-built_in">cos</span>(angle) - vector_a[<span class="hljs-number">2</span>] * <span class="hljs-built_in">sin</span>(angle);
 vector_rotated[<span class="hljs-number">2</span>] = vector_a[<span class="hljs-number">1</span>] * <span class="hljs-built_in">sin</span>(angle) + vector_a[<span class="hljs-number">2</span>] * <span class="hljs-built_in">cos</span>(angle);</code></pre></div>
 <p>In this case, <span class="math inline">\(V_1\)</span> aligns to the negative y axis i.e. <code>vector_a[0] = vector_a[2] = 0</code>. So the code is simplified as shown above.</p>
@@ -426,7 +460,7 @@ vector_rotated[<span class="hljs-number">2</span>] = vector_a[<span class="hljs-
     -\sin\beta &amp; 0 &amp; \cos\beta
   \end{bmatrix}
 \]</span> in code that is:</p>
-<div class="hljs code-wrapper"><pre><code class="hljs c++">vector_rotated[<span class="hljs-number">0</span>] = vector_a[<span class="hljs-number">0</span>] * <span class="hljs-built_in">cos</span>(angle) + vector_a[<span class="hljs-number">2</span>] * <span class="hljs-built_in">sin</span>(angle);
+<div class="code-wrapper"><pre><code class="hljs c++">vector_rotated[<span class="hljs-number">0</span>] = vector_a[<span class="hljs-number">0</span>] * <span class="hljs-built_in">cos</span>(angle) + vector_a[<span class="hljs-number">2</span>] * <span class="hljs-built_in">sin</span>(angle);
 vector_rotated[<span class="hljs-number">1</span>] = vector_a[<span class="hljs-number">1</span>];
 vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs-number">0</span>] * <span class="hljs-built_in">sin</span>(angle) + vector_a[<span class="hljs-number">2</span>] * <span class="hljs-built_in">cos</span>(angle);</code></pre></div>
 <p>in this case, <code>vector_a[0] = 0</code>, the code is thus simplified</p>
@@ -453,29 +487,71 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
 </div>
 </section>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/CUDA/">CUDA</a>
-                    
-                  </div>
                 
               </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    Copyright: This blog is provided under a <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 licience</a>
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CUDA example particles</div>
+      <div>https://daydreamatnight.github.io/2022/09/15/CUDA-example-particles/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 15, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
               
               
-                <div class="post-prevnext">
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
                     
@@ -483,7 +559,7 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/09/CUDA-fundamental-7/">
+                      <a href="/2022/09/09/CUDA-fundamental-7/" title="CUDA Performance">
                         <span class="hidden-mobile">CUDA Performance</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -499,19 +575,69 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
 
 
     
@@ -536,59 +662,61 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-  <div class="statistics">
-    
-    
-
-    
-      
-        <!-- 不蒜子统计PV -->
-        <span id="busuanzi_container_site_pv" style="display: none">
-            Toal views: 
-            <span id="busuanzi_value_site_pv"></span>
-             
-          </span>
-      
-      
-        <!-- 不蒜子统计UV -->
-        <span id="busuanzi_container_site_uv" style="display: none">
-            Total visiters: 
-            <span id="busuanzi_value_site_uv"></span>
-            
-          </span>
-      
-    
-  </div>
-
-
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
   
 
   
-</footer>
-
-
-  <!-- SCRIPTS -->
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -599,15 +727,27 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -619,99 +759,146 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
 
 
 
-  
-
-
 
   
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
 
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-  
-
-  
-    <!-- MathJax -->
-    <script>
-      MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-        loader: {
-          load: ['ui/lazy']
-        },
-        options: {
-          renderActions: {
-            findScript: [10, doc => {
-              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-                const display = !!node.type.match(/; *mode=display/);
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                const text = document.createTextNode('');
-                node.parentNode.replaceChild(text, node);
-                math.start = { node: text, delim: '', n: 0 };
-                math.end = { node: text, delim: '', n: 0 };
-                doc.math.push(math);
-              });
-            }, '', false],
-            insertedScript: [200, () => {
-              document.querySelectorAll('mjx-container').forEach(node => {
-                let target = node.parentNode;
-                if (target.nodeName.toLowerCase() === 'li') {
-                  target.parentNode.classList.add('has-jax');
-                }
-              });
-            }, '', false]
-          }
-        }
-      };
-    </script>
-
-    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
-
-  
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js" ></script>
-  <script>
-    if (window.mermaid) {
-      mermaid.initialize({"theme":"default"});
-    }
-  </script>
-
-
 
 
 
@@ -723,10 +910,16 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 
 <script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
 <script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
