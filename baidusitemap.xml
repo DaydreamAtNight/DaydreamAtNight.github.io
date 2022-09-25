@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/</loc>
+    <lastmod>2022-09-25</lastmod>
+  </url>
+  <url>
     <loc>https://daydreamatnight.github.io/2022/06/28/FVM-schemes-fundamentals2/</loc>
     <lastmod>2022-09-18</lastmod>
   </url>
@@ -78,10 +82,6 @@
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/04/12/paper-reading-transformer/</loc>
-    <lastmod>2022-06-09</lastmod>
-  </url>
-  <url>
-    <loc>https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/</loc>
     <lastmod>2022-06-09</lastmod>
   </url>
   <url>
