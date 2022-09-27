@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_example_particle.png">
 <meta property="article:published_time" content="2022-09-15T02:41:04.000Z">
-<meta property="article:modified_time" content="2022-09-18T02:32:16.594Z">
+<meta property="article:modified_time" content="2022-09-27T08:21:56.084Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="CUDA">
 <meta name="twitter:card" content="summary_large_image">
@@ -221,7 +221,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          6.8k words
+          12k words
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
           <!-- compatible with older versions-->
-          23 minutes
+          39 minutes
         
       </span>
     
@@ -464,6 +464,191 @@ vector_rotated[<span class="hljs-number">2</span>] = vector_a[<span class="hljs-
 vector_rotated[<span class="hljs-number">1</span>] = vector_a[<span class="hljs-number">1</span>];
 vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs-number">0</span>] * <span class="hljs-built_in">sin</span>(angle) + vector_a[<span class="hljs-number">2</span>] * <span class="hljs-built_in">cos</span>(angle);</code></pre></div>
 <p>in this case, <code>vector_a[0] = 0</code>, the code is thus simplified</p>
+<h3 id="periodic-bottom-boundary">Periodic bottom boundary</h3>
+<p>Instead pf Dirichlet boundary condition on wall, it possible to impose another type of boundary condition. In this example, when the particle y position exceeds the bottom, the position will reset to the top, and the velocity remains.</p>
+<p align="center">
+<video src="Periodic bottom boundary.mp4" type="video/mp4" controls="controls">
+</video>
+</p>
+<h4 id="code-1">code</h4>
+<h5 id="step-1-periodic-boundary">step 1: periodic boundary</h5>
+<p><strong>original</strong></p>
+<p>Recall the <a href="#Main-Structure-Overview">Code Structure</a>, the boundary condition is applied in <code>integrate_functor</code>. The bottom boundary is defined as rigid:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (pos.y &lt; <span class="hljs-number">-1.0f</span> + params.particleRadius)
+&#123;
+    pos.y = <span class="hljs-number">-1.0f</span> + params.particleRadius;
+    vel.y *= params.boundaryDamping;
+&#125;</code></pre></div>
+<p><strong>update</strong></p>
+<p>Define a extra conditional statement using a new parameter</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (params.rigidBottom)
+&#123;
+    <span class="hljs-comment">// origial rigid boundary</span>
+    <span class="hljs-keyword">if</span> (pos.y &lt; <span class="hljs-number">-1.0f</span> + params.particleRadius)
+    &#123;
+    pos.y = <span class="hljs-number">-1.0f</span> + params.particleRadius;
+    vel.y *= params.boundaryDamping;
+    &#125;
+&#125;
+<span class="hljs-keyword">else</span>
+&#123;
+    <span class="hljs-comment">// periodic boundary</span>
+    <span class="hljs-keyword">if</span> (pos.y &lt; <span class="hljs-number">-1.0f</span> + params.particleRadius)
+    &#123;
+        pos.y = <span class="hljs-number">1.0f</span> - params.particleRadius;
+    &#125;
+&#125;</code></pre></div>
+<p><code>params.rigidBottom</code> should to be add the the parameter list.</p>
+<h5 id="step-2-parameters">step 2: parameters</h5>
+<p><strong>original</strong></p>
+<p><code>params</code> is the type of <code>SimParams</code> defined in <code>particles_kernel.cuh</code></p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// simulation parameters</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SimParams</span>
+&#123; 
+    float3 colliderPos;
+    <span class="hljs-type">float</span>  colliderRadius;
+
+    float3 gravity;
+	<span class="hljs-comment">//...</span>
+&#125;;</code></pre></div>
+<p><code>SimParams m_params</code> is a parameter of class <code>ParticleSystem</code>. It is initialized in constructor <code>ParticleSystem::ParticleSystem</code> such as:</p>
+<div class="code-wrapper"><pre><code class="hljs c++">ParticleSystem::<span class="hljs-built_in">ParticleSystem</span>(uint numParticles, uint3 gridSize, <span class="hljs-type">bool</span> bUseOpenGL):
+    <span class="hljs-built_in">m_bUseOpenGL</span>(bUseOpenGL),
+    <span class="hljs-built_in">m_numParticles</span>(numParticles),
+	<span class="hljs-comment">// ...</span>
+    <span class="hljs-built_in">m_gridSize</span>(gridSize),
+&#123;
+	<span class="hljs-comment">// ...</span>
+    <span class="hljs-comment">// set simulation parameters</span>
+    m_params.gridSize = m_gridSize;
+    <span class="hljs-comment">//...</span>
+&#125;</code></pre></div>
+<p><strong>update</strong></p>
+<p>Mimicking the <code>gridSize</code> parameter,</p>
+<p>add new global parameter <code>bool rigidBottom = true;</code> in <code>particles.cpp</code></p>
+<p>define new member parameter <code>bool m_rigidBottom</code> in class <code>ParticleSystem</code></p>
+<p>add new input parameter and initialization list of constructor function as</p>
+<p><div class="code-wrapper"><pre><code class="hljs c++">ParticleSystem::<span class="hljs-built_in">ParticleSystem</span>(uint numParticles, uint3 gridSize, <span class="hljs-type">bool</span> bUseOpenGL, <span class="hljs-type">bool</span> rigidBottom) :
+    <span class="hljs-comment">//...</span>
+	<span class="hljs-built_in">m_rigidBottom</span>(rigidBottom),
+    <span class="hljs-built_in">m_gridSize</span>(gridSize),
+	<span class="hljs-comment">//...</span>
+&#123;
+    <span class="hljs-comment">//...</span>
+    <span class="hljs-comment">// set simulation parameters</span>
+    m_params.rigidBottom = m_rigidBottom;
+    m_params.gridSize = m_gridSize;
+    <span class="hljs-comment">//...</span>
+&#125;</code></pre></div></p>
+<div class="note note-info">
+            <p>There is another way to change parameters, suitable for non-constant parameters.</p><p>For example define a function and call it every step in <code>display</code> like:</p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setGravity3d</span><span class="hljs-params">(<span class="hljs-type">float</span> x, <span class="hljs-type">float</span> y, <span class="hljs-type">float</span> z)</span></span>
+<span class="hljs-function"></span>&#123;
+    m_params.gravity = <span class="hljs-built_in">make_float3</span>(x, y, z);
+&#125;</code></pre></div><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">display</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;    
+	<span class="hljs-keyword">if</span> (!bPause)
+    &#123;
+        psystem-&gt;<span class="hljs-built_in">setIterations</span>(iterations);
+        psystem-&gt;<span class="hljs-built_in">setDamping</span>(damping);
+        psystem-&gt;<span class="hljs-built_in">setGravity3d</span>(gravity3d[<span class="hljs-number">0</span>], gravity3d[<span class="hljs-number">1</span>], gravity3d[<span class="hljs-number">2</span>]);
+        psystem-&gt;<span class="hljs-built_in">setCollideSpring</span>(collideSpring);
+        <span class="hljs-comment">//...</span>
+    &#125;
+    <span class="hljs-comment">//...</span>
+&#125;</code></pre></div>
+          </div>
+<h3 id="directory-house-keeping">Directory house keeping</h3>
+<p>This is only a update to the directory tree for clearer developing afterwards.</p>
+<p>The updated directory tree after make (with updated <code>Makefile</code>) is shown as,</p>
+<div class="code-wrapper"><pre><code class="hljs c++">.
+├── bin
+│   └── x86_64
+│       └── linux
+│           └── release
+│               └── particles <span class="hljs-comment">// exe</span>
+├── data
+│   └── ref_particles.bin
+├── doc
+│   ├── FULLTEXT01.pdf
+│   ├── Novel\ hierarchical\ strategies\ <span class="hljs-keyword">for</span>\ SPH-centric\ algorithms\ on\ GPGPU.pdf
+│   ├── particles.pdf
+│   ├── periodic_bottom.mp4
+│   ├── R.W\ Hockney,\ J.W\ Eastwood\ -\ Computer\ simulation\ <span class="hljs-keyword">using</span>\ particles-A.\ Hilger\ (<span class="hljs-number">1988</span>).pdf
+│   ├── screenshot_lg.png
+│   ├── screenshot_md.png
+│   ├── screenshot_sm.png
+│   └── SPH\ on\ GPU\ with\ CUDA.pdf
+├── inc
+│   ├── <span class="hljs-comment">// contain cuda normal inc in SDK</span>
+│   └── rendercheck_gl.h
+├── make
+│   ├── findgllib.mk
+│   ├── Makefile
+│   ├── particles
+│   ├── particles.o
+│   ├── particleSystem_cuda.o
+│   ├── particleSystem.o
+│   ├── render_particles.o
+│   └── shaders.o
+├── readme.txt
+└── src <span class="hljs-comment">// source</span>
+    ├── NsightEclipse.xml
+    ├── particles.cpp
+    ├── particles_kernel.cuh
+    ├── particles_kernel_impl.cuh
+    ├── particleSystem.cpp
+    ├── particleSystem_cuda.cu
+    ├── particleSystem.cuh
+    ├── particleSystem.h
+    ├── render_particles.cpp
+    ├── render_particles.h
+    ├── shaders.cpp
+    ├── shaders.h
+    └── vectorRotate.hpp</code></pre></div>
+<h3 id="debug-on-reset">Debug on reset</h3>
+<p><strong>original</strong></p>
+<p>When calling <code>psystem -&gt; reset</code>, the particle number <code>gridSize</code> in each side of block is defined by</p>
+<div class="code-wrapper"><pre><code class="hljs c++">uint s = (<span class="hljs-type">int</span>) <span class="hljs-built_in">ceilf</span>(<span class="hljs-built_in">powf</span>((<span class="hljs-type">float</span>) m_numParticles, <span class="hljs-number">1.0f</span> / <span class="hljs-number">3.0f</span>));
+
+uint gridSize[<span class="hljs-number">3</span>];
+gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number">1</span>] = gridSize[<span class="hljs-number">2</span>] = s;
+<span class="hljs-built_in">initGrid</span>(gridSize, m_params.particleRadius*<span class="hljs-number">2.0f</span>, jitter, m_numParticles);</code></pre></div>
+<p>But it shows problematic when assigning particles number <span class="math inline">\(64*64*64=262144\)</span>.</p>
+<p><strong>test</strong></p>
+<p>Writing test code:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> jitter = m_params.particleRadius*<span class="hljs-number">0.01f</span>;
+<span class="hljs-comment">// uint s = (int) ceilf(powf((float) m_numParticles, 1.0f / 3.0f));</span>
+
+<span class="hljs-comment">// &lt;&lt;&lt; test ceiling bug&gt;&gt;&gt;</span>
+<span class="hljs-comment">// split this compacted line in two steps and test on each</span>
+<span class="hljs-comment">// step 1, calulate cubic root and print the result</span>
+<span class="hljs-type">float</span> temp = <span class="hljs-built_in">powf</span>((<span class="hljs-type">float</span>) m_numParticles, <span class="hljs-number">1.0f</span> / <span class="hljs-number">3.0f</span>);
+std::cout.<span class="hljs-built_in">precision</span>(<span class="hljs-number">20</span>);
+std::cout &lt;&lt; temp &lt;&lt; std::endl;
+<span class="hljs-comment">// step 2, ceil to int and print the result</span>
+uint s = (<span class="hljs-type">int</span>) <span class="hljs-built_in">ceilf</span>(temp);
+std::cout &lt;&lt; s &lt;&lt; std::endl;
+<span class="hljs-comment">// &lt;&lt;&lt; endtest &gt;&gt;&gt;</span>
+
+uint gridSize[<span class="hljs-number">3</span>];
+gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number">1</span>] = gridSize[<span class="hljs-number">2</span>] = s;
+<span class="hljs-built_in">initGrid</span>(gridSize, m_params.particleRadius*<span class="hljs-number">2.0f</span>, jitter, m_numParticles);</code></pre></div>
+<p>make and run with:</p>
+<div class="code-wrapper"><pre><code class="hljs bash">$./particles n=262144
+CUDA Particles Simulation Starting...
+
+grid: 64 x 64 x 64 = 262144 cells
+particles: 262144
+GPU Device 0: <span class="hljs-string">&quot;Ampere&quot;</span> with compute capability 8.6
+
+64.00000762939453125
+65</code></pre></div>
+<p><strong>update</strong></p>
+<p>The bug is because the low precision of float operations. Change the second step into below to larger the truncation error of the <code>ceil</code> command.</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// step 2, ceil to int and print the result</span>
+<span class="hljs-comment">// uint s = (int) ceilf(temp);</span>
+uint s = (<span class="hljs-type">int</span>) <span class="hljs-built_in">ceilf</span>(<span class="hljs-built_in">floor</span>(temp*<span class="hljs-number">1000</span>)/<span class="hljs-number">1000</span>);</code></pre></div>
+<p>Problem solved!</p>
 <h2 id="references">References</h2>
 <section class="footnotes">
 <div class="footnote-list">
@@ -566,6 +751,12 @@ vector_rotated[<span class="hljs-number">2</span>] = -vector_a[<span class="hljs
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/09/20/hand-written-SPH-method/" title="hand written SPH method">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">hand written SPH method</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

@@ -1,0 +1,966 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="under construction...                         After inspecting the CUDA Particles simulation template. A simplest SPH model is implemented based on it.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hand written SPH method">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/09/20/hand-written-SPH-method/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="under construction...                         After inspecting the CUDA Particles simulation template. A simplest SPH model is implemented based on it.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_SPH.png">
+<meta property="article:published_time" content="2022-09-20T06:23:37.000Z">
+<meta property="article:modified_time" content="2022-09-27T09:16:03.515Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta property="article:tag" content="Fluid Dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_SPH.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>hand written SPH method - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 30vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="hand written SPH method"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-20 14:23" pubdate>
+          September 20, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          12k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          39 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">hand written SPH method</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-danger">
+            <p>under construction...</p>
+          </div>
+<div class="note note-primary">
+            <p>After inspecting the CUDA Particles simulation template. A simplest SPH model is implemented based on it.</p>
+          </div>
+<span id="more"></span>
+<h2 id="introduction">Introduction</h2>
+<h3 id="related-works">Related works</h3>
+<p>The first open source SPH library ever is <a target="_blank" rel="noopener" href="https://wiki.manchester.ac.uk/sphysics/index.php/Main_Page">SPHysics FORTRAN code</a>. It is developed by researchers at the Johns Hopkins University (US), the University of Vigo (Spain), the University of Manchester (UK) and the University of Rome, La Sapienza.</p>
+<p>The earliest CUDA based SPH is <a target="_blank" rel="noopener" href="http://www.gpusph.org/about/">GPUSPH</a>, (github <a target="_blank" rel="noopener" href="https://github.com/GPUSPH/gpusph">gpusph</a>)<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hérault, A., Bilotta, G., &amp; Dalrymple, R. A. (2010). Sph on gpu with cuda. *Journal of Hydraulic Research*, *48*(sup1), 74-79.">[1]</span></a></sup>. It is based on the CUDA Particles simulation template<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, the same code reviewed in last blog. And the newest release is version 5.0.</p>
+<p>Besides, <a target="_blank" rel="noopener" href="https://dual.sphysics.org/">DualSPHysics</a>, (github <a target="_blank" rel="noopener" href="https://github.com/DualSPHysics/DualSPHysics">DualSPHysics</a>)<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Crespo, A. J., Domínguez, J. M., Rogers, B. D., Gómez-Gesteira, M., Longshaw, S., Canelas, R. J. F. B., ... &amp; García-Feal, O. (2015). DualSPHysics: Open-source parallel CFD solver based on Smoothed Particle Hydrodynamics (SPH). *Computer Physics Communications*, *187*, 204-216.">[3]</span></a></sup>, a directly inherited variation from the SPHysics. Provides similar implementations with several optimization strategies. It is called "dual" is because it supports both CPU and GPU implementations of the core functions.</p>
+<h3 id="simplifications">Simplifications</h3>
+<p>Compared with the matured developed SPH code, see DualSPHysics User Guide<sup id="fnref:13" class="footnote-ref"><a href="#fn:13" rel="footnote"><span class="hint--top hint--rounded" aria-label="Crespo, A. J. C., Dominguez, J. M., Gómez-Gesteira, M., Barreiro, A., &amp; Rogers, B. (2011). User guide for DualSPHysics code. *University of Vigo: Vigo, Spain*. [Linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/2_projects/13th_SPH/doc/DualSPHysics_v4.2_GUIDE-noted.pdf) [Win](file://Q:tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/2_projects/13th_SPH/doc/DualSPHysics_v4.2_GUIDE-noted.pdf)">[13]</span></a></sup>, lots of simplifications are made in order to implement a simplest version of SPH code.</p>
+<h4 id="inviscid">Inviscid</h4>
+<p>Instead of using Artificial viscosity <sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan JJ. 1992. Smoothed particle hydrodynamics. Annual Review of Astronomy and  Astrophysics, 30, 543- 574.">[4]</span></a></sup> or Laminar viscosity + SPS turbulence model<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Dalrymple RA and Rogers BD. 2006. Numerical modeling of water waves with the SPH method. Coastal Engineering, 53, 141–147.">[5]</span></a></sup>. No viscosity term is added to the Momentum equation, leaving the Momentum equation without the dissipation as: <span class="math display">\[
+\frac{d\mathbf{V}}{dt} = -\frac{1}{\rho}\nabla P + \mathbf{g}
+\]</span></p>
+<h4 id="verlet-scheme">Verlet Scheme</h4>
+<p>There are two method for numerical integration schemes, Verlet<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Verlet L. 1967. Computer experiments on classical fluids. I. Thermodynamical properties of  Lennard-Jones molecules. Physical Review, 159, 98-103.">[6]</span></a></sup> and mainstream Symplectic<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Leimkuhler BJ, Reich S, Skeel RD. 1996. Integration Methods for Molecular dynamic IMA  Volume in Mathematics and its application. Springer.">[7]</span></a></sup>. The first is computationally simple with low stability. The second is a two-step prediction-correction method with higher stability. I choose the Verlet for simplification.</p>
+<h4 id="quintic-kernel">Quintic kernel</h4>
+<p>The performance of an SPH model depends heavily on the choice of the smoothing kernel. Instead of Cubic Spline kernel <sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan JJ and Lattanzio JC. 1985. A refined method for astrophysical problems. Astron.  Astrophys, 149, 135–143.">[9]</span></a></sup>, a Quintic Wendland kernel<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Molteni, D and Colagrossi A. 2009. A simple procedure to improve the pressure evaluation in  hydrodynamic context using the SPH, Computer Physics Communications, 180 (6), 861–872">[10]</span></a></sup> is my choice.</p>
+<h4 id="formulations-list">Formulations List</h4>
+<p>These are the formulation list:</p>
+<ul>
+<li><p>Time integration scheme:</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" checked="" />
+Verlet<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Verlet L. 1967. Computer experiments on classical fluids. I. Thermodynamical properties of  Lennard-Jones molecules. Physical Review, 159, 98-103.">[6]</span></a></sup></li>
+<li><input type="checkbox" disabled="" />
+Symplectic<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Leimkuhler BJ, Reich S, Skeel RD. 1996. Integration Methods for Molecular dynamic IMA  Volume in Mathematics and its application. Springer.">[7]</span></a></sup></li>
+</ul></li>
+<li><p><input type="checkbox" disabled="" />
+Variable time step</p></li>
+<li><p>Kernel functions:</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Cubic Spline kernel <sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan JJ and Lattanzio JC. 1985. A refined method for astrophysical problems. Astron.  Astrophys, 149, 135–143.">[9]</span></a></sup></li>
+<li><input type="checkbox" disabled="" checked="" />
+Quintic Wendland kernel <sup id="fnref:11" class="footnote-ref"><a href="#fn:11" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wendland H. 1995. Piecewiese polynomial, positive definite and compactly supported radial  functions of minimal degree. Advances in Computational Mathematics 4, 389-396.">[11]</span></a></sup></li>
+</ul></li>
+<li><p>Density treatment:</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Delta-SPH formulation <sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Molteni, D and Colagrossi A. 2009. A simple procedure to improve the pressure evaluation in  hydrodynamic context using the SPH, Computer Physics Communications, 180 (6), 861–872">[10]</span></a></sup></li>
+</ul></li>
+<li><p>Viscosity treatments:</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Artificial viscosity <sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Monaghan JJ. 1992. Smoothed particle hydrodynamics. Annual Review of Astronomy and  Astrophysics, 30, 543- 574.">[4]</span></a></sup></li>
+<li><input type="checkbox" disabled="" />
+Laminar viscosity + SPS turbulence model <sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Dalrymple RA and Rogers BD. 2006. Numerical modeling of water waves with the SPH method. Coastal Engineering, 53, 141–147.">[5]</span></a></sup></li>
+</ul></li>
+</ul>
+<h2 id="update-step-by-step">Update Step by Step</h2>
+<p>The overall algorithm are very similar to the particles<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup> demo, only need several changes for the control function.</p>
+<h3 id="stage-1-neighboring-searching">Stage 1: Neighboring searching</h3>
+<h4 id="theorem-influence-area">Theorem: Influence area</h4>
+<p><img src="Influence length illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Influence length illustration of SPH. The circles denoted by 𝑖,𝑗 represent target particles, interacting particles. In addition, qr is the influence radius of target particle. " style="zoom:35%;" /></p>
+<p>Influence area illustration of SPH is shown above. The circles denoted by <span class="math inline">\(i\)</span>, <span class="math inline">\(j\)</span> represent the target particle and the interacting particles, respectively. The target particle only interacts with particles within the circle (dashed) with a radius of <span class="math inline">\(dist_{critic} = 2h\)</span>. With <span class="math inline">\(q = {dist}/{h}\)</span> denoting the non-dimensional distance between two particles. <span class="math inline">\(q_{critc} = 2\)</span> is the non-dimensional influence radius of target particle.</p>
+<p>The original <span class="math inline">\(dist_{critc}\)</span> in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup> is the sum of the radius of the two interacting particles, i.e. <span class="math inline">\(dist_{critc} = 2 radius\)</span> in the case of uniform radius particles. And <span class="math inline">\(h_{critic} = radius, q_{critic} = 1\)</span>.</p>
+<p>There are two ways of defining <span class="math inline">\(h\)</span>,</p>
+<p>By <span class="math inline">\(coefh\)</span> (default 1): <span class="math display">\[
+h = coefh \cdot \sqrt{dx^2+dy^2+dz^2} \cdot dp
+\]</span></p>
+<p><span class="math display">\[
+h = coefh \cdot \sqrt{dx^2+dy^2+dz^2} dp
+\]</span> By <span class="math inline">\(hdp\)</span> (default 1.5): <span class="math display">\[
+h = hdp \cdot dp
+\]</span> where characteristic length <span class="math inline">\(dp\)</span> is choice to be the original particle distance when generating them, <span class="math inline">\(dp = 2*radius\)</span> in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>.</p>
+<div class="note note-info">
+            <p>There is no concept as "particles diameter" in SPH as in the collision model<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>.</p><p>In the case of particles with the same radius, for collision model, interaction boundary of the particles is the physical particle diameter. While in SPH, the interaction boundary is defined freely. Particles are only the discretized <strong>points</strong> in the space.</p><p>The length unit <span class="math inline">\(dp\)</span> is just a physical length easy to choose.</p><p>In the demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, <span class="math inline">\(dp\)</span> is equal to the diameter of particles. That means particles are generated (by function <code>reset</code>) tightly packed together, i.e. simple cubic stacking as shown below.</p><p><img src="Simple cubic stacking illustration.jpg" srcset="/img/loading.gif" lazyload alt="Simple cubic stacking illustration, from https://iu.pressbooks.pub/openstaxchemistry/chapter/10-6-lattice-structures-in-crystalline-solids/" style="zoom:50%;" /></p>
+          </div>
+<p>The second <span class="math inline">\(hdp\)</span> method is applied in the code because of the simplicity. The equivalent <span class="math inline">\(hdp = 0.5\)</span></p>
+<h4 id="algorithm-neighboring-search">Algorithm: neighboring search</h4>
+<p><img src="Neighboringsearching illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Influence area illustration of SPH, The circles denoted by 𝑖,𝑗,𝑘 represent target particles, true neighbor particles, and false neighbor particles. From [12]" style="zoom:30%;" /></p>
+<p>In order to find the true neighboring particles, instead of brute-force searching i.e. examining distances with all of the particles in the domain, a smart way is called neighboring search.</p>
+<p>A grid as shown above is introduced, dividing the whole domain into cells. For each cell, a neighbor list containing all the particle ids in neighbor cells gets rebuilt periodically (every time step, or every 10 time steps as in Hérault's work<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hérault, A., Bilotta, G., &amp; Dalrymple, R. A. (2010). Sph on gpu with cuda. *Journal of Hydraulic Research*, *48*(sup1), 74-79.">[1]</span></a></sup>). When processing a target particle, the distances only get examined with particles in the neighbor list of its located target cell. In this way, the examining times are reduced dramatically and the share memory can be well leveraged to avoid massive global memory access (not implemented here)</p>
+<h5 id="grid-span">Grid span</h5>
+<p>At a glance, in the demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup> , the grid is generated in the way that the grid spans <span class="math inline">\(dx, dy, dz\)</span> equal <span class="math inline">\(dp\)</span> as shown below in the code block.</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> cellSize = m_params.particleRadius * <span class="hljs-number">2.0f</span>;  <span class="hljs-comment">// cell size equal to particle diameter</span>
+m_params.cellSize = <span class="hljs-built_in">make_float3</span>(cellSize, cellSize, cellSize);</code></pre></div>
+<p>Actually, the grid span is defined as the <strong>influencing distance <span class="math inline">\(2h\)</span></strong>, as shown below. If the span is smaller, the interaction area will not be included by the neighboring area. Yet if the span is larger, the searching will not be the most efficient.</p>
+<p><img src="Largest influence length in grid illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Largest influence length in grid illustration of SPH" style="zoom:25%;" /></p>
+<div class="note note-info">
+            <p>Note the term "grid" represents 3 different concepts:</p><ul><li><p>equal-space structured mesh, span <span class="math inline">\(2h\)</span>, divides the computational domain, e.g.</p><p>"A grid is introduced, dividing the whole domain into cells"</p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> GRID_SIZE       64</span>
+uint gridDim = GRID_SIZE;
+gridSize.x = gridSize.y = gridSize.z = gridDim;
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;grid: %d x %d x %d = %d cells\n&quot;</span>, gridSize.x, gridSize.y, gridSize.z, gridSize.x*gridSize.y*gridSize.z);</code></pre></div></li><li><p>equal-space structured mesh, span <span class="math inline">\(dp\)</span>, used to generate a block of particles on its lattices, e.g.<code>ParticleSystem::reset</code></p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> jitter = m_params.particleRadius*<span class="hljs-number">0.01f</span>;
+uint s = (<span class="hljs-type">int</span>) <span class="hljs-built_in">ceilf</span>(<span class="hljs-built_in">floor</span>(<span class="hljs-built_in">powf</span>((<span class="hljs-type">float</span>) m_numParticles, <span class="hljs-number">1.0f</span> / <span class="hljs-number">3.0f</span>)*<span class="hljs-number">1000</span>)/<span class="hljs-number">1000</span>);
+uint gridSize[<span class="hljs-number">3</span>];
+gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number">1</span>] = gridSize[<span class="hljs-number">2</span>] = s;
+<span class="hljs-built_in">initGrid</span>(gridSize, m_params.particleRadius*<span class="hljs-number">2.0f</span>, jitter, m_numParticles);</code></pre></div></li><li><p>The GPU grid containing blocks of <code>blockSize</code> when running on the device e.g. in the code:</p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// compute grid and thread block size for a given number of elements</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">computeGridSize</span><span class="hljs-params">(uint n, uint blockSize, uint &amp;numBlocks, uint &amp;numThreads)</span></span>
+<span class="hljs-function"></span>&#123;
+    numThreads = <span class="hljs-built_in">min</span>(blockSize, n);
+    numBlocks = <span class="hljs-built_in">iDivUp</span>(n, numThreads);
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">collide</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// thread per particle</span>
+    uint numThreads, numBlocks;
+    <span class="hljs-built_in">computeGridSize</span>(numParticles, <span class="hljs-number">64</span>, numBlocks, numThreads);
+
+    <span class="hljs-comment">// execute the kernel</span>
+    collideD&lt;&lt;&lt; numBlocks, numThreads &gt;&gt;&gt;();
+&#125;</code></pre></div></li></ul><p><img src="maximum numbe of particles in the domain.png" srcset="/img/loading.gif" lazyload alt="maximum numbe of particles in the domain" style="zoom:25%;" /></p><p>In demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, when particle numbers are <span class="math inline">\(64\times64\times64 = 262144\)</span>, the first two grids coincide with each other. And <span class="math inline">\(262144\)</span> is the maximum particle number according to the domain. And <code>numBlocks = 4096</code>.</p>
+          </div>
+<div class="note note-secondary">
+            <p>Wait, there is another tiny difference (It turns out that we are lucky to be able to leave it but it is important to know this).</p><p>There are two ways of Building the Grid. One simple approach is via <strong>Atomic Operations</strong>, which is well illustrated by demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>. In this approach, we allocate two arrays to the global memory:</p><ul><li>gridCounters – this stores the number of particles in each cell so far. It is initialized to zero at the start of each frame.</li><li>gridCells – this stores the particle indices for each cell, and has room for a fixed maximum number of particles per cell.</li></ul><p>Why <strong>fixed</strong> maximum number of particles per cell? It is because it is inefficient (nearly impossible) for GPU to allocate memories dynamically, which means the maximum number of particles per grid cell must be pre defined.</p><p>In the scenario of demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, this maximum number is easy to choose as the distance between particles is limited. Because particles in collision model are rigid bodies and overlapping is not allowed, the maximum is set to be 4 particles per grid cell in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, taking the assumption of simple cubic stacking. But in SPH, there is no such limitation as discussed above. We must make careful assumptions of it, when we use the Atomic Operations method to build the grid.</p><p>Luckily, we are using the second approach, via <strong>sorting</strong>, slightly difficult to understand, also well illustrated in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, and no need the limitation of the maximum particles per cell.</p><p>Yet in Hérault's work<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hérault, A., Bilotta, G., &amp; Dalrymple, R. A. (2010). Sph on gpu with cuda. *Journal of Hydraulic Research*, *48*(sup1), 74-79.">[1]</span></a></sup>, the maximum number of neighboring list is pre-defined, so that the examining loop is further unrolled during compilation for efficiency. We are not going to do that at first time although is it easy to apply.</p>
+          </div>
+<h4 id="code">code</h4>
+<p><strong>original</strong></p>
+<p>The distance examination is applied in <code>__device__ float3 collideSpheres</code> as:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__</span>
+<span class="hljs-function">float3 <span class="hljs-title">collideSpheres</span><span class="hljs-params">(float3 posA, float3 posB,</span></span>
+<span class="hljs-params"><span class="hljs-function">                      float3 velA, float3 velB,</span></span>
+<span class="hljs-params"><span class="hljs-function">                      <span class="hljs-type">float</span> radiusA, <span class="hljs-type">float</span> radiusB,</span></span>
+<span class="hljs-params"><span class="hljs-function">                      <span class="hljs-type">float</span> attraction)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// calculate relative position</span>
+    float3 relPos = posB - posA;
+
+    <span class="hljs-type">float</span> dist = <span class="hljs-built_in">length</span>(relPos);
+    <span class="hljs-type">float</span> collideDist = radiusA + radiusB;
+
+    float3 force = <span class="hljs-built_in">make_float3</span>(<span class="hljs-number">0.0f</span>);
+
+    <span class="hljs-keyword">if</span> (dist &lt; collideDist)
+    &#123;
+        <span class="hljs-comment">// force += ...</span>
+    &#125;
+
+    <span class="hljs-keyword">return</span> force;
+&#125;</code></pre></div>
+<p>The radius of two particles are set to be different, not suitable for SPH model.</p>
+<p><strong>update</strong></p>
+<p>step 0: comment out <code>collider</code> for simplicity and any function related to it such as: <code>M_MOVE</code> mode and its controller.</p>
+<p>step 1: parameters, functions renaming, switching and introducing</p>
+<p>Rename the functions and params from collision related to SPH related such as:</p>
+<div class="code-wrapper"><pre><code class="hljs txt">collideSpheres() -&gt; SPHParticles()
+collideDist -&gt; interactDist</code></pre></div>
+<p>Introduce <code>dp</code> into <code>params</code> (i.e. <code>struct SimParams</code>), change grid span for generating the particles from particle diameter to <code>dp</code>, change the domain grid span to <code>2*h</code></p>
+<p>Introduce <code>hdp,h</code> into <code>params</code>, set <code>hdp=0.5</code> and <code>h=hdp*dp</code></p>
+<p>step 2: In function <code>SPHParticles</code>, change the distance limitation <code>interactDist</code> to <code>2*h</code> so that distance limitation same as before.</p>
+<p>The original <code>__device__ float3 collideSpheres</code> is changed to be:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__</span>
+<span class="hljs-function">float3 <span class="hljs-title">SPHParticles</span><span class="hljs-params">(float3 posA, float3 posB,</span></span>
+<span class="hljs-params"><span class="hljs-function">                      float3 velA, float3 velB,</span></span>
+<span class="hljs-params"><span class="hljs-function">                      <span class="hljs-type">float</span> h, <span class="hljs-type">float</span> attraction)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// calculate relative position</span>
+    float3 relPos = posB - posA;
+
+    <span class="hljs-type">float</span> dist = <span class="hljs-built_in">length</span>(relPos);
+    <span class="hljs-type">float</span> interactDist = <span class="hljs-number">2</span>*h;
+
+    float3 force = <span class="hljs-built_in">make_float3</span>(<span class="hljs-number">0.0f</span>);
+
+    <span class="hljs-keyword">if</span> (dist &lt; interactDist)
+    &#123;
+        <span class="hljs-comment">// force += ...</span>
+    &#125;
+
+    <span class="hljs-keyword">return</span> force;
+&#125;</code></pre></div>
+<div class="note note-secondary">
+            <p>Other than this modification, some cleanups are made. The boundary condition is parameterised for different setting of <code>gridsize</code> other than 64. A new parameter <code>worldMaxPos</code> is introduced right after the <code>worldOrigin</code> parameter.</p>
+          </div>
+<h3 id="stage-2-update">Stage 2: Update</h3>
+<p>Instead of the DEM method that has been used for collision model, the control function between particles are calculated by:</p>
+<p><strong>Momentum equation:</strong> <span class="math display">\[
+\frac{d \boldsymbol{v}}{d t}=-\frac{1}{\rho} \nabla P+\boldsymbol{g}+\boldsymbol{\Gamma}
+\]</span> where <span class="math inline">\(\boldsymbol{\Gamma}\)</span> is the dissipation i.e. the viscosity. We ignore it for now.</p>
+<p><strong>Continuity equation:</strong></p>
+<p>weakly-compressible assumption is took, where the mass of each particle is fixed and the density varies. <span class="math display">\[
+\frac{d \rho_a}{d t}=\sum_b m_b \mathbf{v}_{a b} \cdot \nabla_a W_{a b}
+\]</span> <strong>Close the system:</strong></p>
+<p>The equation of state is used to solve the pressure <span class="math inline">\(P\)</span> <span class="math display">\[
+P=b\left[\left(\frac{\rho}{\rho_0}\right)^\gamma-1\right]
+\]</span> <strong>Kernel function</strong></p>
+<p>Note the <span class="math inline">\(W_{ab}\)</span> is not defined, it is defined as:</p>
+<p><img src="kernel function of SPH, from 14.jpg" srcset="/img/loading.gif" lazyload alt="kernel function of SPH, from 14" style="zoom:40%;" /> <span class="math display">\[
+W(r, h)=\alpha_D\left(1-\frac{q}{2}\right)^4(2 q+1) \quad 0 \leq q \leq 2
+\]</span></p>
+<h3 id="stage-3-verlet-time-scheme">Stage 3: Verlet time scheme</h3>
+<p>Instead of the simple Euler backward time discretization scheme originally applied in the integration step, Verlet scheme is used.</p>
+<h2 id="references">References</h2>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span>Hérault, A., Bilotta, G., &amp; Dalrymple, R. A. (2010). Sph on gpu with cuda. <em>Journal of Hydraulic Research</em>, <em>48</em>(sup1), 74-79. <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span>Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., <a href="file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf">linux</a>, <a href="file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf">Win</a>. <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Crespo, A. J., Domínguez, J. M., Rogers, B. D., Gómez-Gesteira, M., Longshaw, S., Canelas, R. J. F. B., ... &amp; García-Feal, O. (2015). DualSPHysics: Open-source parallel CFD solver based on Smoothed Particle Hydrodynamics (SPH). <em>Computer Physics Communications</em>, <em>187</em>, 204-216. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Monaghan JJ. 1992. Smoothed particle hydrodynamics. Annual Review of Astronomy and Astrophysics, 30, 543- 574. <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span>Dalrymple RA and Rogers BD. 2006. Numerical modeling of water waves with the SPH method. Coastal Engineering, 53, 141–147. <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:6" class="footnote-text"><span>Verlet L. 1967. Computer experiments on classical fluids. I. Thermodynamical properties of Lennard-Jones molecules. Physical Review, 159, 98-103. <a href="#fnref:6" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:7" class="footnote-text"><span>Leimkuhler BJ, Reich S, Skeel RD. 1996. Integration Methods for Molecular dynamic IMA Volume in Mathematics and its application. Springer. <a href="#fnref:7" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:8" class="footnote-text"><span>Monaghan JJ and Kos A. 1999. Solitary waves on a Cretan beach. Journal of Waterway, Port, Coastal and Ocean Engineering, 125, 145-154. <a href="#fnref:8" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:9" class="footnote-text"><span>Monaghan JJ and Lattanzio JC. 1985. A refined method for astrophysical problems. Astron. Astrophys, 149, 135–143. <a href="#fnref:9" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:10" class="footnote-text"><span>Molteni, D and Colagrossi A. 2009. A simple procedure to improve the pressure evaluation in hydrodynamic context using the SPH, Computer Physics Communications, 180 (6), 861–872 <a href="#fnref:10" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:11" class="footnote-text"><span>Wendland H. 1995. Piecewiese polynomial, positive definite and compactly supported radial functions of minimal degree. Advances in Computational Mathematics 4, 389-396. <a href="#fnref:11" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:12" class="footnote-text"><span>Huang, K., Zhao, Z., Li, C., Wang, C., &amp; Qin, H. (2020). Novel hierarchical strategies for SPH-centric algorithms on GPGPU. <em>Graphical Models</em>, <em>111</em>, 101088. <a href="#fnref:12" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:13" class="footnote-text"><span>Crespo, A. J. C., Dominguez, J. M., Gómez-Gesteira, M., Barreiro, A., &amp; Rogers, B. (2011). User guide for DualSPHysics code. <em>University of Vigo: Vigo, Spain</em>. <a href="file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/2_projects/13th_SPH/doc/DualSPHysics_v4.2_GUIDE-noted.pdf">Linux</a> <a href="file://Q:tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/2_projects/13th_SPH/doc/DualSPHysics_v4.2_GUIDE-noted.pdf">Win</a> <a href="#fnref:13" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:14" class="footnote-text"><span>Qin, Y., Wu, J., Hu, Q., Ghista, D. N., &amp; Wong, K. K. (2017). Computational evaluation of smoothed particle hydrodynamics for implementing blood flow modelling through CT reconstructed arteries. <em>Journal of X-ray science and technology</em>, <em>25</em>(2), 213–232. https://doi.org/10.3233/XST-17255 <a href="#fnref:14" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+        <a href="/tags/Fluid-Dynamics/">#Fluid Dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>hand written SPH method</div>
+      <div>https://daydreamatnight.github.io/2022/09/20/hand-written-SPH-method/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 20, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/15/CUDA-example-particles/" title="CUDA example particles">
+                        <span class="hidden-mobile">CUDA example particles</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
