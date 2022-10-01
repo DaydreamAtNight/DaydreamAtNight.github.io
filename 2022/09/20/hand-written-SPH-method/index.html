@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_SPH.png">
 <meta property="article:published_time" content="2022-09-20T06:23:37.000Z">
-<meta property="article:modified_time" content="2022-09-27T09:42:11.823Z">
+<meta property="article:modified_time" content="2022-10-01T19:54:59.554Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="CUDA">
 <meta property="article:tag" content="fluid dynamics">
@@ -234,7 +234,7 @@
         
         
           <!-- compatible with older versions-->
-          39 minutes
+          42 minutes
         
       </span>
     
@@ -344,7 +344,8 @@ h = coefh \cdot \sqrt{dx^2+dy^2+dz^2} \cdot dp
 \]</span></p>
 <p><span class="math display">\[
 h = coefh \cdot \sqrt{dx^2+dy^2+dz^2} dp
-\]</span> By <span class="math inline">\(hdp\)</span> (default 1.5): <span class="math display">\[
+\]</span></p>
+<p>By <span class="math inline">\(hdp\)</span> (default 1.5): <span class="math display">\[
 h = hdp \cdot dp
 \]</span> where characteristic length <span class="math inline">\(dp\)</span> is choice to be the original particle distance when generating them, <span class="math inline">\(dp = 2*radius\)</span> in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>.</p>
 <div class="note note-info">
@@ -390,7 +391,7 @@ gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number
             <p>Wait, there is another tiny difference (It turns out that we are lucky to be able to leave it but it is important to know this).</p><p>There are two ways of Building the Grid. One simple approach is via <strong>Atomic Operations</strong>, which is well illustrated by demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>. In this approach, we allocate two arrays to the global memory:</p><ul><li>gridCounters – this stores the number of particles in each cell so far. It is initialized to zero at the start of each frame.</li><li>gridCells – this stores the particle indices for each cell, and has room for a fixed maximum number of particles per cell.</li></ul><p>Why <strong>fixed</strong> maximum number of particles per cell? It is because it is inefficient (nearly impossible) for GPU to allocate memories dynamically, which means the maximum number of particles per grid cell must be pre defined.</p><p>In the scenario of demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, this maximum number is easy to choose as the distance between particles is limited. Because particles in collision model are rigid bodies and overlapping is not allowed, the maximum is set to be 4 particles per grid cell in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, taking the assumption of simple cubic stacking. But in SPH, there is no such limitation as discussed above. We must make careful assumptions of it, when we use the Atomic Operations method to build the grid.</p><p>Luckily, we are using the second approach, via <strong>sorting</strong>, slightly difficult to understand, also well illustrated in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, and no need the limitation of the maximum particles per cell.</p><p>Yet in Hérault's work<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hérault, A., Bilotta, G., &amp; Dalrymple, R. A. (2010). Sph on gpu with cuda. *Journal of Hydraulic Research*, *48*(sup1), 74-79.">[1]</span></a></sup>, the maximum number of neighboring list is pre-defined, so that the examining loop is further unrolled during compilation for efficiency. We are not going to do that at first time although is it easy to apply.</p>
           </div>
 <h4 id="code">code</h4>
-<p><strong>original</strong></p>
+<h5 id="original">original</h5>
 <p>The distance examination is applied in <code>__device__ float3 collideSpheres</code> as:</p>
 <div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__</span>
 <span class="hljs-function">float3 <span class="hljs-title">collideSpheres</span><span class="hljs-params">(float3 posA, float3 posB,</span></span>
@@ -414,7 +415,7 @@ gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number
     <span class="hljs-keyword">return</span> force;
 &#125;</code></pre></div>
 <p>The radius of two particles are set to be different, not suitable for SPH model.</p>
-<p><strong>update</strong></p>
+<h5 id="update">update</h5>
 <p>step 0: comment out <code>collider</code> for simplicity and any function related to it such as: <code>M_MOVE</code> mode and its controller.</p>
 <p>step 1: parameters, functions renaming, switching and introducing</p>
 <p>Rename the functions and params from collision related to SPH related such as:</p>
@@ -422,6 +423,7 @@ gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number
 collideDist -&gt; interactDist</code></pre></div>
 <p>Introduce <code>dp</code> into <code>params</code> (i.e. <code>struct SimParams</code>), change grid span for generating the particles from particle diameter to <code>dp</code>, change the domain grid span to <code>2*h</code></p>
 <p>Introduce <code>hdp,h</code> into <code>params</code>, set <code>hdp=0.5</code> and <code>h=hdp*dp</code></p>
+<p>Make <code>dp</code> and <code>hdp</code> modifiable by flag via <code>getCmdLineArgumentFloat</code></p>
 <p>step 2: In function <code>SPHParticles</code>, change the distance limitation <code>interactDist</code> to <code>2*h</code> so that distance limitation same as before.</p>
 <p>The original <code>__device__ float3 collideSpheres</code> is changed to be:</p>
 <div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__</span>
@@ -444,11 +446,33 @@ collideDist -&gt; interactDist</code></pre></div>
 
     <span class="hljs-keyword">return</span> force;
 &#125;</code></pre></div>
+<h4 id="results-of-different-hdps">Results of different hdps</h4>
+<table>
+<thead>
+<tr class="header">
+<th><code>./particles hdp=0.5</code></th>
+<th><code>./particles hdp=0.8</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="dhp_0_5-16643506709481.gif" srcset="/img/loading.gif" lazyload alt="dhp=0.5 for collision model, same result with demo[2]" style="zoom:55%;" /></td>
+<td><img src="dhp_0_8-16643506862492.gif" srcset="/img/loading.gif" lazyload alt="dhp=0.8 for collision model" style="zoom:60%;" /></td>
+</tr>
+</tbody>
+</table>
 <div class="note note-secondary">
-            <p>Other than this modification, some cleanups are made. The boundary condition is parameterised for different setting of <code>gridsize</code> other than 64. A new parameter <code>worldMaxPos</code> is introduced right after the <code>worldOrigin</code> parameter.</p>
+            <p>Other than this modification, some cleanups are made at this stage, not related to neighboring search.</p><ul><li><p>The boundary condition is parameterized for different setting of <code>gridsize</code> other than 64. A new parameter <code>worldMaxPos</code> is introduced right after the <code>worldOrigin</code> parameter as:</p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (pos.x &gt; params.worldMaxPos.x - params.dp*<span class="hljs-number">0.5</span>)
+&#123;
+    pos.x = params.worldMaxPos.x - params.dp*<span class="hljs-number">0.5</span>;
+    vel.x *= params.boundaryDamping;
+&#125;</code></pre></div></li><li><p>Add more flags operations such as <code>gridLength</code></p></li><li><p>Another key factor introduced for dump all the parameters as:</p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;k&#x27;</span>:
+    psystem-&gt;<span class="hljs-built_in">dumpParameters</span>();
+    <span class="hljs-keyword">break</span>;</code></pre></div></li></ul>
           </div>
-<h3 id="stage-2-update">Stage 2: Update</h3>
-<p>Instead of the DEM method that has been used for collision model, the control function between particles are calculated by:</p>
+<h3 id="stage-2-control-function">Stage 2: Control function</h3>
+<h4 id="theorem-sph-system">Theorem: SPH system</h4>
+<p>Instead of the DEM method that has been used for collision model, the control function between particles are regulated by:</p>
 <p><strong>Momentum equation:</strong> <span class="math display">\[
 \frac{d \boldsymbol{v}}{d t}=-\frac{1}{\rho} \nabla P+\boldsymbol{g}+\boldsymbol{\Gamma}
 \]</span> where <span class="math inline">\(\boldsymbol{\Gamma}\)</span> is the dissipation i.e. the viscosity. We ignore it for now.</p>
@@ -463,6 +487,25 @@ P=b\left[\left(\frac{\rho}{\rho_0}\right)^\gamma-1\right]
 <p><img src="kernel function of SPH, from 14.jpg" srcset="/img/loading.gif" lazyload alt="kernel function of SPH, from 14" style="zoom:40%;" /> <span class="math display">\[
 W(r, h)=\alpha_D\left(1-\frac{q}{2}\right)^4(2 q+1) \quad 0 \leq q \leq 2
 \]</span></p>
+<h4 id="code-1">Code</h4>
+<h5 id="original-1">original</h5>
+<p>The DEM is implemented in two steps, i.e. two locations:</p>
+<ol type="1">
+<li><code>struct integrate_functor</code> related params: <code>gravity</code>, <code>globalDamping</code>, <code>boundaryDamping</code>.</li>
+<li><code>float3 SPHParticles()</code> related params: <code>spring</code>, <code>damping</code>, <code>shear</code>.</li>
+</ol>
+<p>The work flow in this stage is such that:</p>
+
+<div class="markmap-container" style="height:200px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;integrate_functor&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;Update velocity (vel) with gravity&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;Update velocity (vel) with globalDamping&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;Update position (pos) with velocity (vel)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;Boundary condition&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;SPH(*vel)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;SPHD&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;force = 0&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;force += SPHCell&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;(Neighboring search)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;SPHParticles&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;force += spring&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;force += damping&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;force += shear&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;force += attraction&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;vel + force&quot;}]}]}],&quot;p&quot;:{}}"></svg>
+</div>
+
+<h5 id="update-1">update</h5>
+<p>Substitute parameters</p>
+<p>new workflow is such that</p>
+<div class="note note-danger">
+            <p>to be continue...</p>
+          </div>
 <h3 id="stage-3-verlet-time-scheme">Stage 3: Verlet time scheme</h3>
 <p>Instead of the simple Euler backward time discretization scheme originally applied in the integration step, Verlet scheme is used.</p>
 <h2 id="references">References</h2>
@@ -596,6 +639,12 @@ W(r, h)=\alpha_D\left(1-\frac{q}{2}\right)^4(2 q+1) \quad 0 \leq q \leq 2
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/09/29/RANS-recap/" title="RANS recap">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">RANS recap</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
@@ -962,5 +1011,34 @@ W(r, h)=\alpha_D\left(1-\frac{q}{2}\right)^4(2 q+1) \quad 0 \leq q \leq 2
   <noscript>
     <div class="noscript-warning">Blog works best with JavaScript enabled</div>
   </noscript>
-</body>
+
+<script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
+<script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
+
+
+<style>
+.markmap-container{
+  display:flex;
+  justify-content:center;
+  margin:0 auto;
+  width:90%;
+  height:500px
+}
+.markmap-container svg{
+  width:100%;height:100%
+}
+@media(max-width:768px){
+  .markmap-container{
+    height:400px
+  }
+}</style>
+<script>
+function initMarkMap(){
+  document.querySelectorAll('.markmap-container>svg').forEach(el =>{
+    markmap.Markmap.create(el, null, JSON.parse(el.getAttribute('data')))
+  })
+};
+initMarkMap();
+
+</script></body>
 </html>

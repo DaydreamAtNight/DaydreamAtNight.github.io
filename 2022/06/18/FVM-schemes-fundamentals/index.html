@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
 <meta property="article:published_time" content="2022-06-18T10:08:24.000Z">
-<meta property="article:modified_time" content="2022-09-18T13:10:40.603Z">
+<meta property="article:modified_time" content="2022-09-27T12:35:57.471Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamics">
 <meta name="twitter:card" content="summary_large_image">
@@ -313,7 +313,7 @@
 <h3 id="scalar-conservation-law">Scalar conservation law</h3>
 <h4 id="d-law">1D law</h4>
 <p><img src="1D scalar convection.png" srcset="/img/loading.gif" lazyload alt="1D scalar convection control volume" style="zoom:70%;" /></p>
-<p>First let's introduce a simple example to present the problem: consider an 1D control volume <span class="math inline">\([a,b]\)</span>, during the time interval <span class="math inline">\([t_1,t_2]\)</span> . The scalar conservation law can be stated as that during <span class="math inline">\([t_1,t_2]\)</span> , change in total conserved quantity in <span class="math inline">\([a,b]\)</span> equals to the net flux through the boundaries <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>:</p>
+<p>First let's introduce a simple example to present the problem: consider an 1D control volume <span class="math inline">\([a,b]\)</span>, during the time interval <span class="math inline">\([t_1,t_2]\)</span> . The scalar conservation law can be stated as that during <span class="math inline">\([t_1,t_2]\)</span> , change in total conserved quantity in <span class="math inline">\([a,b]\)</span> equals the net flux through the boundaries <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>:</p>
 <p><span class="math display">\[
 \frac{d}{dt}\int_a^bu(x,t) = -\left[f(u(b,t))-f(u(a,t))\right]
 \]</span> where <span class="math inline">\(u(x,t)\)</span> is called the conserved quantity while <span class="math inline">\(f\)</span> denotes the flux. This equation often describes the <font color=#75147c>transport phenomena</font>.</p>

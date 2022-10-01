@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/solve_wave_eq.png">
 <meta property="article:published_time" content="2022-07-22T16:16:30.000Z">
-<meta property="article:modified_time" content="2022-09-18T09:12:26.621Z">
+<meta property="article:modified_time" content="2022-09-27T15:49:26.473Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamics">
 <meta name="twitter:card" content="summary_large_image">
@@ -286,10 +286,10 @@
 <h2 id="problem-setup">Problem setup</h2>
 <h3 id="wave-equation">Wave equation</h3>
 <p>Wave equation is used for describe the wave fields such as water waves, sound waves and electromagnetic waves. The equation is: <span class="math display">\[
-\mathbf{\ddot {U}}=C\mathbf{\nabla} ^{2}\mathbf{U}
-\]</span> The 2D scalar versions are: <span class="math display">\[
-\frac{\partial^2u}{\partial t^2} = C\left(\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}\right), \quad u = f(x,t)
-\]</span> From the formula, we can see it is <em>linear, elliptic PDE</em>. Although it can be solved analytically, but we ignore that fact and try to solved it numerically.</p>
+\mathbf{\ddot {U}}=C^2\mathbf{\nabla} ^{2}\mathbf{U}
+\]</span> In 2D, the principle is: <span class="math display">\[
+\frac{\partial^2u}{\partial t^2} = C^2\left(\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}\right), \quad u = f(x,t)
+\]</span> From the formula, we can see it is <em>second order, linear, hyperbolic PDE</em>. Although it can be solved analytically (by variable separation), but we ignore that fact and try to solved it numerically.</p>
 <h5 id="initial-condition">Initial condition</h5>
 <p><span class="math display">\[
 u^0_{(x, y)}=\left[r_{(x, y)}^{4}-1\right]\left[\mathrm{e}^{-4 \omega^{2} r_{(x, y)}^{2}}-\mathrm{e}^{-4 \omega^{2}}-\frac{3}{4}\left(\mathrm{e}^{-\omega^{2} r_{(x, y)}^{2}}-\mathrm{e}^{-\omega^{2}}\right)\right] .
@@ -304,9 +304,6 @@ u^0_{(x, y)}=\left[r_{(x, y)}^{4}-1\right]\left[\mathrm{e}^{-4 \omega^{2} r_{(x,
 \text{where} \quad v^k_{ij} = \left[\frac{\partial u}{\partial t}\right]^k_{ij} =&amp; \frac{u^{k+1}_{ij}-u^{k}_{ij}}{dt}
 \end{aligned}
 \]</span></p>
-<div class="note note-info">
-            <p>This time scheme is stable only when the PDE is elliptical, as in this case. Otherwise this scheme will crash.</p>
-          </div>
 <h5 id="space-derivatives-discretisation">Space Derivatives Discretisation</h5>
 <p>Central difference is adopted, with a equal-space orthogonal cartesian mesh (<span class="math inline">\(dx\)</span> for horizontal and <span class="math inline">\(dy\)</span> for vertical), the derivatives become: <span class="math display">\[
 \begin{aligned}
@@ -333,7 +330,7 @@ v^{k+1}_{ij} = Cdt\left(\frac{u^{k+1}_{i+1,j}-2u^{k+1}_{ij}+u^{k+1}_{i-1,j}}{dx^
 \mathbf{U^{k+1}} = \mathbf{V^{k}} dt + \mathbf{U^{k}}
 \]</span></p></li>
 <li><p>In most of the cases, the 2D matrix is flattened into an 1D column vector*, and the formula turns into: <span class="math display">\[
-\mathbf{V}^{k+1} = Cdt\mathbf{AU}^{k+1}+\mathbf{V}^{k}
+\mathbf{V}^{k+1} = C^2dt\mathbf{AU}^{k+1}+\mathbf{V}^{k}
 \]</span> where <span class="math display">\[
 \mathbf{A}=\left[\begin{array}{cccccccc}
 e &amp; a &amp;   &amp; b &amp;    &amp;      &amp;  &amp;&amp;&amp; \\
@@ -379,7 +376,7 @@ v_{mn}
 <li><p>Set the boundary values back to 0</p></li>
 </ol>
 <div class="note note-info">
-            <p>*If the matrix is not flattened:</p><p>In 2D case, the equivalent matrix operations formula is: <span class="math display">\[\mathbf{V^{k+1}} = \left(\frac{Cdt}{dx^2}\mathbf{U^{k+1}}\begin{bmatrix}1 &amp;  1 &amp;  &amp;  &amp;  &amp;  \\  &amp; -2 &amp; 1 &amp;  &amp;  &amp; \\  &amp; 1 &amp; -2 &amp; \ddots &amp;  &amp; \\  &amp;  &amp; 1 &amp; \ddots &amp; 1 &amp; \\  &amp;  &amp;  &amp; \ddots &amp; -2 &amp; \\  &amp;  &amp;  &amp; &amp; 1 &amp; 1 \\\end{bmatrix}+\frac{Cdt}{dy^2}\begin{bmatrix}1 &amp;   &amp;  &amp;  &amp;  &amp;  \\1 &amp; -2 &amp; 1 &amp;  &amp;  &amp; \\  &amp; 1 &amp; -2 &amp; 1 &amp;  &amp;  \\  &amp;  &amp; \ddots &amp; \ddots &amp; \ddots &amp; \\  &amp;  &amp;  &amp; 1 &amp; -2 &amp; 1  \\  &amp;  &amp;  &amp;  &amp;  &amp; 1 \\\end{bmatrix} \mathbf{U^{k+1}}\right) + \mathbf{V^k}\]</span> Unfortunately this formula isn't provided in all the mature CFD codes. Maybe because it requests 2 matrix MULTI-ADDs at one step, but the main reason is that when dealing with unstructured mesh i.e. nodes are located freely in the space, not on a cartesian grid, the 2D matrix cannot be used.</p><p>*The matrix is flattened in column major way, for example: <span class="math display">\[\left[\begin{array}{lll}u_{00} &amp; u_{01} &amp; u_{02} \\u_{10} &amp; u_{11} &amp; u_{12} \\u_{20} &amp; u_{21} &amp; u_{22}\end{array}\right]  \Rightarrow\left[\begin{array}{c}u_{00} \\u_{10} \\u_{20} \\u_{01} \\\vdots \\u_{22}\end{array}\right]\]</span></p>
+            <p>*If the matrix is not flattened:</p><p>In 2D case, the equivalent matrix operations formula is: <span class="math display">\[\mathbf{V^{k+1}} = \left(\frac{C^2dt}{dx^2}\mathbf{U^{k+1}}\begin{bmatrix}1 &amp;  1 &amp;  &amp;  &amp;  &amp;  \\  &amp; -2 &amp; 1 &amp;  &amp;  &amp; \\  &amp; 1 &amp; -2 &amp; \ddots &amp;  &amp; \\  &amp;  &amp; 1 &amp; \ddots &amp; 1 &amp; \\  &amp;  &amp;  &amp; \ddots &amp; -2 &amp; \\  &amp;  &amp;  &amp; &amp; 1 &amp; 1 \\\end{bmatrix}+\frac{C^2dt}{dy^2}\begin{bmatrix}1 &amp;   &amp;  &amp;  &amp;  &amp;  \\1 &amp; -2 &amp; 1 &amp;  &amp;  &amp; \\  &amp; 1 &amp; -2 &amp; 1 &amp;  &amp;  \\  &amp;  &amp; \ddots &amp; \ddots &amp; \ddots &amp; \\  &amp;  &amp;  &amp; 1 &amp; -2 &amp; 1  \\  &amp;  &amp;  &amp;  &amp;  &amp; 1 \\\end{bmatrix} \mathbf{U^{k+1}}\right) + \mathbf{V^k}\]</span> Unfortunately this formula isn't provided in all the mature CFD codes. Maybe because it requests 2 matrix MULTI-ADDs at one step, but the main reason is that when dealing with unstructured mesh i.e. nodes are located freely in the space, not on a cartesian grid, the 2D matrix cannot be used.</p><p>*The matrix is flattened in column major way, for example: <span class="math display">\[\left[\begin{array}{lll}u_{00} &amp; u_{01} &amp; u_{02} \\u_{10} &amp; u_{11} &amp; u_{12} \\u_{20} &amp; u_{21} &amp; u_{22}\end{array}\right]  \Rightarrow\left[\begin{array}{c}u_{00} \\u_{10} \\u_{20} \\u_{01} \\\vdots \\u_{22}\end{array}\right]\]</span></p>
           </div>
 <h2 id="codes">Codes</h2>
 <p>All the codes are available here: <a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/solve-wave-equation">solve-wave-equation</a>. Central difference in time and space, element-wise operations are applied.</p>
@@ -409,7 +406,7 @@ Matlab
 <span class="hljs-comment"># define parameters</span>
 nSteps = <span class="hljs-number">1000</span>  		<span class="hljs-comment"># Number of timesteps</span>
 Dt = <span class="hljs-number">1e-3</span>  				<span class="hljs-comment"># Length of a timestep</span>
-C = <span class="hljs-number">15</span>  					<span class="hljs-comment"># Stiffness constant</span>
+C = <span class="hljs-number">15</span>  					<span class="hljs-comment"># Stiffness constant, sqaure of wave speed</span>
 nx = <span class="hljs-number">300</span>  				<span class="hljs-comment"># Number of x support points</span>
 ny = <span class="hljs-number">300</span>  				<span class="hljs-comment"># Number of y support points</span>
 w = <span class="hljs-number">20</span>  					<span class="hljs-comment"># Initial wave width</span>
@@ -903,12 +900,12 @@ gnuplot-support.cpp
 <p><img src="c++.gif" srcset="/img/loading.gif" lazyload alt="C++ realtime result" style="zoom:50%;" /></p>
 <h3 id="benchmark-on-the-matrix-computing">Benchmark on the matrix computing</h3>
 <p>The codes are evaluated without the I/O or rendering. With purely matrix computing, the time consumptions are:</p>
-<div id="echarts8184" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<div id="echarts8021" style="width: 85%;height: 400px;margin: 0 auto"></div>
 <script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
 <script type="text/javascript" src="https://www.makeapie.com/dep/echarts/map/js/china.js"></script>
 <script type="text/javascript">
   // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('echarts8184'));
+  var myChart = echarts.init(document.getElementById('echarts8021'));
   // 指定图表的配置项和数据
   
 option = {
