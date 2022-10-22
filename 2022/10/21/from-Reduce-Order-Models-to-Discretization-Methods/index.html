@@ -16,16 +16,16 @@
   <meta name="author" content="Ryan LI">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Try to identify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods.">
+    <meta name="description" content="Try to clarify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="from ROMs to Discretization Methods">
 <meta property="og:url" content="https://daydreamatnight.github.io/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/index.html">
 <meta property="og:site_name" content="ShouRou">
-<meta property="og:description" content="Try to identify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods.">
+<meta property="og:description" content="Try to clarify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/ROM%20to%20FEM.png">
 <meta property="article:published_time" content="2022-10-21T14:19:20.000Z">
-<meta property="article:modified_time" content="2022-10-21T14:57:53.492Z">
+<meta property="article:modified_time" content="2022-10-22T16:07:59.347Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamics">
 <meta name="twitter:card" content="summary_large_image">
@@ -221,7 +221,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          12k words
+          17k words
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
           <!-- compatible with older versions-->
-          42 minutes
+          57 minutes
         
       </span>
     
@@ -277,7 +277,7 @@
               <div class="markdown-body">
                 
                 <div class="note note-primary">
-            <p>Try to identify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods.</p>
+            <p>Try to clarify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods.</p>
           </div>
 <span id="more"></span>
 <h2 id="intuitive-introduction">Intuitive Introduction</h2>
@@ -328,7 +328,7 @@
 \]</span> note that <span class="math inline">\(n\)</span> dimensional does not expand the <span class="math inline">\(m\)</span> dimensional space. Unless <span class="math inline">\(m=p\)</span>, we cannot make the error zero everywhere. The exact equality requirment can be loosened by introducing a test vector as shown below.</p></li>
 <li><p>Define a set of <span class="math inline">\(p\)</span> test/weight vectors <span class="math inline">\(\boldsymbol{\Psi}\)</span>, and require them to be orthogonal to the residual (error), letting the inner product of the test vecror and the error equals to 0 <span class="math display">\[
 (\boldsymbol{\Psi}, \boldsymbol{\epsilon})=\boldsymbol{\Psi}^T\boldsymbol{\epsilon} =0,\qquad \mathbf{\Psi}\in\mathbb{R}^{m\times p}
-\]</span> where <span class="math inline">\(\boldsymbol{\Psi}=\left[\begin{array}{llll}\psi_1 &amp; \psi_2 &amp; \ldots &amp; \psi_p\end{array}\right]\)</span> refers to the plane that the system is projected to. We require the error to be zero in the projected sub space.</p></li>
+\]</span> where <span class="math inline">\(\boldsymbol{\Psi}=\left[\begin{array}{llll}\psi_1 &amp; \psi_2 &amp; \ldots &amp; \psi_p\end{array}\right]\)</span> refers to the plane that the system is projected to. We require the error to be zero in the projected sub space, instead of exact zero error everywhere.</p></li>
 <li><p>rearranging the last representation: <span class="math display">\[
 \begin{aligned}
 \boldsymbol{\Psi}^T(\mathbf{X}-\tilde{\mathbf{X}}) &amp;=0 \\
@@ -427,51 +427,118 @@
             <p>We can still change the inner product as weighted production, in order to scale the variables into same unit.</p>
           </div>
 <h3 id="infinite-dimensional-function-space">Infinite dimensional (function) space</h3>
-<p>Consider a Hilbert space <span class="math inline">\(L2([a,b])\)</span>, we use the same process as <a href="#finite-dimensional-vector-space">before</a></p>
+<p>Consider a Hilbert space <span class="math inline">\(L2([a,b])\)</span>, we use the same process as <a href="#finite-dimensional-vector-space">before</a>. But the basis function is not chosen by SVD/PCA/POD.</p>
 <ol type="1">
 <li><p>Weighted inner product of two complex functions <span class="math inline">\(f(x), g(x)\)</span> are: <span class="math display">\[
 (f(x), g(x))_w=\int_a^b f(x) g^*(x) w(x) d x, \quad w(x) \geq 0
 \]</span></p></li>
-<li><p>For a function <span class="math inline">\(q(x)\)</span>, we can represented it into a finit dimensional space spanned by a set of basis/trail functions, <span class="math display">\[
+<li><p>For a function <span class="math inline">\(u(x)\)</span>, we can represented it into a finite dimensional space spanned by a set of basis/trail functions, <span class="math display">\[
 \phi_j(x), \qquad j=1,2,\dots, p
-\]</span> such that reduced order function <span class="math inline">\(\tilde{q}(x)\)</span> in the sub space can be expressed as: <span class="math display">\[
-\tilde{q}(x)=\sum_{j=1}^p \alpha_j \phi_j(x)
+\]</span> such that reduced order function <span class="math inline">\(\tilde{u}(x)\)</span> in the sub space can be expressed as: <span class="math display">\[
+\tilde{u}(x)=\sum_{j=1}^p \alpha_j \phi_j(x)
 \]</span></p></li>
 <li><p>Consider test functions <span class="math display">\[
 \psi_j(x), \qquad j=1,2,\dots, p
-\]</span> and the wighted function of error is suh that <span class="math display">\[
+\]</span> and the wighted function of error is such that <span class="math display">\[
 (\epsilon(x), \psi_j(x))_w=\int_a^b \epsilon(x) \psi^*_j(x) w(x) d x = 0
 \]</span> as a result: <span class="math display">\[
-\left(q, \psi_j\right)_w-\sum_i \alpha_i\left(\phi_i, \psi_j\right)_w=0, \quad j=1,2, \ldots, p
+\left(\tilde{u}, \psi_j\right)_w-\sum_i \alpha_i\left(\phi_i, \psi_j\right)_w=0, \quad j=1,2, \ldots, p
+\]</span> rearranging: <span class="math display">\[
+\begin{aligned}
+\mathbf{M} \boldsymbol{\alpha} &amp;=\mathbf{r} \\
+\text{where: }\{\mathbf{M}\}_{j i} &amp;=\left(\phi_i, \psi_j\right) \\
+\{\mathbf{r}\}_j &amp;=\left(q, \psi_j\right)
+\end{aligned}
 \]</span></p></li>
 <li><p>Still here leaves several choices of test functions and basis functions:</p>
 <ul>
 <li><p>Choice of test functions</p>
 <ul>
 <li>Galerkin method/orthogonal projection, finite element</li>
-<li>Collocation method (non-orthogonal), finit difference</li>
-<li>Step function, finit volume</li>
+<li>Collocation method (non-orthogonal), finite difference</li>
+<li>Step function, finite volume</li>
 </ul></li>
 <li><p>Choice of basis function</p>
 <ul>
-<li><p>Fourier series</p></li>
-<li><p>Polynomials</p>
+<li>Fourier series / Trigonometric series, spectral methods</li>
+<li>Polynomials
 <ul>
 <li>Global, usually Chebyshev poly</li>
-<li>Local, e.g. Piecewise Polynomials/"hat function" (finite element)</li>
+<li>Local, e.g. Piecewise Polynomials
+<ul>
+<li>linear "hat/tent function" (finite element)</li>
+<li>higher order (spectral element)</li>
+</ul></li>
 </ul></li>
 </ul></li>
 </ul>
-<p>Generally to be computationally efficient, we want the matrix M to be sparse</p>
+<p>Generally to be computationally efficient, we want the matrix <span class="math inline">\(\mathbf{M}\)</span> to be sparse</p>
 <ul>
-<li>M is diagonal for Galerkin with orthogonal basis functions</li>
-<li>M is sparse (banded) for Galerkin/collocation with piecewise polynomials</li>
-<li>M is diagonal for bi-orthogonal function</li>
+<li><span class="math inline">\(\mathbf{M}\)</span> is diagonal for Galerkin with orthogonal basis functions</li>
+<li><span class="math inline">\(\mathbf{M}\)</span> is sparse (banded) for Galerkin/collocation with piecewise polynomials</li>
+<li><span class="math inline">\(\mathbf{M}\)</span> is diagonal for bi-orthogonal function</li>
 </ul></li>
 </ol>
 <h2 id="discretization-methods-of-pde">Discretization methods of PDE</h2>
-<p>The discretization methods of a PDE is basically mapping a dynamic system (PDE) from Hilbert space into finite dimensional space, just as illustrated above. As a result, in this section, same methods is applied with a little extra details.</p>
-<p>Consider a 1D Poisson equation with Dirichlet and Neumann boundary condition.</p>
+<p>The discretization methods of a PDE is basically mapping a dynamic system (PDE) from Hilbert space into finite dimensional space, just as illustrated above. As a result, in this section, same methods is applied on an example.</p>
+<p>Consider a 1D Poisson equation with Dirichlet and Neumann boundary condition <span class="math display">\[
+\begin{aligned}
+\mathbb{L}(u) \equiv \nabla^2u = f(x) &amp;\qquad\text{in } \Omega = \{x | 0 &lt; x &lt; 1\} \\
+u(0)=\mathcal{g_D}, &amp;\qquad \frac{\partial u}{\partial x}(1)=\mathcal{g_N}
+\end{aligned}
+\]</span> with a solution <span class="math inline">\(u\)</span> in Hilbert space.</p>
+<div class="note note-secondary">
+            <p>Poisson equation is a typical elliptic PDE</p>
+          </div>
+<ol type="1">
+<li><p>Inner production in domain <span class="math inline">\(\Omega\)</span> <span class="math display">\[
+(f(x), g(x))=\int_{\Omega} f(x) g(x) d x
+\]</span></p></li>
+<li><p>We have a reduced order solution <span class="math inline">\(\tilde{u}(x)\)</span> in <span class="math inline">\(N\)</span> dimensional space spanned by basis <span class="math inline">\(\phi_i(x)\)</span>: <span class="math display">\[
+\tilde{u}(x)=\sum_{i=1}^N \hat{u}_i \phi_i(x)
+\]</span> and therefore <span class="math display">\[
+\tilde{\mathbb{L}}(\tilde{u}(x)) = \nabla^2\tilde{u}
+\]</span> and the error/residual: <span class="math display">\[
+\epsilon = \tilde{\mathbb{L}}-\mathbb{L}=  \nabla^2\tilde{u} - f(x)
+\]</span></p></li>
+<li><p>Consider a <span class="math inline">\(N\)</span> dimensional test function <span class="math inline">\(\Psi\)</span> spanned by <span class="math inline">\(\psi_i(x)\)</span>, and consider inner production of test function and error function: <span class="math display">\[
+(\Psi(x), \epsilon(x))= \int_{\Omega} \Psi(x) (\tilde{\mathbb{L}}(\tilde{u}(x))-f(x)) d x = 0
+\]</span> Above is called the <strong>weak formulation</strong>. Similar to the test vector, the test function release the "strict" requirement of an exact solution everywhere.</p></li>
+<li><p>We are going to use the finite element, so we choose the basis as a set of local linear tent functions as:</p>
+<p><img src="N=6, first basis function.png" srcset="/img/loading.gif" lazyload alt="N=6, i=1 basis function" style="zoom:50%;" /> <span class="math display">\[
+\psi_i(x)= \begin{cases}\frac{x-x_{i-1}}{x_i-x_{i-1}} &amp; \text { if } x \in\left[x_{i-1}, x_i\right] \\ \frac{x_{i+1}-x}{x_{i+1}-x_i} &amp; \text { if } x \in\left[x_i, x_{i+1}\right] \\ 0 &amp; \text { otherwise }\end{cases}
+\]</span> <div class="note note-info">
+            <p>In such a basis, the solution is required to be exact only locally in each cell.</p>
+          </div></p>
+<p>For test function, we use Galerkin formulation as <span class="math display">\[
+\psi_j(\boldsymbol{x}) =\phi_j
+\]</span></p>
+<div class="note note-info">
+            <p>Different test/weight functions lead to different methods of discretization</p><p><img src="Local step weight function of Finite Volume Method.png" srcset="/img/loading.gif" lazyload alt="Local step weight function of Finite Volume Method" style="zoom:25%;" /> <span class="math display">\[\begin{aligned}&amp;\text { Test functions used in the method of weighted residuals}\\&amp;\begin{aligned}\hline &amp; \text { Test function } &amp; &amp; \text { Type of method } \\ &amp; &amp; &amp;\\\psi_j(\boldsymbol{x}) &amp;=\delta\left(\boldsymbol{x}-\boldsymbol{x}_j\right) &amp; &amp; \text { Collocation/Finite Difference } \\\psi_j(\boldsymbol{x}) &amp;=\left\{\begin{array}{llll}1 &amp; \text { inside } &amp; \Omega^j \\0 &amp; \text { outside } &amp; \Omega^j\end{array}\right.&amp; &amp; \text { Finite volume (subdomain） } \\\psi_j(\boldsymbol{x}) &amp;=\frac{\partial R}{\partial \hat{u}_j} &amp; &amp;\text { Least-squares} \\\psi_j(\boldsymbol{x}) &amp;=x^j &amp; &amp; \text { Method of moments } \\\psi_j(\boldsymbol{x}) &amp;=\phi_j &amp; &amp; \text { Galerkin } \\\psi_j(\boldsymbol{x}) &amp;\neq \phi_j &amp; &amp; \text { Petrov-Galerkin moments } \\\hline\end{aligned}\end{aligned}\]</span></p>
+          </div></li>
+</ol>
+<h3 id="weak-formulation-of-poisson-equation">Weak formulation of Poisson equation</h3>
+<p>Now add some details, the weak formulation in step 3 should be: <span class="math display">\[
+\int_{0}^1 (\nabla^2\tilde{u}-f(x))\Psi(x) dx = 0
+\]</span> Use the integration by parts rule:</p>
+<p><span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial x} \frac{\partial \tilde{u}}{\partial x} d x=\int_0^1 \psi f d x+\left[\psi \frac{\partial \tilde{u}}{\partial x}\right]_0^1
+\]</span></p>
+<h3 id="implementation-of-boundary-conditions">Implementation of boundary conditions</h3>
+<p>As <span class="math inline">\(\psi(0)=0\)</span>, apply the Neumann boundary condition <span class="math inline">\(\frac{\partial u}{\partial x}(1)=\mathcal{g_N}\)</span> directly, <span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial x} \frac{\partial \tilde{u}}{\partial x} d x=\int_0^1 \psi f d x+\psi(1) {\mathcal{g_N}}
+\]</span> For the Dirichlet boundary <span class="math inline">\(u(0)=\mathcal{g_D}\)</span>, it cannot be implemented directly. Instead, this can treat as an inhomogeneity part of the solution, such as: <span class="math display">\[
+\tilde{u}=\tilde{u}^\mathcal{H}+\tilde{u}^\mathcal{D}
+\]</span> where <span class="math inline">\(\tilde{u}^\mathcal{H}\)</span> and <span class="math inline">\(\tilde{u}^\mathcal{D}\)</span> denote the homogenize and inhomogenize part respectively, and we have: <span class="math display">\[
+\tilde{u}^\mathcal{H}(0) = 0 \qquad \tilde{u}^\mathcal{D}(0) = \mathcal{g_D}
+\]</span> Plug into the formulation as: <span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial x} \frac{\partial \tilde{u}^\mathcal{H}}{\partial x} d x + \int_0^1 \frac{\partial \psi}{\partial x} \frac{\partial \tilde{u}^\mathcal{D}}{\partial x} d x=\int_0^1 \psi f d x+\psi(1) {\mathcal{g_N}}
+\]</span> As a result, the finite element form of the PDE is: <span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial x} \frac{\partial \tilde{u}^\mathcal{H}}{\partial x} d x =\int_0^1 \psi f d x+\underbrace{\psi(1) {\mathcal{g_N}}}_{Neumann} - \underbrace{\int_0^1 \frac{\partial \psi}{\partial x} \frac{\partial \tilde{u}^\mathcal{D}}{\partial x} dx }_{Dirichlet}
+\]</span> And the <span class="math inline">\(\tilde{u}\)</span> can be solved by solving the ODE.</p>
+<div class="note note-info">
+            <p>In the <span class="math inline">\(h-type\)</span> method a fixed order polynomial is used in every element and convergence is achieved by reducing the size of the elements. <span class="math inline">\(h\)</span> represents the characteristic size of an element.</p><p>In the <span class="math inline">\(p-type\)</span> method a fixed mesh is used and convergence is achieved by increasing the order of the polynomial every element. <span class="math inline">\(p\)</span> represents the polynomial order in the elements.</p><p>In the <span class="math inline">\(spectral\)</span> method is the <span class="math inline">\(p-type\)</span> method but the whole solution domain is treated as a single element.</p><p>The <span class="math inline">\(hp-element\)</span> method combines attributes from both of these methods.</p>
+          </div>
 
                 
               </div>
