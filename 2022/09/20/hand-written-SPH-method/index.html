@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_SPH.png">
 <meta property="article:published_time" content="2022-09-20T06:23:37.000Z">
-<meta property="article:modified_time" content="2022-10-01T19:54:59.554Z">
+<meta property="article:modified_time" content="2022-10-28T11:43:59.461Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="CUDA">
 <meta property="article:tag" content="fluid dynamics">
@@ -222,7 +222,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          12k words
+          15k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
           <!-- compatible with older versions-->
-          42 minutes
+          52 minutes
         
       </span>
     
@@ -335,7 +335,7 @@ Laminar viscosity + SPS turbulence model <sup id="fnref:5" class="footnote-ref">
 <p>The overall algorithm are very similar to the particles<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup> demo, only need several changes for the control function.</p>
 <h3 id="stage-1-neighboring-searching">Stage 1: Neighboring searching</h3>
 <h4 id="theorem-influence-area">Theorem: Influence area</h4>
-<p><img src="Influence length illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Influence length illustration of SPH. The circles denoted by 𝑖,𝑗 represent target particles, interacting particles. In addition, qr is the influence radius of target particle. " style="zoom:35%;" /></p>
+<p><img src="Influence length illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Influence length illustration of SPH. The circles denoted by 𝑖,𝑗 represent target particles, interacting particles. In addition, qr is the influence radius of target particle. " style="zoom:25%;" /></p>
 <p>Influence area illustration of SPH is shown above. The circles denoted by <span class="math inline">\(i\)</span>, <span class="math inline">\(j\)</span> represent the target particle and the interacting particles, respectively. The target particle only interacts with particles within the circle (dashed) with a radius of <span class="math inline">\(dist_{critic} = 2h\)</span>. With <span class="math inline">\(q = {dist}/{h}\)</span> denoting the non-dimensional distance between two particles. <span class="math inline">\(q_{critc} = 2\)</span> is the non-dimensional influence radius of target particle.</p>
 <p>The original <span class="math inline">\(dist_{critc}\)</span> in demo<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup> is the sum of the radius of the two interacting particles, i.e. <span class="math inline">\(dist_{critc} = 2 radius\)</span> in the case of uniform radius particles. And <span class="math inline">\(h_{critic} = radius, q_{critic} = 1\)</span>.</p>
 <p>There are two ways of defining <span class="math inline">\(h\)</span>,</p>
@@ -353,7 +353,7 @@ h = hdp \cdot dp
           </div>
 <p>The second <span class="math inline">\(hdp\)</span> method is applied in the code because of the simplicity. The equivalent <span class="math inline">\(hdp = 0.5\)</span></p>
 <h4 id="algorithm-neighboring-search">Algorithm: neighboring search</h4>
-<p><img src="Neighboringsearching illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Influence area illustration of SPH, The circles denoted by 𝑖,𝑗,𝑘 represent target particles, true neighbor particles, and false neighbor particles. From [12]" style="zoom:30%;" /></p>
+<p><img src="Neighboringsearching illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Influence area illustration of SPH, The circles denoted by 𝑖,𝑗,𝑘 represent target particles, true neighbor particles, and false neighbor particles. From [12]" style="zoom:20%;" /></p>
 <p>In order to find the true neighboring particles, instead of brute-force searching i.e. examining distances with all of the particles in the domain, a smart way is called neighboring search.</p>
 <p>A grid as shown above is introduced, dividing the whole domain into cells. For each cell, a neighbor list containing all the particle ids in neighbor cells gets rebuilt periodically (every time step, or every 10 time steps as in Hérault's work<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hérault, A., Bilotta, G., &amp; Dalrymple, R. A. (2010). Sph on gpu with cuda. *Journal of Hydraulic Research*, *48*(sup1), 74-79.">[1]</span></a></sup>). When processing a target particle, the distances only get examined with particles in the neighbor list of its located target cell. In this way, the examining times are reduced dramatically and the share memory can be well leveraged to avoid massive global memory access (not implemented here)</p>
 <h5 id="grid-span">Grid span</h5>
@@ -361,7 +361,7 @@ h = hdp \cdot dp
 <div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> cellSize = m_params.particleRadius * <span class="hljs-number">2.0f</span>;  <span class="hljs-comment">// cell size equal to particle diameter</span>
 m_params.cellSize = <span class="hljs-built_in">make_float3</span>(cellSize, cellSize, cellSize);</code></pre></div>
 <p>Actually, the grid span is defined as the <strong>influencing distance <span class="math inline">\(2h\)</span></strong>, as shown below. If the span is smaller, the interaction area will not be included by the neighboring area. Yet if the span is larger, the searching will not be the most efficient.</p>
-<p><img src="Largest influence length in grid illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Largest influence length in grid illustration of SPH" style="zoom:25%;" /></p>
+<p><img src="Largest influence length in grid illustration of SPH.PNG" srcset="/img/loading.gif" lazyload alt="Largest influence length in grid illustration of SPH" style="zoom:20%;" /></p>
 <div class="note note-info">
             <p>Note the term "grid" represents 3 different concepts:</p><ul><li><p>equal-space structured mesh, span <span class="math inline">\(2h\)</span>, divides the computational domain, e.g.</p><p>"A grid is introduced, dividing the whole domain into cells"</p><div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> GRID_SIZE       64</span>
 uint gridDim = GRID_SIZE;
@@ -417,7 +417,7 @@ gridSize[<span class="hljs-number">0</span>] = gridSize[<span class="hljs-number
 <p>The radius of two particles are set to be different, not suitable for SPH model.</p>
 <h5 id="update">update</h5>
 <p>step 0: comment out <code>collider</code> for simplicity and any function related to it such as: <code>M_MOVE</code> mode and its controller.</p>
-<p>step 1: parameters, functions renaming, switching and introducing</p>
+<p>step 1: parameters/arguments, functions renaming, switching and introducing</p>
 <p>Rename the functions and params from collision related to SPH related such as:</p>
 <div class="code-wrapper"><pre><code class="hljs txt">collideSpheres() -&gt; SPHParticles()
 collideDist -&gt; interactDist</code></pre></div>
@@ -502,12 +502,101 @@ W(r, h)=\alpha_D\left(1-\frac{q}{2}\right)^4(2 q+1) \quad 0 \leq q \leq 2
 
 <h5 id="update-1">update</h5>
 <p>Substitute parameters</p>
-<p>new workflow is such that</p>
+<p>new work flow is such that</p>
 <div class="note note-danger">
             <p>to be continue...</p>
           </div>
 <h3 id="stage-3-verlet-time-scheme">Stage 3: Verlet time scheme</h3>
-<p>Instead of the simple Euler backward time discretization scheme originally applied in the integration step, Verlet scheme is used.</p>
+<h4 id="theorem">Theorem</h4>
+<p>Instead of the simple Euler backward time discretization scheme originally applied in the integration step, the Verlet scheme <sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Verlet L. 1967. Computer experiments on classical fluids. I. Thermodynamical properties of  Lennard-Jones molecules. Physical Review, 159, 98-103.">[6]</span></a></sup> is used such that: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{v}_a^{n+1}&amp;=\boldsymbol{v}_a^{n-1}+2 \Delta t \boldsymbol{F}_a^n ; \\
+\boldsymbol{r}_a^{n+1}&amp;=\boldsymbol{r}_a^n+\Delta t \boldsymbol{V}_a^n+0.5 \Delta t^2 \boldsymbol{F}_a^n ; \\
+\rho_a^{n+1}&amp;=\rho_a^{n-1}+2 \Delta t D_a^n
+\end{aligned}
+\]</span></p>
+<p>For every <span class="math inline">\(N_s\)</span> time steps: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{v}_a^{n+1}&amp;=\boldsymbol{v}_a^n+\Delta t \boldsymbol{F}_a^n ; \\
+\boldsymbol{r}_a^{n+1}&amp;=\boldsymbol{r}_a^n+\Delta t \boldsymbol{V}_a^n+0.5 \Delta t^2 \boldsymbol{F}_a^n ;\\
+\rho_a^{n+1}&amp;=\rho_a^n+\Delta t D_a^n
+\end{aligned}
+\]</span> <div class="note note-danger">
+            <p>Note in this step, updating of <span class="math inline">\(\rho\)</span> is ignored until <a href="#stage-2-control-function">Stage 2</a> is finished.</p>
+          </div></p>
+<h3 id="code-2">Code</h3>
+<h5 id="original-2">original</h5>
+<p>Refer to the code flow chart at <a href="#stage-2-control-function">Stage 2</a>.</p>
+<h5 id="update-2">update</h5>
+<p>step 0: <strong>debug</strong>, in original <code>SPHD</code> function, the new velocity is updated such that:</p>
+<div class="code-wrapper"><pre><code class="hljs c++">newVel[originalIndex] = <span class="hljs-built_in">make_float4</span>(vel + force, <span class="hljs-number">0.0f</span>);</code></pre></div>
+<p>the velocity is added with the force without a multiplying of the delta time.</p>
+<p>Provide the <code>SPHD</code> with extra argument <code>deltatime</code> (changing <code>SPH</code> as well) and change the original code as:</p>
+<div class="code-wrapper"><pre><code class="hljs c++">newVel[originalIndex] = <span class="hljs-built_in">make_float4</span>(vel + deltaTime*force, <span class="hljs-number">0.0f</span>);</code></pre></div>
+<p>step 1: Rearrange <code>integrate_functor</code> and <code>SPHD</code> so that</p>
+<ul>
+<li>In <code>SPHD</code>, the gravity (original in <code>integrate_functor</code>) and the collision forces (spring, damping, shear and attraction) are added to one argument <code>force</code>.
+<ul>
+<li>Delete the argument <code>newVel</code> in SPHD and SPH.</li>
+<li>Add the argument <code>newForce</code> and update the force with gravity, the code structure as <code>newVel</code>:</li>
+</ul></li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs c++">newForce[originalIndex]= <span class="hljs-built_in">make_float4</span>(force, <span class="hljs-number">0.0f</span>);</code></pre></div>
+<ul>
+<li><code>integrate_functor</code> takes the argument <code>force</code> from <code>SPHD</code> and update the <code>vel</code> and <code>pos</code> as before (1st order Euler backword scheme).
+<ul>
+<li>Delete the force of globalDamping.</li>
+</ul></li>
+</ul>
+<div class="note note-warning">
+            <p>In the original code, force is treated as temporal parameter, no memory of force needed.</p>
+          </div>
+<p>step 2: rename the <code>integrate_functor</code> as <code>integrate_verlet</code> and update the <code>vel</code> and <code>pos</code> via the Verlet scheme</p>
+<ul>
+<li><code>integrate_verlet</code> takes the pointer of <code>step</code>, <code>vel_1</code> and <code>vel_2</code> from outside, change these augments inside, mimicking the <code>vel</code>.
+<ul>
+<li><code>vel_1</code> and <code>vel_2</code> indicates the velocity fields from last, and last of last step, respectively</li>
+</ul></li>
+</ul>
+<p>The new work flow in this stage is such that:</p>
+
+<div class="markmap-container" style="height:300px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;integrate_verlet&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if step&amp;gt;0&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;vel_2=vel_1&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;vel_1= vel&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;if step==0 ||step%50 =0&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;vel +=  force * deltaTime;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;pos +=  vel * deltaTime + pow(deltaTime,2) * force * 0.5f;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;&lt;span style=\&quot;color:#003366;\&quot;&gt;else&lt;/span&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;vel +=  force * deltaTime * 2;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;pos +=  vel * deltaTime + pow(deltaTime,2) * force * 0.5f;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;step++&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;Boundary condition&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;SPH(*vel)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[17,18]},&quot;v&quot;:&quot;SPHD&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;force = 0&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;force += SPHCell&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[20,21],&quot;f&quot;:true},&quot;v&quot;:&quot;(Neighboring search)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[21,22],&quot;f&quot;:true},&quot;v&quot;:&quot;SPHParticles&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[22,23],&quot;f&quot;:true},&quot;v&quot;:&quot;force += spring&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[23,24],&quot;f&quot;:true},&quot;v&quot;:&quot;force += damping&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[24,25],&quot;f&quot;:true},&quot;v&quot;:&quot;force += shear&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[25,26],&quot;f&quot;:true},&quot;v&quot;:&quot;force += attraction&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[26,27]},&quot;v&quot;:&quot;force += gravity&quot;}]}]}],&quot;p&quot;:{}}"></svg>
+</div>
+
+<h3 id="stage-4-boundary">Stage 4: Boundary</h3>
+<p>In former granular collision model<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Green, S. (2008). CUDA Particles. Technical Report contained in the CUDA SDK, www.nvidia.com., [linux](file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf), [Win](file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/snippets/5_Simulations/particles/doc/particles.pdf).">[2]</span></a></sup>, the boundary condition can be provided percisely as the radius of the particle is physical.</p>
+<p><img src="Original boundary condition.png" srcset="/img/loading.gif" lazyload alt="Original boundary condition" style="zoom:28%;" /></p>
+<p>But for SPH boundary, this can be tricky. Need a reference to the DualSPHysics<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Crespo, A. J., Domínguez, J. M., Rogers, B. D., Gómez-Gesteira, M., Longshaw, S., Canelas, R. J. F. B., ... &amp; García-Feal, O. (2015). DualSPHysics: Open-source parallel CFD solver based on Smoothed Particle Hydrodynamics (SPH). *Computer Physics Communications*, *187*, 204-216.">[3]</span></a></sup> source code.</p>
+<h3 id="stage-5-multiple-gpu">Stage 5: Multiple GPU</h3>
+<h4 id="problems">Problems</h4>
+<p>The CUDA environment does not support, natively, a cooperative multi-GPU model. The model is based more on a single-core, single-GPU relationship. This works really well for tasks that are independent of one another, but is rather a pain if you wish to write a task that needs to have the GPUs cooperate in some way.</p>
+<p>Algorithm, compared with multi-GPU machine learning, Halo Exchange might be needed: <a target="_blank" rel="noopener" href="https://pdc-support.github.io/introduction-to-mpi/05-parallel-paradigms/index.html">Parallel Paradigms and Parallel Algorithms – Introduction to Parallel Programming with MPI</a></p>
+<ul>
+<li><p>GPU peer-to-peer communication model provided as of the 4.0 SDK version or CPU-level primitives to cooperate at the CPU level</p></li>
+<li><p>One-core or multi-core</p></li>
+<li><p>MPI or ZeroMQ</p></li>
+</ul>
+<p>Calculate the theoretical speedup, and test for each roots.</p>
+<h4 id="resources">Resources</h4>
+<p>Book <a target="_blank" rel="noopener" href="https://github.com/dipeshdd/BOOKS/blob/master/CUDA%20Programming_2013%20by%20shane%20cook.pdf">CUDA Programming by Shane Cook</a> <a href="file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/docs/CUDA%20Programming_2013%20by%20shane%20cook.pdf">linux</a> <a href="file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/docs/CUDA%20Programming_2013%20by%20shane%20cook.pdf">Win</a></p>
+<ul>
+<li>Chapter 8 Multi-CPU and Multi-GPU Solutions</li>
+</ul>
+<p>Book <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf">CUDA C Programming Guide by NVIDIA</a> <a href="file:///tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/docs/CUDA_C_Programming_Guide.pdf">linux</a> <a href="file://Q:/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/1_learn/9th_CUDA/docs/CUDA_C_Programming_Guide.pdf">Win</a></p>
+<ul>
+<li><strong>NOT Recommended</strong></li>
+</ul>
+<p>Course <a target="_blank" rel="noopener" href="https://www.nvidia.cn/training/instructor-led-workshops/cuda-multi-gpu/">CUDA Multi GPU Training by NVIDIA</a></p>
+<ul>
+<li><strong>NOT Free</strong></li>
+</ul>
+<p>Free course 《GPU并行计算与CUDA编程》</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1if4y1i7yp">06.streams和多GPU</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Vr4y1w78N">08.MPI-GPU集群</a></p></li>
+<li><p><strong>NOT Recommended</strong></p></li>
+</ul>
 <h2 id="references">References</h2>
 <section class="footnotes">
 <div class="footnote-list">
