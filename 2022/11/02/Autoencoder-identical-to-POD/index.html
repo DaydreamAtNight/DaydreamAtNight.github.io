@@ -16,16 +16,16 @@
   <meta name="author" content="Ryan LI">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Build a Linear Autoencoder (LAE) identical to Proper orthogonal decomposition (POD). And the modes extracted by the two algorithms are compared on the MINST (28*28, 60000) and Flow past c">
+    <meta name="description" content="Build a Linear Autoencoder (LAE) comparable to Proper orthogonal decomposition (POD) in two ways. The modes extracted by the two algorithms are compared on the wide (MINST [28*28, 60000])">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Autoencoder identical to POD">
 <meta property="og:url" content="https://daydreamatnight.github.io/2022/11/02/Autoencoder-identical-to-POD/index.html">
 <meta property="og:site_name" content="ShouRou">
-<meta property="og:description" content="Build a Linear Autoencoder (LAE) identical to Proper orthogonal decomposition (POD). And the modes extracted by the two algorithms are compared on the MINST (28*28, 60000) and Flow past c">
+<meta property="og:description" content="Build a Linear Autoencoder (LAE) comparable to Proper orthogonal decomposition (POD) in two ways. The modes extracted by the two algorithms are compared on the wide (MINST [28*28, 60000])">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://daydreamatnight.github.io/index/Autoencoder%20vs%20POD.png">
 <meta property="article:published_time" content="2022-11-02T13:55:17.000Z">
-<meta property="article:modified_time" content="2022-11-16T13:21:14.660Z">
+<meta property="article:modified_time" content="2022-11-18T17:40:32.749Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="fluid dynamics">
 <meta property="article:tag" content="deep learning">
@@ -234,7 +234,7 @@
         
         
           <!-- compatible with older versions-->
-          93 minutes
+          95 minutes
         
       </span>
     
@@ -278,7 +278,7 @@
               <div class="markdown-body">
                 
                 <div class="note note-primary">
-            <p>Build a Linear Autoencoder (LAE) identical to Proper orthogonal decomposition (POD). And the modes extracted by the two algorithms are compared on the MINST (28*28, 60000) and Flow past cylinder snapshots (465*354, 110) datasets. In addition, several regularization methods to improve the LAE training are proposed and tested.</p>
+            <p>Build a Linear Autoencoder (LAE) comparable to Proper orthogonal decomposition (POD) in two ways. The modes extracted by the two algorithms are compared on the wide (MINST [28*28, 60000]) and slim (Flow past cylinder snapshots [465*354, 110]) datasets. In addition, several regularization methods to improve the orthogonality and optimality of LAE modes are proposed and tested.</p>
           </div>
 <span id="more"></span>
 <h2 id="theories">Theories</h2>
@@ -298,7 +298,7 @@
 \mathbf{X_1}=\boldsymbol{W_1}\mathbf{X_0} + \mathbf{b_1},\qquad \mathbf{X_1}\in \mathbb{R}^{p\times n}, \mathbf{W_1}\in\mathbb{R}^{p\times m}, \mathbf{X_0}\in\mathbb{R}^{m\times n}, \mathbf{b_1}\in\mathbb{R}^{p\times 1}\text{(broundcast)}
 \]</span> <img src="2 layer linear autoencoder.png" srcset="/img/loading.gif" lazyload alt="2 layer linear autoencoder" style="zoom:35%;" /></p>
 <p>As the architecture shown above, a linear autoencoder stacks two of linear layer with a lower dimensional intermediate output acting as a bottleneck, also called the latent space. The first and second layer of the autoencoder are always referred to as the encoder and decoder.</p>
-<p>With a well trained LAE, the original input data <span class="math inline">\(\mathbf{X_0}\)</span> can be reconstructed from a latent space <span class="math inline">\(\mathbf{X_1}\)</span>, the error between original data <span class="math inline">\(\mathbf{X_0}\)</span> and the reconstructed data <span class="math inline">\(\mathbf{X_2}\)</span> can be minimized regressively via back propagation and gradient descent. When choosing mean square error (MSE) as error/loss function, the latent space extracted by the optimal LAE is identical with that extracted by POD/PCA. However, unlike POD, the weights/modes extracted by LAE are not necessarily orthonormal.</p>
+<p>With a well trained LAE, the original input data <span class="math inline">\(\mathbf{X_0}\)</span> can be reconstructed from a latent space <span class="math inline">\(\mathbf{X_1}\)</span>, the error between original data <span class="math inline">\(\mathbf{X_0}\)</span> and the reconstructed data <span class="math inline">\(\mathbf{X_2}\)</span> can be minimized regressively via back propagation and gradient descent. When choosing mean square error (MSE) as error/loss function, the optimal latent space extracted by the optimal LAE is identical with that extracted by POD/PCA.</p>
 <h3 id="equivalent-lae-to-pod">Equivalent LAE to POD</h3>
 <h4 id="straightforward-method">Straightforward method</h4>
 <p>To get a autoencoder equivalent to POD, set <span class="math inline">\(\mathbf{b_1} = \mathbf{b_2}=0\)</span>, a <strong>straightforward</strong> way is to make the auto encoder process <span class="math inline">\(\mathbf{X}\)</span> and reconstruct it as <span class="math inline">\(\tilde{\mathbf{X}}\)</span>. The mathematical representation is: <span class="math display">\[
@@ -324,17 +324,17 @@ layer2: \qquad {\color{purple}\tilde{\mathbf{X}}&#39;}=\boldsymbol{W_2}&#39;\mat
 \boldsymbol{\alpha}&amp;= \mathbf{W_2&#39;}
 \end{aligned}
 \]</span></p>
-<h3 id="improvements">Improvements</h3>
+<h3 id="improvement">Improvement</h3>
 <p>Well, those equivalences only exist in imagination because of the large freedom of gradient descend process</p>
 <ul>
-<li>the mode matrix extracted by LAE is not necessarily orthogonal</li>
-<li>the energy of the modes are not distributed in descending order</li>
+<li>non-orthogonality: modes extracted by LAE is not necessarily orthogonal</li>
+<li>non-optimality: (L2) energy preserved by the modes are not ranked in descending order</li>
 </ul>
 <p>There might be several methods to obtain a set of modes comparable with the POD modes:</p>
 <ul>
-<li>Two-stage
+<li>Two-stage:
 <ul>
-<li><code>[method 1]</code> another SVD on the raw modes extracted by the LAE</li>
+<li><code>[method 1]</code> run another SVD on the raw modes extracted by the LAE, it works on both the two methods.</li>
 </ul></li>
 <li>End-to-end:
 <ul>
@@ -354,7 +354,7 @@ layer2: \qquad {\color{purple}\tilde{\mathbf{X}}&#39;}=\boldsymbol{W_2}&#39;\mat
 </ul>
 <p>All these improvements will be compared and tested in the <a href="#case-study">case study</a> section. In this section, the <code>[method 2]</code> regularization methods and the <code>[method 4]</code> SVD parameterization will be further talked about.</p>
 <h4 id="l2-regularization">L2 regularization</h4>
-<p>Before introduce the orthogonal regularization used in <code>[method 2]</code>, let's recall the popular L2 regularization. For dataset <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{m\times n}\)</span> as <span class="math inline">\(\mathbf{X}=\left[\begin{array}{llll}x^1 &amp; x^2 &amp; \ldots &amp; x^n\end{array}\right]\)</span>, where <span class="math inline">\(x^i=\left[\begin{array}{llll}x^i_1 &amp; x^i_2 &amp; \ldots &amp; x^i_m\end{array}\right]^T\)</span>, the L2 regularized loss function of the 2-layer linear autoencoder is: <span class="math display">\[
+<p>Before introducing the orthogonal regularization used in <code>[method 2]</code>, let's recall the popular L2 regularization. For dataset <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{m\times n}\)</span> as <span class="math inline">\(\mathbf{X}=\left[\begin{array}{llll}x^1 &amp; x^2 &amp; \ldots &amp; x^n\end{array}\right]\)</span>, where <span class="math inline">\(x^i=\left[\begin{array}{llll}x^i_1 &amp; x^i_2 &amp; \ldots &amp; x^i_m\end{array}\right]^T\)</span>, the L2 regularized loss function of the 2-layer linear autoencoder is: <span class="math display">\[
 \begin{aligned}
 \mathbf{\hat{\mathcal{L}}_{(W_1,W_2)}} &amp;= \mathcal{L}_{ms} + \mathcal{L}_{L2} \\ 
 \text{where:}\qquad {\mathcal{L}_{ms}}_{\mathbf{(W_1,W_2)}} &amp;= \frac{1}{n}\sum_{i=1}^{n} MSE(\mathbf{\tilde{x^{i}},x^{i}}), \\
@@ -365,8 +365,11 @@ layer2: \qquad {\color{purple}\tilde{\mathbf{X}}&#39;}=\boldsymbol{W_2}&#39;\mat
 \]</span> <div class="note note-secondary">
             <p>Normally, the L2 regularization is not applied by tailoring the loss function, but more simply and efficiently, the weight updating process, referring as the weight decay.</p><p>In the gradient descend algorithm, weights are updated by the gradient of loss function w.r.t. the weights: <span class="math display">\[\mathbf{W}_l = \mathbf{W}_l-\alpha \frac{\partial{\hat{\mathcal{L}}}}{\partial\mathbf{W}_l}\]</span> With <span class="math inline">\(\hat{\mathcal{L}} = \mathcal{L}_{ms} + \mathcal{L}_{L2}\)</span>, we have: <span class="math display">\[\begin{aligned}\mathbf{W}_l  &amp;= \mathbf{W}_l-\alpha \left(\frac{\partial\mathcal{L}_{ms}}{\partial\mathbf{W}_l}+\frac{\partial\mathcal{L}_{L2}}{\partial\mathbf{W}_l}\right) \\&amp;= \mathbf{W}_l-\alpha \left(\frac{\partial\mathcal{L}_{ms}}{\partial\mathbf{W}_l}+\frac{\lambda_{L2}}{n}\mathbf{W}_l\right) \\\end{aligned}\]</span> And <span class="math inline">\(\lambda_{L2}\)</span> is called the weight decay parameter, with <span class="math inline">\(\alpha\)</span> being the learning rate.</p><p>We can't do such simplification with other regularization methods.</p>
           </div></p>
+<div class="note note-success">
+            <p>Ablation tests on the <strong>L2 regularization</strong> (weight decay) and learning rate are carried out with MNIST dataset. <code>[method 1]</code> is used to inspect the results. Some interesting results are shown in the <a href="#appendix">Appendix</a>. It turns out that a small L2 regularization leads to more orthogonal modes and lower reconstruction error. Too much L2 regularization leads to high bias/under fitting.</p>
+          </div>
 <h4 id="orthonormal-regularization">Orthonormal regularization</h4>
-<p>One attractive property of the POD modes is the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Orthogonal_matrix">(semi) orthonormality</a>, i.e. the modes are independent with each others i.e. the inner product of the mode matrix is unitary. <span class="math display">\[
+<p>One attractive property of the POD modes is the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Orthogonal_matrix">(semi) orthonormality</a>, i.e. the modes are independent with each others i.e. the inner product of the mode matrix is identity. <span class="math display">\[
 \begin{aligned}
 \boldsymbol{\Phi}^T\boldsymbol{\Phi}&amp;=\mathbf{I}, \qquad\mathbf{I} \text{ is the identity matrix} \\
 \left\langle \phi_i, \phi_j\right\rangle &amp;= \delta_{i j}, \qquad\forall i, j
@@ -374,7 +377,7 @@ layer2: \qquad {\color{purple}\tilde{\mathbf{X}}&#39;}=\boldsymbol{W_2}&#39;\mat
 \]</span> To impose an orthonormal penalty on the weight of LAE, mimicking the L2 regularization, we can design an orthonormal regularization: <span class="math display">\[
 {\mathcal{L}_{ortho}}_{\mathbf{(W_1,W_2)}} =\lambda_{ortho}\sum_{l=1}^2\left\|\mathbf{W}^T_l\mathbf{W}_l-\mathbf{I}\right\|^2_F
 \]</span> <div class="note note-info">
-            <p>Orthogonal regularization is a technique first proposed in CNNs.</p><p>Brock et.al first proposed that maintaining an orthogonal weight is desirable when training neural networks. And proposed the orthogonal regularization in L1 norm <sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brock, A., Lim, T., Ritchie, J. M., &amp; Weston, N. (2016). Neural photo editing with introspective adversarial networks. *arXiv preprint arXiv:1609.07093*.">[4]</span></a></sup>. Then they upgraded to a new variation in BigGAN<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brock, A., Donahue, J., &amp; Simonyan, K. (2018). Large scale GAN training for high fidelity natural image synthesis. *arXiv preprint arXiv:1809.11096*.">[5]</span></a></sup> based on the L2 norm. Lubana et.al<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Lubana, E. S., Trivedi, P., Hougen, C., Dick, R. P., &amp; Hero, A. O. (2020). OrthoReg: Robust Network Pruning Using Orthonormality Regularization. *arXiv preprint arXiv:2009.05014*.">[6]</span></a></sup> applied it to the field of neural network pruning<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Blalock, D., Gonzalez Ortiz, J. J., Frankle, J., &amp; Guttag, J. (2020). What is the state of neural network pruning?. *Proceedings of machine learning and systems*, *2*, 129-146.">[7]</span></a></sup>.</p>
+            <p>Orthogonal regularization is a technique first proposed in CNNs.</p><p>Brock et.al first proposed that maintaining an orthogonal weight is desirable when training neural networks. And they proposed the orthogonal regularization in L1 norm <sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brock, A., Lim, T., Ritchie, J. M., &amp; Weston, N. (2016). Neural photo editing with introspective adversarial networks. *arXiv preprint arXiv:1609.07093*.">[4]</span></a></sup>. Then they upgraded it to a new variation in BigGAN<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brock, A., Donahue, J., &amp; Simonyan, K. (2018). Large scale GAN training for high fidelity natural image synthesis. *arXiv preprint arXiv:1809.11096*.">[5]</span></a></sup> based on the L2 norm. Lubana et.al<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Lubana, E. S., Trivedi, P., Hougen, C., Dick, R. P., &amp; Hero, A. O. (2020). OrthoReg: Robust Network Pruning Using Orthonormality Regularization. *arXiv preprint arXiv:2009.05014*.">[6]</span></a></sup> applied the same method to the field of neural network pruning<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Blalock, D., Gonzalez Ortiz, J. J., Frankle, J., &amp; Guttag, J. (2020). What is the state of neural network pruning?. *Proceedings of machine learning and systems*, *2*, 129-146.">[7]</span></a></sup>.</p>
           </div></p>
 <h4 id="svd-parameterization">SVD parameterization</h4>
 <p>Parameterization is a method transforming the parameter of neural network in an appropriate way before using it. For example, <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.utils.parametrizations.orthogonal.html">orthogonal parameterization</a> orthogonalizes the weight matrix of a layer of the neural network.</p>
@@ -550,7 +553,7 @@ Estimated Total Size (MB): 603.87
 </tbody>
 </table>
 <h4 id="method-1">[method 1]</h4>
-<p>The modes constructed by LAE is obviously not identical to that of POD, in order to show the new spaces spanned by these two set of modes are identical/similar, orthonormalized the LAE modes by SVD, we can also get energy spectral (below) and a orthonormalized set of modes (above).</p>
+<p>The raw modes constructed by LAE is obviously not identical to that of POD, in order to show the new spaces spanned by these two set of modes are identical/similar, orthonormalized the LAE modes by SVD, we can also get energy spectral (below) and a orthonormalized set of modes (above).</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -559,7 +562,7 @@ Estimated Total Size (MB): 603.87
 </tr>
 </tbody>
 </table>
-<p>The singular values of each orthonormalized mode are similar to each other, implying the orthogonality of modes extracted by LAE is stronger, but still far from orthogonal.</p>
+<p>The singular values of each orthonormalized mode are more similar to each other, implying the orthogonality of the raw modes extracted by LAE is stronger, but still far from orthogonal.</p>
 <p>The orthonormalized modes are, well, not quite same to that extracted by POD. So we do a small scale convergence check, taking some tricks (bigger batch size, learning rate scheduler etc) to have a better reconstruction result with MSE loss 0.0072723706, applying the similar process to get a orthonormalized set of modes.</p>
 <table>
 <thead>
@@ -576,21 +579,18 @@ Estimated Total Size (MB): 603.87
 </tbody>
 </table>
 <p>The better equivalence (at least in terms of the first 2 modes) indicating the space spanned by LAE converges to that spanned by POD modes.</p>
-<div class="note note-success">
-            <p>Ablation tests on the <strong>L2 regularization</strong> (weight decay) and learning rate are carried out. <code>[method 1]</code> is used to inspect the results. Some interesting results are shown in the <a href="#appendix">Appendix</a>. It turns out that a slight higher L2 regularization leads to more orthogonal modes and lower reconstruction error. Too much L2 regularization leads high bias/under fitting.</p>
-          </div>
 <h4 id="method-2">[method 2]</h4>
-<p>In order to apply orthogonal weights, first initialized the weight with radom orthogonal data.</p>
+<p>In order to apply orthogonal weights, first initialize the weight with radom orthogonal data.</p>
 <div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> scipy.stats <span class="hljs-keyword">import</span> ortho_group
 <span class="hljs-comment"># define flatten data, LAE, k = 81</span>
 model.encoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.tensor(ortho_group.rvs(dim=flatten_data.shape[<span class="hljs-number">0</span>])[:,:k].T).<span class="hljs-built_in">float</span>())
 model.decoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.tensor(ortho_group.rvs(dim=flatten_data.shape[<span class="hljs-number">0</span>])[:,:k]).<span class="hljs-built_in">float</span>())</code></pre></div>
-<p>Then add another orthogonal loss to the loss function</p>
+<p>Then add another orthogonal losses to the MSE loss function</p>
 <div class="code-wrapper"><pre><code class="hljs python">ortho_lambd = <span class="hljs-number">0.01</span>
 <span class="hljs-comment"># in the iteration loop:</span>
-loss_ortho_de = torch.square(torch.dist(model.decoder[<span class="hljs-number">0</span>].weight.T @ model.decoder[<span class="hljs-number">0</span>].weight, torch.eye(k).to(device)))
-loss_ortho_en = torch.square(torch.dist(model.encoder[<span class="hljs-number">0</span>].weight @ model.encoder[<span class="hljs-number">0</span>].weight.T, torch.eye(k).to(device)))
-loss = loss_function(reconstructed, image) + ortho_lambd*(loss_ortho_de+loss_ortho_en)</code></pre></div>
+  loss_ortho_de = torch.square(torch.dist(model.decoder[<span class="hljs-number">0</span>].weight.T @ model.decoder[<span class="hljs-number">0</span>].weight, torch.eye(k).to(device)))
+  loss_ortho_en = torch.square(torch.dist(model.encoder[<span class="hljs-number">0</span>].weight @ model.encoder[<span class="hljs-number">0</span>].weight.T, torch.eye(k).to(device)))
+  loss = loss_function(reconstructed, image) + ortho_lambd*(loss_ortho_de+loss_ortho_en)</code></pre></div>
 <p>The resulting modes and the singular value energy division is:</p>
 <table>
 <tbody>
@@ -618,7 +618,8 @@ loss = loss_function(reconstructed, image) + ortho_lambd*(loss_ortho_de+loss_ort
 <li>MSE loss 0.007268394</li>
 <li>pixel-to-pixel error ranges from -0.99917483 to 0.91432786</li>
 </ul>
-<p>The modes is nearly orthogonal yet need a good fine tuning of <span class="math inline">\(\lambda_{ortho}\)</span> to balance the MSE error with the orthogonality error.</p>
+<p>The modes is nearly orthogonal yet it needs a good fine tuning of <span class="math inline">\(\lambda_{ortho}\)</span> to balance the MSE error with the orthogonality error.</p>
+<p>Neither the raw <code>[method 2]</code> modes nor the SVD orthogonalized modes associated to the POD modes, we will talk about that soon later.</p>
 <h4 id="method-3">[method 3]</h4>
 <p>Take advantage of the <code>torch.nn.utils.parametrizations.orthogonal</code> library, when define the LAE:</p>
 <div class="code-wrapper"><pre><code class="hljs diff">class AE(torch.nn.Module):
@@ -662,9 +663,10 @@ loss = loss_function(reconstructed, image) + ortho_lambd*(loss_ortho_de+loss_ort
 <li>MSE loss 0.0072978497</li>
 <li>pixel-to-pixel error ranges from -0.9987151 to 0.9268836</li>
 </ul>
-<p>The modes is perfect orthogonal, the loss is also small. But the modes are totally different from the POD modes. Because there is no regulation of the singular value of the modes.</p>
+<p>The modes is perfect orthogonal, the loss is also small.</p>
+<p>But the <code>[method 2,3]</code> modes are totally different from the POD modes. Because there is no regulation of the singular value of the modes, i.e. the optimality is not guaranteed.</p>
 <h4 id="method-4-best">[method 4] <span style="color:red">( best )</span></h4>
-<p>Writing a parameterize class and apply to the encoder and decoder weights</p>
+<p>Writing a custom parameterization class and apply to the decoder weights as:</p>
 <div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Svd_W_de</span>(nn.Module):
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, W2</span>):
         U,_,_ = torch.svd(W2)
@@ -712,7 +714,7 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <li>MSE loss 0.007290172</li>
 <li>pixel-to-pixel error ranges from -1.005479 to 0.9235858</li>
 </ul>
-<p>Great! The encoder is guaranteed as orthogonal, the error is small, and the model is end-to-end.</p>
+<p>Great! The result is guaranteed as orthogonal and optimal, the error is small, and the model is end-to-end.</p>
 <h3 id="flow-past-a-cylinder">Flow past a cylinder</h3>
 <p>Flow over a 2D cylinder is the fundamental flow that captures the essential features of bluff-body flows. The periodic nature of it known as the von Kármán vortex shedding at Re&gt;47 is always treated as an attractive initial test bed for decomposition methods. The POD result of the DNS simulation snapshots at <strong>Re=100</strong> is shown below, the first 8 modes captures 99.97% of the flow fluctuations in terms of the KE.<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Taira, K., Hemati, M. S., Brunton, S. L., Sun, Y., Duraisamy, K., Bagheri, S., ... &amp; Yeh, C. A. (2020). Modal analysis of fluid flows: Applications and outlook. *AIAA journal*, *58*(3), 998-1022.">[3]</span></a></sup>.</p>
 <p><img src="POD analysis of cylinder flow.png" srcset="/img/loading.gif" lazyload alt="POD analysis of cylinder flow: a) original flowfield under study (vorticity shown), b) first 8 dominant POD modes, and c) amount of KE of unsteadiness captured by the POD modes." style="zoom:50%;" /></p>
@@ -720,11 +722,11 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <div class="note note-info">
             <p>Compared with dynamic mode decomposition (DMD), 2 POD modes in a pair are concluded by the real and imaginary parts of only one complex DMD mode. In another words, the 1st, 3rd, 5th, and the 2nd, 4th, 6th POD modes are identical with the real parts and imaginary parts of the 1st, 2nd, 3rd DMD modes respectively. (only true for exact periodical flow like this case)</p>
           </div>
-<p>Here we take an unsteady FVM result at <strong>Re=200</strong>, from <a target="_blank" rel="noopener" href="http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif">wolfdynamics OpenFOAM turtorial</a> and perform POD and LAE decomposition based on the snapshots of velocity field from time 250 to 350. The resulting data matrix <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{192080 \times 101}\)</span></p>
+<p>For simplicity, here we take an unsteady FVM result at <strong>Re=200</strong>, from <a target="_blank" rel="noopener" href="http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif">wolfdynamics OpenFOAM turtorial</a> and perform POD and LAE decomposition based on the snapshots of velocity field from time 250 to 350. The resulting data matrix <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{192080 \times 101}\)</span></p>
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif" srcset="/img/loading.gif" lazyload alt="First 81 POD modes, reconstruction loss  0.007265054, just copy to here for easier comparison" style="zoom:50%;" /></td>
+<td><img src="http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif" srcset="/img/loading.gif" lazyload alt="If loading fails, see the link http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif" style="zoom:50%;" /></td>
 <td><img src="Incompressible flow – Reynolds 200.png" srcset="/img/loading.gif" lazyload alt="Incompressible flow - Reynolds 200" style="zoom:28%;" /></td>
 </tr>
 </tbody>
@@ -943,8 +945,15 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <li><p>The relationship between LAE and POD modes?</p>
 <p>There is no regulation to the form of LAE modes while the POD modes are orthonormal which is suitable to design a sparse representation.</p>
 <p>The latent space captured by LAE converges to the optimal space spanned by POD modes.</p></li>
-<li><p>How to choose from straightforward transposition LAE?</p>
-<p>It depends on the aspect ratio of input data. In order to decrease the number of weights/parameters, it is better to choose a type such that the longer dimension of data is preserved. That is straightforward method for very wide data, like MNIST transposition method for very thin data like flow velocity snapshots.</p></li>
+<li><p>Straightforward vs transposition LAE?</p>
+<p>It mainly depends on the aspect ratio of input data. In order to decrease the number of weights/parameters, it is better to choose a type such that the longer dimension of data is preserved.</p>
+<ul>
+<li>Straightforward method suitable for very wide data, like MNIST.</li>
+<li>Transposition method for very thin data like flow velocity snapshots.
+<ul>
+<li>If a multi-layer non-linear Autoencoder is applied, the modes extracted by the transposed AE are still easy to get access</li>
+</ul></li>
+</ul></li>
 <li><p>Conclusion on the improvement methods?</p>
 <table>
 
@@ -961,7 +970,7 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 </thead>
 <tbody>
 <tr class="odd">
-<td>LAE</td>
+<td>suitable LAE</td>
 <td>both</td>
 <td>straightforward</td>
 <td>straightforward</td>
@@ -971,11 +980,11 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 </tr>
 <tr class="even">
 <td>end-to-end</td>
-<td>no</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
 <td></td>
 </tr>
 <tr class="odd">
@@ -988,15 +997,24 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <td></td>
 </tr>
 <tr class="even">
-<td>converge to the POD modes</td>
-<td>yes</td>
-<td>no</td>
-<td>no</td>
-<td>yes</td>
-<td>no</td>
+<td>optimality</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
 <td></td>
 </tr>
 <tr class="odd">
+<td>converge to the POD modes</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr class="even">
 <td>reconstruction error (straightforward)</td>
 <td>7.272e-3</td>
 <td>7.268e-3</td>
@@ -1005,7 +1023,7 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <td>NAN</td>
 <td>POD error</br> 7.265e-3</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>reconstruction error (transposition)</td>
 <td>7.48e-5</td>
 <td>NAN</td>
