@@ -330,10 +330,10 @@
 <p>Application Driven, many applications requires computation.</p>
 <h2 id="gpu-structure">GPU Structure</h2>
 <p>A GPU is a heterogeneous chip multi-processor (highly tuned for graphics).</p>
-<p><img src="GPU.jpg" srcset="/img/loading.gif" lazyload alt="GPU" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/GPU.jpg" srcset="/img/loading.gif" lazyload alt="GPU" style="zoom:75%;"></p>
 <p>Shader Core --&gt; ALU( <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Arithmetic_logic_unit">Arithmetic logic unit</a> ), basic computation unit. Before its designed specifically for image rendering, now it is able to perform general arithmetic operations.</p>
 <h5 id="execute-shader">Execute shader</h5>
-<p><img src="gpu_8.jpg" srcset="/img/loading.gif" lazyload alt="16 cores in parallel" style="zoom:100%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_8.jpg" srcset="/img/loading.gif" lazyload alt="16 cores in parallel" style="zoom:100%;"></p>
 <p>Compared with the CPU types cores, there is no cache or extra OoO, branch predictor and memory pre-fetcher, which are not related to regulated instruction processing.</p>
 <h2 id="design-idea-to-speedup">3 design idea to speedup</h2>
 <h3 id="idea-1-multi-slimmed-down-cores-in-parallel">Idea 1: multi “slimmed down cores” in parallel</h3>
@@ -342,11 +342,11 @@
 <li>multi cores, multi fragments in parallel</li>
 <li>instruction stream sharing, multi fragments need to share one instruction stream. Otherwise a complicated control system is needed.</li>
 </ul>
-<p><img src="gpu_10.jpeg" srcset="/img/loading.gif" lazyload alt="16 cores in parallel" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_10.jpeg" srcset="/img/loading.gif" lazyload alt="16 cores in parallel" style="zoom:75%;"></p>
 <h3 id="idea-2-multi-alus-in-one-core">Idea 2: multi ALUs in one core</h3>
 <p>Amortize cost/complexity of managing an instruction stream across many ALUs. Design multiple ALUs in one core - SIMD. Vector operations in one core.</p>
-<p><img src="gpu_11-1.jpeg" srcset="/img/loading.gif" lazyload alt="8 ALUs in one core" style="zoom:75%;" /></p>
-<p><img src="gpu_12.jpeg" srcset="/img/loading.gif" lazyload alt="128 fragments in parallel" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_11-1.jpeg" srcset="/img/loading.gif" lazyload alt="8 ALUs in one core" style="zoom:75%;"></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_12.jpeg" srcset="/img/loading.gif" lazyload alt="128 fragments in parallel" style="zoom:75%;"></p>
 <p>For the overall design for now, there are 16 streams for 128 fragments, technically, the 16 streams can be same or different. The 8 ALUs in one core share the same stream.</p>
 <h4 id="branch-divergence">Branch divergence</h4>
 <p>With multiple ALUs sharing one stream, the parallel performance will deteriorate dealing with branches such as below:</p>
@@ -362,7 +362,7 @@
     ref = K3;
 &#125;</code></pre></div>
 <p>When execute this thread, different ALU will get different <code>true</code> or <code>flase</code>. However, all the ALU's must execute the same path. As a result, as the image below shows, the ALUs going to Path B have to do useless work together with the ALUs who are doing the useful work. With a such branch, and 8-thread core, the performance can be as low as 1/8 peak performance.</p>
-<p><img src="thread divergence.PNG" srcset="/img/loading.gif" lazyload alt="thread divergence" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/thread divergence.PNG" srcset="/img/loading.gif" lazyload alt="thread divergence" style="zoom:75%;"></p>
 <blockquote>
 <p>Just to clarify here, not all the SIMD process need explicit SIMD instruction. There are two options in total:</p>
 <ul>
@@ -378,9 +378,9 @@
 <p>Stalls occur when a core cannot run the next instruction because of a dependency on a previous operation. Wait until ready. In order to deal with stalls, we have a third idea.</p>
 <h3 id="idea-3-switch-between-different-fragments-to-hide-latency.">Idea 3 Switch between different fragments to hide latency.</h3>
 <p>Interleave processing of many fragments on a single core to avoid stalls caused by high latency operations.</p>
-<p><img src="gpu_14.jpeg" srcset="/img/loading.gif" lazyload alt="Stall illustration" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_14.jpeg" srcset="/img/loading.gif" lazyload alt="Stall illustration" style="zoom:75%;"></p>
 <p>To maximise latency hiding, the context storage space is split into multiple components as demonstrated:</p>
-<p><img src="gpu_15.jpeg" srcset="/img/loading.gif" lazyload alt="context memory pool" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_15.jpeg" srcset="/img/loading.gif" lazyload alt="context memory pool" style="zoom:75%;"></p>
 <p>Actually there are 3 level of context storage division:</p>
 <ul>
 <li>18 small contexts, maximal latency hiding, fragments are small</li>
@@ -412,7 +412,7 @@
 <li>64 concurrent (but interleaved) instruction streams</li>
 <li>512 concurrent fragments = 1 TFLOPs (@ 1GHz)</li>
 </ul>
-<p><img src="gpu_16.jpeg" srcset="/img/loading.gif" lazyload alt="overall design with 32 cores" style="zoom:75%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_16.jpeg" srcset="/img/loading.gif" lazyload alt="overall design with 32 cores" style="zoom:75%;"></p>
 <h3 id="real-designs">Real designs</h3>
 <blockquote>
 <p>MP = SM = core</p>
@@ -423,7 +423,7 @@
 <p>The SM is the heart of NVIDIA’s unified GPU architecture. Most of the key hardware units for graphics processing reside in the SM. The SM’s CUDA cores perform pixel/vertex/geometry shading and physics/compute calculations. Texture units perform texture filtering and load/store units fetch and save data to memory. Special Function Units (SFUs) handle transcendental and graphics interpolation instructions. Finally, the PolyMorph Engine handles vertex fetch, tessellation, viewport transform, attribute setup, and stream output.</p>
 </blockquote>
 <h4 id="nvidia-geforce-gtx-480-fermi">NVIDIA GeForce GTX 480 (Fermi)</h4>
-<p><img src="High-level-architecture-of-the-NVIDIA-GTX-480-graphics-card-simplified-and-excluding-the.png" srcset="/img/loading.gif" lazyload alt="NVIDIA GTX 480 (Fermi) high level architecture" style="zoom:80%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/High-level-architecture-of-the-NVIDIA-GTX-480-graphics-card-simplified-and-excluding-the.png" srcset="/img/loading.gif" lazyload alt="NVIDIA GTX 480 (Fermi) high level architecture" style="zoom:80%;"></p>
 <p>Specifics:</p>
 <ul>
 <li>NVIDIA-speak:
@@ -444,8 +444,8 @@
 <li><p>Up to 48 warps are interleaved, totally 23000 CUDA threads</p></li>
 </ul>
 <h4 id="nvidia-geforce-gtx-680-kepler">NVIDIA GeForce GTX 680 (kepler)</h4>
-<p><img src="NVIDIA GeForce GTX 680 (kepler) architecture.png" srcset="/img/loading.gif" lazyload alt="NVIDIA GeForce GTX 680 (kepler) high level architecture" style="zoom:80%;" /></p>
-<p><img src="GeForce_GTX_680_SM_Diagram_FINAL.jpeg" srcset="/img/loading.gif" lazyload alt="GeForce GTX 680 SMX Diagram" style="zoom:80%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/NVIDIA GeForce GTX 680 (kepler) architecture.png" srcset="/img/loading.gif" lazyload alt="NVIDIA GeForce GTX 680 (kepler) high level architecture" style="zoom:80%;"></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/GeForce_GTX_680_SM_Diagram_FINAL.jpeg" srcset="/img/loading.gif" lazyload alt="GeForce GTX 680 SMX Diagram" style="zoom:80%;"></p>
 <table>
 <thead>
 <tr class="header">
@@ -511,7 +511,7 @@
 <h4 id="the-importance-of-bandwidth">The importance of bandwidth</h4>
 <h5 id="gpu-memory-design-1">GPU memory design</h5>
 <p>Compare with CPU-Style core:</p>
-<p><img src="CPU_GPU_cores.PNG" srcset="/img/loading.gif" lazyload alt="CPU GPU cores comparison" style="zoom:100%;" /></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/CPU_GPU_cores.PNG" srcset="/img/loading.gif" lazyload alt="CPU GPU cores comparison" style="zoom:100%;"></p>
 <p>The cache area in CPU is huge, and is is divided into 3 levels, L1, L2 and L3 caches. Inside the caches, the latency (length of stalls) is low and the bandwidth is big. Yet the bandwidth is low to the outside memory, as low as 12GB/s. The CPU cores run efficiently when data is resident in caches.</p>
 <p>In GPU (throughput style), no large cache hierarchy exists. As a result a high bandwidth to the memory is required, as high as 150GB/s.</p>
 <p>Although the GPU memory bandwidth is high, it is only 6 times to the CPU. It is still not enough compared with the compute performance of GPU(over 10 times to the CPU).</p>

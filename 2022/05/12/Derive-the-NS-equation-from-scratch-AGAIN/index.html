@@ -285,8 +285,8 @@
 <h4 id="control-mass-lagrangian-frame-of-reference">1.1.1 Control mass &amp; <em>Lagrangian</em> frame of reference</h4>
 <p>4 terms &amp; 3 facts:</p>
 <ul>
-<li><p>A <em><font color=#6944ba>system</font> (or <font color=#6944ba>control mass</font>)</em> is a collection of moving particles of interest.</p></li>
-<li><p>The <em><font color=#6944ba>boundary</font></em> separates the system with its <em><font color=#6944ba>surroundings</font></em>.</p></li>
+<li><p>A <em><font color="#6944ba">system</font> (or <font color="#6944ba">control mass</font>)</em> is a collection of moving particles of interest.</p></li>
+<li><p>The <em><font color="#6944ba">boundary</font></em> separates the system with its <em><font color="#6944ba">surroundings</font></em>.</p></li>
 <li><p>The boundary may move and deform with the moving particles.</p></li>
 </ul>
 <h4 id="laws-of-mechanics">1.1.2 Laws of Mechanics</h4>
@@ -307,13 +307,13 @@ dE=\delta Q-\delta W
           </div>
 <h4 id="control-volume-eulerian-frame-of-reference">1.1.3 Control volume &amp; <em>Eulerian</em> frame of reference</h4>
 <ul>
-<li><p>A <em><font color=#6944ba>control volume</font></em> is a region of interest in space.</p></li>
-<li><p>A <em><font color=#6944ba>control surface</font></em> closures the control volume</p></li>
+<li><p>A <em><font color="#6944ba">control volume</font></em> is a region of interest in space.</p></li>
+<li><p>A <em><font color="#6944ba">control surface</font></em> closures the control volume</p></li>
 <li><p>Mass, heat and work can cross the control surface and mass and properties can change with time within the control volume.</p></li>
 </ul>
 <h4 id="volume-and-mass-rate-of-flow">1.1.4 Volume and mass rate of flow</h4>
 <p>3 key quantities of interest: Velocity <span class="math inline">\(\textbf{V}\)</span>, Volume flow <span class="math inline">\(Q\)</span> and Mass flow <span class="math inline">\(\dot{m}\)</span>.</p>
-<p><img src="Flow_pass_control_surface.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></p>
+<p><img src="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/Flow_pass_control_surface.png" srcset="/img/loading.gif" lazyload style="zoom:20%;"></p>
 <p>Shown above, given a flow of fluid passing through an infinitesimal control surface (<span class="math inline">\(S\)</span>) with an area of <span class="math inline">\(dA\)</span> at an angle <span class="math inline">\(\theta\)</span> to the surface outward normal <span class="math inline">\(\textbf{n}\)</span>, in time <span class="math inline">\(dt\)</span>, the volume of the flow can be expressed as: <span class="math display">\[
 d \mathcal{V}=V d t d A \cos \theta=(\mathbf{V} \cdot \mathbf{n}) d A d t
 \]</span> Flow rate through surface can be integrated as: <span class="math display">\[
@@ -323,7 +323,7 @@ d \mathcal{V}=V d t d A \cos \theta=(\mathbf{V} \cdot \mathbf{n}) d A d t
           </div></p>
 <p>And the corresponding mass flow is: <span class="math display">\[
 \dot{m}=\int_{S} \rho(\mathbf{x})(\mathbf{V} \cdot \mathbf{n}) d A
-\]</span> In the special case that <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\mathbf{V}\)</span> remain constant in space,<br />
+\]</span> In the special case that <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\mathbf{V}\)</span> remain constant in space,<br>
 <span class="math display">\[
 \dot{m}=\rho AV
 \]</span></p>
@@ -334,7 +334,7 @@ d \mathcal{V}=V d t d A \cos \theta=(\mathbf{V} \cdot \mathbf{n}) d A d t
 \]</span></p>
 <h4 id="concise-proof">1.2.1 concise proof</h4>
 <p>Consider a fixed control volume with fluid moving through it shown as below. The control mass (particles) of interest move from the area surrounded by the solid circle to the area surrounded by dashed line within a time interval of <span class="math inline">\(dt\)</span>.</p>
-<p><img src="Reynolds transport theorem proof.png" srcset="/img/loading.gif" lazyload style="zoom:45%;" /></p>
+<p><img src="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/Reynolds transport theorem proof.png" srcset="/img/loading.gif" lazyload style="zoom:45%;"></p>
 <p>The change rate of <span class="math inline">\(B\)</span> of the control mass equals the sum of</p>
 <ul>
 <li>the change rate of B in the <strong>fixed</strong> control volume (<span class="math inline">\(CV\)</span>)</li>
@@ -466,7 +466,7 @@ d \dot{W}_{v}=-\tau \cdot \mathbf{V} d A
             <p>Note the negative sign represents the work done on the fluid, instead of the other way around.</p>
           </div>
 <div class="note note-info">
-            <p>This term is always negligible when the control surface is at a:</p><ul><li>Solid surface: <span class="math inline">\(\mathbf{V}=0\)</span> from no-slip condition at wall, so <span class="math inline">\(\dot{W}_{v}=0\)</span></li><li>Machine surface, always absorbed in $ _{s}$</li><li>Inlets and outlets, flow is approximately normal to the surface, the only stresses are normal and typically extremely small, neglected.</li></ul><p>This term needs to be evaluated for <strong>steamline surfaces</strong>.</p><p><img src="region of significant viscous work.png" srcset="/img/loading.gif" lazyload alt="region of significant viscous work" style="zoom:40%;" /></p>
+            <p>This term is always negligible when the control surface is at a:</p><ul><li>Solid surface: <span class="math inline">\(\mathbf{V}=0\)</span> from no-slip condition at wall, so <span class="math inline">\(\dot{W}_{v}=0\)</span></li><li>Machine surface, always absorbed in $ _{s}$</li><li>Inlets and outlets, flow is approximately normal to the surface, the only stresses are normal and typically extremely small, neglected.</li></ul><p>This term needs to be evaluated for <strong>steamline surfaces</strong>.</p><p><img src="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/region of significant viscous work.png" srcset="/img/loading.gif" lazyload alt="region of significant viscous work" style="zoom:40%;"></p>
           </div></li>
 </ul>
 <p>As a result the rate of work is: <span class="math display">\[
@@ -515,7 +515,7 @@ d \dot{W}_{v}=-\tau \cdot \mathbf{V} d A
 <p>For <strong>steady flow</strong>, streamlines, pathlines and streaklines coincide.</p>
 <h4 id="derivation-of-bernoullis-equation">3.2.2 Derivation of Bernoulli's Equation</h4>
 <p>Control volume: streamtube</p>
-<p><img src="Bernoulli's Equation CV.png" srcset="/img/loading.gif" lazyload alt="Bernoulli's Equation CV" style="zoom:50%;" /></p>
+<p><img src="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/Bernoulli's Equation CV.png" srcset="/img/loading.gif" lazyload alt="Bernoulli's Equation CV" style="zoom:50%;"></p>
 <p>Conservation of mass in <strong>steady and incompressibility</strong> condition: <span class="math display">\[
 \int_{C S} \rho(\mathbf{V} \cdot \mathbf{n}) d A =0
 \]</span></p>

@@ -288,15 +288,15 @@
 <p>Useful link: https://www.bilibili.com/video/BV1iT4y1d7zP</p>
 <h2 id="notes">Notes</h2>
 <p><em>Because this blog has introduced GNN in detail and explained well with the interactive diagrams, it almost leaves me no need for extra notes. As a result, a throughout reading of the <a target="_blank" rel="noopener" href="https://staging.distill.pub/2021/gnn-intro/?ref=https://githubhelp.com">original blog</a> is recommended. And as a result this notes are only in pieces.</em></p>
-<p><img src=" GNN interative archtecture.png" srcset="/img/loading.gif" lazyload alt="GNN interative archtecture" style="zoom:50%;" /></p>
+<p><img src="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/ GNN interative archtecture.png" srcset="/img/loading.gif" lazyload alt="GNN interative archtecture" style="zoom:50%;"></p>
 <blockquote>
 <h3 id="graph-level-task">Graph-level task</h3>
 <p>In a graph-level task, our goal is to predict the property of an entire graph. For example, for a molecule represented as a graph, we might want to predict what the molecule smells like, or whether it will bind to a receptor implicated in a disease.</p>
-<p><img src=" GNN graph level task.png" srcset="/img/loading.gif" lazyload alt="GNN graph level task" style="zoom:50%;" /></p>
+<p><img src="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/ GNN graph level task.png" srcset="/img/loading.gif" lazyload alt="GNN graph level task" style="zoom:50%;"></p>
 </blockquote>
 <p>The example is actually a simple task example, and the loops can be detected with ordinary algorithm such as: <a target="_blank" rel="noopener" href="https://codeburst.io/fast-and-slow-pointer-floyds-cycle-detection-algorithm-9c7a8693f491">Fast and Slow Pointer: Floyd's Cycle Detection Algorithm</a>. But with more complicated task, GNN can be useful. And here is the related Leetcode question: <a target="_blank" rel="noopener" href="https://leetcode.com/problems/linked-list-cycle/description/">No.141: Linked List Cycle</a>.</p>
 <blockquote>
-<p><img src=" GNN graph message passing.png" srcset="/img/loading.gif" lazyload alt="GNN graph message passing" style="zoom:50%;" /></p>
+<p><img src="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/ GNN graph message passing.png" srcset="/img/loading.gif" lazyload alt="GNN graph message passing" style="zoom:50%;"></p>
 <p>This is <strong>reminiscent of standard convolution</strong>: in essence, message passing and convolution are operations to aggregate and process the information of an element’s neighbors in order to update the element’s value. In graphs, the element is a node, and in images, the element is a pixel. <strong>However</strong>, the number of neighboring nodes in a graph can be variable, unlike in an image where each pixel has a set number of neighboring elements.</p>
 </blockquote>
 <p>When introducing the message passing method, this blog makes an analogy with the convolution. And in addition to the however part mentioned in this blog, another difference is that in convolution, each element's value is weighted differently while in the aggregation method they are all the same.</p>

@@ -347,7 +347,7 @@
 </ul>
 <p>very less arithmetic instructions.</p>
 <h5 id="cpu-structure">CPU structure</h5>
-<p><img src="Intel Core Die Map.png" srcset="/img/loading.gif" lazyload alt="Intel Core Die Map" style="zoom:50%;" /></p>
+<p><img src="/2022/07/15/CUDA-fundamental-1/Intel Core Die Map.png" srcset="/img/loading.gif" lazyload alt="Intel Core Die Map" style="zoom:50%;"></p>
 <ul>
 <li>Very large memory size (Shared L3 Cache)</li>
 <li>Controller (Memory Controller) - also for memory</li>
@@ -377,7 +377,7 @@
 <blockquote>
 <p>取址--&gt;译码--&gt;执行--&gt;访存--&gt;写回</p>
 </blockquote>
-<p><img src="CPU classic pipeline.gif" srcset="/img/loading.gif" lazyload alt="CPU classic pipeline" style="zoom:80%;" /></p>
+<p><img src="/2022/07/15/CUDA-fundamental-1/CPU classic pipeline.gif" srcset="/img/loading.gif" lazyload alt="CPU classic pipeline" style="zoom:80%;"></p>
 <h5 id="instruction-level-parallelism-ilp">instruction-level parallelism (ILP)</h5>
 <ul>
 <li><p>√ reduce clock period</p></li>
@@ -431,7 +431,7 @@ add R1, R7 -&gt; R2</code></pre></div>
 <li>more registers and memory bandwidth</li>
 </ul></li>
 </ul>
-<p><img src="Sandy bridge pipeline.png" srcset="/img/loading.gif" lazyload alt="Sandy bridge pipeline" style="zoom:80%;" /></p>
+<p><img src="/2022/07/15/CUDA-fundamental-1/Sandy bridge pipeline.png" srcset="/img/loading.gif" lazyload alt="Sandy bridge pipeline" style="zoom:80%;"></p>
 <p>Sandy-Bridge has 6 ports, indicating 6 instructions per clock, managed by Scheduler.</p>
 <h4 id="scheduling">Scheduling</h4>
 <h5 id="register-renamingaliasing">Register Renaming/Aliasing</h5>
@@ -455,7 +455,7 @@ addi p8, 1 -&gt; p9</code></pre></div>
 <p><a target="_blank" rel="noopener" href="https://www.gamedev.net/articles/programming/general-and-gameplay-programming/a-journey-through-the-cpu-pipeline-r3115/">A Journey Through the CPU Pipeline</a>:</p>
 <p>Micro-ops can be processed out of order as long as their data is ready, sometimes skipping over unready micro-ops for a long time while working on other micro-ops that are ready. This way a long operation does not block quick operations and the cost of pipeline stalls is greatly reduced.</p>
 </blockquote>
-<p><img src="OoO core illustration.png" srcset="/img/loading.gif" lazyload alt="OoO core illustration" style="zoom:80%;" /></p>
+<p><img src="/2022/07/15/CUDA-fundamental-1/OoO core illustration.png" srcset="/img/loading.gif" lazyload alt="OoO core illustration" style="zoom:80%;"></p>
 <p>Fetch -&gt; decode -&gt; Rename -&gt; Dispatch -&gt; issue -&gt; register read -&gt; execute -&gt; memory -&gt; writeback -&gt; commit</p>
 <p>Devices about OoO include:</p>
 <ul>
@@ -523,7 +523,7 @@ addi p8, 1 -&gt; p9</code></pre></div>
 <li>Main memory</li>
 <li>Disk</li>
 </ul>
-<p><img src="CPU memory hierarchy.jpeg" srcset="/img/loading.gif" lazyload alt="CPU memory hierarchy" style="zoom:80%;" /></p>
+<p><img src="/2022/07/15/CUDA-fundamental-1/CPU memory hierarchy.jpeg" srcset="/img/loading.gif" lazyload alt="CPU memory hierarchy" style="zoom:80%;"></p>
 <h3 id="other-consideration-of-memory">Other consideration of memory</h3>
 <h5 id="banking">Banking</h5>
 <p>avoid multiple access</p>

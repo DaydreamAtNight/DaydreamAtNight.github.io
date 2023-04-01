@@ -293,18 +293,18 @@
 <h3 id="introduction-from-hard-label-to-soft-label">Introduction: from hard label to soft label</h3>
 <p>In deep learning, the neural network is basically a super powerful non-linear regression machine aimed to fit a function between the input and the label. And the result is always called label.</p>
 <p>Hard label, in another word: the one-hot vector, is the most commonly type of label that is used. For example, in this <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, to digitalize the different name of the leaves, it is intuitive to encode the leaves categories as: 0, 1, 2, 3. And the factorized target labels would be somehow like [1,3,0...] where each element stands for the categories of the data. With the resulting category dictionary, it can be easily decoded after the training.</p>
-<p><img src="leave%20class%20code.png" srcset="/img/loading.gif" lazyload alt="leave class code" style="zoom:22%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png" srcset="/img/loading.gif" lazyload alt="leave class code" style="zoom:22%;"></p>
 <p>Actually, there is a slightly difference in the binary world. What usually do is, the previously factorized label will be extended to be a 2-dimensional "on-hot" matrix where the elements stands for the probability of each class. And the network is aimed to train itself to make inference label nearest to the target label.</p>
-<p><img src="hard%20label.png" srcset="/img/loading.gif" lazyload alt="hard label" style="zoom:22%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/hard%20label.png" srcset="/img/loading.gif" lazyload alt="hard label" style="zoom:22%;"></p>
 <p>Soft label is just slightly deteriorate the strong one-hot label into a weaker one.</p>
-<p><img src="soft%20label.png" srcset="/img/loading.gif" lazyload alt="soft label" style="zoom:22%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/soft%20label.png" srcset="/img/loading.gif" lazyload alt="soft label" style="zoom:22%;"></p>
 <h3 id="simple-explanation-how-loss-function-lost-information">Simple explanation: How loss function lost information?</h3>
 <p>In the cross entropy loss function, where <code>y_inference</code> and <code>y_grountruth</code> stands for inference and target label, n stands for the number of class.</p>
-<p><img src="Cross%20entropy%20loss%20function.png" srcset="/img/loading.gif" lazyload alt="Cross entropy loss function" style="zoom:22%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Cross%20entropy%20loss%20function.png" srcset="/img/loading.gif" lazyload alt="Cross entropy loss function" style="zoom:22%;"></p>
 <p>With the one-hot label, the components are 0 except for the true category. In a other word, the <code>y_inference</code> of the wrong category is not considered at all i.e. the information of the wrong category is lost. Which is against the real word classification.</p>
 <h3 id="effectiveness-visualization">Effectiveness: Visualization</h3>
 <p>In <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1906.02629.pdf">When does label smoothing help?</a> Hinton shows the feature map difference between without and with LSR:</p>
-<p><img src="Label%20smoothing%20feature%20norm.png" srcset="/img/loading.gif" lazyload alt="Label smoothing feature norm" style="zoom:80%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Label%20smoothing%20feature%20norm.png" srcset="/img/loading.gif" lazyload alt="Label smoothing feature norm" style="zoom:80%;"></p>
 <blockquote>
 <ul>
 <li>When label smoothing is applied, the clusters are much tighter because label smoothing encourages that each example in the training set is to be equidistant from all other class’s templates.</li>
@@ -421,10 +421,10 @@ loss = LSR(<span class="hljs-number">0.1</span>)</code></pre></div>
 loss = LSR2(<span class="hljs-number">0.1</span>)</code></pre></div>
 <p>Pretrained ResNet50 is in use</p>
 <div class="code-wrapper"><pre><code class="hljs shell">lr, num_epochs, batch_size = 0.01, 10, 256</code></pre></div>
-<p><img src="accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png" srcset="/img/loading.gif" lazyload alt="accuracy curve compare label smoothing with hard label" style="zoom:67%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png" srcset="/img/loading.gif" lazyload alt="accuracy curve compare label smoothing with hard label" style="zoom:67%;"></p>
 <p>It can bee seen that the under same <code>random seed</code>, <code>batch_size</code>, <code>lr</code>, and <code>num_epochs</code>, the overall accuracy has a fascinating rise of 0.5.</p>
 <p>Then apply the LSR and run 50 epochs, with learning rate 0.005 and batch size 256, the result turns to be:</p>
-<p><img src="accuracy%20curve%20applying%20label%20smoothing.png" srcset="/img/loading.gif" lazyload alt="accuracy curve applying label smoothing" style="zoom:67%;" /></p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20applying%20label%20smoothing.png" srcset="/img/loading.gif" lazyload alt="accuracy curve applying label smoothing" style="zoom:67%;"></p>
 <p>It is a exciting improvement, but more tricks still in need.</p>
 <h3 id="conclusion">Conclusion</h3>
 <p>3 disadvantaged of the hard label:</p>

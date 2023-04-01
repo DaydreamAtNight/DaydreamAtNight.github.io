@@ -296,7 +296,7 @@
 <h3 id="linear-autoencoder-lae">Linear autoencoder (LAE)</h3>
 <p>One-layer linear neural network (without nonlinear activation function layer) can be concluded with an input data <span class="math inline">\(\mathbf{X_0}\in\mathbb{R}^{m\times n}\)</span> and the output <span class="math inline">\(\mathbf{X_1}\in \mathbb{R}^{p\times n}\)</span>: <span class="math display">\[
 \mathbf{X_1}=\boldsymbol{W_1}\mathbf{X_0} + \mathbf{b_1},\qquad \mathbf{X_1}\in \mathbb{R}^{p\times n}, \mathbf{W_1}\in\mathbb{R}^{p\times m}, \mathbf{X_0}\in\mathbb{R}^{m\times n}, \mathbf{b_1}\in\mathbb{R}^{p\times 1}\text{(broundcast)}
-\]</span> <img src="2 layer linear autoencoder.png" srcset="/img/loading.gif" lazyload alt="2 layer linear autoencoder" style="zoom:35%;" /></p>
+\]</span> <img src="/2022/11/02/Autoencoder-identical-to-POD/2 layer linear autoencoder.png" srcset="/img/loading.gif" lazyload alt="2 layer linear autoencoder" style="zoom:35%;"></p>
 <p>As the architecture shown above, a linear autoencoder stacks two of linear layer with a lower dimensional intermediate output acting as a bottleneck, also called the latent space. The first and second layer of the autoencoder are always referred to as the encoder and decoder.</p>
 <p>With a well trained LAE, the original input data <span class="math inline">\(\mathbf{X_0}\)</span> can be reconstructed from a latent space <span class="math inline">\(\mathbf{X_1}\)</span>, the error between original data <span class="math inline">\(\mathbf{X_0}\)</span> and the reconstructed data <span class="math inline">\(\mathbf{X_2}\)</span> can be minimized regressively via back propagation and gradient descent. When choosing mean square error (MSE) as error/loss function, the optimal latent space extracted by the optimal LAE is identical with that extracted by POD/PCA.</p>
 <h3 id="equivalent-lae-to-pod">Equivalent LAE to POD</h3>
@@ -394,7 +394,7 @@ layer2:&amp; \qquad \tilde{\mathbf{X}}=\boldsymbol{W_2}\mathbf{X_1}= \mathbf{U}\
 <h2 id="case-study">Case study</h2>
 <h3 id="mnist">MNIST</h3>
 <p>The <a target="_blank" rel="noopener" href="https://paperswithcode.com/dataset/mnist">MNIST handwritten digits dataset</a> contains 70,000 (60,000 training, 1000 testing) greyscale fixed-size (28 * 28) images and is a standard dataset for benchmarking computer vision and deep learning algorithms.</p>
-<p><img src="MNIST original.png" srcset="/img/loading.gif" lazyload alt="First 32 MNIST training set images, two-value images (0 or 1) are rerendered with a color mapping ranging [-0.2,0.2], consistent to the color mapping below" style="zoom:20%;" /></p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST original.png" srcset="/img/loading.gif" lazyload alt="First 32 MNIST training set images, two-value images (0 or 1) are rerendered with a color mapping ranging [-0.2,0.2], consistent to the color mapping below" style="zoom:20%;"></p>
 <div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch
 <span class="hljs-keyword">from</span> torchvision <span class="hljs-keyword">import</span> datasets, transforms, utils
 <span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
@@ -431,8 +431,8 @@ Vk = V[:, :k]</code></pre></div>
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="SVD energy spectual of MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of MNIST-mean" style="zoom:50%;" /></td>
-<td><img src="SVD energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of MNIST - mean" style="zoom:50%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy spectual of MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of MNIST-mean" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of MNIST - mean" style="zoom:50%;"></td>
 </tr>
 </tbody>
 </table>
@@ -453,8 +453,8 @@ Vk = V[:, :k]</code></pre></div>
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="MNIST SVD reconstructed with 81 modes.png" srcset="/img/loading.gif" lazyload alt="MNIST SVD reconstructed with 81 modes" style="zoom:50%;" /></td>
-<td><img src="MNIST SVD error.png" srcset="/img/loading.gif" lazyload alt="MNIST SVD error" style="zoom:70%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST SVD reconstructed with 81 modes.png" srcset="/img/loading.gif" lazyload alt="MNIST SVD reconstructed with 81 modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST SVD error.png" srcset="/img/loading.gif" lazyload alt="MNIST SVD error" style="zoom:70%;"></td>
 </tr>
 </tbody>
 </table>
@@ -466,7 +466,7 @@ Vk = V[:, :k]</code></pre></div>
             <p>Note in this case, the color mapping ranges are all set to be [-0.2, 0.2] for consistence.</p>
           </div>
 <p>The modes can also be extracted easily. Note that these modes are orthonormal.</p>
-<p><img src="SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 POD modes extracted from MNIST - mean" style="zoom:30%;" /></p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 POD modes extracted from MNIST - mean" style="zoom:30%;"></p>
 <h4 id="lae-results">LAE results</h4>
 <p>The <a href="#straightforward-method">straightforward method</a> is adopted, otherwise the size of weights is too large. The architecture is therefore:</p>
 <div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torchinfo <span class="hljs-keyword">import</span> summary
@@ -524,8 +524,8 @@ Estimated Total Size (MB): 603.87
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="MNIST AE reconstructed with 81 hidden size.png" srcset="/img/loading.gif" lazyload alt="MNIST AE reconstructed with 81 hidden size" style="zoom:50%;" /></td>
-<td><img src="MNIST LAE error.png" srcset="/img/loading.gif" lazyload alt="MNIST LAE error" style="zoom:70%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST AE reconstructed with 81 hidden size.png" srcset="/img/loading.gif" lazyload alt="MNIST AE reconstructed with 81 hidden size" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST LAE error.png" srcset="/img/loading.gif" lazyload alt="MNIST LAE error" style="zoom:70%;"></td>
 </tr>
 </tbody>
 </table>
@@ -547,8 +547,8 @@ Estimated Total Size (MB): 603.87
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="AE first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 LAE modes extracted from MNIST - mean" style="zoom:50%;" /></td>
-<td><img src="SVD AE first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD orthonormalized LAE modes, reconstruction loss 0.00777" style="zoom:50%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 LAE modes extracted from MNIST - mean" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD orthonormalized LAE modes, reconstruction loss 0.00777" style="zoom:50%;"></td>
 </tr>
 </tbody>
 </table>
@@ -557,8 +557,8 @@ Estimated Total Size (MB): 603.87
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="AE energy spectual of MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of LAE modes" style="zoom:50%;" /></td>
-<td><img src="AE energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of LAE modes" style="zoom:50%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy spectual of MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of LAE modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of LAE modes" style="zoom:50%;"></td>
 </tr>
 </tbody>
 </table>
@@ -573,8 +573,8 @@ Estimated Total Size (MB): 603.87
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="SVD AE first 81 modes extracted from MNIST - mean larger bs.png" srcset="/img/loading.gif" lazyload alt="SVD orthonormalized LAE modes, reconstruction loss 0.0072723706" style="zoom:50%;" /></td>
-<td><img src="SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 POD modes, reconstruction loss  0.007265054, just copy here for easier comparison" style="zoom:50%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE first 81 modes extracted from MNIST - mean larger bs.png" srcset="/img/loading.gif" lazyload alt="SVD orthonormalized LAE modes, reconstruction loss 0.0072723706" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 POD modes, reconstruction loss  0.007265054, just copy here for easier comparison" style="zoom:50%;"></td>
 </tr>
 </tbody>
 </table>
@@ -595,8 +595,8 @@ model.decoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.te
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="SVD AE method2 energy spectural of MNIST - mean.png.png" srcset="/img/loading.gif" lazyload alt="SVD AE method2 energy spectural of MNIST - mean.png" style="zoom:67%;" /></td>
-<td><img src="SVD AE method2 energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method2 energy division of MNIST - mean" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method2 energy spectural of MNIST - mean.png.png" srcset="/img/loading.gif" lazyload alt="SVD AE method2 energy spectural of MNIST - mean.png" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method2 energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method2 energy division of MNIST - mean" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -609,8 +609,8 @@ model.decoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.te
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="AE method 2 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 2 first 81 modes extracted from MNIST - mean" style="zoom:67%;" /></td>
-<td><img src="SVD AE method 2 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 2 first 81 modes extracted from MNIST - mean" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE method 2 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 2 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method 2 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 2 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -640,8 +640,8 @@ model.decoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.te
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="SVD energy spectual of method3 MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of method3 MNIST-mean" style="zoom:72%;" /></td>
-<td><img src="SVD energy division of method3 MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD division spectual of method3 MNIST-mean" style="zoom:72%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy spectual of method3 MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of method3 MNIST-mean" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy division of method3 MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD division spectual of method3 MNIST-mean" style="zoom:72%;"></td>
 </tr>
 </tbody>
 </table>
@@ -654,8 +654,8 @@ model.decoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.te
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="AE method 3 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 3 first 81 modes extracted from MNIST - mean" style="zoom:72%;" /></td>
-<td><img src="SVD AE method 3 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 3 first 81 modes extracted from MNIST - mean" style="zoom:72%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE method 3 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 3 first 81 modes extracted from MNIST - mean" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method 3 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 3 first 81 modes extracted from MNIST - mean" style="zoom:72%;"></td>
 </tr>
 </tbody>
 </table>
@@ -691,8 +691,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="SVD AE method4 energy spectural of MNIST - mean.png.png" srcset="/img/loading.gif" lazyload alt="SVD AE method4 energy spectural of MNIST - mean.png" style="zoom:67%;" /></td>
-<td><img src="SVD AE method4 energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method4 energy division of MNIST - mean" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method4 energy spectural of MNIST - mean.png.png" srcset="/img/loading.gif" lazyload alt="SVD AE method4 energy spectural of MNIST - mean.png" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method4 energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method4 energy division of MNIST - mean" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -705,8 +705,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="AE method 4 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 4 first 81 modes extracted from MNIST - mean" style="zoom:67%;" /></td>
-<td><img src="SVD AE method 4 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 4 first 81 modes extracted from MNIST - mean" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE method 4 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 4 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method 4 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 4 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -717,7 +717,7 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <p>Great! The result is guaranteed as orthogonal and optimal, the error is small, and the model is end-to-end.</p>
 <h3 id="flow-past-a-cylinder">Flow past a cylinder</h3>
 <p>Flow over a 2D cylinder is the fundamental flow that captures the essential features of bluff-body flows. The periodic nature of it known as the von Kármán vortex shedding at Re&gt;47 is always treated as an attractive initial test bed for decomposition methods. The POD result of the DNS simulation snapshots at <strong>Re=100</strong> is shown below, the first 8 modes captures 99.97% of the flow fluctuations in terms of the KE.<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Taira, K., Hemati, M. S., Brunton, S. L., Sun, Y., Duraisamy, K., Bagheri, S., ... &amp; Yeh, C. A. (2020). Modal analysis of fluid flows: Applications and outlook. *AIAA journal*, *58*(3), 998-1022.">[3]</span></a></sup>.</p>
-<p><img src="POD analysis of cylinder flow.png" srcset="/img/loading.gif" lazyload alt="POD analysis of cylinder flow: a) original flowfield under study (vorticity shown), b) first 8 dominant POD modes, and c) amount of KE of unsteadiness captured by the POD modes." style="zoom:50%;" /></p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/POD analysis of cylinder flow.png" srcset="/img/loading.gif" lazyload alt="POD analysis of cylinder flow: a) original flowfield under study (vorticity shown), b) first 8 dominant POD modes, and c) amount of KE of unsteadiness captured by the POD modes." style="zoom:50%;"></p>
 <p>Note that these modes appear in pairs because of the periodical flow field and the real value nature of POD modes. Also note that the first two dominant modes are top-down asymmetry, associated with the asymmetry of the flow field.</p>
 <div class="note note-info">
             <p>Compared with dynamic mode decomposition (DMD), 2 POD modes in a pair are concluded by the real and imaginary parts of only one complex DMD mode. In another words, the 1st, 3rd, 5th, and the 2nd, 4th, 6th POD modes are identical with the real parts and imaginary parts of the 1st, 2nd, 3rd DMD modes respectively. (only true for exact periodical flow like this case)</p>
@@ -726,8 +726,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="movvmag_o.gif" srcset="/img/loading.gif" lazyload alt="See the high resolution result on link http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif" style="zoom:50%;" /></td>
-<td><img src="Incompressible flow – Reynolds 200.png" srcset="/img/loading.gif" lazyload alt="Incompressible flow - Reynolds 200" style="zoom:28%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/movvmag_o.gif" srcset="/img/loading.gif" lazyload alt="See the high resolution result on link http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/Incompressible flow – Reynolds 200.png" srcset="/img/loading.gif" lazyload alt="Incompressible flow - Reynolds 200" style="zoom:28%;"></td>
 </tr>
 </tbody>
 </table>
@@ -741,8 +741,8 @@ flatten_data = torch.tensor(flatten_data.T[:,<span class="hljs-number">250</span
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="SVD energy spectual of cylinder-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of cylinder-mean" style="zoom:75%;" /></td>
-<td><img src="SVD energy division of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of fluid - mean" style="zoom:75%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy spectual of cylinder-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of cylinder-mean" style="zoom:75%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy division of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of fluid - mean" style="zoom:75%;"></td>
 </tr>
 </tbody>
 </table>
@@ -756,9 +756,9 @@ flatten_data = torch.tensor(flatten_data.T[:,<span class="hljs-number">250</span
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="fluid original.png" srcset="/img/loading.gif" lazyload alt="fluid original" style="zoom:50%;" /></td>
-<td><img src="fluid - mean + mean SVD reconstructed with 8 modes.png" srcset="/img/loading.gif" lazyload alt="fluid SVD reconstructed with 8 modes" style="zoom:50%;" /></td>
-<td><img src="fluid - mean + mean error SVD reconstructed with 8 modes.png" srcset="/img/loading.gif" lazyload alt="error between original and SVD reconstructed with 8 modes" style="zoom:50%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid original.png" srcset="/img/loading.gif" lazyload alt="fluid original" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid - mean + mean SVD reconstructed with 8 modes.png" srcset="/img/loading.gif" lazyload alt="fluid SVD reconstructed with 8 modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid - mean + mean error SVD reconstructed with 8 modes.png" srcset="/img/loading.gif" lazyload alt="error between original and SVD reconstructed with 8 modes" style="zoom:50%;"></td>
 </tr>
 </tbody>
 </table>
@@ -767,7 +767,7 @@ flatten_data = torch.tensor(flatten_data.T[:,<span class="hljs-number">250</span
 <li>pixel-to-pixel error ranges from -0.1370289 to 0.12152482</li>
 </ul>
 <p>The first 8 dominant POD modes are shown bleow:</p>
-<p><img src="SVD first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="SVD first 8 modes extracted from fluid - mean" style="zoom:50%;" /></p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="SVD first 8 modes extracted from fluid - mean" style="zoom:50%;"></p>
 <p>Note the modes looks very similar to the <a href="#flow-past-a-cylinder">standard result</a> at the beginning of this case at Re = 100.</p>
 <h4 id="lae-results-1">LAE results</h4>
 <h5 id="straightforward-failed">Straightforward <span style="color:red">( FAILED )</span></h5>
@@ -809,10 +809,10 @@ decoder weight shape:  torch.Size([192080, 8])</code></pre></div>
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="fluid reconstructed with AE st.png" srcset="/img/loading.gif" lazyload alt="fluid reconstructed with strightforward AE" style="zoom:50%;" /></td>
-<td><img src="fluid error reconstructed with AE st.png" srcset="/img/loading.gif" lazyload alt="fluid error reconstructed with strightforward AE st" style="zoom:50%;" /></td>
-<td><img src="AE st first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="original strightforward AE modes" style="zoom:50%;" /></td>
-<td><img src="SVD AE st first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="[method 1] orthogonalized strightforward AE modes" style="zoom:50%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid reconstructed with AE st.png" srcset="/img/loading.gif" lazyload alt="fluid reconstructed with strightforward AE" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid error reconstructed with AE st.png" srcset="/img/loading.gif" lazyload alt="fluid error reconstructed with strightforward AE st" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE st first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="original strightforward AE modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE st first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="[method 1] orthogonalized strightforward AE modes" style="zoom:50%;"></td>
 </tr>
 </tbody>
 </table>
@@ -852,8 +852,8 @@ decoder weight shape:  torch.Size([101, 8])</code></pre></div>
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="fluid reconstructed with AE t.png" srcset="/img/loading.gif" lazyload alt="fluid reconstructed with transposed AE" style="zoom:70%;" /></td>
-<td><img src="fluid error reconstructed with AE t.png" srcset="/img/loading.gif" lazyload alt="fluid error reconstructed with transposed AE" style="zoom:70%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid reconstructed with AE t.png" srcset="/img/loading.gif" lazyload alt="fluid reconstructed with transposed AE" style="zoom:70%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid error reconstructed with AE t.png" srcset="/img/loading.gif" lazyload alt="fluid error reconstructed with transposed AE" style="zoom:70%;"></td>
 </tr>
 </tbody>
 </table>
@@ -872,9 +872,9 @@ decoder weight shape:  torch.Size([101, 8])</code></pre></div>
 </thead>
 <tbody>
 <tr class="odd">
-<td><img src="AE energy spectual of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="AE energy spectual" style="zoom:32%;" /><br /><img src="AE energy division of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="AE energy division" style="zoom:32%;" /></td>
-<td><img src="AE t first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="original transposed AE modes" style="zoom:72%;" /></td>
-<td><img src="SVD AE t first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="orthogonalized transposed AE modes" style="zoom:72%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy spectual of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="AE energy spectual" style="zoom:32%;"><br><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy division of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="AE energy division" style="zoom:32%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE t first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="original transposed AE modes" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE t first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="orthogonalized transposed AE modes" style="zoom:72%;"></td>
 </tr>
 </tbody>
 </table>
@@ -1021,7 +1021,7 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <td>7.298e-3</td>
 <td>7.290e-3</td>
 <td>NAN</td>
-<td>POD error</br> 7.265e-3</td>
+<td>POD error<br> 7.265e-3</td>
 </tr>
 <tr class="odd">
 <td>reconstruction error (transposition)</td>
@@ -1030,7 +1030,7 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <td>NAN</td>
 <td>NAN</td>
 <td>7.03e-4</td>
-<td>POD error</br> 7.44e-05</td>
+<td>POD error<br> 7.44e-05</td>
 </tr>
 </tbody>
 </table></li>
@@ -1042,8 +1042,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="Energy_spectral_opt.gif" srcset="/img/loading.gif" lazyload alt="Energy_spectral_opt" style="zoom:67%;" /></td>
-<td><img src="Energy_division_opt.gif" srcset="/img/loading.gif" lazyload alt="Energy_division_opt" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/Energy_spectral_opt.gif" srcset="/img/loading.gif" lazyload alt="Energy_spectral_opt" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/Energy_division_opt.gif" srcset="/img/loading.gif" lazyload alt="Energy_division_opt" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -1051,8 +1051,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="AE_modes_opt.gif" srcset="/img/loading.gif" lazyload alt="AE_modes_opt" style="zoom:67%;" /></td>
-<td><img src="orthogonalized_modes_opt.gif" srcset="/img/loading.gif" lazyload alt="orthogonalized_modes_opt" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE_modes_opt.gif" srcset="/img/loading.gif" lazyload alt="AE_modes_opt" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/orthogonalized_modes_opt.gif" srcset="/img/loading.gif" lazyload alt="orthogonalized_modes_opt" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -1060,8 +1060,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="ablation error with weight decay.png" srcset="/img/loading.gif" lazyload alt="ablation error with weight decay" style="zoom:48%;" /></td>
-<td><img src="ablation range with weight decay.png" srcset="/img/loading.gif" lazyload alt="ablation range with weight decay" style="zoom:48%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/ablation error with weight decay.png" srcset="/img/loading.gif" lazyload alt="ablation error with weight decay" style="zoom:48%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/ablation range with weight decay.png" srcset="/img/loading.gif" lazyload alt="ablation range with weight decay" style="zoom:48%;"></td>
 </tr>
 </tbody>
 </table>
@@ -1069,8 +1069,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="orthogonalized modes wd 8e-05, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="orthogonalized modes wd 8e-05, lr 0.005" style="zoom:72%;" /></td>
-<td><img src="SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD first 81 modes extracted from MNIST - mean" style="zoom:38%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/orthogonalized modes wd 8e-05, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="orthogonalized modes wd 8e-05, lr 0.005" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD first 81 modes extracted from MNIST - mean" style="zoom:38%;"></td>
 </tr>
 </tbody>
 </table>
@@ -1078,8 +1078,8 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
 <table>
 <tbody>
 <tr class="odd">
-<td><img src="AE modes wd 0.005, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="AE modes wd 0.005, lr 0.005" style="zoom:67%;" /></td>
-<td><img src="orthogonalized modes wd 0.005, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="orthogonalized modes wd 0.005, lr 0.005" style="zoom:67%;" /></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE modes wd 0.005, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="AE modes wd 0.005, lr 0.005" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/orthogonalized modes wd 0.005, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="orthogonalized modes wd 0.005, lr 0.005" style="zoom:67%;"></td>
 </tr>
 </tbody>
 </table>
@@ -1193,6 +1193,12 @@ torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decod
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/03/22/build-a-chatbot-backended-by-Meta-llama/" title="build a chatbot backended by Meta LLaMA">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">build a chatbot backended by Meta LLaMA</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

@@ -317,25 +317,25 @@
 <p>In articles, stepped learning rate decay is more often used as the default choice. For example, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1605.07146">Zagoruyko, S., &amp; Komodakis, N</a> set the initial learning rate as 0.1 and drop it by 0.2 every 60 epochs on their modified version of ResNet. And this version of learning rate decay is set as the control group to compare with the SGDR strategy later in <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.03983">Ilya Loshchilov &amp; Frank Hutter's work</a>. And in practice, the cosine annealing policy is a common choice today and can be used either alone or in combination with warmup and SGDR.</p>
 <h5 id="explanation">Explanation</h5>
 <p>Because of the presence of stochastic noise, the entire gradient descent process is not straightforward. With a constant learning rate, as shown in the gradient contour map below, the minima can not be reached with a constant step (blue) due to the relatively small steps at the bottom. And a lower minimum can be reached if the learning rate descends with the gradient i.e. epoch(green).</p>
-<p><img src="SGD%20with%20learning%20rate%20decay.png" srcset="/img/loading.gif" lazyload alt="SGD with learning rate decay" style="zoom:80%;" /></p>
+<p><img src="/2022/03/08/learning-rate-schedule/SGD%20with%20learning%20rate%20decay.png" srcset="/img/loading.gif" lazyload alt="SGD with learning rate decay" style="zoom:80%;"></p>
 <p>#### SGDR and CLR</p>
 <p>##### SGDR</p>
 <p>Stochastic gradient descent with warm restarts(SGDR) is firstly proposed to Deep learning in <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.03983">Ilya Loshchilov &amp; Frank Hutter's work</a>. They introduced a policy of reinitializing the learning rate every certain number of epochs. Applying cosine annealing learning rate decay during each resulting "mini-run", the results perform fascinating.</p>
-<p><img src="SGDR.png" srcset="/img/loading.gif" lazyload alt="SGDR" style="zoom:75%;" /></p>
-<p><img src="SGDR_REsult.png" srcset="/img/loading.gif" lazyload alt="SGDR_REsult" style="zoom:100%;" /></p>
+<p><img src="/2022/03/08/learning-rate-schedule/SGDR.png" srcset="/img/loading.gif" lazyload alt="SGDR" style="zoom:75%;"></p>
+<p><img src="/2022/03/08/learning-rate-schedule/SGDR_REsult.png" srcset="/img/loading.gif" lazyload alt="SGDR_REsult" style="zoom:100%;"></p>
 <p>As shown in the charts, compared to 2 default step learnin rate decay policies, they enacted several SGDR policies with different T_0 and T_mul. T_0 refers to the epoch interval of the first "mini-run" and the epoch interval is multiplied by T_mul after each restart. As a result, at the ith "mini-run", T_i = T_0*T_mul^(i)</p>
 <p>And they suggests a SGDR policy with a small T0 = 1 or 10 at start, and set Tmult = 2 to double the epoch interval after every restart. And they claim by this policy, at least 2× to 4× fewer epochs are required to achieve a comparable result than before.</p>
 <p>##### CLR</p>
 <p>A similar method called cyclical Learning rates(CLR) is proposed later by <a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/7926641/">Leslie N. Smith</a>, where 2 kinds of triangular and exponential CLR policies are demonstrated on CIFAR-10 and CIFAR-100 with most kinds of mainstream CNN modules.</p>
-<p><img src="CLR.png" srcset="/img/loading.gif" lazyload alt="CLR" style="zoom:75%;" /></p>
+<p><img src="/2022/03/08/learning-rate-schedule/CLR.png" srcset="/img/loading.gif" lazyload alt="CLR" style="zoom:75%;"></p>
 <p>Similarly, compared with a default fixed learnin rate, the demonstrats that their policies outperforms in accuracy and efficiency on several datasetes.</p>
 <blockquote>
 <p>one obtains the same test classification accuracy of 81.4% after only 25, 000 iterations with the triangular2 policy as obtained by running the standard hyper-parameter settings for 70, 000 iterations.</p>
 </blockquote>
 <p>##### explanation</p>
 <p>Because of the nonconvexity, it is common sense that reaching a global minima is impossible. With a standard learning rate decay, a saddle point, or unstable local minima is more likely to trap the descending process as shown below. But cyclical Learning rates(CLR) and stochastic gradient descent with warm restarts(SGDR) would allow the process to “jump” from one local minimum to another regularly until a stable one.</p>
-<p><img src="2d%20cyclic%20learning%20rate%20schedule.png" srcset="/img/loading.gif" lazyload alt="2d cyclic learning rate schedule" style="zoom:80%;" /></p>
-<p><img src="cyclic%20learning%20rate%20schedule.png" srcset="/img/loading.gif" lazyload alt="cyclic learning rate schedule" style="zoom:80%;" /></p>
+<p><img src="/2022/03/08/learning-rate-schedule/2d%20cyclic%20learning%20rate%20schedule.png" srcset="/img/loading.gif" lazyload alt="2d cyclic learning rate schedule" style="zoom:80%;"></p>
+<p><img src="/2022/03/08/learning-rate-schedule/cyclic%20learning%20rate%20schedule.png" srcset="/img/loading.gif" lazyload alt="cyclic learning rate schedule" style="zoom:80%;"></p>
 <p>Still there are several choices, but Cosine Cyclical and Cosine Annealing with Warm Restarts are more common.</p>
 <p>#### learning rate warmup</p>
 <p>Learning rate warmup is first applied in the famous <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">Resnet</a> paper in one of its experiments.</p>
@@ -346,7 +346,7 @@
 <blockquote>
 <p>As we discussed, for large minibatches (e.g., 8k) the linear scaling rule breaks down when the network is changing rapidly, which commonly occurs in early stages of training. We find that this issue can be alleviated by a properly designed warmup [16], namely, a strategy of using less aggressive learning rates at the start of training.</p>
 </blockquote>
-<p><img src="warmup%20on%20large%20batches.png" srcset="/img/loading.gif" lazyload alt="warmup on large batches" style="zoom:100%;" /></p>
+<p><img src="/2022/03/08/learning-rate-schedule/warmup%20on%20large%20batches.png" srcset="/img/loading.gif" lazyload alt="warmup on large batches" style="zoom:100%;"></p>
 <p>In practice, warmup are always combined with other learning rate methods afterwards. And linear warmup is a default method.</p>
 <p>#### Reducing the learning rate on plateau</p>
 <p>Apart from methods scheduling the learning rate with epoch, a dynamic learning rate decay method is also an option. It denotes the process of decaying the learning rate only when the optimizer fails to improve the accuracy or decrease the loss in serval epochs.</p>
@@ -430,7 +430,7 @@ plt.plot(lr_plot)</code></pre></div>
 <p>In this little experiment, the best setting in the last article is set as baseline, with Adam with constant learning rate. Leave other settings, Adam with cosine annealing learning rate, and AdamW with cosine annealing learning rate are compared.</p>
 <p><code>global learning rate = 0.005</code></p>
 <p><code>scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0 = **int**(num_epochs***len**(train_iter)/10), T_mult=1, eta_min=1e-9)</code></p>
-<p><img src="experiment.png" srcset="/img/loading.gif" lazyload alt="experiment" style="zoom:80%;" /></p>
+<p><img src="/2022/03/08/learning-rate-schedule/experiment.png" srcset="/img/loading.gif" lazyload alt="experiment" style="zoom:80%;"></p>
 <p>As shown in the line charts, SGDR lift both the training and test accuracies. And the overfitting of the baseline method is alleviated as well.</p>
 <p>In the second and sub-figure, the fluctuation in the process of gradient descend caused by the cosine learning rate is obvious. And after each learning rate restart, the rate of the descend also gets a restart. And it takes fewer epochs than to get the same accuracy than the baseline.</p>
 <h3 id="reference">Reference</h3>

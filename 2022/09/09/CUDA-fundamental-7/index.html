@@ -322,7 +322,7 @@
 <li>Multiples of 32-bytes are read</li>
 </ul></li>
 </ul>
-<p><img src="L1 L2 cache memory access.PNG" srcset="/img/loading.gif" lazyload alt="L1 L2 cache memory access" style="zoom:75%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/L1 L2 cache memory access.PNG" srcset="/img/loading.gif" lazyload alt="L1 L2 cache memory access" style="zoom:75%;"></p>
 <h5 id="memory-coalescing-caching-or-non-caching">Memory Coalescing (caching or non-caching)</h5>
 <p>Global Memory -&gt; caching</p>
 <ul>
@@ -417,12 +417,12 @@
 </tr>
 </tbody>
 </table>
-<p><img src="32%20threads%20requesting%201%20float%20each%20(continuous%20in%20memory).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (continuous in memory).png)" style="zoom:22%;" /></p>
-<p><img src="32%20threads%20requesting%201%20float%20each%20(not%20sequentially%20indexed).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not sequentially indexed).png)" style="zoom:22%;" /></p>
-<p><img src="32%20threads%20requesting%201%20float%20each%20(not%20all%20continuous%20in%20memory).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not all continuous in memory).png)" style="zoom:22%;" /></p>
-<p><img src="32%20threads%20requesting%201%20float%20each%20(not%20all%20continuous%20in%20memory)%20on%20L2.png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not all continuous in memory) on L2.png) on L2" style="zoom:22%;" /></p>
-<p><img src="32%20threads%20requesting%201%20float%20each%20(randomly).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (randomly).png)" style="zoom:22%;" /></p>
-<p><img src="32%20threads%20requesting%201%20float%20each%20(randomly)%20L2.png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (randomly) L2.png) L2" style="zoom:75%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(continuous%20in%20memory).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (continuous in memory).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(not%20sequentially%20indexed).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not sequentially indexed).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(not%20all%20continuous%20in%20memory).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not all continuous in memory).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(not%20all%20continuous%20in%20memory)%20on%20L2.png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not all continuous in memory) on L2.png) on L2" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(randomly).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (randomly).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(randomly)%20L2.png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (randomly) L2.png) L2" style="zoom:75%;"></p>
 <h5 id="principle">principle</h5>
 <p><strong><em>requesting large, consecutive locations instead of random locations</em></strong></p>
 <p>Memory coalescing – rearrange access patterns to improve performance</p>
@@ -432,8 +432,8 @@
 <p>The GPU coalesces consecutive reads in a full-warp into a single read</p>
 <h5 id="example">example</h5>
 <p>When accessing matrix data, avoid single thread requesting consecutive locations.</p>
-<p><img src="suitable memory requesting model for row-major matrix.PNG" srcset="/img/loading.gif" lazyload alt="suitable memory requesting model for row-major matrix" style="zoom:75%;" /></p>
-<p><img src="suitable memory requesting model for column-major matrix.PNG" srcset="/img/loading.gif" lazyload alt="suitable memory requesting model for column-major matrix" style="zoom:75%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/suitable memory requesting model for row-major matrix.PNG" srcset="/img/loading.gif" lazyload alt="suitable memory requesting model for row-major matrix" style="zoom:75%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/suitable memory requesting model for column-major matrix.PNG" srcset="/img/loading.gif" lazyload alt="suitable memory requesting model for column-major matrix" style="zoom:75%;"></p>
 <h4 id="share-memory">Share memory</h4>
 <p>What if it is impossible to request memory concecutively? It happens especially for the high dimensional conditions.</p>
 <p>Strategy:</p>
@@ -457,10 +457,10 @@
 <li>Per-bank bandwidth: 32-bits per two cycles</li>
 <li>Successive 32-bit words are assigned to successive banks</li>
 </ul>
-<p><img src="share memory bank illustration.png" srcset="/img/loading.gif" lazyload alt="share memory bank illustration" style="zoom: 50%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank illustration.png" srcset="/img/loading.gif" lazyload alt="share memory bank illustration" style="zoom: 50%;"></p>
 <h5 id="example-1">example</h5>
 <div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];</code></pre></div>
-<p><img src="share memory bank storage example.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage example, note the bank illustration is transposed as the upper one" style="zoom:25%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank storage example.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage example, note the bank illustration is transposed as the upper one" style="zoom:25%;"></p>
 <h4 id="bank-conflict">Bank Conflict</h4>
 <p>Two simultaneous accesses to the same bank, but not the same address,</p>
 <ul>
@@ -471,9 +471,9 @@
 </ul></li>
 </ul>
 <h5 id="conditions-1">conditions</h5>
-<p><img src="Bank no conflicts illustration.png" srcset="/img/loading.gif" lazyload alt="Bank no conflicts illustration" style="zoom:40%;" /></p>
-<p><img src="Bank conflicts illustration.png" srcset="/img/loading.gif" lazyload alt="Bank conflicts illustration" style="zoom:40.3%;" /></p>
-<p><img src="Bank broadcasting illustration.png" srcset="/img/loading.gif" lazyload alt="Bank broadcasting illustration" style="zoom:40%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Bank no conflicts illustration.png" srcset="/img/loading.gif" lazyload alt="Bank no conflicts illustration" style="zoom:40%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Bank conflicts illustration.png" srcset="/img/loading.gif" lazyload alt="Bank conflicts illustration" style="zoom:40.3%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Bank broadcasting illustration.png" srcset="/img/loading.gif" lazyload alt="Bank broadcasting illustration" style="zoom:40%;"></p>
 <p>The latency of share memory is comparable with the registers, when no bank conflicts.</p>
 <p>The conflicts can be detected by <code>warp_serialize</code> profiler.</p>
 <h5 id="examples">examples</h5>
@@ -483,13 +483,13 @@
 <div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
 <span class="hljs-type">int</span> tidx = threadidx.x;
 <span class="hljs-type">float</span> foo = tile[tidx] - <span class="hljs-number">3</span>;</code></pre></div>
-<p><img src="share memory bank storage requested concecutively.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested concecutively" style="zoom:15%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank storage requested concecutively.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested concecutively" style="zoom:15%;"></p>
 <ol start="2" type="1">
 <li><p>Access to same element of bank by a warp executes in parallel.</p>
 <div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
 <span class="hljs-type">int</span> tidx = threadidx.x;
 <span class="hljs-type">int</span> bar = tile[tidx - tidx % <span class="hljs-number">2</span>];</code></pre></div>
-<p><img src="same element in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="same element in share memory bank storage requested" style="zoom:15%;" /></p></li>
+<p><img src="/2022/09/09/CUDA-fundamental-7/same element in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="same element in share memory bank storage requested" style="zoom:15%;"></p></li>
 <li><p>Access to defferent element of bank by a warp executes in serial</p>
 <ul>
 <li>2-way conflict</li>
@@ -497,7 +497,7 @@
 <div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
 <span class="hljs-type">int</span> tidx = threadidx.x;
 <span class="hljs-type">int</span> bar = tile[tidx + tidx % <span class="hljs-number">2</span> * <span class="hljs-number">31</span>];</code></pre></div>
-<p><img src="different elements in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested, 2-way conflict" style="zoom:15%;" /></p></li>
+<p><img src="/2022/09/09/CUDA-fundamental-7/different elements in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested, 2-way conflict" style="zoom:15%;"></p></li>
 </ol>
 <h4 id="fermi-vs-kepler-newer">Fermi vs Kepler &amp; Newer</h4>
 <p>Fermi (Compute 2.x)</p>
@@ -513,7 +513,7 @@
 <h3 id="example-matrix-transpose">Example Matrix Transpose</h3>
 <p>Inherently parallel - Each element independent of another</p>
 <p>Simple to implement</p>
-<p><img src="Matrix transpose illustration.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose illustration" style="zoom:67%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Matrix transpose illustration.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose illustration" style="zoom:67%;"></p>
 <h4 id="cpu">CPU</h4>
 <div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; rows; i++)
 &#123;
@@ -544,7 +544,7 @@
 <li>when row-major: consecutive locations when loading yet scattered locations on writing</li>
 <li>when col-major: consecutive locations when writing yet scattered locations on loading</li>
 </ul>
-<p><img src="memory access modes on READ and WRITE with row major matrix.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE with row major matrix" style="zoom:67%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/memory access modes on READ and WRITE with row major matrix.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE with row major matrix" style="zoom:67%;"></p>
 <h5 id="improvement">Improvement</h5>
 <p>Recall the <a href="#Share-memory">share memory</a>, we can make both the <code>global memory &lt;--&gt; share memory</code> coalesced in both directions.</p>
 <h4 id="gpu-v2">GPU V2</h4>
@@ -558,8 +558,8 @@
 </ul></li>
 <li><p>Copy data from shared memory to output</p></li>
 </ol>
-<p><img src="memory access modes on READ and WRITE via share memory.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE via share memory" style="zoom:60%;" /></p>
-<p><img src="Matrix transpose via share memory.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose via share memory" style="zoom:60%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/memory access modes on READ and WRITE via share memory.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE via share memory" style="zoom:60%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Matrix transpose via share memory.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose via share memory" style="zoom:60%;"></p>
 <div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTransposeShared</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span> *_a, <span class="hljs-type">float</span> *_b)</span></span>
 <span class="hljs-function"></span>&#123;
     __shared__ <span class="hljs-type">float</span> mat[BLOCK_SIZE_Y][BLOCK_SIZE_X];
@@ -589,7 +589,7 @@
 <li>32-way conflict</li>
 </ul>
 <div class="code-wrapper"><pre><code class="hljs c++">b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y];</code></pre></div>
-<p><img src="different elements in share memory bank storage requested 32 way conflict.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested 32 way conflict" style="zoom:15%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/different elements in share memory bank storage requested 32 way conflict.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested 32 way conflict" style="zoom:15%;"></p>
 <h5 id="improvement-1">Improvement</h5>
 <p>Resolving bank conflict by stuffing blank element at the end of each bank.</p>
 <h4 id="gpu-v3">GPU V3</h4>
@@ -600,7 +600,7 @@ b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
 <p>Elements per row = 32</p>
 <p>Shared Mem per row = 33</p>
 <p>1 empty element per row</p>
-<p><img src="share memory bank storage requested with no conflicts.PNG" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested with no conflicts" style="zoom:60%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank storage requested with no conflicts.PNG" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested with no conflicts" style="zoom:60%;"></p>
 <p>Now it is very very close to production ready!</p>
 <h5 id="furthere-improvements">Furthere improvements</h5>
 <p>More work per thread - Do more than one element</p>
@@ -621,7 +621,7 @@ b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
 <ul>
 <li>Reduce threads per block by factor (<code>SIDE</code>)</li>
 </ul>
-<p><img src="loop unrolled illustration.PNG" srcset="/img/loading.gif" lazyload alt="loop unrolled illustration" style="zoom:80%;" /></p></li>
+<p><img src="/2022/09/09/CUDA-fundamental-7/loop unrolled illustration.PNG" srcset="/img/loading.gif" lazyload alt="loop unrolled illustration" style="zoom:80%;"></p></li>
 </ul>
 <table>
 
@@ -689,7 +689,7 @@ b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
     &#125;
 &#125;</code></pre></div>
 <h4 id="benchmark-result">Benchmark result</h4>
-<p><img src="Matrix transpose benchmark.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose benchmark" style="zoom:80%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Matrix transpose benchmark.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose benchmark" style="zoom:80%;"></p>
 <h2 id="divergent-optimisation">Divergent Optimisation</h2>
 <h3 id="example-parallel-reduction">Example Parallel Reduction</h3>
 <p>Example first this time</p>
@@ -709,7 +709,7 @@ b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
 s = \sum_ {i=0}^N a_i
 \]</span></p>
 <h4 id="serial-vs-parallel">Serial vs Parallel</h4>
-<p><img src="serial and parallel reduction illustration.png" srcset="/img/loading.gif" lazyload alt="serial and parallel reduction comparison, the serial (left) and parallel codes (right) have complicity n and O(log2n) respectively" style="zoom:20%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/serial and parallel reduction illustration.png" srcset="/img/loading.gif" lazyload alt="serial and parallel reduction comparison, the serial (left) and parallel codes (right) have complicity n and O(log2n) respectively" style="zoom:20%;"></p>
 <p>It is obvious, the merits of parallel reduce are:</p>
 <ul>
 <li>Binary
@@ -736,7 +736,7 @@ s = \sum_ {i=0}^N a_i
 <li>Global sync is not practical due to the overhead of sync across so many cores</li>
 <li>Solution: Call the reduce kernel recursively to reduce the results from previous reduce</li>
 </ul>
-<p><img src="Parallel reduction example.PNG" srcset="/img/loading.gif" lazyload alt="Parallel reduction example" style="zoom:75%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Parallel reduction example.PNG" srcset="/img/loading.gif" lazyload alt="Parallel reduction example" style="zoom:75%;"></p>
 <p><span class="math inline">\(\log_2(n)\)</span> passes for n elements</p>
 <p><span class="math inline">\(O(\log_2n)\)</span> complexity</p>
 <h5 id="code">code</h5>
@@ -782,7 +782,7 @@ s = \sum_ {i=0}^N a_i
 	    d_odata[blockIdx.x] = smem[<span class="hljs-number">0</span>];
     &#125;
 &#125;</code></pre></div>
-<p><img src="Reduction with interleaved addressing.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with interleaved addressing" style="zoom:80%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction with interleaved addressing.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with interleaved addressing" style="zoom:80%;"></p>
 <p><code>1st</code> pass: <code>threadid.x = 0, 2, 4, 6 ...</code> are working while the others keep idle.</p>
 <p><code>2st</code> pass: <code>threadid.x = 0, 4 ...</code> are working while the others keep idle.</p>
 <p><code>3st</code> pass: <code>threadid.x = 0 ...</code> are working while the others keep idal.</p>
@@ -890,7 +890,7 @@ s = \sum_ {i=0}^N a_i
 <blockquote>
 <p>note that bitwise shifting <code>&gt;&gt;</code> substitutes the <code>/</code> operation.</p>
 </blockquote>
-<p><img src="Reduction with sequential addressing.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with sequential addressing" style="zoom:30%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction with sequential addressing.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with sequential addressing" style="zoom:30%;"></p>
 <p><code>1st</code> pass: <code>threadid.x = 0, 1, 2, 3 ...</code> are working while ( <code>1/2</code>) keep idle.</p>
 <p><code>2st</code> pass: <code>threadid.x = 0, 1 ...</code> are working while ( <code>3/4</code>) keep idle.</p>
 <p><code>3st</code> pass: <code>threadid.x = 0 ...</code> are working while ( <code>7/8</code>) keep idal.</p>
@@ -899,7 +899,7 @@ s = \sum_ {i=0}^N a_i
 <p>The idle threads are able to release because the indexes of the working threads are changed.</p>
 <h5 id="compared-with-v12">Compared with V1/2:</h5>
 <p>Suppose the <code>warpSize = 2</code></p>
-<p><img src="Algorithms comparison.PNG" srcset="/img/loading.gif" lazyload alt="Algorithms comparison" style="zoom:80%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Algorithms comparison.PNG" srcset="/img/loading.gif" lazyload alt="Algorithms comparison" style="zoom:80%;"></p>
 <p>Given the knowledge of warp partitioning</p>
 <table>
 
@@ -976,7 +976,7 @@ s = \sum_ {i=0}^N a_i
     <span class="hljs-comment">// step 3</span>
     <span class="hljs-comment">// step 4</span>
 &#125;</code></pre></div>
-<p><img src="Reduction with interleaved addressing add on load.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with interleaved addressing add on load" style="zoom:80%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction with interleaved addressing add on load.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with interleaved addressing add on load" style="zoom:80%;"></p>
 <h5 id="problem-3">Problem</h5>
 <p>Single - the threads needed is halved only in the first pass</p>
 <h5 id="improvement-3">Improvement</h5>
@@ -1095,7 +1095,7 @@ s = \sum_ {i=0}^N a_i
             <p>Note that the blockSize is known at compile time</p><ul><li>All the if conditions related to <code>blockSize</code> are evaluated at compile time.</li><li>No problem with other if conditions either</li><li>All guarantee no warp divergence</li></ul>
           </div>
 <h4 id="benchmark">Benchmark</h4>
-<p><img src="Reduction benchmark.png" srcset="/img/loading.gif" lazyload alt="Reduction benchmark" style="zoom:80%;" /></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction benchmark.png" srcset="/img/loading.gif" lazyload alt="Reduction benchmark" style="zoom:80%;"></p>
 <h4 id="further-improvements">Further improvements</h4>
 <ol type="1">
 <li>RECURSIVE REDUCTION - Call recursion on result of block reduction – instead of CPU</li>

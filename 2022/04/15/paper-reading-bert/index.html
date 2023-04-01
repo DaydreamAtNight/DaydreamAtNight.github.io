@@ -310,12 +310,12 @@
 <p>BERTBASE(L=12, H=768, A=12, Total Parameters=110M) and BERTLARGE(L=24, H=1024, A=16, Total Parameters=340M).</p>
 </blockquote>
 <p>Because the hidden size of each multi-head attention sublayer is set as 64. And in transformer tradition, H = A * 64. So the multi-head number A actually depends on the hidden size H. As a result, the way of calculating the number of parameters is shown below.</p>
-<p><img src="BERT learnable paramters.png" srcset="/img/loading.gif" lazyload alt="BERT learnable paramters" style="zoom:48%;" /></p>
+<p><img src="/2022/04/15/paper-reading-bert/BERT learnable paramters.png" srcset="/img/loading.gif" lazyload alt="BERT learnable paramters" style="zoom:48%;"></p>
 <p><strong>Input/Output Representations</strong></p>
 <p>Why Bert need a pair of sentence to handle downstream tasks such as Machine Translation, unlike its predecessor Transformer?</p>
 <p>Because in Transformer, the input is a pair of sequences, taken by encoder and decoder respectively. But Bert is only an encoder. In English-Chinese Translation task for example, for transformer, the encoder take the English version and the decoder take the Chinese version, for Bert, the English version and Chinese version are glued with a special token [sept] then be inputed to the model.</p>
 <p>Besides the [sept] token, another embedding is introduced into the embedding layer, the sequence model. Details are shown below.</p>
-<p><img src="BERT segment embedding.png" srcset="/img/loading.gif" lazyload alt="BERT segment embedding" style="zoom:50%;" /></p>
+<p><img src="/2022/04/15/paper-reading-bert/BERT segment embedding.png" srcset="/img/loading.gif" lazyload alt="BERT segment embedding" style="zoom:50%;"></p>
 <p><strong>3.1 Pre-training BERT</strong></p>
 <p>The paper provides an example of each task in Appendix section <strong>Masked LM and the Masking Procedure</strong>, just go for it and have a look if don't understand.</p>
 <blockquote>
@@ -336,13 +336,13 @@
 <p>This misleads the people for a while. People found when fine-tuning with Bert, the variance of each results are high i.e. the result of fine-tuning is unstable. Then people found it is because 3 epochs are not enough. Besides, the optimiser that the original Bert model used is an incomplete version of Adam which is not stable for small epoch number. And the follow-ups change it into the original Adam.</p>
 <p>From the processes of the 3 experiments, it can be seen it is easy for BERT to be applied to downstream tasks. Just need to modify the input data in the form of the Bert sequence, and add another output layer. As a result, with BERT, massive number of tasks can be trained under a rather simple architecture.</p>
 <h3 id="ablation-studies">5 Ablation Studies</h3>
-<p><img src="BERT alibation study 1.png" srcset="/img/loading.gif" lazyload alt="BERT alibation study 1" style="zoom:30%;" /></p>
+<p><img src="/2022/04/15/paper-reading-bert/BERT alibation study 1.png" srcset="/img/loading.gif" lazyload alt="BERT alibation study 1" style="zoom:30%;"></p>
 <p>It is obvious the 4th architecture BiLSTM is from the idea of ELMO. And all the variation lead to a deterioration of the acc, especially in the MRPC task.</p>
 <blockquote>
 <p><strong>Microsoft Research Paraphrase Corpus (MRPC) Dataset</strong></p>
 <p>Created by Dolan et al. at 2005, the Microsoft Research Paraphrase Corpus (MRPC) Dataset contains pairs of sentences which have been extracted from news sources on the web, along with human annotations indicating whether each pair captures a paraphrase/semantic equivalence relationship., in English language. Containing 5,8 in Text file format.</p>
 </blockquote>
-<p><img src="model size graph.webp" srcset="/img/loading.gif" lazyload alt="model size graph" style="zoom:50%;" /></p>
+<p><img src="/2022/04/15/paper-reading-bert/model size graph.webp" srcset="/img/loading.gif" lazyload alt="model size graph" style="zoom:50%;"></p>
 <p>In the Effect of model size part, they claim with a large model size, huge improvement can be reached. And this leads a trend of increasing the model size in NLP, for example, the 100 billon GPT-3, and 500 billion model Megatron-Turing Natural Language Generation (MT-NLG). The boundary of NLP will be push further.</p>
 <h2 id="reviews">Reviews</h2>
 <p>Writing: The biggest sell point in this paper is chosen as the "bidirectional". From today's view, the contributions of BERT are so more than this. Besides, when say to choose a feature, it is better to discuss both the pros and the cons of the choice. For example, compared with GPT, the encoder is used instead of the decoder. The pros are the bidirectional feature, but the cons is the resulting difficulty in applying on generative tasks such as the machine translation.</p>

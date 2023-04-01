@@ -359,7 +359,7 @@
 </table>
 <h5 id="cuda-program-execution">CUDA Program Execution</h5>
 <p>When a CUDA program is executed, a serial code will run on the host until the Kerenl invocation. Then the parallel code runs on the devices. The resultant data is gathered back to the host to run on serial...</p>
-<p><img src="Cuda excution.PNG" srcset="/img/loading.gif" lazyload alt="Cuda excution" style="zoom:100%;" /></p>
+<p><img src="/2022/09/01/CUDA-fundamental-5/Cuda excution.PNG" srcset="/img/loading.gif" lazyload alt="Cuda excution" style="zoom:100%;"></p>
 <h2 id="thread-hierarchies">Thread Hierarchies</h2>
 <p>Grid - one or more thread blocks</p>
 <ul>
@@ -409,7 +409,7 @@
     matrixAddition&lt;&lt;&lt;blocks, threadsPerBlock&gt;&gt;&gt;(A, B, C); 
 &#125;</code></pre></div>
 <p>Here, <code>blockDim</code> is an array with 2 elements representing the dimension of thread matrix inside the block.</p>
-<p><img src="threadIndex in One Block.png" srcset="/img/loading.gif" lazyload alt="threadIndex in One Block" style="zoom:25%;" /></p>
+<p><img src="/2022/09/01/CUDA-fundamental-5/threadIndex in One Block.png" srcset="/img/loading.gif" lazyload alt="threadIndex in One Block" style="zoom:25%;"></p>
 <h5 id="group-of-threads">Group of threads</h5>
 <ul>
 <li>G80 and GT200: Up to 512 threads</li>
@@ -439,7 +439,7 @@
     <span class="hljs-comment">// 2D grid of blocks, 2D block of threads</span>
     matrixAddition&lt;&lt;&lt;blocks, threadsPerBlock&gt;&gt;&gt;(A, B, C); 
 &#125;</code></pre></div>
-<p><img src="blockIndex in One Grid.png" srcset="/img/loading.gif" lazyload alt="blockIndex in One Grid" style="zoom:25%;" /></p>
+<p><img src="/2022/09/01/CUDA-fundamental-5/blockIndex in One Grid.png" srcset="/img/loading.gif" lazyload alt="blockIndex in One Grid" style="zoom:25%;"></p>
 <h5 id="group-of-blocks">Group of blocks</h5>
 <p>Blocks execute independently</p>
 <ul>
@@ -449,13 +449,13 @@
 </ul></li>
 <li>Scheduled in any order by any number of cores
 <ul>
-<li>Allows code to scale with core count<br />
+<li>Allows code to scale with core count<br>
 </li>
 <li>For example, with 8 blocks on a GPU with 2 cores(SM), 2 blocks are run in parallel each time. If with a GPU with 4 cores, 4 blocks are run in parallel each time.</li>
 </ul></li>
 </ul>
 <h2 id="cuda-memory-transfers">CUDA Memory Transfers</h2>
-<p><img src="CUDA Memory Transfers.png" srcset="/img/loading.gif" lazyload alt="CUDA Memory Transfers" style="zoom:75%;" /></p>
+<p><img src="/2022/09/01/CUDA-fundamental-5/CUDA Memory Transfers.png" srcset="/img/loading.gif" lazyload alt="CUDA Memory Transfers" style="zoom:75%;"></p>
 <h4 id="memory-accesibility">Memory Accesibility</h4>
 <table>
 <thead>

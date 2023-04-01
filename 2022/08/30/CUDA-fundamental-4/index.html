@@ -305,13 +305,13 @@
 </tbody>
 </table>
 <h2 id="cpu-gpu-communication">CPU-GPU communication</h2>
-<p><img src="CPU GPU communication.png" srcset="/img/loading.gif" lazyload alt="CPU GPU communication" style="zoom:100%;" /></p>
+<p><img src="/2022/08/30/CUDA-fundamental-4/CPU GPU communication.png" srcset="/img/loading.gif" lazyload alt="CPU GPU communication" style="zoom:100%;"></p>
 <p>Physical memory space for each device, communicated through PCIE IO with a bandwidth of (8~16 GB/s)</p>
 <div class="note note-secondary">
             <p>There are 2 standards for memory, DDR has low latency, HBM has high bandwidth.</p><p>Most commonly used GPU memory standard is GDDR. For CPU memory, DDR is commonly used.</p>
           </div>
 <h2 id="gpu-memory-hierarchy">GPU memory hierarchy</h2>
-<p><img src="Schematic-of-CUDA-memory-hierarchy-in-GPU.png" srcset="/img/loading.gif" lazyload alt="Schematic of CUDA memory hierarchy in GPU" style="zoom:80%;" /></p>
+<p><img src="/2022/08/30/CUDA-fundamental-4/Schematic-of-CUDA-memory-hierarchy-in-GPU.png" srcset="/img/loading.gif" lazyload alt="Schematic of CUDA memory hierarchy in GPU" style="zoom:80%;"></p>
 <p>Register - dedicated HW -single cycle</p>
 <p>Shared Memory - dedicated HW - single cycle</p>
 <p>Local Memory - DRAM (obstruct memory, actually saved in graphic memory), no cache - slow</p>
@@ -320,10 +320,10 @@
 <p>Texture Memory - DRAM, cached - 1...10s...100s of cycles ,depending on cache locality</p>
 <p>Instruction Memory (invisible)- DRAM, cached</p>
 <h5 id="in-reality">In reality:</h5>
-<p><img src="GTX980-SMM-unit(one-core).PNG" srcset="/img/loading.gif" lazyload alt="GTX980 SMM unit(one core)" style="zoom:75%;" /></p>
-<p><img src="GTX980-arch-with-16-SMMs.PNG" srcset="/img/loading.gif" lazyload alt="GTX980-arch-with-16-SMMs" style="zoom:75%;" /></p>
+<p><img src="/2022/08/30/CUDA-fundamental-4/GTX980-SMM-unit(one-core).PNG" srcset="/img/loading.gif" lazyload alt="GTX980 SMM unit(one core)" style="zoom:75%;"></p>
+<p><img src="/2022/08/30/CUDA-fundamental-4/GTX980-arch-with-16-SMMs.PNG" srcset="/img/loading.gif" lazyload alt="GTX980-arch-with-16-SMMs" style="zoom:75%;"></p>
 <h2 id="gpu-thread-hierarchies">GPU thread hierarchies</h2>
-<p><img src="thread-hierarchies.png" srcset="/img/loading.gif" lazyload alt="thread-hierarchies" style="zoom:100%;" /></p>
+<p><img src="/2022/08/30/CUDA-fundamental-4/thread-hierarchies.png" srcset="/img/loading.gif" lazyload alt="thread-hierarchies" style="zoom:100%;"></p>
 <h4 id="grid-block-thread">Grid &gt;&gt; Block &gt;&gt; Thread</h4>
 <p>One block contains several threads, one grid contains several blocks.</p>
 <div class="note note-info">
@@ -368,7 +368,7 @@
 <ul>
 <li>Declspecs:
 <ul>
-<li>global,device,shared ,local, constant<br />
+<li>global,device,shared ,local, constant<br>
 </li>
 <li>different memory places</li>
 </ul></li>

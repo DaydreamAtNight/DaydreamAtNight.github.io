@@ -289,7 +289,7 @@
 <p>Useful links:</p>
 <p>https://www.bilibili.com/video/BV15P4y137jb</p>
 <p>https://theaisummer.com/vision-transformer/</p>
-<p><img src="VIT properties.png" srcset="/img/loading.gif" lazyload alt="VIT properties" style="zoom:50%;" /></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/VIT properties.png" srcset="/img/loading.gif" lazyload alt="VIT properties" style="zoom:50%;"></p>
 <p>Not only Vision Transformer (ViT) performs better on traditional CV tasks, it has more impressive properties. As shown above, <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2021/hash/c404a5adbf90e09631678b13b05d9d7a-Abstract.html">Naseer et al.</a> demonstrate the tasks where ViT shows extra performance over CNN models, even over humans.</p>
 <h2 id="notes">Notes</h2>
 <h3 id="abstract">Abstract</h3>
@@ -321,16 +321,16 @@
 <h3 id="method">Method</h3>
 <p>The whole big idea of the method part is leaving as much as possible the original transformer architecture in order to leverage the good feature and the existing mature efficient implementations of it.</p>
 <h4 id="vision-transformer-vit">Vision Transformer (VIT)</h4>
-<p><img src="VIT model overview.png" srcset="/img/loading.gif" lazyload alt="VIT model overview" style="zoom:60%;" /></p>
-<p><img src="VIT algorithm.png" srcset="/img/loading.gif" lazyload alt="VIT algorithm" style="zoom:40%;" /></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/VIT model overview.png" srcset="/img/loading.gif" lazyload alt="VIT model overview" style="zoom:60%;"></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/VIT algorithm.png" srcset="/img/loading.gif" lazyload alt="VIT algorithm" style="zoom:40%;"></p>
 <p>From the overview, and the algorithm it should be called Vision BERT instead of Vision Transformer, given the pure encoder architecture and the extra "classification token". Assume a <em>224*224*3</em> image, after patching, the sequence length is <em>HW/P<sup>2</sup>=16*16=196</em> and the width is <em>14*14*3=768</em>. Given the hidden size of the model <em>D=768</em>, through linear projection layer (E), sequence <em>X [196*768]</em> are multiplied with weight <em>E [768*768]</em>. The resulting linear output <em>[196*768]</em> is then contacted with [cls], followed by adding standard 1D learnable positional embedding to be the transformer input <em>[197*768]</em>. After several transformer blocks, the output size does not change and the [cls] token is projected to a softmax classification layer</p>
 <h4 id="ablation-experiments">Ablation experiments</h4>
 <p>The pre and post-processing are crucial for ViT given that the middle transformer encoder layers are kept as original. Multiple rounds of ablation experiments are carried out.</p>
 <ul>
 <li><p>Position embedding schemes, 2D embedding and relative embedding are applied to compare with the standard 1D embedding, and no evident gain is spotted.</p>
-<p><img src="VIT positional embedding ablation.png" srcset="/img/loading.gif" lazyload alt="VIT positional embedding ablation" style="zoom:30%;" /></p></li>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/VIT positional embedding ablation.png" srcset="/img/loading.gif" lazyload alt="VIT positional embedding ablation" style="zoom:30%;"></p></li>
 <li><p>[cls] token vs average pooling, extra [cls] token is inherited from the Transformer model for text, and traditionally in CV, instead of an additional token, an average polling layer after the output layer is usually used as a classifier. The figure blow shows no both works. But in order to stick the original design as close as possible, [cls] token is applied.</p>
-<p><img src="VIT class token ablation.png" srcset="/img/loading.gif" lazyload alt="VIT class token ablation" style="zoom:30%;" /></p></li>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/VIT class token ablation.png" srcset="/img/loading.gif" lazyload alt="VIT class token ablation" style="zoom:30%;"></p></li>
 </ul>
 <p>Another analysis after the model description:</p>
 <p><strong>Inductive bias:</strong> Less locality, translation equivariance and 2D neighbourhood structure are possessed by ViT, compared with CNN.</p>
@@ -342,17 +342,17 @@
 <p>ResNet, ViT, and the hybrid model are evaluated together and ViT wins taking account of the pre-training cost. Besides, a small self-supervision experiment is deployed and sees potential.</p>
 <p>Two scales of ImageNet(1k and 21k) and JFT(303M) are used as pre-training dataset. Only classification tasks are evaluated with popular datasets.</p>
 <p>3 scales of ViT are designed with different patch size(inversely proportional to the amount of data). For example, ViT-L/16 means ViT-Large with 16 patches.</p>
-<p><img src="ViT variants.png" srcset="/img/loading.gif" lazyload alt="ViT variants" style="zoom:50%;" /></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/ViT variants.png" srcset="/img/loading.gif" lazyload alt="ViT variants" style="zoom:50%;"></p>
 <h4 id="comparison-to-sota">Comparison to SOTA</h4>
 <p>And the best results are shown below:</p>
-<p><img src="ViT results.png" srcset="/img/loading.gif" lazyload alt="ViT results" style="zoom:60%;" /></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/ViT results.png" srcset="/img/loading.gif" lazyload alt="ViT results" style="zoom:60%;"></p>
 <h4 id="pre-training-cost-requirements">Pre-training cost requirements</h4>
 <p>Figure 3 and 4 shows the performance of the presented models on different sizes of per-training datasets. ViT preforms competitive only starts from dataset 21k, and very well only on huge dataset.</p>
 <p>Figure 5 shows the transfer performances versus pre-training costs on JFT-300M of several models. And it shows that ViT is cheaper than ResNet. Interestingly, the Hybrid model is competitive on low pre-training cost.</p>
-<p><img src="ViT ablation 2.png" srcset="/img/loading.gif" lazyload alt="ViT ablation 2" style="zoom:55%;" /></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/ViT ablation 2.png" srcset="/img/loading.gif" lazyload alt="ViT ablation 2" style="zoom:55%;"></p>
 <h4 id="inspecting-vit">Inspecting ViT</h4>
-<p><img src="ViT inspecting.png" srcset="/img/loading.gif" lazyload alt="ViT inspecting" style="zoom:42%;" /></p>
-<p><strong>Figure7 Left:</strong> The learned linear projection weight matrix <em>E [768*768]</em> is inspected by PCA, and the first 28 components(modes) are visualised as embedding filters. They look pretty much similar to the early layer filters(kernels) of CNN (for example, the first layer of a CNN shown by <a target="_blank" rel="noopener" href="https://www.mdpi.com/2073-8994/8/12/144">Brachnmann et.al</a>). This similarity indicates that the linear patch embedding manages to represent the low-dimension structure of each patch. <img src="CNN first layer filters.png" srcset="/img/loading.gif" lazyload alt="CNN first layer filters" style="zoom:40%;" /></p>
+<p><img src="/2022/04/21/paper-reading-Vision-Transformer/ViT inspecting.png" srcset="/img/loading.gif" lazyload alt="ViT inspecting" style="zoom:42%;"></p>
+<p><strong>Figure7 Left:</strong> The learned linear projection weight matrix <em>E [768*768]</em> is inspected by PCA, and the first 28 components(modes) are visualised as embedding filters. They look pretty much similar to the early layer filters(kernels) of CNN (for example, the first layer of a CNN shown by <a target="_blank" rel="noopener" href="https://www.mdpi.com/2073-8994/8/12/144">Brachnmann et.al</a>). This similarity indicates that the linear patch embedding manages to represent the low-dimension structure of each patch. <img src="/2022/04/21/paper-reading-Vision-Transformer/CNN first layer filters.png" srcset="/img/loading.gif" lazyload alt="CNN first layer filters" style="zoom:40%;"></p>
 <p><strong>Figure7 mid:</strong> Position embedding visualisation first shows that the spatial information is captured well by the E matrix, given that the similarity matrix between patches matches well with the distance relationships of patches. Second, patterns across rows (and columns) have similar representations, indicating the embedding layer has successful learned the row-column relationship. Overall, the 1D positional embedding has learned the 2D structure, coherent with the ablation experiment result.</p>
 <p><strong>Figure7 Right:</strong> The receptive fields of the multi-head attention layers are evaluated by the mean attention distance. Compared with CNN whose receptive field increases linearly with the depth, the ViT attends the whole picture from the first layer, leveraging the natural advantage of transformer.</p>
 <h4 id="self-supervision">Self-supervision</h4>

@@ -283,7 +283,7 @@
 <h2 id="acceleration-and-mass-conservation">1 Acceleration and Mass Conservation</h2>
 <h3 id="acceleration-field-of-a-fluid">1.1 Acceleration field of a fluid</h3>
 <h4 id="material-substantial-convective-derivatives">1.1.1 Material / substantial / convective derivatives</h4>
-<p><img src="Material derivatives.png" srcset="/img/loading.gif" lazyload alt="Material derivatives" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Material derivatives.png" srcset="/img/loading.gif" lazyload alt="Material derivatives" style="zoom:50%;"></p>
 <p>Given a spatial-temporal property <span class="math inline">\(f(x,y,z,t)\)</span> of a fluid particle in the Eulerian coordinate. After an infinitesimal period, the change in <span class="math inline">\(f\)</span> , is therefore: <span class="math display">\[
 \begin{aligned}
 \Delta f = f(x+\Delta x,y+\delta x,z+\delta z,t+\Delta t)- f(x,y,z,t) 
@@ -312,7 +312,7 @@
           </div>
 <h3 id="differential-equation-of-mass-conservation">1.2 Differential equation of mass conservation</h3>
 <p>Take an infinitesimally small cubic control volume as below.</p>
-<p><img src="Differential mass conservation.png" srcset="/img/loading.gif" lazyload alt="Differential mass conservation" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Differential mass conservation.png" srcset="/img/loading.gif" lazyload alt="Differential mass conservation" style="zoom:50%;"></p>
 <p>With the integral form with one-dimensional assumption: <span class="math display">\[
 \int_{C V} \frac{\partial \rho}{\partial t} d \mathcal{V}+\sum_{i}\left(\rho_{i} A_{i} V_{i}\right)_{o u t}-\sum_{i}\left(\rho_{i} A_{i} V_{i}\right)_{i n}=0
 \]</span></p>
@@ -351,7 +351,7 @@
             <p>It makes the equation linear and much more tractable to solving analytically.</p>
           </div>
 <h3 id="cylindrical-coordinates">1.3 Cylindrical coordinates</h3>
-<p><img src="Polar coordinate.png" srcset="/img/loading.gif" lazyload alt="Polar coordinate" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Polar coordinate.png" srcset="/img/loading.gif" lazyload alt="Polar coordinate" style="zoom:50%;"></p>
 <h4 id="transformation-of-coordinates">1.3.1 Transformation of coordinates</h4>
 <p>From cartesian to cylindrical: <span class="math display">\[
 r=\sqrt{x^{2}+y^{2}} \quad \theta=\tan ^{-1} \frac{y}{x} \quad z=z
@@ -437,10 +437,10 @@ d \mathbf{F}_{g}=\rho \mathbf{g} d x d y d z \quad \mathbf{g}=-g \mathbf{k}
 \tau_{x y} &amp; -p+\tau_{yy} &amp; \tau_{z y} \\
 \tau_{x z} &amp; \tau_{y z} &amp; -p+\tau_{z z}
 \end{array}\right|
-\]</span> <img src="Viscous stress on CS.png" srcset="/img/loading.gif" lazyload alt="Stress on CS" style="zoom:50%;" /></p>
+\]</span> <img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Viscous stress on CS.png" srcset="/img/loading.gif" lazyload alt="Stress on CS" style="zoom:50%;"></p>
 <p>Similar to what we do in the <a href="#differential-equation-of-mass-conservation">Mass Conservation</a>, the force is due to the stress change in each direction, for instance: <span class="math display">\[
 dF{s,xx} = \left(\sigma_{xx}+\frac{\partial\sigma_{xx}}{\partial x}dx\right)dydz-\sigma_{xx}dydz = \frac{\partial\sigma_{xx}}{\partial x}d\mathcal{V}
-\]</span> <img src="Surface forces on CS.png" srcset="/img/loading.gif" lazyload alt="Surface forces on CS" style="zoom:50%;" /></p>
+\]</span> <img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Surface forces on CS.png" srcset="/img/loading.gif" lazyload alt="Surface forces on CS" style="zoom:50%;"></p>
 <p>as a result: <span class="math display">\[
 \begin{aligned}
 &amp;\frac{\mathrm{d} F_{x}}{\mathrm{~d} \mathcal{V}}=-\frac{\partial p}{\partial x}+\frac{\partial \tau_{x x}}{\partial x}+\frac{\partial \tau_{y x}}{\partial y}+\frac{\partial \tau_{z x}}{\partial z} \\
@@ -512,7 +512,7 @@ c_{v}, \mu, k, \rho &amp; \approx \mathrm{const}
 <h3 id="newtonian-fluid">3.2 Newtonian fluid</h3>
 <h4 id="strain">3.2.1 Strain</h4>
 <p>Strains of a fluid particle evaluate the deformation due to an applied <em>shear stress</em>.</p>
-<p><img src="Fluid partical deformation.png" srcset="/img/loading.gif" lazyload alt="Fluid partical deformation" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Fluid partical deformation.png" srcset="/img/loading.gif" lazyload alt="Fluid partical deformation" style="zoom:50%;"></p>
 <p>and strain is defined as (anticlockwise positive): <span class="math display">\[
 \mathrm{strain_{xy}} = \Delta\theta_x-(-\Delta\theta_y)
 \]</span> In a continuous system, the rate of strain is then: <span class="math display">\[
@@ -635,7 +635,7 @@ u=\frac{\partial \psi}{\partial y} \qquad v=-\frac{\partial \psi}{\partial x}
 \]</span></p>
 <ul>
 <li><p>The change of <span class="math inline">\(\psi\)</span> across a control surface of unit depth is equal to the volume flow through the surface</p>
-<p><img src="Stream function property.png" srcset="/img/loading.gif" lazyload alt="Stream function property" style="zoom:50%;" /> <span class="math display">\[
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Stream function property.png" srcset="/img/loading.gif" lazyload alt="Stream function property" style="zoom:50%;"> <span class="math display">\[
 \begin{aligned}
 d Q &amp;=(\mathbf{V} \cdot \boldsymbol{n}) d A \\
 &amp;=\left(\boldsymbol{i} \frac{\partial \psi}{\partial y}-\boldsymbol{j} \frac{\partial \psi}{\partial x}\right) \cdot\left(\boldsymbol{i} \frac{\mathrm{d} y}{\mathrm{~d} s}-\boldsymbol{j} \frac{\mathrm{d} x}{\mathrm{~d} s}\right) d s \\
@@ -644,12 +644,12 @@ d Q &amp;=(\mathbf{V} \cdot \boldsymbol{n}) d A \\
 \end{aligned}
 \]</span></p></li>
 <li><p>The flow direction can be determined by observing whether <span class="math inline">\(\psi\)</span> increases or decreases</p>
-<p><img src="Flow direction based on stream function.png" srcset="/img/loading.gif" lazyload alt="Flow direction based on stream function" style="zoom:50%;" /></p></li>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Flow direction based on stream function.png" srcset="/img/loading.gif" lazyload alt="Flow direction based on stream function" style="zoom:50%;"></p></li>
 </ul>
 <h2 id="vorticity-and-irrotationality">4 Vorticity and Irrotationality</h2>
 <h3 id="vorticity">4.1 Vorticity</h3>
 <p>Recall how a fluid particle deforms under shear stresses:</p>
-<p><img src="Fluid particle deformation.png" srcset="/img/loading.gif" lazyload alt="Fluid particle deformation" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Fluid particle deformation.png" srcset="/img/loading.gif" lazyload alt="Fluid particle deformation" style="zoom:50%;"></p>
 <p>The angular velocity <span class="math inline">\(\omega_z\)</span> is defined as the average rate of counter-clockwise turning of the two sides: <span class="math display">\[
 \omega_z = \frac{1}{2}\left(\frac{\mathrm{d}(\Delta\theta_x)}{\mathrm{d}t}+\frac{\mathrm{d}(\Delta\theta_y)}{\mathrm{d}t}\right) =\frac{1}{2}\left(\frac{\partial v}{\partial x}-\frac{\partial u}{\partial y}\right)
 \]</span> Similarly, <span class="math display">\[
@@ -710,7 +710,7 @@ u &amp; v &amp; w
 \]</span> <div class="note note-info">
             <p>Assumptions made:</p><ul><li>Steady flow</li><li>Incompressible</li><li>Two dimensional</li></ul>
           </div></p>
-<p>One important special case is when<br />
+<p>One important special case is when<br>
 <span class="math display">\[
 \boldsymbol{\nabla}^2\psi = \frac{\partial^2\psi}{\partial x^2} + \frac{\partial^2\psi}{\partial y^2} = 0
 \]</span> The flow is <strong>irrotational</strong>.</p>
@@ -773,7 +773,7 @@ u=\frac{\partial \psi}{\partial y}=\frac{\partial \phi}{\partial x} \quad v=-\fr
 </ul>
 <h2 id="vortex-motion-and-applications">5 Vortex Motion and Applications</h2>
 <p>Vortices are structures within the flow in which fluid is rotating about an axis line (which may be straight or curved). A <strong>vortex line</strong> is therefore defined as a line which is always in the same direction as the local vorticity vector <span class="math inline">\(\boldsymbol{\xi}\)</span>.</p>
-<p><img src="Vortex line example.png" srcset="/img/loading.gif" lazyload alt="Vortex line example (red line) from physics.stackexchange.com" style="zoom:100%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Vortex line example.png" srcset="/img/loading.gif" lazyload alt="Vortex line example (red line) from physics.stackexchange.com" style="zoom:100%;"></p>
 <p>Similar to streamline, vortex lines <span class="math inline">\((x, y, z) = (x(s), y(s), z(s))\)</span> are obtained by solving: <span class="math display">\[
 \frac{dx/ds}{d\xi_x}=\frac{dy/ds}{d\xi_y}=\frac{dz/ds}{d\xi_z}
 \]</span> Similar to steam tube, vertex lines which pass through a closed curve in space form a <strong>vortex tube</strong>.</p>
@@ -783,7 +783,7 @@ u=\frac{\partial \psi}{\partial y}=\frac{\partial \phi}{\partial x} \quad v=-\fr
 \]</span></p>
 <h4 id="material-elements-and-its-motion">5.1.1 Material elements and its motion</h4>
 <p>Consider how a infinitesimal displacement <span class="math inline">\(d\mathbf{s}\)</span> deforms over a small time <span class="math inline">\(dt\)</span>, illustrated in the diagram below.</p>
-<p><img src="Displacement deformation.png" srcset="/img/loading.gif" lazyload alt="Displacement deformation" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Displacement deformation.png" srcset="/img/loading.gif" lazyload alt="Displacement deformation" style="zoom:50%;"></p>
 <p>We have <span class="math inline">\(d(d\mathbf{s})\)</span> the <strong>material line element</strong>: <span class="math display">\[
 \begin{aligned}
 d(d \boldsymbol{s})=d \boldsymbol{s}_{1}-d \boldsymbol{s}_{0} &amp;=\left(\boldsymbol{x}+d \boldsymbol{s}_{0}+\mathbf{V}\left(\boldsymbol{x}+d \boldsymbol{s}_{0}\right) d t\right)-(\boldsymbol{x}+\mathbf{V}(\boldsymbol{x}) d t)-d \boldsymbol{s}_{0} \\
@@ -820,7 +820,7 @@ d(d \boldsymbol{s})=d \boldsymbol{s}_{1}-d \boldsymbol{s}_{0} &amp;=\left(\bolds
 <h4 id="aerofoil-lift-and-kutta-joukowski-theorem">5.2.1 Aerofoil lift and Kutta-Joukowski Theorem</h4>
 <p>One application of the Kelvin Circulation Theorem is in explaining the lift attained by an aerofoil during the shedding of the starting vortex.</p>
 <p>Consider a stationary aerofoil shown in the diagram below.</p>
-<p><img src="Aerofoil vortex shedding.png" srcset="/img/loading.gif" lazyload alt="Aerofoil vortex shedding" style="zoom:50%;" /></p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Aerofoil vortex shedding.png" srcset="/img/loading.gif" lazyload alt="Aerofoil vortex shedding" style="zoom:50%;"></p>
 <p>At time <span class="math inline">\(t = 0\)</span>, the aerofoil is stationary, there is no vorticity and around the path <span class="math inline">\(C(t)\)</span> the circulation is <span class="math inline">\(\Gamma = 0\)</span>. As the flow velocity increases, vorticity is shed behind the aerofoil leading to positive <span class="math inline">\(\Gamma\)</span>.</p>
 <p>By Kelvin’s circulation theorem, the circulation <span class="math inline">\(\Gamma_0\)</span> around <span class="math inline">\(C(t)\)</span> is independent of time. Therefore, there must be negative <span class="math inline">\(\Gamma_1\)</span> around the aerofoil, which leads to lift by the Kutta-Joukowski theorem (<span class="math inline">\(L&#39; = −\rho u\Gamma\)</span>).</p>
 <h3 id="helmholtz-theorems">5.3 Helmholtz Theorems</h3>

@@ -295,12 +295,12 @@
 <p>Not only the 1st place results on several tasks but the potential to train a 1000-layer network made this Residual framework a huge attention.</p>
 <p>Unfortunately, due to the 8-page limitation of CDPR, and the massive number of results to be presented, there is no room for the conclusion section in this paper.</p>
 <h3 id="key-figure">Key figure</h3>
-<p><img src="ResNet figure 4.png" srcset="/img/loading.gif" lazyload alt="ResNet figure 1" style="zoom:80%;" /></p>
+<p><img src="/2022/04/09/paper-reading-ResNet/ResNet figure 4.png" srcset="/img/loading.gif" lazyload alt="ResNet figure 1" style="zoom:80%;"></p>
 <p>This is the key figure showing that the degradation in accuracy caused by the depth in plain networks has been well addressed in ResNet.</p>
 <h3 id="introduction">1. Introduction</h3>
 <p>This section first presents the need of training deeper neural network. And the first obstacle that encountered during this process is non-convergence cause by gradient vanishing / explosion, and it has been well addressed by normalised initialisation and intermediate normalisation layers.</p>
 <p>And the main focus of this paper is the second obstacle i.e. deeper networks have difficulty converging to lower losses and may perform worse than networks with fewer layers. And they addressed this obstacle by introducing the Residual learning framework as shown in the pic below. And this framework is easy to implement in <a target="_blank" rel="noopener" href="https://caffe.berkeleyvision.org/">caffe</a>, the most popular DL framework back to 2015.</p>
-<p><img src="ResNet figure 2.png" srcset="/img/loading.gif" lazyload alt="ResNet figure 2" style="zoom:30%;" /></p>
+<p><img src="/2022/04/09/paper-reading-ResNet/ResNet figure 2.png" srcset="/img/loading.gif" lazyload alt="ResNet figure 2" style="zoom:30%;"></p>
 <p>Afterwards experiments results are briefly mentioned. The introduction section played as an expanded version of the abstract and the residual method is mainly focused, which is helpful for readers to catch the essence of the whole paper.</p>
 <h3 id="related-work">2. Related work</h3>
 <h4 id="residual-representation">Residual representation</h4>
@@ -322,14 +322,14 @@
 <p>Next the paper brings up 2 methods to address the shape difference between X the input and H(x) the output for one particular layer that may occur. Option (A): 0 padding and Option (B): 1*1 convolution to project the channel and pooling with stride to adjust the height and width.</p>
 <h3 id="experiments">4. Experiments</h3>
 <h4 id="identity-vs.-projection-shortcuts">Identity vs. Projection Shortcuts</h4>
-<p><img src="  ResNet table 3.png" srcset="/img/loading.gif" lazyload alt="ResNet table 3" style="zoom:30%;" /></p>
+<p><img src="/2022/04/09/paper-reading-ResNet/  ResNet table 3.png" srcset="/img/loading.gif" lazyload alt="ResNet table 3" style="zoom:30%;"></p>
 <p>After introducing the well known architectures, the 2 methods to address the shape difference are also studied. 3 groups are studies, Option (A): 0 padding, Option (B): projection when necessary, Option (C): projection to all layers. And because of the increasing of parameters caused by the projection, it is not surprise to discover C is better than B than A. And Option (B) is the winner considering both the performance and the efficiency.</p>
 <h4 id="deeper-bottleneck-architectures">Deeper Bottleneck Architectures</h4>
-<p><img src="  ResNet figure 5.png" srcset="/img/loading.gif" lazyload alt="ResNet figure 5" style="zoom:30%;" /></p>
+<p><img src="/2022/04/09/paper-reading-ResNet/  ResNet figure 5.png" srcset="/img/loading.gif" lazyload alt="ResNet figure 5" style="zoom:30%;"></p>
 <p>In ResNet18 and ResNet 34, the standard architecture is fine. But for deeper network, in order to decrease the flops, the bottleneck architectures is deployed. Basically in each residual block, decreasing the number of channel by 1*1 convolution first then expend the channel back to the number of input channel. As can be seen in Table 1, the flops of ResNet34 is similar to that in ResNet50. But this is only theory, in practice ResNet50 is obviously more expensive because of the inefficiency of computing 1*1 conv.</p>
-<p><img src="  ResNet table 1.png" srcset="/img/loading.gif" lazyload alt="ResNet table 1" style="zoom:80%;" /></p>
+<p><img src="/2022/04/09/paper-reading-ResNet/  ResNet table 1.png" srcset="/img/loading.gif" lazyload alt="ResNet table 1" style="zoom:80%;"></p>
 <h4 id="exploring-over-1000-layers">Exploring Over 1000 layers</h4>
-<p><img src="ResNet table 6.png" srcset="/img/loading.gif" lazyload alt="ResNet table 6" style="zoom:30%;" /></p>
+<p><img src="/2022/04/09/paper-reading-ResNet/ResNet table 6.png" srcset="/img/loading.gif" lazyload alt="ResNet table 6" style="zoom:30%;"></p>
 <p>Networks with layer numbers from 20 to 1202 are applied on dataset CIFAR-10 (With only output size 32*32 compared with &gt;300*300 on ImageNet, the networks are slightly modified). And the results shows that even with an aggressive depth on a tiny dataset, no difficulty of optimisation occurs. Yet shown on Table6, the test set classification error goes up compared with the shallower models because of the overfitting.</p>
 <h2 id="some-reviews">Some Reviews</h2>
 <p>This is a model with relatively simple idea and the authors have a great writing skill to make this paper neat and clear.</p>

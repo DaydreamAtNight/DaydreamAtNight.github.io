@@ -342,7 +342,7 @@ float4 f4 = <span class="hljs-built_in">make_floate4</span>(<span class="hljs-nu
 <ul>
 <li>Device only</li>
 <li>10x faster but lower precision</li>
-<li>Prefixed with <code>__</code><br />
+<li>Prefixed with <code>__</code><br>
 </li>
 <li>names as: <code>__exp</code>, <code>__log</code>, <code>__sin</code>, <code>__pow</code>...</li>
 </ul>
@@ -396,7 +396,7 @@ __syncthreads();
 <li>Basic unit of thread scheduling</li>
 <li>Run on the same SM (block)</li>
 </ul>
-<p><img src="warp on the same SM.PNG" srcset="/img/loading.gif" lazyload alt="warp on the same SM" style="zoom:67%;" /></p>
+<p><img src="/2022/09/02/CUDA-fundamental-6/warp on the same SM.PNG" srcset="/img/loading.gif" lazyload alt="warp on the same SM" style="zoom:67%;"></p>
 <ul>
 <li>Ant any time, only one of the warps is executed by SM.
 <ul>
@@ -410,7 +410,7 @@ __syncthreads();
 </ul>
 <h3 id="branches">Branches</h3>
 <p>Recall the branch divergence, it is also called <strong>warp divergence</strong></p>
-<p><img src="warp on branch.PNG" srcset="/img/loading.gif" lazyload alt="warp on branch" style="zoom:50%;" /></p>
+<p><img src="/2022/09/02/CUDA-fundamental-6/warp on branch.PNG" srcset="/img/loading.gif" lazyload alt="warp on branch" style="zoom:50%;"></p>
 <p>In extreme, the performance will drop drastically, yet is has been highly optimised. And it is unessasary to worry about, except massive complicated branches exist, which is very rare.</p>
 <h3 id="cycles">Cycles</h3>
 <h5 id="if-more-threads-than-sps">If More threads than SPs</h5>
@@ -578,7 +578,7 @@ __syncthreads();
 <span class="hljs-built_in">cudaMemcpyFromSymbol</span>(data, constData, <span class="hljs-built_in">sizeof</span>(data));</code></pre></div>
 <h2 id="matrix-multiply-again">Matrix multiply Again</h2>
 <h3 id="problems-that-still-exist">Problems that Still Exist</h3>
-<p><img src="Matrix Multiply V1.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply Version 1" style="zoom: 50%;" /></p>
+<p><img src="/2022/09/02/CUDA-fundamental-6/Matrix Multiply V1.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply Version 1" style="zoom: 50%;"></p>
 <p>Recall the limitations of the code from last time:</p>
 <ul>
 <li>Limited matrix size
@@ -595,7 +595,7 @@ __syncthreads();
 </ul>
 <h3 id="solve-problems">Solve problems</h3>
 <h4 id="remove-size-limitation">Remove size limitation</h4>
-<p><img src="Matrix Multiply V2 remove size lim.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply V2 remove size lim" style="zoom:60%;" /></p>
+<p><img src="/2022/09/02/CUDA-fundamental-6/Matrix Multiply V2 remove size lim.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply V2 remove size lim" style="zoom:60%;"></p>
 <ul>
 <li>Divide the matrix into tiles, assign each tile to a block.</li>
 <li>Use threadIdx and blockIdx for indexing.</li>
@@ -670,7 +670,7 @@ __syncthreads();
 <li><p>Must drastically reduce global memory access</p></li>
 </ul>
 <h5 id="solve">Solve</h5>
-<p><img src="Matrix Multiply V3 phases.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply V3 phases" style="zoom:60%;" /></p>
+<p><img src="/2022/09/02/CUDA-fundamental-6/Matrix Multiply V3 phases.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply V3 phases" style="zoom:60%;"></p>
 <p>Becuase for matrix multiply, each input element is read by Width threads</p>
 <p>We can use <strong>shared memory</strong> to reduce global memory bandwidth</p>
 <p>Break kernel into phases</p>

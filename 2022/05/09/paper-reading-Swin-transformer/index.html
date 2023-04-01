@@ -284,7 +284,7 @@
 <div class="note note-secondary">
             <p>This is a <a href="/2022/04/02/paper-reading-start/">series of paper reading notes</a>, hopefully, to push me to read paper casually and to leave some record of what I've learned.</p>
           </div>
-<p><img src="CoCo and ADE20K SOTA.png" srcset="/img/loading.gif" lazyload alt="CoCo and ADE20K SOTA" style="zoom:100%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/CoCo and ADE20K SOTA.png" srcset="/img/loading.gif" lazyload alt="CoCo and ADE20K SOTA" style="zoom:100%;"></p>
 <p><em>Paper link:</em></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</a>(newer version on arXiv)</p>
 <p><em>Useful links:</em></p>
@@ -309,7 +309,7 @@
             <p>One line is added to the abstract in this version, after MLPmixer in order to further prove the method of sifted window: shifted window is also beneficial for all-MLP architectures.</p>
           </div>
 <h3 id="key-figures">Key figures</h3>
-<p><img src="Swin transformer architecture.png" srcset="/img/loading.gif" lazyload alt="Swin transformer architecture" style="zoom:20%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/Swin transformer architecture.png" srcset="/img/loading.gif" lazyload alt="Swin transformer architecture" style="zoom:20%;"></p>
 <p>ViT and Swin Transformer are compared in the above illustration, for ViT, the feature map is single and with low resolution (all *16 downsampling <span class="math inline">\(patchSize = 16\)</span>). For Swin Transformer, the hierarchical feature map is introduced.</p>
 <div class="note note-info">
             <p>Importance of multi-scale feature for detection and segmentation:</p><p>For detection, take the most common FPN as an example, features from different layers of feature map of different reception field are collected to ensure the multi scale performance.</p><p>For segmentation, take the common UNet as an example, the skip connection of different layers also provide a hierarchy of scales.</p>
@@ -320,7 +320,7 @@
 <li>the locality inductive bias, i.e. the objects are locally consecutive. The full space self attention is kinda a wast of source.</li>
 <li>For CNN, pooling layers increase the receptive field of each layers, enabling them to catch features with different scales. The <strong>patch merging</strong> is a mimic of this operation. A bigger patch is merged by 4 smaller patch, so that the receptive field of the bigger patch is increased. The multi scale feature maps can feed a FPN for detection or UNet for segmentation, i.e. a general purpose backbone.</li>
 </ul>
-<p><img src="shifted window illustration.png" srcset="/img/loading.gif" lazyload alt="shifted window illustration" style="zoom:40%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/shifted window illustration.png" srcset="/img/loading.gif" lazyload alt="shifted window illustration" style="zoom:40%;"></p>
 <p>It illustrates how the window is shifted in layers. The unit patch is the grey on with patch size = 4. In the next layer, the window is shifted 2 patches to the right and bottom. The main benefit of this is the ability of cross-window interaction. Without shifting, the self-attention operations are limited to non-overlap patches. The global information is inaccessible, broke the key idea of transformer. The memory can be saved with an ability to global modelling.</p>
 <h3 id="introduction">1 Introduction</h3>
 <p>The motivation is to prove the ability of Vision Transformer as a general backbone.</p>
@@ -330,8 +330,8 @@
 <h3 id="method">3.Method</h3>
 <h4 id="overall-architecture">3.1 Overall Architecture</h4>
 <p>Feed forward process and patch merging method are mainly discussed.</p>
-<p><img src="Overall architecture.png" srcset="/img/loading.gif" lazyload alt="Overall architecture" style="zoom:67%;" /></p>
-<p><img src="patch merging illustration.png" srcset="/img/loading.gif" lazyload alt="patch merging illustration" style="zoom:48%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/Overall architecture.png" srcset="/img/loading.gif" lazyload alt="Overall architecture" style="zoom:67%;"></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/patch merging illustration.png" srcset="/img/loading.gif" lazyload alt="patch merging illustration" style="zoom:48%;"></p>
 <p>The key process of swin transformer is the patch merging. After merging, the width and height get halved while the length is doubled, just like the convolutional method.</p>
 <p>The dimensions of each layer is very similar to CNNs', identical to ResNet. Besides, in order to keep aligned with CNN, the CLS token used in ViT is deprecated.</p>
 <div class="note note-info">
@@ -339,9 +339,9 @@
           </div>
 <p>There is always a global average pooling layer after the architecture above. For example, if for image classification on ImageNet, the feather length of next two layers are: [1, 768] -&gt; [1, 1000].</p>
 <h4 id="shifted-window-based-self-attention">3.2 Shifted Window based Self-Attention</h4>
-<p><img src="window and patch illustration.png" srcset="/img/loading.gif" lazyload alt="window and patch arrangement in swin transformer" style="zoom:38%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/window and patch illustration.png" srcset="/img/loading.gif" lazyload alt="window and patch arrangement in swin transformer" style="zoom:38%;"></p>
 <p>As shown above, the image with <span class="math inline">\(H \times W\)</span> patches is divided into non-overlapping windows such a way that each window has <span class="math inline">\(M \times M\)</span> patches (<span class="math inline">\(M = 7\)</span> for default). The self-attention is computed within each windows, instead of the whole image as in the standard one.</p>
-<p><img src="computational complexity comparison with MSA and W-MSA.png" srcset="/img/loading.gif" lazyload alt="computational complexity comparison with MSA and W-MSA" style="zoom:38%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/computational complexity comparison with MSA and W-MSA.png" srcset="/img/loading.gif" lazyload alt="computational complexity comparison with MSA and W-MSA" style="zoom:38%;"></p>
 <p>The complexity difference between standard shelf attention (<span class="math inline">\(\mathrm{MSA}\)</span>) and window base self-attention (<span class="math inline">\(\mathrm{W}-\mathrm{MSA}\)</span>) is further estimated:</p>
 <p>For an image with <span class="math inline">\(h\times w\)</span> patches: <span class="math display">\[
 \begin{aligned}
@@ -363,10 +363,10 @@
             <p>Below is some technical details with shifted window, not related to the main idea of swin-transformer.</p>
           </div></p>
 <p>Recalling the illustration of shifted windows in <a href="#key-figures">key figures</a>, the unlike the window layer, the shifted window layer has more resulting windows (9 instead of 4) with different scales ($2, 4, 4  $), it is impossible to compute efficiently in parallel. Another simple idea is padding, extra 0 is padded so that the scales of windows are identical. But the authors come up with a better one:</p>
-<p><img src="illustration of masked MSA.png" srcset="/img/loading.gif" lazyload alt="illustration of masked MSA" style="zoom:25%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/illustration of masked MSA.png" srcset="/img/loading.gif" lazyload alt="illustration of masked MSA" style="zoom:25%;"></p>
 <p>The idea is cyclic shift, pretty much like the periodic boundary condition, the windows out of the "boundary" is glutted back from the left bottom of the image, and after the SW-MSA, a reversed operation is applied. However, unlike the real periodic boundary condition, the glutted windows are actually far from each other, no attention operations should be applied across these windows. In order to do this, the familiar masking technique is introduced</p>
-<p><img src="masks for each window.png" srcset="/img/loading.gif" lazyload alt="masks for each window, modified from https://github.com/microsoft/Swin-Transformer/issues/38#issuecomment-823806591" style="zoom:28%;" /></p>
-<p><img src="mask detail for window 2.png" srcset="/img/loading.gif" lazyload alt="mask detail for window 2" style="zoom:37%;" /></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/masks for each window.png" srcset="/img/loading.gif" lazyload alt="masks for each window, modified from https://github.com/microsoft/Swin-Transformer/issues/38#issuecomment-823806591" style="zoom:28%;"></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/mask detail for window 2.png" srcset="/img/loading.gif" lazyload alt="mask detail for window 2" style="zoom:37%;"></p>
 <p>As shown above, for window 2 and 1, only half of the resultant window is useful, the other half needed to be masked. And it is applied by add a mask matrix, where the useful and masked area are set to be <span class="math inline">\(0\)</span> and <span class="math inline">\(-100\)</span>, respectively. After softmax, the infinite negative number results in 0.</p>
 <h4 id="architecture-variants">3.3 Architecture variants</h4>
 <p>Different <span class="math inline">\(C\)</span> and block numbers of 4 stages differs the variants.</p>

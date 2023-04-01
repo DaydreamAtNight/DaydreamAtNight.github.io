@@ -299,7 +299,7 @@
 <p>Afterwards, related work on self-attention and memory network is mentioned. And both the connections and distinctions with transformer are elaborated.</p>
 <h3 id="model-architecture">3. Model Architecture</h3>
 <p>After introducing the basic idea of the encoder-decoder architecture, the key transformer architecture diagram is given. And each part of the model is briefly described. (The diagram in this blog below is not the original, but a combination of 3 diagrams in the paper.)</p>
-<p><img src="transformer.png" srcset="/img/loading.gif" lazyload alt="transformer figure 1" style="zoom:50%;" /></p>
+<p><img src="/2022/04/12/paper-reading-transformer/transformer.png" srcset="/img/loading.gif" lazyload alt="transformer figure 1" style="zoom:50%;"></p>
 <h4 id="encoder-decoder-stacks">3.1 encoder decoder stacks</h4>
 <p><strong>Encoder:</strong></p>
 <p>In addition to briefly describing the encoder architecture, the authors mention that in order to avoid the projection step on the residual connection layers, the same input and output dimension is chosen in each sublayer, which is different from what CNN normally does. And this simple design yields the super parameters of the encoder to 2: Nx - the number of the "encoder block" and d_model - the feature dimension of the output layers. And this design makes the follow-up work such as bert, GPT-3 simple as well.</p>
@@ -333,11 +333,11 @@
 <p>Different with RNN, transformer architecture reads no sequence information. And the authors add the positional information in the input data.</p>
 <h3 id="why-self-attention">4 Why Self-Attention</h3>
 <p>Basically it explains the table 1 below:</p>
-<p><img src="transformer table1.png" srcset="/img/loading.gif" lazyload alt="transformer figure 1" style="zoom:30%;" /></p>
+<p><img src="/2022/04/12/paper-reading-transformer/transformer table1.png" srcset="/img/loading.gif" lazyload alt="transformer figure 1" style="zoom:30%;"></p>
 <p>It might be the case but it's not been accepted by some researchers. And the restricted self-attention is rarely used. The table shows that if n and d are the same, self-attention, RNN, and CNN possess the same complexity per layer, but self-attention outperforms them on the sequential operations and the max path length. But actually, a huge mount of layers and parameters and data are required for a self-attention model achieving a similar result as RNN and CNN. And nowadays all models based on the transformer are very expensive.</p>
 <h3 id="results">6 Results</h3>
 <h4 id="model-variations">6.2 Model Variations</h4>
-<p><img src="transformer table 3.png" srcset="/img/loading.gif" lazyload alt="transformer table 3" style="zoom:30%;" /></p>
+<p><img src="/2022/04/12/paper-reading-transformer/transformer table 3.png" srcset="/img/loading.gif" lazyload alt="transformer table 3" style="zoom:30%;"></p>
 <p>From Table 3, we can see the hyper parameters are not so much, and this simple design benefits the follow-ups. For example Bert and GPT.</p>
 <h2 id="reviews">Reviews</h2>
 <p>Writing: It is concise and neat. But if the possible, it's better to describe why of doing it, and show more thoughts on the model to make the paper "deeper".</p>
