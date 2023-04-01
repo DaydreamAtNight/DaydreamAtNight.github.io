@@ -493,6 +493,13 @@
   </url>
   
   <url>
+    <loc>https://daydreamatnight.github.io/tags/mac/</loc>
+    <lastmod>2023-04-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
     <lastmod>2023-04-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -501,13 +508,6 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
-    <lastmod>2023-04-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/mac/</loc>
     <lastmod>2023-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
