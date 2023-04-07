@@ -16,28 +16,23 @@
   <meta name="author" content="Ryan LI">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Successfully trained a Chinese chatGPT based on the model of last blog.">
+    <meta name="description" content="The process to further improve the current alpaca model with larger datasets.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Chinese chatbot">
-<meta property="og:url" content="https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/index.html">
+<meta property="og:title" content="Improve the chatbot">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/04/02/Improve-the-chatbot/index.html">
 <meta property="og:site_name" content="ShouRou">
-<meta property="og:description" content="Successfully trained a Chinese chatGPT based on the model of last blog.">
+<meta property="og:description" content="The process to further improve the current alpaca model with larger datasets.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/1680318734757.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/Screen%20Shot%202023-03-14%20at%2010.30.01%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/piechart.png">
-<meta property="article:published_time" content="2023-04-01T09:45:13.000Z">
-<meta property="article:modified_time" content="2023-04-06T11:03:56.000Z">
+<meta property="article:published_time" content="2023-04-02T03:29:00.000Z">
+<meta property="article:modified_time" content="2023-04-06T11:03:57.000Z">
 <meta property="article:author" content="Ryan LI">
-<meta property="article:tag" content="deep learning">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/1680318734757.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Chinese chatbot - ShouRou</title>
+  <title>Improve the chatbot - ShouRou</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -194,7 +189,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Chinese chatbot"></span>
+            <span id="subtitle" data-typed-text="Improve the chatbot"></span>
           
         </div>
 
@@ -210,8 +205,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-01 17:45" pubdate>
-          April 1, 2023 pm
+        <time datetime="2023-04-02 11:29" pubdate>
+          April 2, 2023 am
         </time>
       </span>
     
@@ -223,7 +218,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          5.3k words
+          2.3k words
         
       </span>
     
@@ -235,7 +230,7 @@
         
         
           <!-- compatible with older versions-->
-          18 minutes
+          8 minutes
         
       </span>
     
@@ -273,124 +268,79 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Chinese chatbot</h1>
+            <h1 style="display: none">Improve the chatbot</h1>
             
             
               <div class="markdown-body">
                 
                 <div class="note note-primary">
-            <p>Successfully trained a Chinese chatGPT based on the model of last blog.</p>
+            <p>The process to further improve the current alpaca model with larger datasets.</p>
           </div>
 <span id="more"></span>
-<div class="note note-warning">
-            <p>Got you! Happy fools day! By the way now its 18:00 and I’m still here writting this shit.</p><p>So, I’m really happy to tell you that this title/abstruct is a mislead and surprise! This blog is just a collection of recent models variants from llama/alpaca that can be considered later, including the Chinese chatbot.</p>
-          </div>
-<h2 id="extra-extra">Extra! Extra!</h2>
-<p>The llama and alpaca model has been a very popular topic in the research community, along with the increasing attention of ChatGPT and GPT4 for the mainstream. I see interesting and promising llama/alpaca variants every single day. Here are a collection of them:</p>
-<h3 id="training-with-lora">Training with LoRA</h3>
-<p>Using the Alpaca dataset, the llama model can also be finetuned using low-rank adaptation (LoRA)<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., ... &amp; Chen, W. (2021). Lora: Low-rank adaptation of large language models. *arXiv preprint arXiv:2106.09685*.">[1]</span></a></sup> (see <a target="_blank" rel="noopener" href="https://github.com/tloen">tloen</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora">alpaca-lora</a></strong>).</p>
-<p>Alpaca LoRA turned the weights into 8-bit int to reduce the memory requirement, accerlate its training and inferencing, which allows the 7B model to be trained within 6 hours on a single RTX 4090.</p>
-<p>The authors claim that</p>
-<blockquote>
-<p>Without hyperparameter tuning, the LoRA model produces outputs comparable to the Stanford Alpaca model.</p>
-</blockquote>
-<p>And they’ve posted a comparision among Stanford Alpaca 7B, Alpaca-LoRA 7B, and text-davinci-003. I beleive them after reading this.</p>
-<h3 id="deploy-it-on-cpu">Deploy it on CPU!</h3>
-<p><img src="/2023/04/01/Chinese-chatbot/1680318734757.png" srcset="/img/loading.gif" lazyload alt="The guy that runs LLama 7B on Raspberry Pi 4G" style="zoom:80%;"></p>
-<p>Besides, the community has tried many ways to consolidate the memory requirements and deploy llama/alpaca on different devices. Such as a different GPU architecture <a target="_blank" rel="noopener" href="https://github.com/jankais3r">jankais3r</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/jankais3r/LLaMA_MPS">LLaMA_MPS</a></strong>, CPUs <a target="_blank" rel="noopener" href="https://github.com/ggerganov">ggerganov</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp">llama.cpp</a></strong>, <a target="_blank" rel="noopener" href="https://github.com/antimatter15">antimatter15</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/antimatter15/alpaca.cpp">alpaca.cpp</a></strong>, or even Raspberry Pi 4GB <a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp/issues/58">#58</a> (as slow as 10s/token but very impressive).</p>
-<p>However, considering there are not many researches on how much the performance deteriation is compared with the origianl large model, and llama.cpp have been hacked before. And considering we still have 8*A800 80GB at least for now. So we are not considering try these. But maybe later.</p>
-<h3 id="vicuna">Vicuna</h3>
-<p>Vicuna is created by fine-tuning a LLaMA base model using approximately 70K user-shared conversations gathered from ShareGPT.com with public APIs. And the authors use GPT4 to evaluate Vicuna along with other trending LLMs and shows a very similar performance to chatGPT and Bard.</p>
-<table>
-<thead>
-<tr class="header">
-<th><strong>Baseline</strong></th>
-<th><strong>Baseline Score</strong></th>
-<th><strong>Vicuna Score</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>LLaMA-13B</td>
-<td>513.0</td>
-<td><strong>694.0</strong></td>
-</tr>
-<tr class="even">
-<td>Alpaca-13B</td>
-<td>583.0</td>
-<td><strong>704.0</strong></td>
-</tr>
-<tr class="odd">
-<td>Bard</td>
-<td><strong>664.0</strong></td>
-<td>655.5</td>
-</tr>
-<tr class="even">
-<td>ChatGPT</td>
-<td><strong>693.0</strong></td>
-<td>638.0</td>
-</tr>
-</tbody>
-</table>
-<p>And it has been seen that Vicuda has a better Chinese performance even though they don't have trained specifically on Chinese dataset.</p>
-<h3 id="gpt4all">GPT4all</h3>
-<p><img src="/2023/04/01/Chinese-chatbot/Screen%20Shot%202023-03-14%20at%2010.30.01%20PM.png" srcset="/img/loading.gif" lazyload alt="Lightning AI CEO slams OpenAI's GPT-4 paper" style="zoom: 33%;"></p>
-<p>Just days before, <a target="_blank" rel="noopener" href="https://github.com/nomic-ai">nomic-ai</a> published their own finetuning version of llama, with a Discord demo and a Technical Report<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[GPT4All: Training an Assistant-style Chatbot with Large Scale Data Distillation from GPT-3.5-Turbo](https://s3.amazonaws.com/static.nomic.ai/gpt4all/2023_GPT4All_Technical_Report.pdf)">[2]</span></a></sup>. Even if it has only 3 pages, it provides more information than the 99-page GPT4 technical report <sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[GPT-4 Technical Report](https://cdn.openai.com/papers/gpt-4.pdf)">[3]</span></a></sup>.</p>
-<h3 id="chinese-alpaca">Chinese alpaca</h3>
-<p>And also, <a target="_blank" rel="noopener" href="https://github.com/ymcui">ymcui</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">Chinese-LLaMA-Alpaca</a></strong> just came to me yestoday when I was thinking of how to translate the alpaca data into Chinese (One guy on the Youtube did a calculation of the estimated cost on tranlating the whole 52K instructions and answers into Genmaney. It would cost about $500 on the Deepl API, or Google translate API.)</p>
-<p>Chinese alpaca takes a different route, instead of doing instrcuction fine tuning, they retrained the llama first.</p>
-<p>This repo solves my probelm because it provides the translated data, and the lora weights trained on this data.</p>
-<h3 id="belle">BELLE</h3>
-<p>Furthermore, aligning with alpaca’s data generation method, BELLE generates a Chinese dataset with instructions and answers of ChatGPT. They also did a great ablation experiments on how large improvements the model can benefit from different size of Chinese dataset(0.2M, 0.6M, 1M, 2M).</p>
-<blockquote>
-<p>Overall, increasing the amount of data consistently improved performance, but the extent of improvement varied across different types of tasks. For Extract, Classification, Closed QA, and Summarization tasks, increasing data continued to improve performance without reaching a plateau. For Translation, Rewrite, and Brainstorming tasks, good performance could be achieved with only hundreds of thousands of data. However, for Math, Code, and COT tasks, these models' performance were poor, and increasing data did not lead to further improvement.</p>
-</blockquote>
-<p>More of it see their arxiv paper<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Ji, Y., Deng, Y., Gong, Y., Peng, Y., Niu, Q., Zhang, L., ... &amp; Li, X. (2023). Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases. *arXiv preprint arXiv:2303.14742*.](https://arxiv.org/pdf/2303.14742)">[4]</span></a></sup>.</p>
-<p>They also published two datasets that in the same format of the alpaca dataset. see <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/BelleGroup/train_1M_CN">train_1M_CN</a> and <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/BelleGroup/train_0.5M_CN">train_0.5M_CN</a>.</p>
-<h3 id="alpaca-cot">Alpaca COT</h3>
-<p>Another extension that claims to improve its Chinese is capability is <a target="_blank" rel="noopener" href="https://github.com/PhoebusSi">PhoebusSi</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong>, they extend the alpaca dataset, adding Chinese and CoT instructions.</p>
-<p>And they have collected all the useful dataset here <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT">Alpaca-CoT</a><img src="/2023/04/01/Chinese-chatbot/piechart.png" srcset="/img/loading.gif" lazyload alt="data collection statistics" style="zoom: 10%;"></p>
-<blockquote>
+<h2 id="training-process">Training process</h2>
+<p>First of all, a big thank to <strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong> for collecting and formatting such a detailed dataset. And a great training framework for efficient training process.</p>
+<p>I desided to further improve current model alpaca 7B/13B in 3 steps with 3 dataset:</p>
 <ul>
-<li>This repo contains code, modified from <a target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora">here</a>, which can *<strong>finetune LLaMA cheaply and efficiently*</strong> (without performance degradation compared to Stanford Alpaca) by using <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2106.09685.pdf">low-rank adaptation (LoRA)</a> [4], <a target="_blank" rel="noopener" href="https://github.com/huggingface/peft">PEFT</a> and <a target="_blank" rel="noopener" href="https://github.com/TimDettmers/bitsandbytes">bitsandbytes</a>. The <code>7b</code>, <code>13b</code> and <code>30b</code> versions of LLaMA models can be easily trained on a single 80G A100.</li>
-<li>The models published in this repo significantly *<strong>improve the CoT (reasoning) capability*</strong>.</li>
-<li>The models published in this repo significantly *<strong>improve the ability to follow Chinese instructions*</strong>.</li>
-<li>This repo contains *<strong>a <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT">collection of instruction-finetuning datasets</a> that are continuously collected*</strong>, which so far includes English, Chinese and CoT instructions. In addition, a collection of checkpoints trained with various instruction datasets is also provided.</li>
+<li>First step, improve stories, dialogue, reasoning, coding and COT performance, 564088
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/gpt4all_without_p3.json">gpt4all_without_p3.json</a>, 437604, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/nomic-ai/gpt4all">gpt4all</a></strong> for more details</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/alpaca_data_cleaned.json">alpaca_data_cleaned.json</a>, 51712</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/CoT_data.json">CoT_data.json</a>, 74770</li>
+</ul></li>
+<li>Second step, improve the Chineses performance, 2107402 in total
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/belle_data1.5M_cn.json">belle_data1.5M_cn.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong> for more details</li>
+</ul></li>
+<li>Third step
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/instinwild_ch.json">instinwild_ch.json</a>, collected from Twitter, where users tend to share their interesting prompts of mostly generation, open QA, and mind-storm types</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/instinwild_en.json">instinwild_en.json</a></li>
+</ul></li>
 </ul>
-</blockquote>
-<div class="note note-warning">
-            <p>So the title is not complete missleading because it is very promising to reproduce above models.</p>
-          </div>
-<h2 id="references">References</h2>
-<p>Alpaca lora: <a target="_blank" rel="noopener" href="https://github.com/tloen">tloen</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora">alpaca-lora</a></strong></p>
-<p>llama.cpp: <a target="_blank" rel="noopener" href="https://github.com/ggerganov">ggerganov</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp">llama.cpp</a></strong></p>
-<p>Alpaca.cpp: <a target="_blank" rel="noopener" href="https://github.com/antimatter15">antimatter15</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/antimatter15/alpaca.cpp">alpaca.cpp</a></strong></p>
-<p>Alpaca MPS: <a target="_blank" rel="noopener" href="https://github.com/jankais3r">jankais3r</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/jankais3r/LLaMA_MPS">LLaMA_MPS</a></strong></p>
-<p>Vicuda: <a target="_blank" rel="noopener" href="https://github.com/lm-sys">lm-sys</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat">FastChat</a></strong></p>
-<p>Vicuda blog: <a target="_blank" rel="noopener" href="https://vicuna.lmsys.org/">Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90%* ChatGPT Quality</a></p>
-<p>GPT4All: <a target="_blank" rel="noopener" href="https://github.com/nomic-ai">nomic-ai</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/nomic-ai/gpt4all">gpt4all</a></strong></p>
-<p>Chinese llama alpaca: <a target="_blank" rel="noopener" href="https://github.com/ymcui">ymcui</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/ymcui/Chinese-LLaMA-Alpaca">Chinese-LLaMA-Alpaca</a></strong></p>
-<p>BELLE: <a target="_blank" rel="noopener" href="https://github.com/LianjiaTech">LianjiaTech</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong></p>
-<p>alpaca COT: <a target="_blank" rel="noopener" href="https://github.com/PhoebusSi">PhoebusSi</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong></p>
-<p>alpaca COT dataset: <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT">Alpaca-CoT</a></p>
-<section class="footnotes">
-<div class="footnote-list">
-<ol>
-<li>
-<span id="fn:1" class="footnote-text"><span>Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., ... &amp; Chen, W. (2021). Lora: Low-rank adaptation of large language models. <em>arXiv preprint arXiv:2106.09685</em>. <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
-</li>
-<li>
-<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://s3.amazonaws.com/static.nomic.ai/gpt4all/2023_GPT4All_Technical_Report.pdf">GPT4All: Training an Assistant-style Chatbot with Large Scale Data Distillation from GPT-3.5-Turbo</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
-</li>
-<li>
-<span id="fn:3" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://cdn.openai.com/papers/gpt-4.pdf">GPT-4 Technical Report</a> <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
-</li>
-<li>
-<span id="fn:4" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2303.14742">Ji, Y., Deng, Y., Gong, Y., Peng, Y., Niu, Q., Zhang, L., ... &amp; Li, X. (2023). Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases. <em>arXiv preprint arXiv:2303.14742</em>.</a> <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
-</li>
-</ol>
-</div>
-</section>
+<p>Combine json files with:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> json
+
+files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<span class="hljs-string">&#x27;CoT_data.json&#x27;</span>,<span class="hljs-string">&#x27;gpt4all_without_p3.json&#x27;</span>]
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">merge_JsonFiles</span>(<span class="hljs-params">filename</span>):
+    result = <span class="hljs-built_in">list</span>()
+    <span class="hljs-keyword">for</span> f1 <span class="hljs-keyword">in</span> filename:
+        <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(f1, <span class="hljs-string">&#x27;r&#x27;</span>) <span class="hljs-keyword">as</span> infile:
+            result.extend(json.load(infile))
+
+    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;alpaca_cleaned_plus_GPT4woP3_plus_Cot.json&#x27;</span>, <span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> output_file:
+        json.dump(result, output_file)
+
+merge_JsonFiles(files)
+
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;alpaca_cleaned_plus_GPT4woP3_plus_Cot.json&#x27;</span>) <span class="hljs-keyword">as</span> f1:               <span class="hljs-comment"># open the file</span>
+    data1 = json.load(f1)</code></pre></div>
+<p>set up the dependencies with:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">git clone git@github.com:PhoebusSi/Alpaca-CoT.git
+pip install -r requirements.txt</code></pre></div>
+<h2 id="step-1">Step 1</h2>
+<p>Combine the jsons:</p>
+<div class="code-wrapper"><pre><code class="hljs python">files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<span class="hljs-string">&#x27;CoT_data.json&#x27;</span>,<span class="hljs-string">&#x27;gpt4all_without_p3.json&#x27;</span>]</code></pre></div>
+<p>Train with</p>
+<div class="code-wrapper"><pre><code class="hljs shell">export HF_DATASETS_CACHE=&quot;/home/.cache&quot;
+torchrun --nproc_per_node 8  \
+    --nnodes=1 --node_rank=0 uniform_finetune.py \
+    --model_type llama --model_name_or_path ../llama_weights_converted/7B \
+    --data alpaca-gpt4-cot --lora_target_modules q_proj v_proj \
+    --per_gpu_train_batch_size 128 --gradient_accumulation_steps 32 \
+    --learning_rate 3e-4 --epochs 1</code></pre></div>
+<h2 id="step-2">Step 2</h2>
+<p>Combine the jsons:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">files=[&#x27;alpaca_data_cleaned.json&#x27;,&#x27;CoT_data.json&#x27;,&#x27;gpt4all_without_p3.json&#x27;, &#x27;belle_data1.5M_cn.json&#x27;]</code></pre></div>
+<p>Train with</p>
+<div class="code-wrapper"><pre><code class="hljs shell">export HF_DATASETS_CACHE=&quot;/home/.cache&quot;
+torchrun --nproc_per_node 8  \
+    --nnodes=1 --node_rank=0 uniform_finetune.py \
+    --model_type llama --model_name_or_path ../llama_weights_converted/7B/ \
+    --data alpaca-gpt4-cot-belle15b --lora_target_modules q_proj v_proj \
+    --per_gpu_train_batch_size 32 --gradient_accumulation_steps 2 \
+    --learning_rate 3e-4 --epochs 1</code></pre></div>
+<p><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech">LianjiaTech</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong></p>
 
                 
               </div>
@@ -400,13 +350,6 @@
               <div class="post-metas my-3">
   
   
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/deep-learning/">#deep learning</a>
-      
-    </div>
-  
 </div>
 
 
@@ -415,8 +358,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Chinese chatbot</div>
-      <div>https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/</div>
+      <div>Improve the chatbot</div>
+      <div>https://daydreamatnight.github.io/2023/04/02/Improve-the-chatbot/</div>
     </div>
     <div class="license-meta">
       
@@ -428,7 +371,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>April 1, 2023</div>
+          <div>April 2, 2023</div>
         </div>
       
       
@@ -472,18 +415,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/02/Improve-the-chatbot/" title="Improve the chatbot">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Improve the chatbot</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/03/30/Fine-tuning-chatbot/" title="Fine tuning chatbot">
-                        <span class="hidden-mobile">Fine tuning chatbot</span>
+                      <a href="/2023/04/01/Chinese-chatbot/" title="Chinese chatbot">
+                        <span class="hidden-mobile">Chinese chatbot</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
