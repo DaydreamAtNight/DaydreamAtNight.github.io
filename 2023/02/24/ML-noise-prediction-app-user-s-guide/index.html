@@ -1,0 +1,3347 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is a brief user’s guide of the Wind Noise Prediction Software (WNPS). This project aimed to predict the wind noise propagation paths of the holes &amp; gaps and provide guidance for">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WNPS user&#39;s guide">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/02/24/ML-noise-prediction-app-user-s-guide/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a brief user’s guide of the Wind Noise Prediction Software (WNPS). This project aimed to predict the wind noise propagation paths of the holes &amp; gaps and provide guidance for">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/WNSP.png">
+<meta property="article:published_time" content="2023-02-24T04:07:09.000Z">
+<meta property="article:modified_time" content="2023-04-08T18:37:52.473Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="manual">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/WNSP.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>WNPS user&#39;s guide - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/fluid_ai.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="WNPS user&#39;s guide"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-24 12:07" pubdate>
+          February 24, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          28k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          93 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">WNPS user&#39;s guide</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>This is a brief user’s guide of the Wind Noise Prediction Software (WNPS). This project aimed to predict the wind noise propagation paths of the holes &amp; gaps and provide guidance for the development of wind noise performance on the early stage. Machine learning and data science techniques are adopted to analysis former experimental data and conduct the prediction. Refer to the project developing report for all the details.</p>
+          </div>
+<span id="more"></span>
+<h2 id="introduction">1. Introduction</h2>
+<div class="note note-info">
+            <p>This section gives an overview of Wind Noise Prediction Software (WNPS), its purpose, features, and benefits. It also provides some background information on the project development process and the intended audience of the guide. A glossary part is followed including terms or acronyms that could help users to understand the technical aspects of WNPS better.</p>
+          </div>
+<h3 id="overview">1.1. Overview</h3>
+<p><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/strips%20configuration%20of%20a%20vehicle.png" srcset="/img/loading.gif" lazyload alt="Fig 1.1.1: strips configuration of a vehicle" style="zoom:50%;"></p>
+<p>WNPS is a cross-platform software product that predicts the wind noise propagation paths of the holes and gaps in a vehicle and provides guidance for the development of wind noise performance on the early stage. Wind noise is a type of noise that is generated by air flow around a vehicle and can affect its acoustic comfort and quality<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[How Weather Affects an Outdoor Noise Study | ABD Engineering &amp; Design](https://www.abdengineering.com/blog/weather-affects-noise-study/)">[1]</span></a></sup> <sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Effect of Wind on Sound Transmission | Sciencing](https://sciencing.com/effect-wind-sound-transmission-23531.html)">[2]</span></a></sup>. WNPS uses machine learning and data science techniques to analyze former experimental data and conduct the prediction<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[How Weather Affects an Outdoor Noise Study | ABD Engineering &amp; Design](https://www.abdengineering.com/blog/weather-affects-noise-study/)">[3]</span></a></sup>.</p>
+<p>WNPS has the following features and benefits:</p>
+<ul>
+<li>It can read the basic data of the experiment vehicle, such as vehicle type, height, width, length, configuration and status<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[How Weather Affects an Outdoor Noise Study | ABD Engineering &amp; Design](https://www.abdengineering.com/blog/weather-affects-noise-study/)">[3]</span></a></sup></li>
+<li>It can output a relative ML predicted AI (Articulation Index) value that indicates the intelligibility of speech in noisy environments<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wind Turbine Noise Propagation | SpringerLink](https://link.springer.com/referenceworkentry/10.1007/978-3-030-05455-7_71-1)">[4]</span></a></sup></li>
+<li>It can print a line chart that shows how different experiment statuses affect the AI value<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[How Weather Affects an Outdoor Noise Study | ABD Engineering &amp; Design](https://www.abdengineering.com/blog/weather-affects-noise-study/)">[3]</span></a></sup></li>
+<li>It can help engineers to optimize the design of vehicles for better wind noise performance</li>
+</ul>
+<p>The intended audience of this guide are engineers who are involved in vehicle design, testing and evaluation. This guide assumes that they have some basic knowledge of wind noise, machine learning and data science.</p>
+<h3 id="glossary">1.2. Glossary</h3>
+<table>
+
+<thead>
+<tr class="header">
+<th>terms</th>
+<th>explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(AI\)</span></td>
+<td>Articulation Index. A measure of speech intelligibility in noisy environments. The higher the AI value, the more intelligible speech is.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(ML\)</span></td>
+<td>Machine Learning. A branch of artificial intelligence that uses algorithms and data to learn from experience and make predictions.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(R\)</span></td>
+<td>wheel hub diameter.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(L\)</span></td>
+<td>car length</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(W\)</span></td>
+<td>car width</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(H\)</span></td>
+<td>car height</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(ESG\)</span></td>
+<td>Electrically heated safety glass. A type of glass that has an electric heating element embedded in it.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(VSG\)</span></td>
+<td>Vacuum safety glass. A type of glass that has a vacuum layer between two sheets of glass.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(A-pillar\)</span></td>
+<td>A roof support pillar located on either side of the front windscreen of a car.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(B-pillar\)</span></td>
+<td>It is located in the car’s midsection, between the A and C pillars.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(C-pillar\)</span></td>
+<td>It holds the sides of your car’s rear window in place.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(WNPS\)</span></td>
+<td>Wind Noise Prediction Software. A software product that predicts the wind noise propagation paths of holes and gaps in a vehicle using machine learning techniques.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(GUI\)</span></td>
+<td>Graphical User Interface, a visual way of interacting with a software program</td>
+</tr>
+</tbody>
+</table>
+<h2 id="starting-and-executing-wnps">2. Starting and Executing WNPS</h2>
+<div class="note note-info">
+            <p>This section the describes the requirements of WNPS. It also includes instructions on how to run WNPS on Windows and Linux platform.</p>
+          </div>
+<h3 id="system-requirements">2.1 System Requirements</h3>
+<p>Before you begin, make sure that your computer meets the system requirements for the software:</p>
+<ul>
+<li>Operating System: Windows 10 or Linux</li>
+<li>Processor: Intel Core i5 or equivalent</li>
+<li>Memory: 8 GB RAM</li>
+<li>Storage: 500 MB available space</li>
+<li>Data file (optional): A data file that contains the configuration data in EXCEL format.</li>
+</ul>
+<h3 id="starting-wnps">2.2 Starting WNPS</h3>
+<p>To start it in Windows operating system:</p>
+<ol type="1">
+<li><p>Go to directory</p>
+<div class="code-wrapper"><pre><code class="hljs powershell">Q:\<span class="hljs-number">7</span>th_ML_noise_prediction\Platforms\Win</code></pre></div></li>
+<li><p>double click on the executable file (image below with blue shade):</p></li>
+</ol>
+<p><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/Executing_on_windows.png" srcset="/img/loading.gif" lazyload alt="Fig 2.2.1: windows exe" style="zoom:100%;"></p>
+<p>To run it in Linux:</p>
+<ol type="1">
+<li><p>Open a terminal window.</p></li>
+<li><p>Run the following command:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">cd /7th_ML_noise_prediction/Platforms/Linux &amp;&amp; ./ML_wind_noise_prediction &amp;</code></pre></div></li>
+</ol>
+<div class="note note-warning">
+            <p>Note that it could take as long as 8 mins to start the app for the first time.</p>
+          </div>
+<h2 id="getting-started">3. Getting started</h2>
+<div class="note note-info">
+            <p>This section helps you to get familiar with WNPS interface, menus, icons, buttons and other elements. It also include a tutorial or a walkthrough of a common task/scenario using WNPS.</p>
+          </div>
+<h3 id="graphical-user-interface-gui">3.1. Graphical User Interface (GUI)</h3>
+<p>The WNPS interface is designed to be simple and user-friendly, with three main parts: the menu bar, input panel, and output panel.</p>
+<p>Part 1: the Menu Bar</p>
+<p>The menu bar is located at the top of the WNPS window and provides access to various functions and settings. It contains the following options:</p>
+<ul>
+<li>File: Allows you to open, save, and export files. It also allows you to the start the prediction process.</li>
+<li>Plotting: Allows you to customize the plotting process and the appearance of output panel.</li>
+</ul>
+<p>Part 2: the Input Panel</p>
+<p>The input panel is located at the bottom half of the WNPS window and is where you can manually enter or select the basic data of your experiment vehicle. The input panel is divided into different sections, such as vehicle type, height, width, length, configuration, and status. Here is a brief description of the sections:</p>
+<ul>
+<li>Vehicle basic information: Allows you to select the type of vehicle you are testing, and its dimension.</li>
+<li>Configuration: Allows you to select the configuration of the vehicle.</li>
+<li>Status: Allows you to enter the status of the experiment.</li>
+</ul>
+<p>At the bottom of the input panel, there are two buttons: predict and save data. The predict button starts the prediction process, and the save data button allows you to save the input data as a CSV file.</p>
+<p>Part 3: the Output Panel</p>
+<p>The output panel is located at the upper half of the WNPS window and displays your prediction results as a point and/or as a line chart. The output panel is divided into two parts: the toolbar and the chart area.</p>
+<ul>
+<li>Toolbar: Allows you to change the chart settings, such as zoom in/out, pan, and switch between AI point and line chart.</li>
+<li>Chart area: Displays your prediction results as an AI point and/or as a line chart. The line chart shows how different experiment statuses affect the AI value. The relative (instead of the absolute) AI value is plotted indicates the AI gain/loss compared with the last status.</li>
+</ul>
+<p>Here is an example screenshot of WNPS interface:</p>
+<p><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/interface.PNG" srcset="/img/loading.gif" lazyload alt="Fig 3.1.1: interface" style="zoom: 25%;"></p>
+<p>The menu bar provides quick access to different functions and settings, while the input panel allows you to easily enter or select the basic data of your experiment vehicle. The output panel displays your prediction results in a clear and concise manner, making it easy to analyze and optimize your vehicle's wind noise performance.</p>
+<h3 id="tutorial">3.2. Tutorial</h3>
+<p>This tutorial will guide you through the process of using WNPS to predict wind noise performance and optimize vehicle design. By following these steps, you will be able to input your data, run the prediction process, view your results, and save your data and charts.</p>
+<p>Step 1: Enter or select your input data</p>
+<p>There are two methods for inputting your data into WNPS. The first method is manual input. This involves typing or choosing your input values from drop-down lists in each field under Input Data section in the input panel. Details will be explained in the <a href="#manual-input">manual input</a> section.</p>
+<p>The second method is data file input. To use this method, click on the <code>Predict_from_file</code> button under <code>File</code> section in the menu bar, and select your EXCEL file that contains your input data. The file should have one row per experiment status with columns corresponding to each input field. An example input file is shown in the <a href="#file-input">file input</a> section.</p>
+<p>Step 2: Click on <code>Predict</code> button</p>
+<p>Once you have entered or selected your input data, click on the <code>Predict</code> button at the bottom left corner of the input panel to start the prediction process.</p>
+<p>Step 3: View your prediction results</p>
+<p>After the prediction process is complete, you will be able to view your results in the output panel. Depending on your input data, you will see a new point or a line chart. The line chart shows how different experiment statuses affect the AI value. The relative (instead of the absolute) AI value is plotted, which indicates the AI gain/loss compared with the last status.</p>
+<p>Step 4: Add a new line</p>
+<p>If you want to add a new line to your input data, press the <code>new_line</code> button under the <code>Plotting</code> section on the menu bar, and then go back to step 1 to enter more data.</p>
+<p>Step 5: Save your results</p>
+<p>You can save your result as a data (CSV) file by clicking on the <code>save data</code> button at the bottom right corner of the input panel. You can also save the line chart by clicking on the <code>save_image</code> button under the plotting section on the menu bar, or clicking on the <code>icon: save</code> button on the output panel toolbar.</p>
+<h2 id="using-wnps">4. Using WNPS</h2>
+<div class="note note-info">
+            <p>This section explains how to perform various functions and operations using WNPS in detail. It provides tips, tricks and best practices for using WNPS effectively.</p>
+          </div>
+<h3 id="manual-input">4.1 Manual input</h3>
+<p>The input panel of the Wind Noise Prediction Software (WNPS) is a crucial component of the software that enables engineers to perform virtual experiments to predict wind noise propagation paths in a vehicle. It contains three distinct subsections that enable users to input critical information about the vehicle being tested, wind-noise related configurations, and experiment status.</p>
+<p>The first subsection, Basic Info, enables users to input information about the vehicle being tested, such as its type, dimensions, and other basic data. The Wind-Noise Related Configurations subsection allows the user to specify design details that could affect the vehicle's wind noise performance, such as hole size and shape, gap width, and vehicle configuration. The Experiment Status subsection allows the user to toggle between different settings for each virtual experiment.</p>
+<p>The input panel is designed to make it easy for engineers to perform a series of experiments on a vehicle quickly. If they are performing a series of experiments at a single velocity to generate one AI line, they can set the first two subsections only once. They can then toggle the checkboxes under the third subsection several times to correspond with each virtual experiment, saving time and simplifying the process.</p>
+<p>The Experiment Status subsection of the input panel is particularly useful because it enables engineers to quickly toggle between different settings for each virtual experiment. This means they can test multiple configurations in a short amount of time, without manually inputting all of the information again.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Input panel subsections</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/input_panel_1.png" srcset="/img/loading.gif" lazyload alt="input_panel_1"></td>
+<td>basic info</td>
+</tr>
+<tr class="even">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/input_panel_2.png" srcset="/img/loading.gif" lazyload alt="input_panel_2"></td>
+<td>wind-noise related configurations</td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/input_panel_3.png" srcset="/img/loading.gif" lazyload alt="input_panel_3"></td>
+<td>experiments status</td>
+</tr>
+</tbody>
+</table>
+<p>In summary, the input panel of WNPS streamlines the process of performing virtual wind noise experiments and helps engineers make informed decisions about vehicle design. Its user-friendly interface enables engineers to input the necessary information quickly and easily, and the Experiment Status subsection allows them to test multiple configurations efficiently.</p>
+<h3 id="file-input">4.2. File input</h3>
+<p>The input file of the Wind Noise Prediction Software (WNPS) is another way for engineers to perform virtual experiments. It offers a convenient way to perform multiple virtual experiments at once, by allowing users to specify all the necessary information in a single file. As shown below, the file is organized into three sections: basic data, wind noise related configurations, and experiment status. Each row in the input file represents one experiment, and each file results in one series of experiments (one line).</p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-ew93{background-color:#ffffff;border-color:#efefef;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-fwcs{background-color:#efefef;border-color:inherit;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-jj5o{background-color:#ffffff;border-color:inherit;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-51p0{background-color:#9aff99;border-color:inherit;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-mf3x{background-color:#e2e2e2;border-color:#000000;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-qng7{background-color:#ffffff;border-color:#000000;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-8105{background-color:#e2e2e2;border-color:inherit;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-pdad{background-color:#ffffff;border-color:#efefef;color:#000000;font-size:xx-small;font-weight:bold;text-align:left;
+  vertical-align:bottom}
+.tg .tg-xrvr{background-color:#9aff99;border-color:inherit;color:#000000;font-size:xx-small;text-align:left;vertical-align:bottom}
+.tg .tg-5tc8{background-color:#ffffff;border-color:#efefef;color:#000000;font-size:xx-small;font-weight:bold;text-align:left;
+  vertical-align:bottom}
+.tg .tg-3bi3{background-color:#ffffff;border-color:#000000;color:#000000;font-size:xx-small;text-align:center;vertical-align:bottom}
+</style>
+<table class="tg">
+<thead>
+<tr>
+<th class="tg-ew93">
+</th>
+<th class="tg-5tc8">
+A
+</th>
+<th class="tg-5tc8">
+B
+</th>
+<th class="tg-5tc8">
+C
+</th>
+<th class="tg-5tc8">
+D
+</th>
+<th class="tg-5tc8">
+E
+</th>
+<th class="tg-5tc8">
+F
+</th>
+<th class="tg-5tc8">
+G
+</th>
+<th class="tg-5tc8">
+H
+</th>
+<th class="tg-5tc8">
+I
+</th>
+<th class="tg-5tc8">
+J
+</th>
+<th class="tg-5tc8">
+K
+</th>
+<th class="tg-5tc8">
+L
+</th>
+<th class="tg-5tc8">
+M
+</th>
+<th class="tg-5tc8">
+N
+</th>
+<th class="tg-5tc8">
+O
+</th>
+<th class="tg-5tc8">
+P
+</th>
+<th class="tg-5tc8">
+Q
+</th>
+<th class="tg-5tc8">
+R
+</th>
+<th class="tg-5tc8">
+S
+</th>
+<th class="tg-5tc8">
+T
+</th>
+<th class="tg-5tc8">
+U
+</th>
+<th class="tg-5tc8">
+V
+</th>
+<th class="tg-5tc8">
+W
+</th>
+<th class="tg-5tc8">
+X
+</th>
+<th class="tg-5tc8">
+Y
+</th>
+<th class="tg-5tc8">
+Z
+</th>
+<th class="tg-5tc8">
+AA
+</th>
+<th class="tg-5tc8">
+AB
+</th>
+<th class="tg-5tc8">
+AC
+</th>
+<th class="tg-5tc8">
+AD
+</th>
+<th class="tg-5tc8">
+AE
+</th>
+<th class="tg-5tc8">
+AF
+</th>
+<th class="tg-5tc8">
+AG
+</th>
+<th class="tg-5tc8">
+AH
+</th>
+<th class="tg-5tc8">
+AI
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tg-pdad">
+0
+</td>
+<td class="tg-3bi3" colspan="5">
+basic data
+</td>
+<td class="tg-3bi3" colspan="11">
+wind noise related configurations
+</td>
+<td class="tg-qng7">
+basic
+</td>
+<td class="tg-3bi3" colspan="17">
+experiment status
+</td>
+<td class="tg-qng7">
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+1
+</td>
+<td class="tg-mf3x">
+Cartype
+</td>
+<td class="tg-8105">
+R
+</td>
+<td class="tg-8105">
+L
+</td>
+<td class="tg-8105">
+W
+</td>
+<td class="tg-8105">
+H
+</td>
+<td class="tg-8105">
+Rearview mirror installation method door/triangular window
+</td>
+<td class="tg-8105">
+Water retaining strip
+</td>
+<td class="tg-8105">
+Front window glass ESG/VSG
+</td>
+<td class="tg-8105">
+Front window glass thickness
+</td>
+<td class="tg-8105">
+A-pillar sealing strip
+</td>
+<td class="tg-8105">
+B-pillar sealing strip
+</td>
+<td class="tg-8105">
+C-pillar sealing strip
+</td>
+<td class="tg-8105">
+Rear cover sealing strip
+</td>
+<td class="tg-8105">
+Threshold sealing strip
+</td>
+<td class="tg-8105">
+Front windshield upper edge sealing strip
+</td>
+<td class="tg-8105">
+roof rack yes/no
+</td>
+<td class="tg-8105">
+velocity
+</td>
+<td class="tg-8105">
+all taped
+</td>
+<td class="tg-8105">
+Remove the hood tape
+</td>
+<td class="tg-8105">
+Remove the upper edge tape of the front windshield
+</td>
+<td class="tg-8105">
+Remove the rearview mirror casing tape
+</td>
+<td class="tg-8105">
+Remove the A-pillar vertical strip of tape
+</td>
+<td class="tg-8105">
+Remove the remaining tape from the triangular cover
+</td>
+<td class="tg-8105">
+Remove the sealing strip between the rear cover and the top cover
+</td>
+<td class="tg-8105">
+Remove tailgate tape
+</td>
+<td class="tg-8105">
+Remove window guide tape
+</td>
+<td class="tg-8105">
+Remove AE1outer window slot tape
+</td>
+<td class="tg-8105">
+Remove the tape above the waistline
+</td>
+<td class="tg-8105">
+Remove the tape below the waistline
+</td>
+<td class="tg-8105">
+Remove sunroof tape
+</td>
+<td class="tg-8105">
+Remove the tape between the water retaining strip and the A-pillar sheet metal
+</td>
+<td class="tg-8105">
+Remove the tape between the water retaining strip and the front windshield
+</td>
+<td class="tg-8105">
+Remove the rear triangular window tape
+</td>
+<td class="tg-8105">
+baseline
+</td>
+<td class="tg-8105">
+Delta AI Value
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+2
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+3
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+4
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+5
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+6
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+7
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+8
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+9
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+10
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+11
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+12
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+13
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+14
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+15
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+16
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-5tc8">
+17
+</td>
+<td class="tg-jj5o">
+7
+</td>
+<td class="tg-jj5o">
+17
+</td>
+<td class="tg-jj5o">
+4893
+</td>
+<td class="tg-jj5o">
+1862
+</td>
+<td class="tg-jj5o">
+1449
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+4.96
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+120
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-51p0">
+1
+</td>
+<td class="tg-jj5o">
+0
+</td>
+<td class="tg-jj5o">
+0
+</td>
+</tr>
+<tr>
+<td class="tg-pdad">
+18
+</td>
+<td class="tg-fwcs">
+7
+</td>
+<td class="tg-fwcs">
+17
+</td>
+<td class="tg-fwcs">
+4893
+</td>
+<td class="tg-fwcs">
+1862
+</td>
+<td class="tg-fwcs">
+1449
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+4.96
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-fwcs">
+120
+</td>
+<td class="tg-fwcs">
+0
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-xrvr">
+1
+</td>
+<td class="tg-fwcs">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<div class="note note-warning">
+            <p>One real input file should only contains cell <code>A1</code> to <code>AI18</code>, other cells above are just the notations to the file.</p>
+          </div>
+<p>Similar to the manual input panel, the input file contains 3 sections.</p>
+<ul>
+<li><p>The basic data section (Columns A to E and Q ) contains information about the car type, dimensions (length, width and height), and velocity. The <code>cartype</code> column of the input file specifies the type of vehicle being tested. Different item numbers correspond to different types of vehicles. And the relationship is shown below.</p>
+<table>
+<thead>
+<tr class="header">
+<th>item number</th>
+<th>corresponding cartype</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>oversize SUV</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Compact SUV</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>Compact Vehicle</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Mini size vehicle</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Middle large SUV</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Middle large vehicle</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Middle size SUV</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Middle size Vehicle</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>The wind noise related configurations section (Columns F to P) contains information about rearview mirror installation method, water retaining strip, front window glass type and thickness, sealing strips for various parts of the car (A-pillar, B-pillar, C-pillar and rear cover), whether or not a roof rack is present etc. For True/False configurations, 1 indicates that the design feature is present, while 0 indicates that it is not.</p></li>
+<li><p>The experiment status section (Columns R to AH ) specifies the removal of tape from different parts of the vehicle during the virtual experiment. With 1 means yes and 0 means no (shaded as green and white for illustration). With 1 representing yes and 0 representing no, each experiment represents a different configuration, and the removal of tapes allows engineers to test the effects of different design choices on wind noise performance.</p></li>
+<li><p>It is important to note that the Delta AI Value column does not affect the result and can be left at 0 for convenience. After prediction, it is possible to overwrite this column with the predicted value.</p></li>
+</ul>
+<p>For a normal series of virtual experiments, the basic data and wind noise configurations for one vehicle remain unchanged, and the data of columns A to Q remain the same. In the experiment status section (Columns R to AH), the first experiment always tapes all parts of the vehicle, and with each following experiment, one new tape is removed until the last experiment removed all the tapes, representing the baseline status.</p>
+<p>For example, in the above example file:</p>
+<ul>
+<li>Experiment 1 (row 2): only cell <code>R2</code> is checked.</li>
+<li>Experiment 2 (row 3): leave <code>R3</code> as 0 and check <code>S3</code> indicating that only the hood tape is removed.</li>
+<li>Experiment 3 (row 4): <code>S4</code>, <code>T4</code> are checked indicating that the hood tape remains removed, and a new tape (the upper edge tape of the front windshield) is removed compared with experiment1.</li>
+<li>Experiment 4 (row 5): <code>S5</code>, <code>T5</code>, <code>U5</code> are checked indicating that a new tape (the rearview mirror casing tape) is removed compared with last experiment.</li>
+<li>...</li>
+<li>Experiment 17 (row 18): <code>S18</code>, <code>T18</code>, <code>U18</code>, <code>V18</code>, <code>W18</code>, <code>X18</code>, <code>Y18</code>, <code>Z18</code>, <code>AA18</code>, <code>AB18</code>, <code>AC18</code>, <code>AD18</code>, <code>AE18</code>, <code>AF18</code>, <code>AG18</code>are checked indicating all the tapes are removed, and therefore <code>AH18</code> is checked indicating the baseline status.</li>
+</ul>
+<p>Using the input file, engineers can easily perform virtual experiments to see how different design choices affect wind noise performance. By specifying all the necessary information in a single file, they can quickly generate multiple AI lines and compare wind noise performance across different configurations. Overall, the input file is a powerful tool that streamlines the process of performing virtual wind noise experiments and helps engineers make informed decisions about vehicle design.</p>
+<h3 id="plotting">4.3. Plotting</h3>
+<p>The output panel embeds the matplotlib toolbar<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Interactive navigation — Matplotlib 3.2.2 documentation](https://matplotlib.org/3.2.2/users/navigation_toolbar.html)">[5]</span></a></sup> and buttons, and this embedded version works very much like it. It is very convenient to zoom in/out, change the figure configuration, figure options, legend name, etc.</p>
+<p><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/output%20panel%20tool%20bar.png" srcset="/img/loading.gif" lazyload alt="Fig 4.3.1: output panel toolbar" style="zoom:15%;"></p>
+<p><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/Figure%20layout.png" srcset="/img/loading.gif" lazyload alt="Fig 4.3.2: Figure layout dialog" style="zoom: 30%;"></p>
+<p><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/Figure%20option.png" srcset="/img/loading.gif" lazyload alt="Fig 4.3.3: Figure option" style="zoom:22%;"></p>
+<p>A list of the functions of these output panel toolbar buttons is shown below:</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>Button</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Home/Reset</td>
+<td>This button resets the view of the plot to its original state.</td>
+</tr>
+<tr class="even">
+<td>Back</td>
+<td>This button allows you to go back to the previous view of the plot.</td>
+</tr>
+<tr class="odd">
+<td>Forward</td>
+<td>This button allows you to go forward to the next view of the plot if you have used the Back button previously.</td>
+</tr>
+<tr class="even">
+<td>Pan/Zoom</td>
+<td>This tool allows you to pan and zoom in and out of a plot by clicking and dragging with your mouse.</td>
+</tr>
+<tr class="odd">
+<td>Zoom-to-rect</td>
+<td>This tool allows you to zoom in on a specific area of a plot by clicking and dragging your mouse to create a rectangle around that area.</td>
+</tr>
+<tr class="even">
+<td>Figure layout</td>
+<td>This tool opens a dialog (Fig 4.3.2) that allows you to adjust the appearance of subplots within a figure. You can choose the borders and the padding space. There a button <code>Tightlayout</code> that shrink the borders. And a <code>reset</code> button to change the layout back to default.</td>
+</tr>
+<tr class="odd">
+<td>Figure options</td>
+<td>This button opens a dialog (Fig 4.3.3) that allows you to edit various properties of a figure. This includes options for line styles, marker styles, and axes properties such as axis limits and scales. You can use this dialog to customize the appearance of your plot and make changes to its visual properties.</td>
+</tr>
+<tr class="even">
+<td>Save</td>
+<td>This button allows you to save a copy of the current view of the plot.</td>
+</tr>
+</tbody>
+</table>
+<p>Among these capabilities are the ability to generate multiple lines of output and clear the existing output panel.</p>
+<p>To add a new line of output, users can simply click on the <code>new_line</code> button located in the <code>Plotting</code> section of the menu bar. This feature allows engineers to easily compare the wind noise performance of different configurations and make informed decisions about vehicle design.</p>
+<p>Additionally, users have the ability to clear the existing output panel with the click of a button. By selecting the <code>clear_all</code> button located in the <code>Plotting</code> section of the menu bar, engineers can reset the output panel and prepare for new experiments. This functionality enhances the efficiency and productivity of the virtual experiment process, allowing engineers to quickly move from one experiment to the next without any clutter or confusion.</p>
+<h3 id="tips">4.4. tips</h3>
+<p>To optimize the use of Wind Noise Prediction Software (WNPS), it is essential to adhere to some best practices and techniques, including:</p>
+<ul>
+<li>Ensure the accuracy and completeness of your input data. Any errors or omissions may negatively impact your prediction results and compromise the reliability of your analysis.</li>
+<li>Utilize the data file input method when comparing multiple experiment statuses. This approach saves time and effort that would otherwise be required for manual entry.</li>
+<li>Visualize the effects of different experiment statuses on AI values by employing a line chart. This enables the identification of the experiment status that yields optimal wind noise performance, thereby enhancing the quality of your predictions.</li>
+</ul>
+<h3 id="shortcuts">4.5. Shortcuts</h3>
+<p>The Wind Noise Prediction Software (WNPS) offers a comprehensive array of shortcuts that can be applied to virtually all functions within the software. By taking advantage of these keyboard shortcuts, engineers can work more efficiently and effectively within the software, ultimately leading to improved results and faster progress in their projects.</p>
+<table>
+<thead>
+<tr class="header">
+<th>operations</th>
+<th>shortcuts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Next checkbox</td>
+<td><code>Tab</code> or <code>down</code></td>
+</tr>
+<tr class="even">
+<td>Previous checkbox</td>
+<td><code>up</code></td>
+</tr>
+<tr class="odd">
+<td>Check/uncheck</td>
+<td><code>space</code></td>
+</tr>
+<tr class="even">
+<td>input file predict</td>
+<td><code>Shift</code>+<code>Enter</code></td>
+</tr>
+<tr class="odd">
+<td>new line</td>
+<td><code>\</code></td>
+</tr>
+<tr class="even">
+<td>clear all</td>
+<td><code>Ctrl</code>+<code>x</code></td>
+</tr>
+<tr class="odd">
+<td>manual input predict</td>
+<td><code>Enter</code></td>
+</tr>
+<tr class="even">
+<td>save data</td>
+<td><code>Ctrl</code>+<code>Shift</code>+<code>s</code></td>
+</tr>
+<tr class="odd">
+<td>save image</td>
+<td><code>Ctrl</code>+<code>s</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="machine-learning-techniques-used-in-wnps">4. Machine Learning Techniques used in WNPS</h2>
+<div class="note note-info">
+            <p>This section briefly explains how the machine learning and data science techniques used by WNPS to analyze former experimental data and conduct wind noise prediction. It also includes a introduction of the different models and algorithms used by WNPS and how they are applied to the data input by the engineer.</p>
+          </div>
+<p>Machine learning is a subset of artificial intelligence that involves the development of algorithms and statistical models that can learn from data and make predictions based on patterns. Machine learning has gained widespread popularity in recent years due to its ability to automate data analysis and prediction tasks, which were previously done manually.</p>
+<h3 id="data-science-in-wnps">4.1 Data Science in WNPS</h3>
+<p>The first step in using machine learning for wind noise prediction is to collect and preprocess the data. WNPS has a database of experimental data on wind noise generated by different vehicles under various environmental conditions. The data collected includes the vehicle type, wind speed, and other relevant parameters.</p>
+<p>The success of wind noise prediction highly depends on the accuracy and quality of input data. As such, data scientists in the WNPS team utilize various data cleansing and analysis techniques to ensure the input data is reliable and consistent.</p>
+<p>One of the data cleansing methods commonly used in WNPS is correlation analysis. This method helps to identify any correlations or relationships between different variables in the input data. For example, correlation analysis can reveal if there is a relationship between wind speed and wind noise level. If a strong correlation is found, the WNPS model can take it into account and make more accurate predictions.</p>
+<p>Another method used in data cleansing is outlier detection. Outliers are data points that deviate significantly from the rest of the data, and they can have a significant impact on the accuracy of prediction models. Therefore, WNPS data scientists use various techniques to detect and remove outliers from the input data, such as using statistical methods like Z-score and box plots.</p>
+<p>Additionally, data normalization and standardization are also used in WNPS. Normalization involves scaling the data to a common range to eliminate the impact of different units or scales. Standardization involves converting the data to a standard normal distribution with a mean of zero and a standard deviation of one. These methods ensure that the input data is consistent and can be analyzed accurately.</p>
+<h3 id="machine-learning-models-in-wnps">4.2 Machine Learning Models in WNPS</h3>
+<p>After the data has been collected and preprocessed, machine learning algorithms are applied to analyze and predict wind noise propagation paths. WNPS uses supervised learning algorithms, which require labeled data to train statistical models that can predict future wind noise propagation paths. The algorithms used include linear regression, decision trees, and neural networks.</p>
+<p>Linear regression is a simple machine learning algorithm that finds the relationship between two variables by fitting a linear equation to the data. In WNPS, linear regression is used to model the relationship between wind speed, wind direction, and AI values, which are used to predict wind noise propagation paths.</p>
+<p>Decision trees are another type of machine learning algorithm used in WNPS. Decision trees use a tree-like model to make decisions based on a series of conditions. In WNPS, decision trees are used to model the relationship between various input parameters and the wind noise output.</p>
+<p>Finally, neural networks are a more complex type of machine learning algorithm used in WNPS. Neural networks are inspired by the structure and function of the human brain and consist of interconnected nodes that process information. In WNPS, neural networks are used to model the complex relationship between input parameters and wind noise propagation paths.</p>
+<h3 id="validation-and-optimization">4.3 Validation and Optimization</h3>
+<p>After the machine learning models have been developed, they are validated and optimized to ensure that they provide accurate and reliable predictions. This is done by comparing the predicted wind noise values with the actual wind noise generated by the vehicle. The models are then optimized by adjusting the input parameters to minimize the difference between predicted and actual wind noise values.</p>
+<p>Metrics such as accuracy, precision, recall, and F1-score are used to measure the performance of our models. In addition, techniques such as cross-validation and hold-out validation are used to estimate the generalization performance of our models. This will help us determine how well our models are likely to perform on new, unseen data.</p>
+<p>In conclusion, machine learning is a powerful tool that can be used to predict wind noise propagation paths in vehicles. WNPS uses a combination of supervised learning algorithms, including linear regression, decision trees, and neural networks, to analyze former experimental data and predict wind noise propagation paths. These models are then validated and optimized to ensure that they provide accurate and reliable predictions.</p>
+<h2 id="troubleshooting">5. Troubleshooting</h2>
+<div class="note note-info">
+            <p>This section provides solutions or workarounds for common problems or errors that may occur while using WNPS. It also includes FAQs (frequently asked questions) and contact information for technical support.</p>
+          </div>
+<p>If you encounter any issues when starting or executing WNPS, try these fist-aid troubleshooting tips first:</p>
+<ul>
+<li>Make sure that your computer meets the minimum system requirements for running WNPS.</li>
+<li>Check that you have installed all required software dependencies.</li>
+<li>If you are using a data file for input, make sure that it is formatted correctly and contains valid data.</li>
+<li>If you are still having issues, consult the user manual or contact technical support for assistance.</li>
+</ul>
+<h3 id="problems">5.1. Problems</h3>
+<p>When using WNPS, it is possible to encounter some common problems or errors that can hinder the prediction process. Some of the common issues and their potential solutions are outlined below:</p>
+<ul>
+<li>WNPS fails to start or crashes: This could be due to several reasons such as corrupted installation files, incompatible system settings, insufficient memory space, among others. To resolve this problem, the following solutions can be attempted:
+<ul>
+<li>Wait for another 5 mins.</li>
+<li>Quit and restart WNPS following Starting and Executing WNPS instructions above.</li>
+<li>Check if your computer meets minimum system requirements for running WNPS.</li>
+<li>Close other applications that may consume memory space before running WNPS.</li>
+<li>Contact technical support if problem persists.</li>
+</ul></li>
+<li>Prediction process takes too long or fails: This may be caused by large input data size, network connection issues, server overload etc. To fix this problem, try these solutions:
+<ul>
+<li>Reduce input data size by selecting fewer experiment statuses or removing unnecessary rows from data file.</li>
+<li>Contact technical support if problem persists.</li>
+</ul></li>
+</ul>
+<p>A list of possible error messages is shown below:</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>Error/warning examples</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/start_warning.png" srcset="/img/loading.gif" lazyload alt="start_warning" style="zoom:100%;"></td>
+<td>Just ignore it, it will not effect starting the program.</td>
+</tr>
+<tr class="even">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/error_wrong_input_file.png" srcset="/img/loading.gif" lazyload alt="error_wrong_input_file.png" style="zoom:190%;"></td>
+<td>The input file is not in Excel format. Choose a valid file format.</td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/error_wrong_input_excel.png" srcset="/img/loading.gif" lazyload alt="error_wrong_input_excel.png" style="zoom:100%;"></td>
+<td>The inputted Excel file is in wrong format. Check the example file section to make sure the format is right.</td>
+</tr>
+<tr class="even">
+<td><img src="/2023/02/24/ML-noise-prediction-app-user-s-guide/error_wrong_output_file.png" srcset="/img/loading.gif" lazyload alt="error_wrong_output_file" style="zoom:180%;"></td>
+<td>The program has not enough permission to write to the csv data file. This happens normally when the destination file is opened somewhere. Close this file then try again.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="faqs">5.2. FAQs</h3>
+<p>Some FAQs (frequently asked questions) about WNPS are:</p>
+<p>Q: What is wind noise?</p>
+<p>A: Wind noise is a type of noise that is generated by air flow around a vehicle and can affect its acoustic comfort and quality .</p>
+<p>Q: What is AI (Articulation Index)?</p>
+<p>A: AI (Articulation Index) is a measure of speech intelligibility in noisy environments. It ranges from 0 to 1, where higher values indicate better speech intelligibility.</p>
+<p>Q: How does machine learning work in WNPS?</p>
+<p>A: Machine learning is a branch of artificial intelligence that uses algorithms to learn from data and make predictions based on patterns. In WNPS, machine learning algorithms are used to analyze former experimental data and predict wind noise propagation paths based on input variables.</p>
+<p>Q: Does WNPS require internet access to work?</p>
+<p>A: No, WNPS does not require internet access to work. All the necessary files and functions are included in the installation package. However, internet access may be required for software updates and technical support.</p>
+<p>Q: Can I use WNPS on a Mac or Linux computer?</p>
+<p>A: Yes, WNPS is compatible with Mac and Linux operating systems. Simply download the appropriate version from our website and follow the installation instructions.</p>
+<p>Q: How accurate are prediction results from WNPS?</p>
+<p>A: Prediction results from WNPS are based on statistical models that have been trained and validated using former experimental data. They are not exact measurements and may have some margin of error depending on input data quality and quantity. They should be used as a reference or a guidance for wind noise performance development, not as a final verdict.</p>
+<p>Q: Can WNPS be used for other types of noise prediction besides wind noise?</p>
+<p>A: No, WNPS is specifically designed for wind noise prediction in the automotive industry. However, similar machine learning techniques and algorithms can be applied to other types of noise prediction problems in other industries.</p>
+<p>Q: How can I provide feedback or suggestions for WNPS?</p>
+<p>A: You can provide feedback or suggestions for WNPS by contact the Email below and filling out a feedback form. We appreciate your input and will use it to improve our product.</p>
+<h3 id="contact-information">5.3. Contact information</h3>
+<p>The contact information for technical support is:</p>
+<ul>
+<li>Email: <a href="mailto:lisongrui@csvw.com">lisongrui@csvw.com</a></li>
+<li>Phone: +86-21-59042202</li>
+</ul>
+<p>Thank you for using WNPS! 😊</p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.abdengineering.com/blog/weather-affects-noise-study/">How Weather Affects an Outdoor Noise Study | ABD Engineering &amp; Design</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://sciencing.com/effect-wind-sound-transmission-23531.html">Effect of Wind on Sound Transmission | Sciencing</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.abdengineering.com/blog/weather-affects-noise-study/">How Weather Affects an Outdoor Noise Study | ABD Engineering &amp; Design</a> <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://link.springer.com/referenceworkentry/10.1007/978-3-030-05455-7_71-1">Wind Turbine Noise Propagation | SpringerLink</a> <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://matplotlib.org/3.2.2/users/navigation_toolbar.html">Interactive navigation — Matplotlib 3.2.2 documentation</a> <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/manual/">#manual</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>WNPS user&#39;s guide</div>
+      <div>https://daydreamatnight.github.io/2023/02/24/ML-noise-prediction-app-user-s-guide/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 24, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/22/build-a-chatbot-backended-by-Meta-llama/" title="build a chatbot backended by Meta LLaMA">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">build a chatbot backended by Meta LLaMA</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/02/Autoencoder-identical-to-POD/" title="Autoencoder identical to POD">
+                        <span class="hidden-mobile">Autoencoder identical to POD</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

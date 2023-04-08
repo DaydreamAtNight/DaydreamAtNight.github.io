@@ -23,10 +23,13 @@
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="The process to further improve the current alpaca model with larger datasets.">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/own_llama.png">
 <meta property="article:published_time" content="2023-04-02T03:29:00.000Z">
-<meta property="article:modified_time" content="2023-04-06T11:03:57.000Z">
+<meta property="article:modified_time" content="2023-04-08T17:26:50.938Z">
 <meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/own_llama.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -218,7 +221,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          2.3k words
+          6.6k words
         
       </span>
     
@@ -230,7 +233,7 @@
         
         
           <!-- compatible with older versions-->
-          8 minutes
+          23 minutes
         
       </span>
     
@@ -277,30 +280,130 @@
             <p>The process to further improve the current alpaca model with larger datasets.</p>
           </div>
 <span id="more"></span>
-<h2 id="training-process">Training process</h2>
+<h2 id="dataset">Dataset</h2>
 <p>First of all, a big thank to <strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong> for collecting and formatting such a detailed dataset. And a great training framework for efficient training process.</p>
-<p>I desided to further improve current model alpaca 7B/13B in 3 steps with 3 dataset:</p>
+<p>I desided to further improve current model alpaca 7B/13B in 2 steps:</p>
 <ul>
-<li>First step, improve stories, dialogue, reasoning, coding and COT performance, 564088
+<li>First step we test for our training process, take a small dataset to improve stories, Chinese, and COT performance
 <ul>
-<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/gpt4all_without_p3.json">gpt4all_without_p3.json</a>, 437604, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/nomic-ai/gpt4all">gpt4all</a></strong> for more details</li>
-<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/alpaca_data_cleaned.json">alpaca_data_cleaned.json</a>, 51712</li>
-<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/CoT_data.json">CoT_data.json</a>, 74770</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/alpaca/alpaca_data_cleaned.json">alpaca_data_cleaned.json</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/Chain-of-Thought/CoT_data.json">CoT_data.json</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/belle_cn/belle_instructions/belle_data0.5M_cn.json">belle_data0.5cn.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong> for more details</li>
 </ul></li>
-<li>Second step, improve the Chineses performance, 2107402 in total
+<li>Second step, after tuned the superparameters and the training process, we add more dataset, improve the Chinese, dialogue, reasoning, coding performance
 <ul>
-<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/belle_data1.5M_cn.json">belle_data1.5M_cn.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong> for more details</li>
-</ul></li>
-<li>Third step
-<ul>
-<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/instinwild_ch.json">instinwild_ch.json</a>, collected from Twitter, where users tend to share their interesting prompts of mostly generation, open QA, and mind-storm types</li>
-<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/instinwild_en.json">instinwild_en.json</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/gpt4all_without_p3.json">gpt4all_without_p3.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/nomic-ai/gpt4all">gpt4all</a></strong> for more details</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/belle_cn/belle_instructions/belle_data1M_cn.json">belle_data1.0M_cn.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong> for more details</li>
 </ul></li>
 </ul>
-<p>Combine json files with:</p>
+<p>The final dataset results in:</p>
+<div id="echarts9020" style="width: 100%;height: 600px;margin: 0 auto"></div>
+<script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+<script type="text/javascript" src="https://www.makeapie.com/dep/echarts/map/js/china.js"></script>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('echarts9020'));
+  // 指定图表的配置项和数据
+  
+option = {
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: <br/> {c} <br/>({d}%)'
+  },
+  legend: {
+    data: [
+      'alpaca.json',
+      'CoT_data.json',
+      'gpt4all_without_p3_formatted.json',
+      'Vicuna.json',
+      'belle_data1M_cn.json',
+     'dialog_w_context/train.json',
+      'Chinese',
+      'dialoag',
+      'coding',
+      'reasoning'
+    ]
+  },
+  series: [
+    {
+      name: 'dataset',
+      type: 'pie',
+      selectedMode: 'single',
+      radius: [0, '30%'],
+      label: {
+        position: 'inner',
+        fontSize: 14
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1079517, name: 'Chinese' },
+        { value: 165681, name: 'dialoag' },
+        { value: 806199, name: 'coding' },
+        { value: 74771+51974, name: 'reasoning' }
+      ]
+    },
+    {
+      name: 'dataset',
+      type: 'pie',
+      radius: ['45%', '60%'],
+      labelLine: {
+        length: 30
+      },
+      label: {
+        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}\n  {per|{d}%}  ',
+        backgroundColor: '#F6F8FC',
+        borderColor: '#8C8D8E',
+        borderWidth: 1,
+        borderRadius: 4,
+        rich: {
+          a: {
+            color: '#6E7079',
+            lineHeight: 22,
+            align: 'center'
+          },
+          hr: {
+            borderColor: '#8C8D8E',
+            width: '100%',
+            borderWidth: 1,
+            height: 0
+          },
+          b: {
+            color: '#4C5058',
+            fontSize: 14,
+            fontWeight: 'bold',
+            lineHeight: 33
+          },
+          per: {
+            color: '#fff',
+            backgroundColor: '#4C5058',
+            padding: [3, 4],
+            borderRadius: 4
+          }
+        }
+      },
+      data: [
+        { value: 52002, name: 'alpaca.json' },
+        { value: 74771, name: 'CoT_data.json' },
+        { value: 806199, name: 'gpt4all_without_p3_formatted.json' },
+        { value: 51974, name: 'Vicuna.json' },
+        { value: 1079517, name: 'belle_data1M_cn.json' },
+        { value: 165681, name: 'dialog_w_context/train.json' }
+      ]
+    }
+  ]
+};
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+<p>And we combine json files with:</p>
 <div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> json
 
-files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<span class="hljs-string">&#x27;CoT_data.json&#x27;</span>,<span class="hljs-string">&#x27;gpt4all_without_p3.json&#x27;</span>]
+files=[<span class="hljs-string">&#x27;file1.json&#x27;</span>,<span class="hljs-string">&#x27;file2.json&#x27;</span>,<span class="hljs-string">&#x27;file3.json&#x27;</span>]
+output_file = <span class="hljs-string">&#x27;combined.json&#x27;</span>
 
 <span class="hljs-keyword">def</span> <span class="hljs-title function_">merge_JsonFiles</span>(<span class="hljs-params">filename</span>):
     result = <span class="hljs-built_in">list</span>()
@@ -308,39 +411,249 @@ files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<sp
         <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(f1, <span class="hljs-string">&#x27;r&#x27;</span>) <span class="hljs-keyword">as</span> infile:
             result.extend(json.load(infile))
 
-    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;alpaca_cleaned_plus_GPT4woP3_plus_Cot.json&#x27;</span>, <span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> output_file:
+    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(output_file, <span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> output_file:
         json.dump(result, output_file)
 
-merge_JsonFiles(files)
-
-<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;alpaca_cleaned_plus_GPT4woP3_plus_Cot.json&#x27;</span>) <span class="hljs-keyword">as</span> f1:               <span class="hljs-comment"># open the file</span>
-    data1 = json.load(f1)</code></pre></div>
-<p>set up the dependencies with:</p>
+merge_JsonFiles(files)</code></pre></div>
+<h2 id="train-steps">Train steps</h2>
+<h3 id="step-1">step 1:</h3>
+<p>After setting up the dependencies with:</p>
 <div class="code-wrapper"><pre><code class="hljs shell">git clone git@github.com:PhoebusSi/Alpaca-CoT.git
 pip install -r requirements.txt</code></pre></div>
-<h2 id="step-1">Step 1</h2>
+<p>First we train a small size mode with small size of dataset to validate the training process.</p>
 <p>Combine the jsons:</p>
-<div class="code-wrapper"><pre><code class="hljs python">files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<span class="hljs-string">&#x27;CoT_data.json&#x27;</span>,<span class="hljs-string">&#x27;gpt4all_without_p3.json&#x27;</span>]</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs python">files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<span class="hljs-string">&#x27;CoT_data.json&#x27;</span>,<span class="hljs-string">&#x27;belle_data05cn.json&#x27;</span>]</code></pre></div>
 <p>Train with</p>
 <div class="code-wrapper"><pre><code class="hljs shell">export HF_DATASETS_CACHE=&quot;/home/.cache&quot;
 torchrun --nproc_per_node 8  \
     --nnodes=1 --node_rank=0 uniform_finetune.py \
     --model_type llama --model_name_or_path ../llama_weights_converted/7B \
-    --data alpaca-gpt4-cot --lora_target_modules q_proj v_proj \
+    --data alpaca-cot-belle --lora_target_modules q_proj v_proj \
     --per_gpu_train_batch_size 128 --gradient_accumulation_steps 32 \
     --learning_rate 3e-4 --epochs 1</code></pre></div>
-<h2 id="step-2">Step 2</h2>
-<p>Combine the jsons:</p>
-<div class="code-wrapper"><pre><code class="hljs shell">files=[&#x27;alpaca_data_cleaned.json&#x27;,&#x27;CoT_data.json&#x27;,&#x27;gpt4all_without_p3.json&#x27;, &#x27;belle_data1.5M_cn.json&#x27;]</code></pre></div>
-<p>Train with</p>
+<p>We found durining training, the convergence speed is slow, and the memory usage is not optimized using lora method. As a result we add the learning rate as well as the batch size and per_gpu_train_batch_size.</p>
+<p>Second, when deploiying the test model, it still doesn’t know where to stop for each model, and the dialogue performance is poor as well. We decided to change <code>add_eos_token=False</code> to <code>True</code>. And decided to include more dialog related dataset.</p>
+<h3 id="step-2-bigger-dataset">Step 2: bigger dataset</h3>
+<p>At this stage, we only fine tune the 7B model, applying the above measurements, we</p>
+<p>combine the jsons:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">files=[&#x27;CoT_data.json&#x27;,&#x27;gpt4all_without_p3_formatted.json&#x27;, &#x27;Vicuna.json&#x27;, &#x27;belle_data1M_cn.json&#x27;, &#x27;dialog_w_context/train.json&#x27;]</code></pre></div>
+<p>train with</p>
 <div class="code-wrapper"><pre><code class="hljs shell">export HF_DATASETS_CACHE=&quot;/home/.cache&quot;
-torchrun --nproc_per_node 8  \
-    --nnodes=1 --node_rank=0 uniform_finetune.py \
-    --model_type llama --model_name_or_path ../llama_weights_converted/7B/ \
-    --data alpaca-gpt4-cot-belle15b --lora_target_modules q_proj v_proj \
-    --per_gpu_train_batch_size 32 --gradient_accumulation_steps 2 \
-    --learning_rate 3e-4 --epochs 1</code></pre></div>
-<p><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech">LianjiaTech</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong></p>
+torchrun --nproc_per_node 8 uniform_finetune.py --model_type llama  \
+		--model_name_or_path ../llama_weights_converted/13B  \
+		--data gpt4-cot-belle1M-vicuna-dialog --lora_target_modules q_proj v_proj  \
+		--per_gpu_train_batch_size 32 --gradient_accumulation_steps 1  \
+		--learning_rate 4.5e-4 --epochs 1 &amp;</code></pre></div>
+<p>It takes 1h for data spliting and mapping and 10h 37m 26s for training on 8 NVIDIA A800-SXM4-80GB GPUs. And the training summary is presented in the Appendix.</p>
+<div class="note note-warning">
+            <p>Note that the training process is badly inefficient, refer to the appendix, the memory accessing takes as high as 75% time of training. The high memory accessing problem might because of training 7B on 8 devices is too much. And the low memory usage is because I want to keep to batch size not higher than 256 to get a good generalization ability. But I have no time to do ablation on this super parameter.</p>
+          </div>
+<h2 id="deployment-and-comparision">Deployment and comparision</h2>
+<p>We deploy the model with context using the same way as the last section of previous blog.</p>
+<p>Actually it is really difficult to evaluate a large language model. Using GPT4 is a possible approach but I don’t have OpenAI plus. So at this stage, I evaluate by myself.</p>
+<p>Here are some example results between the further fine tuned model and the alpaca model from precious blog.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">python alpaca_backend.py --size 7 --data gpt4-cot-belle1M-vicuna-dialog --bit 1
+python alpaca_backend.py --size 7 --data alpaca --bit 1</code></pre></div>
+<h3 id="dialog-discourse-ability">dialog &amp; discourse ability</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Alpaca</th>
+<th>Fine tuned alpaca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2014-27-04.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 14-27-04"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2014-27-15.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 14-27-15"></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="chinese-ability">Chinese ability</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Alpaca</th>
+<th>Fine tuned alpaca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-27-04-16808597894931.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-27-04"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-27-04.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-27-04"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-37-13.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-37-13"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-39-48.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-39-48"></td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-34-39.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-34-39"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-25-09.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-25-09"></td>
+</tr>
+</tbody>
+</table>
+<p>We can the Chinese ability of fine tuned version shows a big improvement. Impressively, even though Alpaca hasn't been trained in Chinese. It can understand Chinese prompt. As I shown in the first example, when I asked "What is the emergent abilities of LLM<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wei, J., Tay, Y., Bommasani, R., Raffel, C., Zoph, B., Borgeaud, S., ... &amp; Fedus, W. (2022). Emergent abilities of large language models. *arXiv preprint arXiv:2206.07682*.](https://arxiv.org/abs/2206.07682)">[1]</span></a></sup>?" The Alpaca model gives the model perfectly.</p>
+<p>In the second example, when I ask "Introduce Shanghai" in Chinese. The model also clearly understands my instruction and gives me what I want, though in English.</p>
+<p>However, the translation ability is still poor. It's too hard for it.</p>
+<h2 id="appendix">Appendix</h2>
+<table>
+
+<thead>
+<tr class="header">
+<th>Overview</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State</td>
+<td>finished</td>
+</tr>
+<tr class="even">
+<td>Start time</td>
+<td>April 6th, 2023 at 4:55:13 pm</td>
+</tr>
+<tr class="odd">
+<td>Duration</td>
+<td>10h 37m 26s</td>
+</tr>
+<tr class="even">
+<td>Hostname</td>
+<td>localhost.localdomain</td>
+</tr>
+<tr class="odd">
+<td>OS</td>
+<td>Linux-3.10.0-957.el7.x86_64-x86_64-with-glibc2.17</td>
+</tr>
+<tr class="even">
+<td>Python version</td>
+<td>3.9.12</td>
+</tr>
+<tr class="odd">
+<td>Python executable</td>
+<td>/home/conda/llama/bin/python</td>
+</tr>
+<tr class="even">
+<td>Command</td>
+<td>/home/singleGPU/chatbot/fintune/Alpaca-CoT-main/uniform_finetune.py --model_type llama --model_name_or_path ../llama_weights_converted/7B --data gpt4-cot-belle1M-vicuna-dialog --lora_target_modules q_proj v_proj --per_gpu_train_batch_size 32 --gradient_accumulation_steps 1 --learning_rate 4.5e-4 --epochs 1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>System Hardware</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPU count</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<td>GPU count</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>GPU type</td>
+<td>NVIDIA A800-SXM4-80GB</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Train logs:</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>epoch</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>global_step</td>
+<td>6573</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>9.732735980225552e-7</td>
+</tr>
+<tr class="even">
+<td>loss</td>
+<td>0.8531</td>
+</tr>
+<tr class="odd">
+<td>total_flos</td>
+<td>34166331403636048000</td>
+</tr>
+<tr class="even">
+<td>train_loss</td>
+<td>0.8965309444272535</td>
+</tr>
+<tr class="odd">
+<td>train_runtime</td>
+<td>38249.6774</td>
+</tr>
+<tr class="even">
+<td>train_samples_per_second</td>
+<td>43.989</td>
+</tr>
+<tr class="odd">
+<td>train_steps_per_second</td>
+<td>0.172</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Training process visualization</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_32_33%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_32_33 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_33_38%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_33_38 PM" style="zoom:80%;"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_33_12%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_33_12 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_32_57%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_32_57 PM" style="zoom:80%;"></td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_23%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_23 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_05%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_05 PM" style="zoom:80%;"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_36%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_36 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_54%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_54 PM" style="zoom:80%;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<p>Belle: <a target="_blank" rel="noopener" href="https://github.com/LianjiaTech">LianjiaTech</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong></p>
+<p>alpaca COT: <a target="_blank" rel="noopener" href="https://github.com/PhoebusSi">PhoebusSi</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong></p>
+<p>alpaca COT dataset: <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT">Alpaca-CoT</a></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2206.07682">Wei, J., Tay, Y., Bommasani, R., Raffel, C., Zoph, B., Borgeaud, S., ... &amp; Fedus, W. (2022). Emergent abilities of large language models. <em>arXiv preprint arXiv:2206.07682</em>.</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
 
                 
               </div>
@@ -349,6 +662,13 @@ torchrun --nproc_per_node 8  \
             <div>
               <div class="post-metas my-3">
   
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+    </div>
   
 </div>
 

@@ -23,36 +23,13 @@
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="This is a process of optimizing the chat bot that I just build in last blog. We first make the model more like chatGPT by few shot learning, then we fine tune the model follow Stanford&#39;s">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/Screenshot%20from%202023-03-30%2016-44-21.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/Screenshot%20from%202023-03-30%2016-51-15.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/interface_version2_1.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/interface_version2_2.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/alpaca_main.jpg">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/Screenshot%20from%202023-04-06%2016-17-38.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/Screenshot%20from%202023-04-06%2016-40-39.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/Screenshot%20from%202023-04-06%2017-30-24.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_13_05%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_13_35%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_37%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_27%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_15%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_25%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_13_52%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_05%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_02_38%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_02_50%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_56%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_45%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_25%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_36%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_01%20PM.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_15%20PM.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/alpaca.png">
 <meta property="article:published_time" content="2023-03-30T08:16:10.000Z">
-<meta property="article:modified_time" content="2023-04-06T11:03:56.000Z">
+<meta property="article:modified_time" content="2023-04-08T17:26:03.834Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/Screenshot%20from%202023-03-30%2016-44-21.png">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/alpaca.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -244,7 +221,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          21k words
+          16k words
         
       </span>
     
@@ -256,7 +233,7 @@
         
         
           <!-- compatible with older versions-->
-          72 minutes
+          54 minutes
         
       </span>
     
@@ -458,7 +435,8 @@ btit = <span class="hljs-string">&quot;### Response:&quot;</span>
 <p>Disable the <code>load_context</code> inference (no conversation) , with the first user input shown below, this is what the model sees:</p>
 <blockquote>
 <p>Below is an instruction that describes a task. Write a response that appropriately completes the request.</p>
-<p><font style="background:yellow">### Instruction: </font> <strong><em>How to sort a list in Python?</em></strong></p>
+<p><font style="background:yellow">### Instruction: </font></p>
+<p><strong><em>How to sort a list in Python?</em></strong></p>
 <p><font style="background:yellow">### Response: </font></p>
 </blockquote>
 <p>Below is the raw result (only exclude the user prompt before its real answer, no truncation or other preprocessing) The performance looks pretty good actually.</p>
@@ -495,7 +473,7 @@ btit = <span class="hljs-string">&quot;### Response:&quot;</span>
             <p>The conservation ability even lower than the llama original with few shot learning.</p>
           </div>
 <h5 id="method-2">method 2</h5>
-<p>A second method is appending the new message directly to the history as a big <code>### Instruction</code>. For example for the second round, this is what the model sees:</p>
+<p>A second method (mainsteam) is appending the new message directly to the history as a big <code>### Instruction</code>. For example for the second round, this is what the model sees:</p>
 <blockquote>
 <p>Below is an instruction that describes a task. Write a response that appropriately completes the request.</p>
 <p><font style="background:yellow">### Instruction: </font></p>
@@ -675,64 +653,6 @@ btit = <span class="hljs-string">&quot;### Response:&quot;</span>
 </tr>
 </tbody>
 </table>
-<p>One screen shot of the GPU usage</p>
-<div class="code-wrapper"><pre><code class="hljs shell">Every 2.0s: nvidia-smi
-
-Fri Mar 31 04:50:00 2023
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  NVIDIA A800-SXM...  On   | 00000000:10:00.0 Off |                    0 |
-| N/A   56C    P0   264W / 400W |  72854MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   1  NVIDIA A800-SXM...  On   | 00000000:16:00.0 Off |                    0 |
-| N/A   45C    P0   222W / 400W |  72502MiB / 81920MiB |     98%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   2  NVIDIA A800-SXM...  On   | 00000000:49:00.0 Off |                    0 |
-| N/A   58C    P0   418W / 400W |  69598MiB / 81920MiB |     99%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   3  NVIDIA A800-SXM...  On   | 00000000:4D:00.0 Off |                    0 |
-| N/A   53C    P0   237W / 400W |  71034MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   4  NVIDIA A800-SXM...  On   | 00000000:8A:00.0 Off |                    0 |
-| N/A   53C    P0   212W / 400W |  68628MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   5  NVIDIA A800-SXM...  On   | 00000000:8F:00.0 Off |                    0 |
-| N/A   49C    P0   213W / 400W |  71334MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   6  NVIDIA A800-SXM...  On   | 00000000:C6:00.0 Off |                    0 |
-| N/A   51C    P0   312W / 400W |  66548MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   7  NVIDIA A800-SXM...  On   | 00000000:CA:00.0 Off |                    0 |
-| N/A   56C    P0   233W / 400W |  73034MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|    0   N/A  N/A     61688      C   /home/conda/llama/bin/python    72851MiB |
-|    1   N/A  N/A     61689      C   /home/conda/llama/bin/python    72499MiB |
-|    2   N/A  N/A     61690      C   /home/conda/llama/bin/python    69595MiB |
-|    3   N/A  N/A     61691      C   /home/conda/llama/bin/python    71031MiB |
-|    4   N/A  N/A     61692      C   /home/conda/llama/bin/python    68625MiB |
-|    5   N/A  N/A     61693      C   /home/conda/llama/bin/python    71331MiB |
-|    6   N/A  N/A     61695      C   /home/conda/llama/bin/python    66545MiB |
-|    7   N/A  N/A     61696      C   /home/conda/llama/bin/python    73031MiB |
-+-----------------------------------------------------------------------------+</code></pre></div>
 <h3 id="b-training-1">13B training</h3>
 <table>
 
@@ -871,64 +791,6 @@ Fri Mar 31 04:50:00 2023
 </tr>
 </tbody>
 </table>
-<p>One screen shot of the GPU usage</p>
-<div class="code-wrapper"><pre><code class="hljs shell">Every 2.0s: nvidia-smi
-
-Fri Mar 31 06:11:07 2023
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  NVIDIA A800-SXM...  On   | 00000000:10:00.0 Off |                    0 |
-| N/A   44C    P0    98W / 400W |  74682MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   1  NVIDIA A800-SXM...  On   | 00000000:16:00.0 Off |                    0 |
-| N/A   39C    P0    92W / 400W |  80688MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   2  NVIDIA A800-SXM...  On   | 00000000:49:00.0 Off |                    0 |
-| N/A   43C    P0   104W / 400W |  62844MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   3  NVIDIA A800-SXM...  On   | 00000000:4D:00.0 Off |                    0 |
-| N/A   43C    P0   113W / 400W |  81178MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   4  NVIDIA A800-SXM...  On   | 00000000:8A:00.0 Off |                    0 |
-| N/A   43C    P0   219W / 400W |  68668MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   5  NVIDIA A800-SXM...  On   | 00000000:8F:00.0 Off |                    0 |
-| N/A   41C    P0   139W / 400W |  80238MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   6  NVIDIA A800-SXM...  On   | 00000000:C6:00.0 Off |                    0 |
-| N/A   39C    P0   185W / 400W |  79534MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-|   7  NVIDIA A800-SXM...  On   | 00000000:CA:00.0 Off |                    0 |
-| N/A   45C    P0   231W / 400W |  67694MiB / 81920MiB |    100%      Default |
-|                               |                      |             Disabled |
-+-------------------------------+----------------------+----------------------+
-
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|    0   N/A  N/A      9589      C   /home/conda/llama/bin/python    74679MiB |
-|    1   N/A  N/A      9590      C   /home/conda/llama/bin/python    80685MiB |
-|    2   N/A  N/A      9591      C   /home/conda/llama/bin/python    70997MiB |
-|    3   N/A  N/A      9592      C   /home/conda/llama/bin/python    81155MiB |
-|    4   N/A  N/A      9593      C   /home/conda/llama/bin/python    68665MiB |
-|    5   N/A  N/A      9594      C   /home/conda/llama/bin/python    80235MiB |
-|    6   N/A  N/A      9595      C   /home/conda/llama/bin/python    79531MiB |
-|    7   N/A  N/A      9596      C   /home/conda/llama/bin/python    67691MiB |
-+-----------------------------------------------------------------------------+</code></pre></div>
 <h2 id="references">References</h2>
 <p>LangChain document: <a target="_blank" rel="noopener" href="https://python.langchain.com/en/latest/index.html#">LangChain 0.0.128</a></p>
 <p>Alpaca: <a target="_blank" rel="noopener" href="https://github.com/tatsu-lab">tatsu-lab</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">stanford_alpaca</a></strong></p>

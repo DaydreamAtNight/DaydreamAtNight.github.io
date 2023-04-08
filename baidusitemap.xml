@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://daydreamatnight.github.io/2023/02/24/ML-noise-prediction-app-user-s-guide/</loc>
+    <lastmod>2023-04-08</lastmod>
+  </url>
+  <url>
     <loc>https://daydreamatnight.github.io/2023/04/02/Improve-the-chatbot/</loc>
-    <lastmod>2023-04-06</lastmod>
+    <lastmod>2023-04-08</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2023/04/01/Chinese-chatbot/</loc>
-    <lastmod>2023-04-06</lastmod>
+    <lastmod>2023-04-08</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/</loc>
-    <lastmod>2023-04-06</lastmod>
+    <lastmod>2023-04-08</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/</loc>
-    <lastmod>2023-04-06</lastmod>
+    <lastmod>2023-04-08</lastmod>
   </url>
   <url>
     <loc>https://daydreamatnight.github.io/2022/06/05/Lesson-note-Patterns-Machine-learning-for-fluids-dynamics/</loc>

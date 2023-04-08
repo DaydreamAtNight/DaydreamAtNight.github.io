@@ -23,14 +23,13 @@
 <meta property="og:site_name" content="ShouRou">
 <meta property="og:description" content="A castrated version of chatGPT is built backended by LLaMA, Meta&#39;s leaked large language model. Vue.js and flask is used for front-end and backend, and axios is used for HTTP requests.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/Screenshot%20from%202023-03-30%2016-06-51.png">
-<meta property="og:image" content="https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/interface_version1.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/llama.png">
 <meta property="article:published_time" content="2023-03-22T08:35:16.000Z">
-<meta property="article:modified_time" content="2023-04-06T11:03:56.000Z">
+<meta property="article:modified_time" content="2023-04-08T17:25:39.292Z">
 <meta property="article:author" content="Ryan LI">
 <meta property="article:tag" content="deep learning">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/Screenshot%20from%202023-03-30%2016-06-51.png">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/llama.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -222,7 +221,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          14k words
+          13k words
         
       </span>
     
@@ -234,7 +233,7 @@
         
         
           <!-- compatible with older versions-->
-          46 minutes
+          45 minutes
         
       </span>
     
@@ -319,7 +318,7 @@
 <span class="language-javascript"><span class="language-xml">        <span class="hljs-attr">messages</span>: [</span></span>
 <span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Ask me any questions like what you will do to ChatGPT, come on!&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;,</span></span>
 <span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;What can you do!&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;sent&#x27;</span> &#125;,</span></span>
-<span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Hey, I&#x27;m a AI backended chatbot developed by Ryan LI, see 172.26.53.226:4000 for the development documentation!&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Hey, I&#x27;m a AI backended chatbot developed by Ryan LI&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;,</span></span>
 <span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Hello, who are you?&#x27;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;sent&#x27;</span> &#125;,</span></span>
 <span class="language-javascript"><span class="language-xml">        ], </span></span>
 <span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// Defines if there are still history messages, if false, it will stop loading. The reader can change it to true to demonstrate the effect of automatic scrolling updates.</span></span></span>
@@ -613,7 +612,7 @@ CORS(app)
 <h2 id="deploy-the-chatbot">Deploy the chatbot</h2>
 <p>After building the front-end interface (with the code being modified a little bit), run the script:</p>
 <div class="code-wrapper"><pre><code class="hljs shell">torchrun --nproc_per_node 1 chatbotBackend.py</code></pre></div>
-<p>And we can open <a target="_blank" rel="noopener" href="http://172.26.53.226:5000/" class="uri">http://172.26.53.226:5000/</a> give it a try on the 7B model！</p>
+<p>And we can open <a target="_blank" rel="noopener" href="http://localhost:5000/" class="uri">http://localhost:5000/</a> give it a try on the 7B model！</p>
 <p>Bigger models requires larger graphic memory and requires muti-GPU. A locally available multi-GPU server is needed to try one of the those.</p>
 <p>Some prompts that worth a try:</p>
 <div class="code-wrapper"><pre><code class="hljs txt">Here is a brief introduction of the software Catia:
@@ -747,8 +746,8 @@ CATIA is</code></pre></div>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/02/Autoencoder-identical-to-POD/" title="Autoencoder identical to POD">
-                        <span class="hidden-mobile">Autoencoder identical to POD</span>
+                      <a href="/2023/02/24/ML-noise-prediction-app-user-s-guide/" title="WNPS user&#39;s guide">
+                        <span class="hidden-mobile">WNPS user&#39;s guide</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
