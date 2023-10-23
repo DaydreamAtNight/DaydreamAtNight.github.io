@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://daydreamatnight.github.io/2023/10/20/Search-for-PHD/</loc>
-    
-    <lastmod>2023-10-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://daydreamatnight.github.io/about/index.html</loc>
     
     <lastmod>2023-10-19</lastmod>
@@ -553,7 +544,7 @@
 
   <url>
     <loc>https://daydreamatnight.github.io/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -561,98 +552,91 @@
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/OpenFOAM/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/mac/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/CUDA/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/llama/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/C/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/mac/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/llama/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/CUDA/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning-tricks/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/manual/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/paper-reading/</loc>
-    <lastmod>2023-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/tags/Apply-Math/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://daydreamatnight.github.io/tags/paraview/</loc>
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
