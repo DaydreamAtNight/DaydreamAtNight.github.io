@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://daydreamatnight.github.io/googlea90d7e873607f04a.html</loc>
+    
+    <lastmod>2023-10-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://daydreamatnight.github.io/about/index.html</loc>
     
     <lastmod>2023-10-19</lastmod>
@@ -104,15 +113,6 @@
     <loc>https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/</loc>
     
     <lastmod>2023-04-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://daydreamatnight.github.io/googlea90d7e873607f04a.html</loc>
-    
-    <lastmod>2023-03-29</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -572,13 +572,6 @@
   </url>
   
   <url>
-    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
-    <lastmod>2023-10-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://daydreamatnight.github.io/tags/deep-learning/</loc>
     <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -593,6 +586,13 @@
   </url>
   
   <url>
+    <loc>https://daydreamatnight.github.io/tags/fluid-dynamics/</loc>
+    <lastmod>2023-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://daydreamatnight.github.io/tags/CUDA/</loc>
     <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -600,14 +600,14 @@
   </url>
   
   <url>
-    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
+    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
     <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://daydreamatnight.github.io/tags/hexo/</loc>
+    <loc>https://daydreamatnight.github.io/tags/blog/</loc>
     <lastmod>2023-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
