@@ -1,0 +1,833 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is a series of brief notes for the popular lesson: Machine Learning for Fluid Mechanics, by Dr. Steve Brunton. He is not only a good instructor, but an active researcher focusing combining techn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction, Machine learning for fluids dynamics">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a series of brief notes for the popular lesson: Machine Learning for Fluid Mechanics, by Dr. Steve Brunton. He is not only a good instructor, but an active researcher focusing combining techn">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/Lesson_note_ML_for_fluid_dynamics.jpeg">
+<meta property="article:published_time" content="2022-06-01T09:09:11.000Z">
+<meta property="article:modified_time" content="2022-06-08T18:16:37.950Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/Lesson_note_ML_for_fluid_dynamics.jpeg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Introduction, Machine learning for fluids dynamics - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Introduction, Machine learning for fluids dynamics"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-01 17:09" pubdate>
+          June 1, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          7.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          25 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Introduction, Machine learning for fluids dynamics</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>This is a series of brief notes for the popular lesson: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8e3OT2K99Kw&amp;list=PLMrJAkhIeNNQWO3ESiccZmPssvUDFHL4M&amp;index=1">Machine Learning for Fluid Mechanics</a>, by <a target="_blank" rel="noopener" href="https://www.eigensteve.com/">Dr. Steve Brunton</a>. He is not only a good instructor, but an active researcher focusing combining techniques in dimensionality reduction, sparse sensing, and machine learning for the data-driven discovery and control of complex dynamical systems.</p>
+</blockquote>
+<span id="more"></span>
+<div class="note note-primary">
+            <p>Given the background of the popularity of ML in the CV area, this lesson focus on how to apply it into the field of traditional physics science and engineering, especially dynamical systems and fluid mechanics.</p>
+          </div>
+<h2 id="introduction">Introduction</h2>
+<p>Several Q&amp;As:</p>
+<ul>
+<li><p>Explain machine learning in nutshell.</p>
+<p>Machine learning is a growing set of techniques for high dimensional, non-convex optimisations based on a growing wealth of data.</p></li>
+<li><p>Why machine learning suits fluid mechanics?</p>
+<p>Almost all of the fluid dynamics tasks (including Reduction, modelling, control, sensing and closure) can be written as nonlinear, non-convex, multi-scale and very high dimensional (very hard) <strong>optimisation problems</strong> that can't be solved efficiently by traditional methods. Yet it is exactly the field of machine learning.</p></li>
+<li><p>What is high dimensional?</p>
+<p>Fluid itself has many degrees of freedom, million or billion degrees of freedom might be needed for simulate a turbulent fluid. And a growing of data leads an explosion of dimension.</p></li>
+<li><p>What is non-linear?</p>
+<p>Because fluids is governed by a nonlinear PDE, the NS equation.</p></li>
+<li><p>What is non-convex?</p>
+<p>Because there exists local minima in the optimisation problems.</p></li>
+<li><p>What kind of ML do we need?</p>
+<p>Interpretable, generalisable i.e. reliable</p>
+<p>Sparse, low-dimensional, robust</p></li>
+</ul>
+<h2 id="history">History</h2>
+<p>Machine learning and fluid dynamics share a long history of interfaces.</p>
+<p>Pioneered by Rechenberg (1973) and Schwefel (1977), who introduced Evolution Strategies (ES) to design and optimise the profile of a multi-panel plate in order to minimise the drag. The stochastic was introduced and a optimisation similar to the SGD is applied to find the best configuration.</p>
+<p>Another link is Sir James Lighthill's report (1974), which leads the AI winter. His report says AI fails to meet the promises in several fields, such as speech recognition, and natural language processing (NLP).</p>
+<div class="note note-success">
+            <p>The first time I heard this part of history, I thought this Lighthill was some idiot who lacks insight. I never connected this man with the very person who proposed the Lighthill's Equation with the acoustic analogy method and founded the subject of aeroacoustics, during his PHD!</p><p>Also, it reminds me a talk I saw by Geoffrey Hinton, who said he came to the US because he couldn't find a job in the UK with a degree in AI. Back then (1978) UK refused to fund almost any research topics related to AI and deep learning, partly of Sir Lighthill's consequences.</p><p>It's just like someone of my field narrowly buried the AI halfway yet at the same time influenced a star in this area.</p>
+          </div>
+<h2 id="examples">Examples</h2>
+<h3 id="podpcasva">POD/PCA/SVA</h3>
+<p>POD refers to the PCA done on the flow data. With a series of snapshots of a flow past a cylinder at <span class="math inline">\(Re\approx100\)</span>, subtracting the mean flow and applying a singular value decomposition (SVA), the resulting dominant eigen flows (modes, representing the flow patterns) can be used to construct a <strong>reduced order model</strong> to reproduce the fluid flow field efficiently.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/POD Analysis of Cylinder Flow.jpeg" srcset="/img/loading.gif" lazyload alt="POD Analysis of Cylinder Flow. (a) Original Flow Field (vorticity shown). (b) First 8 dominant POD modes. After https://www.researchgate.net/publication/318710028_Special_Topics_in_CFD/citations" style="zoom:50%;"></p>
+<p>One application of this method is shown below<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Scherl, I., Strom, B., Shang, J. K., Williams, O., Polagye, B. L., &amp; Brunton, S. L. (2020). Robust principal component analysis for modal decomposition of corrupt fluid flows. *Physical Review Fluids*, *5*(5), 054401.](https://scholar.google.com/scholar_url?url=https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.5.054401&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=9368717229379747223&amp;ei=eXCcYp2tDZb0yAT_6KLYDw&amp;scisig=AAGBfm3dnQgKr4Ku82Fv4l8EQlBowAQZdQ)">[1]</span></a></sup>, RPCA, a variant of PCA is applied to denoise the artificially pepper-salt corrupted DNS simulation result, and real PIV experiment result. The outliers and the true fluid field are able to separate with a change of the <span class="math inline">\(\lambda\)</span>.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/RPCA for denoising.png" srcset="/img/loading.gif" lazyload alt="RPCA filtering removes noise and outliers in the flow past a cylinder (black circle), from DNS (left) with 10% of velocity field measurements corrupted with salt and pepper noise, and PIV measurements (right). All frames show resultant vorticity fields. As the parameter λ is decreased, RPCA filtering is more aggressive, eventually incorrectly identifying coherent flow structures as outliers. After Scherl, I., Strom, B., Shang, J. K., Williams, O., Polagye, B. L., & Brunton, S. L. (2020). Robust principal component analysis for modal decomposition of corrupt fluid flows. *Physical Review Fluids*, *5*(5), 054401." style="zoom:48%;"></p>
+<h3 id="closure-modelling">Closure modelling</h3>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wr984EOmNaY?start=15" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</p>
+<p>This is a DNS simulation on turbulent boundary layers by HTL. As we zoom in and out, massive fractal, multi-scale patterns are found in space and time. This happens everytime and everywhere when fluid flowing past a wing, car, or inside an engine. But instead of simulating the full DNS equation i.e. resolving the patterns with all the energy scales, we only want to get a reduced order model approximating the small energy scales while focusing on only the scales of energy that resulting in the macroscopic change of the fluid.</p>
+<div class="note note-info">
+            <p>Steve reckons this as the one of the most exciting area where ML can really make a practical impact on everyday industrials. And I heard that after a talk in China, he said a great progress on the area of turbulence might be made in the next 2 decades. (I'm not sure, just heard of it)</p>
+          </div>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/RANs modeling with DNN.png" srcset="/img/loading.gif" lazyload alt="The novel architecture used for Rans closure model. Unlike the traditional MLP, an extra Tenser Input Layer, fixed during training, is introduced before the emerging layer. After Ling, J., Kurzawski, A., & Templeton, J. (2016). Reynolds averaged turbulence modelling using deep neural networks with embedded invariance. Journal of Fluid Mechanics, 807, 155-166." style="zoom:50%;"></p>
+<p>One inspiring job<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Ling, J., Kurzawski, A., &amp; Templeton, J. (2016). Reynolds averaged turbulence modelling using deep neural networks with embedded invariance. Journal of Fluid Mechanics, 807, 155-166.](https://scholar.google.com/scholar_url?url=https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/reynolds-averaged-turbulence-modelling-using-deep-neural-networks-with-embedded-invariance/0B280EEE89C74A7BF651C422F8FBD1EB&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=17265256326087997648&amp;ei=iXCcYrLaKuOEywThnbSYCQ&amp;scisig=AAGBfm1mnR-uoBACuF1rcikuCwEx5HWzKw)">[2]</span></a></sup> is mentioned which study the RANs closure models. They designed a novel customised structure that embed the physical variables one layer before the output layer of NN. And it inspires us how to "bake in" prior knowledge to design a model not only accurate but also physically meaningful".</p>
+<h3 id="super-resolution">Super resolution</h3>
+<p>Super resolution is already a mature field in image sciences, and it can be directly deployed into flow fields.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/Super resolution.png" srcset="/img/loading.gif" lazyload alt="Super resolution reconstruction for turbulence flow, the interpolation error of the SHALLOW DECODER error is about 9.3%. From Erichson, N. B., Mathelin, L., Yao, Z., Brunton, S. L., Mahoney, M. W., & Kutz, J. N. (2020). Shallow neural networks for fluid flow reconstruction with limited sensors. *Proceedings of the Royal Society A*, *476*(2238), 20200097." style="zoom:50%;"></p>
+<p>Above is the result of reconstructing the turbulence flow fields(<a target="_blank" rel="noopener" href="http://turbulence.pha.jhu.edu/">Johns Hopkins Turbulence Database</a>) from the coarse results obtained by applying an average pooling on the original flow fields<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Erichson, N. B., Mathelin, L., Yao, Z., Brunton, S. L., Mahoney, M. W., &amp; Kutz, J. N. (2020). Shallow neural networks for fluid flow reconstruction with limited sensors. *Proceedings of the Royal Society A*, *476*(2238), 20200097.](https://scholar.google.com/scholar_url?url=https://royalsocietypublishing.org/doi/abs/10.1098/rspa.2020.0097&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=4644643361595480852&amp;ei=72-cYoPaH8nFywSZv6aYDQ&amp;scisig=AAGBfm3cHzLDR-qONvANNbFZQE0NFSr01Q)">[3]</span></a></sup>. Multiple MLPs are deployed for this task.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/super resolution interpolation and extrapolation comparison.png" srcset="/img/loading.gif" lazyload alt="Two different training and test set configurations, showing (a) a within sample prediction task and (b) an out of sample prediction task. Here, the gray columns indicate snapshots used for training, while the red columns indicate snapshots used for testing. From Erichson, N. B., Mathelin, L., Yao, Z., Brunton, S. L., Mahoney, M. W., & Kutz, J. N. (2020). Shallow neural networks for fluid flow reconstruction with limited sensors. *Proceedings of the Royal Society A*, *476*(2238), 20200097." style="zoom:50%;"></p>
+<p>Yet the good results only happen at the interpolation scenario, for the extrapolation i.e. prediction task, the reconstruction failed. More physics need to add to make this work.</p>
+<h3 id="deep-autoencoders">Deep autoencoders</h3>
+<p>The classical POD/PCA can be written in a form of one-layer linear autoencoder. And instead solving by the analytic SVD algorithm, it can be solved by SGD. So why not change the two-layer, linear autoencoder into the non-linear, multilayer deep autoencoder?</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/Deep autoencoder reconstruction.png" srcset="/img/loading.gif" lazyload alt="Deep autoencoder reconstruction examples, (a) NN performs good, (b) NN performs bad. From Milano, M., & Koumoutsakos, P. (2002). Neural network modeling for near wall turbulent flow. Journal of Computational Physics, 182(1), 1-26." style="zoom:48%;"></p>
+<p>Based on this thought, Michele Milano and Petros Koumoutsakos deployed neural network modeling for near wall turbulent flow<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Milano, M., &amp; Koumoutsakos, P. (2002). Neural network modeling for near wall turbulent flow. Journal of Computational Physics, 182(1), 1-26.](https://www.semanticscholar.org/paper/Neural-network-modeling-for-near-wall-turbulent-Milano-Koumoutsakos/f0e8198850dae31cc9612940581ec8c059c24475)">[4]</span></a></sup>, and compared with POD results, 2 decades ahead of its time.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/parabolic reduced order model.png" srcset="/img/loading.gif" lazyload alt="Transient solution of the Navier–Stokes equation (solid circles) and Galerkin model B (solid curve). The figure shows (a1(t), a?(t)) of a transient trajectory starting close to the steady Navier–Stokes solution corresponding to the fixed point in the Galerkin system. From Noack, B. R., Afanasiev, K., MORZYŃSKI, M., Tadmor, G., & Thiele, F. (2003). A hierarchy of low-dimensional models for the transient and post-transient cylinder wake. *Journal of Fluid Mechanics*, *497*, 335-363" style="zoom:50%;"></p>
+<p>This concepts are also developed to build the reduced order models. The pattens extracted from POD or AE can be used to build simple representations in a low dimensional coordinate. For example Bernd R. Noack et als' work<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Noack, B. R., Afanasiev, K., MORZYŃSKI, M., Tadmor, G., &amp; Thiele, F. (2003). A hierarchy of low-dimensional models for the transient and post-transient cylinder wake. *Journal of Fluid Mechanics*, *497*, 335-363.](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/hierarchy-of-lowdimensional-models-for-the-transient-and-posttransient-cylinder-wake/0F114BEB5DD20B7342E99ED8D0070C01)">[5]</span></a></sup> showed the dynamics of transient cylinder wakes can be concluded by a hierarchy of low-dimensional models lived on parabolic bowls.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/Schematic overview of the proposed sparse modeling procedure.png" srcset="/img/loading.gif" lazyload alt="Schematic overview of the proposed sparse modeling procedure. A sparse dynamical system is identified based on features obtained from sensor signals s and the full state u may also be estimated with the ability of PIV snapshots (optional). From Loiseau, J. C., Noack, B. R., & Brunton, S. L. (2018). Sparse reduced-order modelling: sensor-based dynamics to full-state estimation. *Journal of Fluid Mechanics*, *844*, 459-490" style="zoom:50%;"></p>
+<p>And these learned coordinates can be used with data-diven methods like SINDy(the sparse identification of nonlinear dynamics)<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Brunton, S. L., Proctor, J. L., &amp; Kutz, J. N. (2016). Discovering governing equations from data by sparse identification of nonlinear dynamical systems. *Proceedings of the national academy of sciences*, *113*(15), 3932-3937.](https://www.pnas.org/content/113/15/3932.short)">[6]</span></a></sup> to build efficient models for predicting the modes purely from measurement data. Jean-Christophe Loiseau has done a lot work based on this<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Loiseau, J. C., Noack, B. R., &amp; Brunton, S. L. (2018). Sparse reduced-order modelling: sensor-based dynamics to full-state estimation. *Journal of Fluid Mechanics*, *844*, 459-490.](https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=4rvzkMEAAAAJ&amp;citation_for_view=4rvzkMEAAAAJ:qxL8FJ1GzNcC)">[7]</span></a></sup>.</p>
+<h3 id="the-ultimate-goal-flow-control">The ultimate goal: Flow control</h3>
+<p>It is a very principled optimisation of the flow field and of the control law with some objectives in mind. Those objectives come from the real wold such as: increasing the lift, decreasing the drag. And these optimisation problems can be solved better with machine learning tools.</p>
+<p><img src="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/Structure of control scheme.png" srcset="/img/loading.gif" lazyload alt="Structure of the control scheme, where a classical MPC controller based on a model for the full system state is shown in green and a controller using a surrogate model in orange. After. After ieker, K., Peitz, S., Brunton, S. L., Kutz, J. N., & Dellnitz, M. (2019). Deep model predictive control with online learning for complex physical systems. arXiv preprint arXiv:1905.10094." style="zoom:50%;"></p>
+<p>As shown by Bieker at als' diagram<sup id="fnref:8" class="footnote-ref"><a href="#fn:8" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Bieker, K., Peitz, S., Brunton, S. L., Kutz, J. N., &amp; Dellnitz, M. (2019). Deep model predictive control with online learning for complex physical systems. *arXiv preprint arXiv:1905.10094*.](https://arxiv.org/abs/1905.10094)">[8]</span></a></sup>, instead of controlling a NS equation, an efficient alternative is controlling a machine learning surrogate model to realise the real-time control.</p>
+<h2 id="inspiration-from-biology">Inspiration from biology</h2>
+<p>At last to give us some confidence, Steve mentioned without knowing the NS equations, eagle can somehow manoeuvre the complex turbulence flow by its own sensors on its wings. And the insects, with way small neural system, they can handle the complex turbulence flow elegantly and seamlessly (I don't feel any self-confidence hearing this). And maybe we can learn something from them and fit into our engineering world.</p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar_url?url=https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.5.054401&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=9368717229379747223&amp;ei=eXCcYp2tDZb0yAT_6KLYDw&amp;scisig=AAGBfm3dnQgKr4Ku82Fv4l8EQlBowAQZdQ">Scherl, I., Strom, B., Shang, J. K., Williams, O., Polagye, B. L., &amp; Brunton, S. L. (2020). Robust principal component analysis for modal decomposition of corrupt fluid flows. <em>Physical Review Fluids</em>, <em>5</em>(5), 054401.</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar_url?url=https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/reynolds-averaged-turbulence-modelling-using-deep-neural-networks-with-embedded-invariance/0B280EEE89C74A7BF651C422F8FBD1EB&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=17265256326087997648&amp;ei=iXCcYrLaKuOEywThnbSYCQ&amp;scisig=AAGBfm1mnR-uoBACuF1rcikuCwEx5HWzKw">Ling, J., Kurzawski, A., &amp; Templeton, J. (2016). Reynolds averaged turbulence modelling using deep neural networks with embedded invariance. Journal of Fluid Mechanics, 807, 155-166.</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar_url?url=https://royalsocietypublishing.org/doi/abs/10.1098/rspa.2020.0097&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=4644643361595480852&amp;ei=72-cYoPaH8nFywSZv6aYDQ&amp;scisig=AAGBfm3cHzLDR-qONvANNbFZQE0NFSr01Q">Erichson, N. B., Mathelin, L., Yao, Z., Brunton, S. L., Mahoney, M. W., &amp; Kutz, J. N. (2020). Shallow neural networks for fluid flow reconstruction with limited sensors. <em>Proceedings of the Royal Society A</em>, <em>476</em>(2238), 20200097.</a> <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.semanticscholar.org/paper/Neural-network-modeling-for-near-wall-turbulent-Milano-Koumoutsakos/f0e8198850dae31cc9612940581ec8c059c24475">Milano, M., &amp; Koumoutsakos, P. (2002). Neural network modeling for near wall turbulent flow. Journal of Computational Physics, 182(1), 1-26.</a> <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/hierarchy-of-lowdimensional-models-for-the-transient-and-posttransient-cylinder-wake/0F114BEB5DD20B7342E99ED8D0070C01">Noack, B. R., Afanasiev, K., MORZYŃSKI, M., Tadmor, G., &amp; Thiele, F. (2003). A hierarchy of low-dimensional models for the transient and post-transient cylinder wake. <em>Journal of Fluid Mechanics</em>, <em>497</em>, 335-363.</a> <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:6" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.pnas.org/content/113/15/3932.short">Brunton, S. L., Proctor, J. L., &amp; Kutz, J. N. (2016). Discovering governing equations from data by sparse identification of nonlinear dynamical systems. <em>Proceedings of the national academy of sciences</em>, <em>113</em>(15), 3932-3937.</a> <a href="#fnref:6" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:7" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=4rvzkMEAAAAJ&amp;citation_for_view=4rvzkMEAAAAJ:qxL8FJ1GzNcC">Loiseau, J. C., Noack, B. R., &amp; Brunton, S. L. (2018). Sparse reduced-order modelling: sensor-based dynamics to full-state estimation. <em>Journal of Fluid Mechanics</em>, <em>844</em>, 459-490.</a> <a href="#fnref:7" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:8" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.10094">Bieker, K., Peitz, S., Brunton, S. L., Kutz, J. N., &amp; Dellnitz, M. (2019). Deep model predictive control with online learning for complex physical systems. <em>arXiv preprint arXiv:1905.10094</em>.</a> <a href="#fnref:8" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Introduction, Machine learning for fluids dynamics</div>
+      <div>https://daydreamatnight.github.io/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 1, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/05/Lesson-note-Patterns-Machine-learning-for-fluids-dynamics/" title="Patterns, Machine learning for fluids dynamics">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Patterns, Machine learning for fluids dynamics</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/26/External-flow-fundamentals/" title="External flow fundamentals">
+                        <span class="hidden-mobile">External flow fundamentals</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,921 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Following last blog, a benchmark is performed on 8 Nvidia A800 GPU server. The P2P bandwidth and multi GPU performance of N-body problem are tested.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="test GPU server multiGPU performance">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/02/01/test-GPU-server-multiGPU/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Following last blog, a benchmark is performed on 8 Nvidia A800 GPU server. The P2P bandwidth and multi GPU performance of N-body problem are tested.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/multigpu_benchmark.png">
+<meta property="article:published_time" content="2023-02-01T08:56:45.000Z">
+<meta property="article:modified_time" content="2023-09-16T16:23:07.229Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/multigpu_benchmark.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>test GPU server multiGPU performance - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="test GPU server multiGPU performance"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-01 16:56" pubdate>
+          February 1, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          21 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">test GPU server multiGPU performance</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Following <a href="/2022/12/16/test-GPU-server-singleGpu/">last blog</a>, a benchmark is performed on 8 Nvidia A800 GPU server. The P2P bandwidth and multi GPU performance of N-body problem are tested.</p>
+          </div>
+<span id="more"></span>
+<h2 id="peer-to-peer-bandwidth-test">1. Peer-to-peer bandwidth test</h2>
+<p>First check the GPU connection configuration.</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">nvidia-smi topo -m</span>
+        GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    CPU Affinity    NUMA Affinity
+GPU0     X      NV8     NV8     NV8     NV8     NV8     NV8     NV8     0-27,56-83      0
+GPU1    NV8      X      NV8     NV8     NV8     NV8     NV8     NV8     0-27,56-83      0
+GPU2    NV8     NV8      X      NV8     NV8     NV8     NV8     NV8     0-27,56-83      0
+GPU3    NV8     NV8     NV8      X      NV8     NV8     NV8     NV8     0-27,56-83      0
+GPU4    NV8     NV8     NV8     NV8      X      NV8     NV8     NV8     28-55,84-111    1
+GPU5    NV8     NV8     NV8     NV8     NV8      X      NV8     NV8     28-55,84-111    1
+GPU6    NV8     NV8     NV8     NV8     NV8     NV8      X      NV8     28-55,84-111    1
+GPU7    NV8     NV8     NV8     NV8     NV8     NV8     NV8      X      28-55,84-111    1
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+<span class="hljs-meta">  NV# </span><span class="language-bash"> = Connection traversing a bonded <span class="hljs-built_in">set</span> of <span class="hljs-comment"># NVLinks</span></span>
+</code></pre></div>
+<p><small>Except <code>X</code>, The speed decreases from <code>NV#</code> to <code>SYS</code>.</small></p>
+<p>Note that each pair of GPUs are connected by Nvlink.</p>
+<p>Use <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/cuda-samples/tree/master/Samples/5_Domain_Specific/p2pBandwidthLatencyTest">p2pBandwidthLatencyTest</a> tool to get an estimation of the bandwidth. P2P copying of 40000000 integer elements between all visible GPUs are performed. And the results are compared with Nvlink P2P connection enabled and disabled.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">[P2P (Peer-to-Peer) GPU Bandwidth Latency Test]
+Device: 0, NVIDIA A800-SXM4-80GB, pciBusID: 10, pciDeviceID: 0, pciDomainID:0
+Device: 1, NVIDIA A800-SXM4-80GB, pciBusID: 16, pciDeviceID: 0, pciDomainID:0
+Device: 2, NVIDIA A800-SXM4-80GB, pciBusID: 49, pciDeviceID: 0, pciDomainID:0
+Device: 3, NVIDIA A800-SXM4-80GB, pciBusID: 4d, pciDeviceID: 0, pciDomainID:0
+Device: 4, NVIDIA A800-SXM4-80GB, pciBusID: 8a, pciDeviceID: 0, pciDomainID:0
+Device: 5, NVIDIA A800-SXM4-80GB, pciBusID: 8f, pciDeviceID: 0, pciDomainID:0
+Device: 6, NVIDIA A800-SXM4-80GB, pciBusID: c6, pciDeviceID: 0, pciDomainID:0
+Device: 7, NVIDIA A800-SXM4-80GB, pciBusID: ca, pciDeviceID: 0, pciDomainID:0
+
+P2P Connectivity Matrix
+     D\D     0     1     2     3     4     5     6     7
+     0	     1     1     1     1     1     1     1     1
+     1	     1     1     1     1     1     1     1     1
+     2	     1     1     1     1     1     1     1     1
+     3	     1     1     1     1     1     1     1     1
+     4	     1     1     1     1     1     1     1     1
+     5	     1     1     1     1     1     1     1     1
+     6	     1     1     1     1     1     1     1     1
+     7	     1     1     1     1     1     1     1     1
+Unidirectional P2P=Disabled Bandwidth Matrix (GB/s)
+   D\D     0      1      2      3      4      5      6      7 
+     0 1519.65  15.83  20.62  20.70  20.65  20.73  20.86  20.71 
+     1  15.86 1564.06  20.69  20.71  20.57  20.64  20.87  20.67 
+     2  20.33  20.74 1562.66  15.70  20.59  20.65  20.81  20.65 
+     3  20.38  20.68  15.71 1562.66  20.72  20.62  20.71  20.61 
+     4  20.35  20.45  20.47  20.51 1564.30  15.69  21.18  20.61 
+     5  20.50  20.53  20.55  20.58  15.71 1566.10  21.11  20.64 
+     6  20.53  20.59  20.60  20.65  20.85  20.69 1566.02  15.66 
+     7  20.55  20.56  20.59  20.65  20.84  20.71  15.79 1564.46 
+Unidirectional P2P=Enabled Bandwidth (P2P Writes) Matrix (GB/s)
+   D\D     0      1      2      3      4      5      6      7 
+     0 1520.09 186.35 186.23 186.32 186.48 186.60 186.53 186.43 
+     1 186.31 1533.74 186.54 186.57 186.46 186.63 186.49 186.56 
+     2 186.27 186.27 1524.61 186.26 186.56 186.56 186.54 186.53 
+     3 186.25 186.32 186.53 1562.89 186.63 186.55 186.64 186.60 
+     4 186.30 186.39 186.38 186.45 1564.06 186.55 186.62 186.64 
+     5 186.33 186.25 186.40 186.41 186.52 1565.16 186.61 186.60 
+     6 186.36 186.29 186.34 186.57 186.49 186.49 1566.81 186.62 
+     7 186.44 186.33 186.39 186.62 186.55 186.49 186.51 1564.61 
+Bidirectional P2P=Disabled Bandwidth Matrix (GB/s)
+   D\D     0      1      2      3      4      5      6      7 
+     0 1555.85  15.83  20.85  20.86  20.84  20.73  20.89  20.73 
+     1  15.71 1596.51  20.91  20.98  20.92  20.82  20.80  20.81 
+     2  20.84  20.97 1594.18  15.80  20.78  20.70  20.85  20.73 
+     3  20.88  20.81  15.81 1596.55  20.91  20.82  20.95  20.83 
+     4  20.82  20.90  20.84  20.88 1594.23  15.81  21.14  20.99 
+     5  20.77  20.85  20.80  20.85  15.84 1596.95  21.11  20.86 
+     6  20.90  20.85  20.92  20.95  21.19  21.06 1596.55  15.82 
+     7  20.85  20.82  20.89  20.90  21.02  20.94  15.81 1596.02 
+Bidirectional P2P=Enabled Bandwidth Matrix (GB/s)
+   D\D     0      1      2      3      4      5      6      7 
+     0 1555.58 363.84 363.87 363.86 363.83 363.84 364.42 364.45 
+     1 364.49 1597.28 363.90 363.87 364.17 364.25 364.47 364.47 
+     2 364.37 364.37 1579.72 364.23 364.22 364.42 364.44 364.44 
+     3 364.42 364.47 364.46 1595.41 363.77 364.39 364.47 364.42 
+     4 364.30 364.26 364.38 364.47 1595.45 364.39 364.44 364.52 
+     5 364.43 364.45 364.46 364.45 364.42 1596.67 364.47 364.43 
+     6 364.50 364.45 364.43 364.51 364.45 364.39 1597.44 364.43 
+     7 364.46 364.47 364.47 364.45 364.45 364.47 364.44 1595.53 
+P2P=Disabled Latency Matrix (us)
+   GPU     0      1      2      3      4      5      6      7 
+     0   2.42  21.58  22.35  22.45  22.31  20.91  20.38  19.78 
+     1  22.15   2.24  23.31  23.16  23.41  22.57  22.45  22.27 
+     2  22.68  23.28   2.45  22.83  23.11  22.34  21.96  22.31 
+     3  23.16  23.31  23.03   2.45  23.38  22.44  21.96  22.37 
+     4  22.63  23.54  23.28  23.77   2.88  22.65  22.49  22.65 
+     5  21.04  22.69  22.25  23.32  23.54   2.86  22.45  20.89 
+     6  21.55  21.86  22.23  22.70  22.66  23.07   2.76  20.37 
+     7  21.88  22.75  21.92  22.51  21.80  22.27  21.56   2.30 
+
+   CPU     0      1      2      3      4      5      6      7 
+     0   3.19  20.69  21.46  21.56  21.42  20.01  19.49  18.89 
+     1  21.32   2.54  22.47  22.32  22.53  21.70  21.60  21.43 
+     2  21.77  22.38   2.56  22.00  22.19  21.43  21.06  21.41 
+     3  22.26  22.40  22.33   2.48  22.47  21.53  21.05  21.48 
+     4  21.72  22.61  22.38  24.26   2.76  23.30  23.09  23.23 
+     5  21.58  23.15  22.81  23.93  23.88   3.29  22.95  21.20 
+     6  22.18  22.22  22.56  23.04  22.96  23.38   3.29  21.03 
+     7  20.86  21.53  20.90  21.33  20.59  21.05  20.68   3.28 
+P2P=Enabled Latency (P2P Writes) Matrix (us)
+   GPU     0      1      2      3      4      5      6      7 
+     0   3.12   3.22   3.24   3.23   3.24   3.22   3.24   3.24 
+     1   3.20   2.77   3.24   3.24   3.23   3.21   3.24   3.22 
+     2   3.23   3.18   2.98   3.22   3.23   3.24   3.19   3.20 
+     3   3.23   3.21   3.21   2.98   3.23   3.24   3.23   3.23 
+     4   3.25   3.28   3.24   3.25   2.79   3.27   3.28   3.27 
+     5   3.25   3.26   3.24   3.21   3.25   2.68   3.24   3.25 
+     6   3.10   3.12   3.11   3.11   3.11   3.13   2.67   3.11 
+     7   3.12   3.11   3.12   3.09   3.12   3.11   3.11   2.66 
+
+   CPU     0      1      2      3      4      5      6      7 
+     0   3.20   2.20   2.26   2.25   2.25   2.25   2.26   2.26 
+     1   2.02   2.69   1.93   1.93   1.95   1.96   1.88   1.88 
+     2   2.02   1.98   2.69   1.98   1.99   1.99   1.92   1.93 
+     3   1.99   1.95   1.96   2.65   1.96   2.09   1.89   1.89 
+     4   2.23   2.12   2.13   2.12   2.80   2.13   2.05   2.03 
+     5   2.56   2.47   2.48   2.46   2.46   3.39   2.40   2.40 
+     6   2.49   2.43   2.44   2.43   2.44   2.46   3.25   2.38 
+     7   2.61   2.52   2.53   2.53   2.53   2.55   2.54   3.38 
+</code></pre></div>
+<p>We can see that:</p>
+<ul>
+<li>With NVLink(P2P) enabled, the bidirectional GPU-to-GPU writes bandwidth reach 22.7% of self bandwidth.</li>
+<li>With NVLink(P2P) disabled, the bidirectional GPU-to-GPU writes bandwidth through PCIE is extremely decreased (roughly 1.3% of self bandwidth).</li>
+</ul>
+<h2 id="multi-gpu-nbody-benchmark">2. multi-GPU nbody Benchmark</h2>
+<p>An N-body simulation numerically approximates the system of bodies where each body continuously interacts with every other body.</p>
+<p>The nbody simulation benchmark was done across,</p>
+<ul>
+<li>number of particles: from 100000 to 15000000</li>
+<li>number of iterations: 100</li>
+<li>number of devices: from 1 to 8</li>
+<li>precision: float32 (float)</li>
+</ul>
+<p>The linecharts of performances with number of devices are shown below, followed by the table of the average efficiency of <code>nbodies&gt;50000</code>. Other figures and full data result are available in <a href="#appendix">Appendix</a>.</p>
+<p><img src="/2023/02/01/test-GPU-server-multiGPU/pics/unlink-ndevices-runtime.png" srcset="/img/loading.gif" lazyload alt="Fig2.1: unlink-ndevices-runtime" style="zoom:80%;"></p>
+<p><img src="/2023/02/01/test-GPU-server-multiGPU/pics/unlink-ndevices-gflops.png" srcset="/img/loading.gif" lazyload alt="Fig2.2: unlink-ndevices-gflops" style="zoom:80%;"></p>
+<p><img src="/2023/02/01/test-GPU-server-multiGPU/pics/unlink-ndevices-efficiency.png" srcset="/img/loading.gif" lazyload alt="Fig2.3: unlink-ndevices-efficiency" style="zoom:80%;"></p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">devices</th>
+<th style="text-align: right;">1</th>
+<th style="text-align: right;">2</th>
+<th style="text-align: right;">3</th>
+<th style="text-align: right;">4</th>
+<th style="text-align: right;">5</th>
+<th style="text-align: right;">6</th>
+<th style="text-align: right;">7</th>
+<th style="text-align: right;">8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">average efficiency</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.982481</td>
+<td style="text-align: right;">0.968182</td>
+<td style="text-align: right;">0.96815</td>
+<td style="text-align: right;">0.965076</td>
+<td style="text-align: right;">0.779486</td>
+<td style="text-align: right;">0.676789</td>
+<td style="text-align: right;">0.675233</td>
+</tr>
+</tbody>
+</table>
+<p>we can see that</p>
+<ul>
+<li>the performance sticks to the linear line (dashed) well when <code>ndevices&lt;6</code>. The efficiency can still reach more than 99% with large <code>nbodies</code>.</li>
+<li>With <code>ndevices&gt;=6</code>, the efficiency drops badly, the runtime lines tilt up on <code>ndevices=6,7</code>. For example, the runtime for <code>nbodies=8000000, ndevices=6</code> is longer than that of <code>nbodies=8000000, ndevices=5</code>.</li>
+</ul>
+<h2 id="appendix">Appendix</h2>
+<h3 id="nbody-benchmark">nbody Benchmark</h3>
+<h5 id="other-figures">Other figures:</h5>
+<p><img src="/2023/02/01/test-GPU-server-multiGPU/pics/unlink-nbodies-runtime.png" srcset="/img/loading.gif" lazyload alt="FigA.1: unlink-nbodies-runtime" style="zoom:80%;"></p>
+<p><img src="/2023/02/01/test-GPU-server-multiGPU/pics/unlink-nbodies-gflops.png" srcset="/img/loading.gif" lazyload alt="FigA.2:unlink-nbodies-gflops" style="zoom:80%;"></p>
+<p><img src="/2023/02/01/test-GPU-server-multiGPU/pics/unlink-nbodies-efficiency.png" srcset="/img/loading.gif" lazyload alt="FigA.3:unlink-nbodies-efficiency" style="zoom:80%;"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>test GPU server multiGPU performance</div>
+      <div>https://daydreamatnight.github.io/2023/02/01/test-GPU-server-multiGPU/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 1, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/24/ML-noise-prediction-app-user-s-guide/" title="WNPS user&#39;s guide">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">WNPS user&#39;s guide</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/16/test-GPU-server-singleGpu/" title="test GPU servers single GPU">
+                        <span class="hidden-mobile">test GPU servers single GPU</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

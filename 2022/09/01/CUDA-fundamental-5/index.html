@@ -1,0 +1,1097 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Basic CUDA programming methods, with a simple matrix multiply example constructed from the scratch.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA Programming 1">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/09/01/CUDA-fundamental-5/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Basic CUDA programming methods, with a simple matrix multiply example constructed from the scratch.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_5.png">
+<meta property="article:published_time" content="2022-09-01T13:22:43.000Z">
+<meta property="article:modified_time" content="2022-09-02T13:50:22.512Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_5.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CUDA Programming 1 - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CUDA Programming 1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-01 21:22" pubdate>
+          September 1, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          7.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          26 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CUDA Programming 1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Basic CUDA programming methods, with a simple matrix multiply example constructed from the scratch.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>All the pics and contents are not original. The contents of the whole series are mainly collected from:</p><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1kx411m7Fk">NVIDIA CUDA初级教程视频</a></p><p><a target="_blank" rel="noopener" href="https://cis565-fall-2019.github.io/">CIS 565 2019</a></p><p><a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15418-s21/www/index.html">CMU 15-418/618 (2018)</a></p>
+          </div>
+<h2 id="introduction">Introduction</h2>
+<h3 id="cpu-computing-history-apis">CPU Computing History: APIs</h3>
+<ul>
+<li><p>2001/2002 - researchers see GPU as data-parallel coprocessor</p>
+<p>The GPGPU field is born, expand GPU to the general computing</p></li>
+<li><p>2007 - NVIDIA releases <strong>CUDA</strong></p>
+<ul>
+<li>CUDA Compute Uniform Device Architecture</li>
+<li>GPGPU shifts to GPU Computing</li>
+</ul></li>
+<li><p>2008 - Khronos releases <strong>OpenCL</strong> specification</p></li>
+<li><p>2013 - Khronos releases <strong>OpenGL</strong> compute shaders</p></li>
+<li><p>2015 - Khronos releases <strong>Vulkan</strong> and SPIR-V</p></li>
+</ul>
+<p>• Except for SoC</p>
+<p>• CUDA Program</p>
+<p>• Contains both host and device code</p>
+<h3 id="cuda-terminology">CUDA Terminology</h3>
+<ul>
+<li>Host - typically the CPU
+<ul>
+<li>Code written in ANSI C, or other languages</li>
+</ul></li>
+<li>Device typically the GPU (data-parallel)
+<ul>
+<li>Code written in extended ANSI C, or fortran</li>
+</ul></li>
+<li>Host and device have separate memories
+<ul>
+<li>Except for SoC ( System On a Chip, <a target="_blank" rel="noopener" href="https://www.bing.com/ck/a?!&amp;&amp;p=72fd9a361abd9c35JmltdHM9MTY2MTkyMjYyMCZpZ3VpZD1iZWEzZmYxMC1hNTIwLTQyMmYtYWQyYi1jMmRhNGYzYmQ4ZjImaW5zaWQ9NTE4OQ&amp;ptn=3&amp;hsh=3&amp;fclid=35a3c5f0-28eb-11ed-9370-8fe7b4384d00&amp;u=a1aHR0cHM6Ly93d3cubWFjb2JzZXJ2ZXIuY29tL2FuYWx5c2lzL3VuZGVyc3RhbmRpbmctYXBwbGVzLXVuaWZpZWQtbWVtb3J5LWFyY2hpdGVjdHVyZS8&amp;ntb=1">Unified Memory Architecture</a> )</li>
+</ul></li>
+<li>CUDA Program
+<ul>
+<li>Contains both host and device codes</li>
+</ul></li>
+</ul>
+<h2 id="kernel">Kernel</h2>
+<p>A CUDA Kernel represents a data-parallel function</p>
+<ul>
+<li>Invoking a kernel creates lightweight threads on the device</li>
+<li>Threads are generated and scheduled with hardware</li>
+<li>similar to a shader in OpenGL/WebGL/VuIkan.</li>
+</ul>
+<h5 id="example">Example</h5>
+<p>Execute <span class="math inline">\(C = A+B\)</span> in <strong>N</strong> times in parallel by N different CUDA threads</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// Kernel Defination</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">vectorAdd</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* A, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* B, <span class="hljs-type">float</span>* C)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-type">int</span> i = threadIdx.x;
+    C[i] = A[i] + B[i];
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-comment">// Kernel invocation with N threads</span>
+    vectorAdd&lt;&lt;&lt;<span class="hljs-number">1</span>, N&gt;&gt;&gt;(A, B, C)
+&#125;</code></pre></div>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>__global__</code></td>
+<td>Declaration specifier</td>
+</tr>
+<tr class="even">
+<td><code>threadIdx.x</code></td>
+<td>Thread Index</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;&lt;&lt;1,N&gt;&gt;&gt;</code></td>
+<td>Kernel execution configuration</td>
+</tr>
+</tbody>
+</table>
+<h5 id="cuda-program-execution">CUDA Program Execution</h5>
+<p>When a CUDA program is executed, a serial code will run on the host until the Kerenl invocation. Then the parallel code runs on the devices. The resultant data is gathered back to the host to run on serial...</p>
+<p><img src="/2022/09/01/CUDA-fundamental-5/Cuda excution.PNG" srcset="/img/loading.gif" lazyload alt="Cuda excution" style="zoom:100%;"></p>
+<h2 id="thread-hierarchies">Thread Hierarchies</h2>
+<p>Grid - one or more thread blocks</p>
+<ul>
+<li>1D, 2D or 3D</li>
+<li>Example: Index into vector, matrix, volume, better for representing arrays in 2D and 3D</li>
+</ul>
+<p>Block - array of threads</p>
+<ul>
+<li>1D, 2D, or 3D</li>
+<li>Each block in a grid has the same number of threads</li>
+<li>Each thread in a block can
+<ul>
+<li>Synchronize</li>
+<li>Access to the shared memory hazard-free</li>
+</ul></li>
+</ul>
+<p>Two threads from two different blocks cannot cooperate</p>
+<h3 id="thread-id-one-block">Thread ID, one block</h3>
+<p>Thread ID: Scalar thread identifier</p>
+<p><strong>Thread Index:</strong> <code>threadIdx</code></p>
+<ul>
+<li>1D: Thread ID == Thread Index</li>
+<li>2D with size (Dx, Dy)
+<ul>
+<li>Thread ID of <span class="math inline">\(index_{(x, y)} = x + Dim_x * y\)</span></li>
+</ul></li>
+<li>3D with size (Dx, Dy, Dz)
+<ul>
+<li>Thread ID of <span class="math inline">\(index_{(x, y,z)} = x + Dim_x * y + Dim_x * Dim_y * z\)</span></li>
+</ul></li>
+</ul>
+<h5 id="example-1">example</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// Kernel Definition</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixAddition</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* A, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* B, <span class="hljs-type">float</span>* C)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// 2D Thread Index to 1D memory index</span>
+    <span class="hljs-type">int</span> idx = threadIdx.y * blockDim.x + threadIdx.x;
+    C[idx] = A[idx] + B[idx];
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// ....</span>
+    <span class="hljs-comment">// Kernel invocation with one block of N * N * 1 threads</span>
+    <span class="hljs-type">int</span> blocks = <span class="hljs-number">1</span>;
+    <span class="hljs-function">dim3 <span class="hljs-title">threadsPerBlock</span><span class="hljs-params">(N, N)</span></span>; <span class="hljs-comment">// N rows x N columns</span>
+    <span class="hljs-comment">// 1 block, 2D block of threads</span>
+    matrixAddition&lt;&lt;&lt;blocks, threadsPerBlock&gt;&gt;&gt;(A, B, C); 
+&#125;</code></pre></div>
+<p>Here, <code>blockDim</code> is an array with 2 elements representing the dimension of thread matrix inside the block.</p>
+<p><img src="/2022/09/01/CUDA-fundamental-5/threadIndex in One Block.png" srcset="/img/loading.gif" lazyload alt="threadIndex in One Block" style="zoom:25%;"></p>
+<h5 id="group-of-threads">Group of threads</h5>
+<ul>
+<li>G80 and GT200: Up to 512 threads</li>
+<li>Fermi, Kepler, Maxwell, Pascal: Up to 1024 threads</li>
+</ul>
+<p>Locate on same processor core (SM)</p>
+<p>Share memory of that core (SM)</p>
+<h3 id="thread-id-multiple-blocks">Thread ID, multiple blocks</h3>
+<p>1D or 2D Grid</p>
+<p><strong>Block Index</strong>: <code>blockIdx</code></p>
+<h5 id="example-2">example</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// Kernel Definition</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixAddition</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* A, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* B, <span class="hljs-type">float</span>* C)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// 2D Thread Index to 1D memory index</span>
+    <span class="hljs-type">int</span> blockId_2D = blockIdx.y * gridDim.x + blockIdx.x +;
+    <span class="hljs-type">int</span> threadId_2D = threadIdx.y * blockDim.x + threadIdx.x;
+    <span class="hljs-type">int</span> idx = blockId_2D * (blockDim.x * blockDim.y) + threadId_2D;
+    C[idx] = A[idx] + B[idx];
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// ....</span>
+    <span class="hljs-comment">// Kernel invocation with computed configuration</span>
+    <span class="hljs-function">dim3 <span class="hljs-title">threadsPerBlock</span><span class="hljs-params">(N, N)</span></span>; <span class="hljs-comment">// N*N threads per block</span>
+    <span class="hljs-function">dim3 <span class="hljs-title">blocks</span><span class="hljs-params">(M, M)</span></span>;   		<span class="hljs-comment">// M*M blocks per thread</span>
+    <span class="hljs-comment">// 2D grid of blocks, 2D block of threads</span>
+    matrixAddition&lt;&lt;&lt;blocks, threadsPerBlock&gt;&gt;&gt;(A, B, C); 
+&#125;</code></pre></div>
+<p><img src="/2022/09/01/CUDA-fundamental-5/blockIndex in One Grid.png" srcset="/img/loading.gif" lazyload alt="blockIndex in One Grid" style="zoom:25%;"></p>
+<h5 id="group-of-blocks">Group of blocks</h5>
+<p>Blocks execute independently</p>
+<ul>
+<li>In any order: parallel or series
+<ul>
+<li>run whenever one block is ready</li>
+</ul></li>
+<li>Scheduled in any order by any number of cores
+<ul>
+<li>Allows code to scale with core count<br>
+</li>
+<li>For example, with 8 blocks on a GPU with 2 cores(SM), 2 blocks are run in parallel each time. If with a GPU with 4 cores, 4 blocks are run in parallel each time.</li>
+</ul></li>
+</ul>
+<h2 id="cuda-memory-transfers">CUDA Memory Transfers</h2>
+<p><img src="/2022/09/01/CUDA-fundamental-5/CUDA Memory Transfers.png" srcset="/img/loading.gif" lazyload alt="CUDA Memory Transfers" style="zoom:75%;"></p>
+<h4 id="memory-accesibility">Memory Accesibility</h4>
+<table>
+<thead>
+<tr class="header">
+<th>Device code can:</th>
+<th>Host code can:</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R/W per-thread registers</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>R/W per-thread local memory</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>R/W per-block shared memory</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>R/W per-grid global memory</td>
+<td>R/W per-grid global memory</td>
+</tr>
+<tr class="odd">
+<td>Read only per-grid constant memory</td>
+<td>R/W per-grid constant memory</td>
+</tr>
+<tr class="even">
+<td>Read only per-grid texture memory</td>
+<td>R/W per-grid texture memory</td>
+</tr>
+</tbody>
+</table>
+<h4 id="memory-transfers">Memory transfers</h4>
+<p><strong>Host</strong> can transfer to/from device, through PCIE I/O</p>
+<ul>
+<li>Global memory</li>
+<li>Constant memory</li>
+</ul>
+<h5 id="cudamalloc"><code>cudaMalloc()</code></h5>
+<ul>
+<li>Allocate global memory on device</li>
+</ul>
+<h5 id="cudafree"><code>cudaFree()</code></h5>
+<ul>
+<li>Frees memory</li>
+</ul>
+<h5 id="example-3">Example</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">float</span> *deviceMemory = <span class="hljs-literal">NULL</span>; <span class="hljs-comment">// Pointer to device memory</span>
+<span class="hljs-type">int</span> size = width * height * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>); <span class="hljs-comment">// size in bytes</span>
+<span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;deviceMemory, size); <span class="hljs-comment">// Allocate memory</span>
+<span class="hljs-comment">// Do work</span>
+<span class="hljs-built_in">cudaFree</span>(deviceMemory); <span class="hljs-comment">// Free memory</span></code></pre></div>
+<p>Not that <code>(void**)&amp;deviceMemory</code> is on device, not on host. Cannot be used by host directly. (a little bit contradict with the concept of global memory, need check later)</p>
+<h5 id="cudamemcpy"><code>cudaMemcpy()</code></h5>
+<p>Cuda-Memory-Copy, transfer memory between host and device</p>
+<ul>
+<li><p>Host to host</p>
+<p><code>cudaMemcpy(destPtr, sourcePtr, size, cudaMemcpyHostToHost);</code></p></li>
+<li><p>Host to device</p>
+<p><code>cudaMemcpy(devicePtr, hostPtr, size, cudaMemcpyHostToDevice);</code></p>
+<p>(destination(host), source(device), size in byte, copy direction)</p></li>
+<li><p>Device to host</p>
+<p><code>cudaMemcpy(hostPtr, devicePtr, size cudaMemcpyDeviceToHost);</code></p></li>
+<li><p>Device to device</p>
+<p><code>cudaMemcpy(destPtr, sourcePtr, size, cudaMemcpyDeviceToDevice);</code></p></li>
+</ul>
+<h2 id="example-matrix-multiply">Example: matrix multiply</h2>
+<p><span class="math display">\[
+\mathbf{P} = \mathbf{M}\mathbf{N}
+\]</span></p>
+<p><span class="math inline">\(\mathbf{P,M,N}\)</span> are all square matrices with the same width.</p>
+<h3 id="cpu-implementation">CPU implementation</h3>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyOnHost</span><span class="hljs-params">(<span class="hljs-type">float</span>* M, <span class="hljs-type">float</span>* N, <span class="hljs-type">float</span>* P, <span class="hljs-type">int</span> width)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; width; ++i)
+    &#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; width; ++j)
+        &#123;
+            <span class="hljs-type">float</span> sum = <span class="hljs-number">0</span>;
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; width; ++k)
+            &#123;
+                <span class="hljs-type">float</span> a = M[i * width + k];
+                <span class="hljs-type">float</span> b = N[k * width + j];
+                sum += a * b;
+            &#125;
+            P[i * width + j] = sum;
+        &#125;
+    &#125;
+&#125;</code></pre></div>
+<h3 id="gpu-implementation">GPU implementation</h3>
+<h4 id="cuda-skeleton">CUDA skeleton</h4>
+<p>This is a general framwork that is suitable for all most all the CUDA programs</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+<span class="hljs-comment">// 1. Allocate and Initialize M, N, and result P matrices</span>
+<span class="hljs-comment">// Copy M, N matrices to device</span>
+<span class="hljs-comment">// 2. M * N on device</span>
+<span class="hljs-comment">// 3. Copy P matrix to host and output</span>
+<span class="hljs-comment">// Free device memory and clean up</span>
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></div>
+<h4 id="fill-up-the-skeleton">Fill up the skeleton</h4>
+<h5 id="step-1-add-cuda-memory-transfers-to-the-skeleton">Step 1: Add CUDA memory transfers to the skeleton</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyOnDevice</span><span class="hljs-params">(<span class="hljs-type">float</span>* hostP,</span></span>
+<span class="hljs-params"><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">float</span>* hostM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* hostN, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-type">int</span> sizeInBytes = width * width * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>);
+    <span class="hljs-type">float</span> *devM, *devN, *devP;
+    
+    <span class="hljs-comment">// Allocate M and N on device</span>
+    <span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;devM, sizeInBytes);
+    <span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;devN, sizeInBytes);
+    
+    <span class="hljs-comment">// Allocate P</span>
+    <span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;devP, sizeInBytes);
+    
+    <span class="hljs-comment">// Copy M and N from host to device</span>
+    <span class="hljs-built_in">cudaMemcpy</span>(devM, hostM, sizeInBytes, cudaMemcpyHostToDevice);
+    <span class="hljs-built_in">cudaMemcpy</span>(devN, hostN, sizeInBytes, cudaMemcpyHostToDevice);
+    
+    <span class="hljs-comment">// Call the kernel here - Look back at these lines in step 3 later</span>
+    <span class="hljs-comment">// Setup thread/block execution configuration</span>
+    <span class="hljs-function">dim3 <span class="hljs-title">threads</span><span class="hljs-params">(width, width)</span></span>;
+    <span class="hljs-function">dim3 <span class="hljs-title">blocks</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span></span>;
+    <span class="hljs-comment">// Launch the kernel</span>
+	MatrixMultiplyKernel&lt;&lt;&lt;blocks, threads&gt;&gt;&gt;(devM, devN, devP, width)
+    
+    <span class="hljs-comment">// Copy P matrix from device to host</span>
+    <span class="hljs-built_in">cudaMemcpy</span>(hostP, devP, sizeInBytes, cudaMemcpyDeviceToHost);
+    
+    <span class="hljs-comment">// Free allocated memory</span>
+    <span class="hljs-built_in">cudaFree</span>(devM); <span class="hljs-built_in">cudaFree</span>(devN); <span class="hljs-built_in">cudaFree</span>(devP);
+&#125;</code></pre></div>
+<h5 id="step-2-implement-the-kernel-in-cuda-c">Step 2: Implement the kernel in CUDA C</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
+<span class="hljs-params"><span class="hljs-function">                                     <span class="hljs-type">float</span>* devP, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// Accessing a Matrix, use 2D threads</span>
+    <span class="hljs-type">int</span> tx = threadIdx.x;
+    <span class="hljs-type">int</span> ty = threadIdx.y;
+    
+    <span class="hljs-comment">// Initialize accumulator to 0</span>
+    <span class="hljs-type">float</span> pValue = <span class="hljs-number">0</span>;
+    <span class="hljs-comment">// Multiply and add</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; width; k++)
+    &#123;
+        <span class="hljs-type">float</span> m = devM[ty * width + k];
+        <span class="hljs-type">float</span> n = devN[k * width + tx];
+        pValue += m * n;
+        <span class="hljs-comment">// no need synchronization for this code</span>
+    &#125;
+    
+    <span class="hljs-comment">// Write value to device memory</span>
+    <span class="hljs-comment">// each thread has unique index to write to</span>
+    devP[ty * width + tx] = pValue;
+&#125;</code></pre></div>
+<h5 id="step-3-invoke-the-kernel">Step 3: Invoke the kernel</h5>
+<p>Look back at the code <code>Call the kernel here</code> in Step1:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// Call the kernel here - Look NOW</span>
+<span class="hljs-comment">// Setup thread/block execution configuration</span>
+<span class="hljs-function">dim3 <span class="hljs-title">threads</span><span class="hljs-params">(width, width)</span></span>;
+<span class="hljs-function">dim3 <span class="hljs-title">blocks</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span></span>; <span class="hljs-comment">// 1 block</span>
+<span class="hljs-comment">// Launch the kernel</span>
+MatrixMultiplyKernel&lt;&lt;&lt;blocks, threads&gt;&gt;&gt;(devM, devN, devP, width)</code></pre></div>
+<h3 id="analysis-of-the-example">Analysis of the example</h3>
+<ul>
+<li><p>One Block of threads compute matrix <code>devP</code></p>
+<ul>
+<li>Each thread computes one element of <code>devP</code></li>
+</ul></li>
+<li><p>Each thread</p>
+<ul>
+<li>Loads a row of matrix <code>devM</code></li>
+<li>Loads a column of matrix <code>devN</code></li>
+<li>Perform one multiply and addition for each pair of <code>devM</code> and <code>devN</code> elements</li>
+<li>Compute to off-chip memory access ratio close to 1:1 (not very high, load-store intense)</li>
+</ul></li>
+<li><p>Size of matrix limited by the number of threads allowed in a thread block</p></li>
+<li><p>The performance bottleneck is:</p>
+<ul>
+<li>bandwidth - the heavy memory access</li>
+</ul></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CUDA Programming 1</div>
+      <div>https://daydreamatnight.github.io/2022/09/01/CUDA-fundamental-5/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 1, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/09/02/CUDA-fundamental-6/" title="CUDA programming 2">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CUDA programming 2</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/30/CUDA-fundamental-4/" title="GPU/CUDA programming models">
+                        <span class="hidden-mobile">GPU/CUDA programming models</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

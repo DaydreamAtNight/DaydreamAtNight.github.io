@@ -1,0 +1,1040 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="d2l is a small python module wheel that needed when read the useful deep learning book &quot;dive into deeplearning&quot;, which provide interactive code examples implemented with MXNet, PyTorch, and Tensorflo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="install d2l module on apple m1 chip for deep learning">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="d2l is a small python module wheel that needed when read the useful deep learning book &quot;dive into deeplearning&quot;, which provide interactive code examples implemented with MXNet, PyTorch, and Tensorflo">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-02-28T14:30:11.000Z">
+<meta property="article:modified_time" content="2022-06-09T10:14:46.816Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="mac">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>install d2l module on apple m1 chip for deep learning - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="install d2l module on apple m1 chip for deep learning"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-28 22:30" pubdate>
+          February 28, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          19k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          62 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">install d2l module on apple m1 chip for deep learning</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><a target="_blank" rel="noopener" href="https://pypi.org/project/d2l/">d2l</a> is a small python module wheel that needed when read the useful deep learning book "<a target="_blank" rel="noopener" href="https://d2l.ai/">dive into deeplearning</a>", which provide interactive code examples implemented with <a target="_blank" rel="noopener" href="https://mxnet.apache.org/versions/1.9.0/">MXNet</a>, PyTorch, and Tensorflow.</p>
+<p>But it took me ton's of time installing this module on the new M1 MacBook Air. Actually its easy, just to record this.</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="how-to-install">How to install</h3>
+<p>1.install miniforge</p>
+<p>already did, easy.</p>
+<p>2.create a new environment with python=3.8</p>
+<p>m1 Mac officially support python&gt;=3.9, but 3.8 can be installed.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">conda create -n d2l python=3.8
+conda info --env
+conda activate d2l</code></pre></div>
+<p>3.install torch</p>
+<p>torch==1.8.1 and torchvision==0.9.1 is recommended and tested in the book, but <a target="_blank" rel="noopener" href="https://pytorch.org/"># macOS is not currently supported for lts</a>.</p>
+<p>So the most convenient choice for mac is pytorch==1.10.2, torchvision==0.2.2</p>
+<div class="code-wrapper"><pre><code class="hljs python">conda install pytorch torchvision -c pytorch</code></pre></div>
+<p>#4.try install d2l directly</p>
+<div class="code-wrapper"><pre><code class="hljs shell">clear
+pip install d2l==0.17.3</code></pre></div>
+<p>thousands lines of terrifying error will come out:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">pip install d2l==0.17.3</span>
+Collecting d2l==0.17.3
+  Using cached d2l-0.17.3-py3-none-any.whl (82 kB)
+Collecting jupyter==1.0.0
+  Using cached jupyter-1.0.0-py2.py3-none-any.whl (2.7 kB)
+Collecting numpy==1.18.5
+  Using cached numpy-1.18.5.zip (5.4 MB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting pandas==1.2.2
+  Using cached pandas-1.2.2.tar.gz (5.5 MB)
+  Installing build dependencies ... error
+  error: subprocess-exited-with-error
+  
+  × pip subprocess to install build dependencies did not run successfully.
+  │ exit code: 1
+  ╰─&gt; [3659 lines of output]
+      Ignoring numpy: markers &#x27;python_version == &quot;3.7&quot; and platform_system != &quot;AIX&quot;&#x27; don&#x27;t match your environment
+      Ignoring numpy: markers &#x27;python_version == &quot;3.7&quot; and platform_system == &quot;AIX&quot;&#x27; don&#x27;t match your environment
+      Ignoring numpy: markers &#x27;python_version == &quot;3.8&quot; and platform_system == &quot;AIX&quot;&#x27; don&#x27;t match your environment
+      Ignoring numpy: markers &#x27;python_version &gt;= &quot;3.9&quot;&#x27; don&#x27;t match your environment
+      Collecting setuptools
+        Using cached setuptools-60.9.3-py3-none-any.whl (1.1 MB)
+      Collecting wheel
+        Using cached wheel-0.37.1-py2.py3-none-any.whl (35 kB)
+      Collecting Cython&lt;3,&gt;=0.29.21
+        Using cached Cython-0.29.28-py2.py3-none-any.whl (983 kB)
+      Collecting numpy==1.17.3
+        Using cached numpy-1.17.3.zip (6.4 MB)
+        Preparing metadata (setup.py): started
+        Preparing metadata (setup.py): finished with status &#x27;done&#x27;
+      Building wheels for collected packages: numpy
+        Building wheel for numpy (setup.py): started
+        Building wheel for numpy (setup.py): finished with status &#x27;error&#x27;
+        error: subprocess-exited-with-error
+      
+        × python setup.py bdist_wheel did not run successfully.
+        │ exit code: 1
+        ╰─&gt; [3286 lines of output]
+            Running from numpy source directory.
+            blas_opt_info:
+            blas_mkl_info:
+            customize UnixCCompiler
+              libraries mkl_rt not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            blis_info:
+            customize UnixCCompiler
+              libraries blis not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            openblas_info:
+            customize UnixCCompiler
+            customize UnixCCompiler
+              libraries openblas not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            atlas_3_10_blas_threads_info:
+            Setting PTATLAS=ATLAS
+            customize UnixCCompiler
+              libraries tatlas not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            atlas_3_10_blas_info:
+            customize UnixCCompiler
+              libraries satlas not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            atlas_blas_threads_info:
+            Setting PTATLAS=ATLAS
+            customize UnixCCompiler
+              libraries ptf77blas,ptcblas,atlas not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            atlas_blas_info:
+            customize UnixCCompiler
+              libraries f77blas,cblas,atlas not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            accelerate_info:
+            customize UnixCCompiler
+              libraries accelerate not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+            Library accelerate was not found. Ignoring
+            customize UnixCCompiler
+              libraries veclib not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+            Library veclib was not found. Ignoring
+              FOUND:
+                extra_compile_args = [&#x27;-faltivec&#x27;, &#x27;-I/System/Library/Frameworks/vecLib.framework/Headers&#x27;]
+                extra_link_args = [&#x27;-Wl,-framework&#x27;, &#x27;-Wl,Accelerate&#x27;]
+                define_macros = [(&#x27;NO_ATLAS_INFO&#x27;, 3), (&#x27;HAVE_CBLAS&#x27;, None)]
+      
+              FOUND:
+                extra_compile_args = [&#x27;-faltivec&#x27;, &#x27;-I/System/Library/Frameworks/vecLib.framework/Headers&#x27;]
+                extra_link_args = [&#x27;-Wl,-framework&#x27;, &#x27;-Wl,Accelerate&#x27;]
+                define_macros = [(&#x27;NO_ATLAS_INFO&#x27;, 3), (&#x27;HAVE_CBLAS&#x27;, None)]
+      
+            /bin/sh: svnversion: command not found
+            non-existing path in &#x27;numpy/distutils&#x27;: &#x27;site.cfg&#x27;
+            lapack_opt_info:
+            lapack_mkl_info:
+            customize UnixCCompiler
+              libraries mkl_rt not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            openblas_lapack_info:
+            customize UnixCCompiler
+            customize UnixCCompiler
+              libraries openblas not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            openblas_clapack_info:
+            customize UnixCCompiler
+            customize UnixCCompiler
+              libraries openblas,lapack not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            flame_info:
+            customize UnixCCompiler
+              libraries flame not found in [&#x27;/opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib&#x27;, &#x27;/usr/local/lib&#x27;, &#x27;/usr/lib&#x27;]
+              NOT AVAILABLE
+      
+            atlas_3_10_threads_info:
+            Setting PTATLAS=ATLAS
+            customize UnixCCompiler
+              libraries lapack_atlas not found in /opt/homebrew/Caskroom/miniforge/base/envs/d2d/lib
+...
+...
+...
+	
+						None - nothing done with h_files = [&#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath/npy_math_internal.h&#x27;]
+            building library &quot;npysort&quot; sources
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/common&#x27; to include_dirs.
+            None - nothing done with h_files = [&#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/common/npy_sort.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/common/npy_partition.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/common/npy_binsearch.h&#x27;]
+            building extension &quot;numpy.core._dummy&quot; sources
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/config.h&#x27; to sources.
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/_numpyconfig.h&#x27; to sources.
+            executing numpy/core/code_generators/generate_numpy_api.py
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/__multiarray_api.h&#x27; to sources.
+            numpy.core - nothing done with h_files = [&#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/config.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/_numpyconfig.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/__multiarray_api.h&#x27;]
+            building extension &quot;numpy.core._multiarray_tests&quot; sources
+            building extension &quot;numpy.core._multiarray_umath&quot; sources
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/config.h&#x27; to sources.
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/_numpyconfig.h&#x27; to sources.
+            executing numpy/core/code_generators/generate_numpy_api.py
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/__multiarray_api.h&#x27; to sources.
+            executing numpy/core/code_generators/generate_ufunc_api.py
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/__ufunc_api.h&#x27; to sources.
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath&#x27; to include_dirs.
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath&#x27; to include_dirs.
+              adding &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/common&#x27; to include_dirs.
+            numpy.core - nothing done with h_files = [&#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/funcs.inc&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/simd.inc&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/loops.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/matmul.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/clip.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath/npy_math_internal.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/src/common/templ_common.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/config.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/_numpyconfig.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/__multiarray_api.h&#x27;, &#x27;build/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy/__ufunc_api.h&#x27;]
+            building extension &quot;numpy.core._umath_tests&quot; sources
+            building extension &quot;numpy.core._rational_tests&quot; sources
+            building extension &quot;numpy.core._struct_ufunc_tests&quot; sources
+            building extension &quot;numpy.core._operand_flag_tests&quot; sources
+            building extension &quot;numpy.fft._pocketfft_internal&quot; sources
+            building extension &quot;numpy.linalg.lapack_lite&quot; sources
+              adding &#x27;numpy/linalg/lapack_lite/python_xerbla.c&#x27; to sources.
+            building extension &quot;numpy.linalg._umath_linalg&quot; sources
+              adding &#x27;numpy/linalg/lapack_lite/python_xerbla.c&#x27; to sources.
+            building extension &quot;numpy.random.mt19937&quot; sources
+            building extension &quot;numpy.random.philox&quot; sources
+            building extension &quot;numpy.random.pcg64&quot; sources
+            building extension &quot;numpy.random.sfc64&quot; sources
+            building extension &quot;numpy.random.common&quot; sources
+            building extension &quot;numpy.random.bit_generator&quot; sources
+            building extension &quot;numpy.random.generator&quot; sources
+            building extension &quot;numpy.random.bounded_integers&quot; sources
+            building extension &quot;numpy.random.mtrand&quot; sources
+            building data_files sources
+            build_src: building npy-pkg config files
+            running build_py
+            copying numpy/version.py -&gt; build/lib.macosx-11.0-arm64-3.8/numpy
+            copying build/src.macosx-11.0-arm64-3.8/numpy/__config__.py -&gt; build/lib.macosx-11.0-arm64-3.8/numpy
+            copying build/src.macosx-11.0-arm64-3.8/numpy/distutils/__config__.py -&gt; build/lib.macosx-11.0-arm64-3.8/numpy/distutils
+            running build_clib
+            customize UnixCCompiler
+            customize UnixCCompiler using build_clib
+            running build_ext
+            customize UnixCCompiler
+            customize UnixCCompiler using build_ext
+            building &#x27;numpy.core._multiarray_umath&#x27; extension
+            compiling C sources
+            C compiler: gcc -Wno-unused-result -Wsign-compare -Wunreachable-code -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I/opt/homebrew/Caskroom/miniforge/base/envs/d2d/include -arch arm64 -I/opt/homebrew/Caskroom/miniforge/base/envs/d2d/include -arch arm64
+      
+            compile options: &#x27;-DNPY_INTERNAL_BUILD=1 -DHAVE_NPY_CONFIG_H=1 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -DNO_ATLAS_INFO=3 -DHAVE_CBLAS -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/umath -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/common -Inumpy/core/include -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy -Inumpy/core/src/common -Inumpy/core/src -Inumpy/core -Inumpy/core/src/npymath -Inumpy/core/src/multiarray -Inumpy/core/src/umath -Inumpy/core/src/npysort -I/opt/homebrew/Caskroom/miniforge/base/envs/d2d/include/python3.8 -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/common -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/common -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath -c&#x27;
+            extra options: &#x27;-faltivec -I/System/Library/Frameworks/vecLib.framework/Headers&#x27;
+            gcc: numpy/core/src/multiarray/alloc.c
+            gcc: numpy/core/src/multiarray/array_assign_scalar.c
+            gcc: numpy/core/src/multiarray/buffer.c
+            gcc: numpy/core/src/multiarray/common.c
+            gcc: numpy/core/src/multiarray/conversion_utils.c
+            gcc: numpy/core/src/multiarray/datetime_strings.c
+            gcc: numpy/core/src/multiarray/descriptor.c
+            gcc: build/src.macosx-11.0-arm64-3.8/numpy/core/src/multiarray/einsum.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/multiarray/hashdescr.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: build/src.macosx-11.0-arm64-3.8/numpy/core/src/multiarray/lowlevel_strided_loops.c
+            gcc: numpy/core/src/multiarray/multiarraymodule.c
+            gcc: numpy/core/src/multiarray/nditer_constr.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/multiarray/refcount.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/multiarray/scalarapi.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/multiarray/temp_elide.c
+            gcc: numpy/core/src/multiarray/vdot.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/loops.c
+            gcc: numpy/core/src/umath/ufunc_object.c
+            gcc: build/src.macosx-11.0-arm64-3.8/numpy/core/src/umath/scalarmath.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/npymath/npy_math.c
+            gcc: numpy/core/src/common/npy_longdouble.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/npymath/halffloat.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            gcc: numpy/core/src/common/numpyos.c
+            gcc: /private/var/folders/5y/pqfqz2md0njg2slq29yxp12w0000gn/T/pip-install-mxyh83f9/numpy_51614e6143884c3bbd246341eeb3b857/numpy/_build_utils/src/apple_sgemv_fix.c
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitlyclang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+      
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            clang: error: the clang compiler does not support &#x27;faltivec&#x27;, please use -maltivec and include altivec.h explicitly
+            error: Command &quot;gcc -Wno-unused-result -Wsign-compare -Wunreachable-code -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I/opt/homebrew/Caskroom/miniforge/base/envs/d2d/include -arch arm64 -I/opt/homebrew/Caskroom/miniforge/base/envs/d2d/include -arch arm64 -DNPY_INTERNAL_BUILD=1 -DHAVE_NPY_CONFIG_H=1 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -DNO_ATLAS_INFO=3 -DHAVE_CBLAS -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/umath -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/common -Inumpy/core/include -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/include/numpy -Inumpy/core/src/common -Inumpy/core/src -Inumpy/core -Inumpy/core/src/npymath -Inumpy/core/src/multiarray -Inumpy/core/src/umath -Inumpy/core/src/npysort -I/opt/homebrew/Caskroom/miniforge/base/envs/d2d/include/python3.8 -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/common -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/common -Ibuild/src.macosx-11.0-arm64-3.8/numpy/core/src/npymath -c numpy/core/src/multiarray/array_assign_scalar.c -o build/temp.macosx-11.0-arm64-3.8/numpy/core/src/multiarray/array_assign_scalar.o -MMD -MF build/temp.macosx-11.0-arm64-3.8/numpy/core/src/multiarray/array_assign_scalar.o.d -faltivec -I/System/Library/Frameworks/vecLib.framework/Headers&quot; failed with exit status 1
+            [end of output]
+      
+        note: This error originates from a subprocess, and is likely not a problem with pip.
+      error: legacy-install-failure
+      
+      × Encountered error while trying to install package.
+      ╰─&gt; numpy
+      
+      note: This is an issue with the package mentioned above, not pip.
+      hint: See above for output from the failure.
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× pip subprocess to install build dependencies did not run successfully.
+│ exit code: 1
+╰─&gt; See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.</code></pre></div>
+<p>Scroll to the top, it looks like <code>jupyter==1.0.0</code>, <code>pandas==1.2.2</code>, <code>numpy==1.18.5</code> are required, and numpy==1.18.5 is where the error comes from.</p>
+<p>4.As a result, install <code>jupyter==1.0.0</code> and <code>pandas==1.2.2</code> first</p>
+<div class="code-wrapper"><pre><code class="hljs shell">pip install jupyter==1.0.0</code></pre></div>
+<p>conda can't be installed by pip, but can by conda</p>
+<div class="code-wrapper"><pre><code class="hljs shell">conda install pandas=1.2.2</code></pre></div>
+<p>5.numpy==1.18.5 can not be installed by pip or conda</p>
+<p>thanks to <a target="_blank" rel="noopener" href="https://github.com/apple/tensorflow_macos/releases/tag/v0.1alpha0">tensorflow's wheel</a>, numpy==1.18.5's wheel for mac is included in the addons</p>
+<p>download and unzip <a target="_blank" rel="noopener" href="https://github.com/apple/tensorflow_macos/releases/download/v0.1alpha0/tensorflow_macos-0.1alpha0.tar.gz">tensorflow_macos-0.1alpha0.tar.gz</a></p>
+<p>go to the unzipped folder in terminal, and run</p>
+<div class="code-wrapper"><pre><code class="hljs shell">pip install arm64/numpy-1.18.5-cp38-cp38-macosx_11_0_arm64.whl</code></pre></div>
+<p>check</p>
+<div class="code-wrapper"><pre><code class="hljs shell">pip list |grep pandas
+pip list |grep jupyter
+pip list |grep numpy</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">pandas               1.2.2
+jupyter              1.0.0
+jupyter-client       7.1.2
+jupyter-console      6.4.0
+jupyter-core         4.9.2
+jupyterlab-pygments  0.1.2
+jupyterlab-widgets   1.0.2
+numpy                1.18.5</code></pre></div>
+<p>5.install d2l</p>
+<div class="code-wrapper"><pre><code class="hljs shell">pip install d2l</code></pre></div>
+<p>Sucess!</p>
+<h3 id="reference">Reference</h3>
+<p>https://zh-v2.d2l.ai/chapter_installation/index.html</p>
+<p>https://parthiban-kannan.medium.com/install-tensorflow-on-apple-macbook-m1-release-c1ce7e65cd0</p>
+<p>https://github.com/apple/tensorflow_macos/issues/48</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/mac/">#mac</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>install d2l module on apple m1 chip for deep learning</div>
+      <div>https://daydreamatnight.github.io/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 28, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/" title="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/" title="Build and configure a personal blog via hexo and yilia on github">
+                        <span class="hidden-mobile">Build and configure a personal blog via hexo and yilia on github</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

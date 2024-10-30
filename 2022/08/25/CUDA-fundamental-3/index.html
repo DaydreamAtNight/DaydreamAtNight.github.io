@@ -1,0 +1,1036 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="The architecture and design mode of GPU is introduced with examples, in comparison with the CPU architecture.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPU architecture">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/08/25/CUDA-fundamental-3/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="The architecture and design mode of GPU is introduced with examples, in comparison with the CPU architecture.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_3.png">
+<meta property="article:published_time" content="2022-08-24T17:23:25.000Z">
+<meta property="article:modified_time" content="2022-09-02T13:43:30.085Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_3.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>GPU architecture - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="GPU architecture"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-25 01:23" pubdate>
+          August 25, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          24 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">GPU architecture</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>The architecture and design mode of GPU is introduced with examples, in comparison with the CPU architecture.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>All the pics and contents are not original. The contents of the whole series are mainly collected from:</p><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1kx411m7Fk">NVIDIA CUDA初级教程视频</a></p><p><a target="_blank" rel="noopener" href="https://cis565-fall-2019.github.io/">CIS 565 2019</a></p><p><a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15418-s21/www/index.html">CMU 15-418/618 (2018)</a></p>
+          </div>
+<table>
+<thead>
+<tr class="header">
+<th>Outline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Why need GPU</td>
+</tr>
+<tr class="even">
+<td>3 design ideas to speedup</td>
+</tr>
+<tr class="odd">
+<td>examples</td>
+</tr>
+<tr class="even">
+<td>GPU memory design</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Terms</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FLOPS</td>
+<td>Floating-point OPerations per Second</td>
+</tr>
+<tr class="even">
+<td>GFLOPS</td>
+<td>One billion (10^9) FLOPS</td>
+</tr>
+<tr class="odd">
+<td>TFLOPS</td>
+<td>1000 GFLOPS</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-gpu">Why GPU</h2>
+<p>Application Driven, many applications requires computation.</p>
+<h2 id="gpu-structure">GPU Structure</h2>
+<p>A GPU is a heterogeneous chip multi-processor (highly tuned for graphics).</p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/GPU.jpg" srcset="/img/loading.gif" lazyload alt="GPU" style="zoom:75%;"></p>
+<p>Shader Core --&gt; ALU( <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Arithmetic_logic_unit">Arithmetic logic unit</a> ), basic computation unit. Before its designed specifically for image rendering, now it is able to perform general arithmetic operations.</p>
+<h5 id="execute-shader">Execute shader</h5>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_8.jpg" srcset="/img/loading.gif" lazyload alt="16 cores in parallel" style="zoom:100%;"></p>
+<p>Compared with the CPU types cores, there is no cache or extra OoO, branch predictor and memory pre-fetcher, which are not related to regulated instruction processing.</p>
+<h2 id="design-idea-to-speedup">3 design idea to speedup</h2>
+<h3 id="idea-1-multi-slimmed-down-cores-in-parallel">Idea 1: multi “slimmed down cores” in parallel</h3>
+<ul>
+<li>removing components that help a singe instruction stream run fast</li>
+<li>multi cores, multi fragments in parallel</li>
+<li>instruction stream sharing, multi fragments need to share one instruction stream. Otherwise a complicated control system is needed.</li>
+</ul>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_10.jpeg" srcset="/img/loading.gif" lazyload alt="16 cores in parallel" style="zoom:75%;"></p>
+<h3 id="idea-2-multi-alus-in-one-core">Idea 2: multi ALUs in one core</h3>
+<p>Amortize cost/complexity of managing an instruction stream across many ALUs. Design multiple ALUs in one core - SIMD. Vector operations in one core.</p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_11-1.jpeg" srcset="/img/loading.gif" lazyload alt="8 ALUs in one core" style="zoom:75%;"></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_12.jpeg" srcset="/img/loading.gif" lazyload alt="128 fragments in parallel" style="zoom:75%;"></p>
+<p>For the overall design for now, there are 16 streams for 128 fragments, technically, the 16 streams can be same or different. The 8 ALUs in one core share the same stream.</p>
+<h4 id="branch-divergence">Branch divergence</h4>
+<p>With multiple ALUs sharing one stream, the parallel performance will deteriorate dealing with branches such as below:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (x &gt; <span class="hljs-number">0</span>)
+&#123;
+    y = <span class="hljs-built_in">pow</span>(x, exp);
+    y *= K3;
+    ref = y * K3;
+&#125;
+<span class="hljs-keyword">else</span>
+&#123;
+    y = <span class="hljs-number">0</span>;
+    ref = K3;
+&#125;</code></pre></div>
+<p>When execute this thread, different ALU will get different <code>true</code> or <code>flase</code>. However, all the ALU's must execute the same path. As a result, as the image below shows, the ALUs going to Path B have to do useless work together with the ALUs who are doing the useful work. With a such branch, and 8-thread core, the performance can be as low as 1/8 peak performance.</p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/thread divergence.PNG" srcset="/img/loading.gif" lazyload alt="thread divergence" style="zoom:75%;"></p>
+<blockquote>
+<p>Just to clarify here, not all the SIMD process need explicit SIMD instruction. There are two options in total:</p>
+<ul>
+<li>explicit vectorized instructions, SSE for example</li>
+<li>implicit sharing managed by hardware, provide scalar instructions and the hardware share them.
+<ul>
+<li>one scalar instruction is shared by multi-threads</li>
+<li>NVIDIA for example</li>
+</ul></li>
+</ul>
+</blockquote>
+<h4 id="stalls">Stalls</h4>
+<p>Stalls occur when a core cannot run the next instruction because of a dependency on a previous operation. Wait until ready. In order to deal with stalls, we have a third idea.</p>
+<h3 id="idea-3-switch-between-different-fragments-to-hide-latency.">Idea 3 Switch between different fragments to hide latency.</h3>
+<p>Interleave processing of many fragments on a single core to avoid stalls caused by high latency operations.</p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_14.jpeg" srcset="/img/loading.gif" lazyload alt="Stall illustration" style="zoom:75%;"></p>
+<p>To maximise latency hiding, the context storage space is split into multiple components as demonstrated:</p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_15.jpeg" srcset="/img/loading.gif" lazyload alt="context memory pool" style="zoom:75%;"></p>
+<p>Actually there are 3 level of context storage division:</p>
+<ul>
+<li>18 small contexts, maximal latency hiding, fragments are small</li>
+<li>12 medium contexts,</li>
+<li>4 large contexts, more work for each fragments, but low latency hiding ability</li>
+</ul>
+<blockquote>
+<p>Just to clarify here, interleaving between contexts can be managed by hardware (HW) or software (SW) or both</p>
+<ul>
+<li>NIVIDIA / ATI Radeon GPUs (HW only)
+<ul>
+<li>HW schedules / manages all contexts (lots of them)</li>
+<li>Special on-chip storage hods fragment states</li>
+</ul></li>
+<li>Intel Larrabee (Both)
+<ul>
+<li>HW manages 4 x86 (big) contexts at fine granularity</li>
+<li>SW scheduling interleaves many groups of fragments on each HW context</li>
+<li>L1 - L2 cache holds fragment state (as determined by SW)</li>
+</ul></li>
+</ul>
+</blockquote>
+<h3 id="overall-design">Overall design</h3>
+<p>Our overall design has the following specifications:</p>
+<ul>
+<li>32 cores</li>
+<li>16 mul-add ALUs per core (512 total)</li>
+<li>32 simultaneous instruction streams</li>
+<li>64 concurrent (but interleaved) instruction streams</li>
+<li>512 concurrent fragments = 1 TFLOPs (@ 1GHz)</li>
+</ul>
+<p><img src="/2022/08/25/CUDA-fundamental-3/gpu_16.jpeg" srcset="/img/loading.gif" lazyload alt="overall design with 32 cores" style="zoom:75%;"></p>
+<h3 id="real-designs">Real designs</h3>
+<blockquote>
+<p>MP = SM = core</p>
+<p>CUDA core = ALU</p>
+<p>CUDA thread = fragment</p>
+</blockquote>
+<blockquote>
+<p>The SM is the heart of NVIDIA’s unified GPU architecture. Most of the key hardware units for graphics processing reside in the SM. The SM’s CUDA cores perform pixel/vertex/geometry shading and physics/compute calculations. Texture units perform texture filtering and load/store units fetch and save data to memory. Special Function Units (SFUs) handle transcendental and graphics interpolation instructions. Finally, the PolyMorph Engine handles vertex fetch, tessellation, viewport transform, attribute setup, and stream output.</p>
+</blockquote>
+<h4 id="nvidia-geforce-gtx-480-fermi">NVIDIA GeForce GTX 480 (Fermi)</h4>
+<p><img src="/2022/08/25/CUDA-fundamental-3/High-level-architecture-of-the-NVIDIA-GTX-480-graphics-card-simplified-and-excluding-the.png" srcset="/img/loading.gif" lazyload alt="NVIDIA GTX 480 (Fermi) high level architecture" style="zoom:80%;"></p>
+<p>Specifics:</p>
+<ul>
+<li>NVIDIA-speak:
+<ul>
+<li>480 stream processors ("CUDA cores")</li>
+<li>"SIMT" execution</li>
+</ul></li>
+<li>Generic speak
+<ul>
+<li>16 (SM) cores</li>
+<li>2 groups of 16 SIMD functional unites per core</li>
+</ul></li>
+</ul>
+<p>Some notes:</p>
+<ul>
+<li><p>1 SM contains 32 CUDA cores</p></li>
+<li><p>2 warps are selected each clock (decode, fetch, then execute 2 warps in parallel)</p></li>
+<li><p>Up to 48 warps are interleaved, totally 23000 CUDA threads</p></li>
+</ul>
+<h4 id="nvidia-geforce-gtx-680-kepler">NVIDIA GeForce GTX 680 (kepler)</h4>
+<p><img src="/2022/08/25/CUDA-fundamental-3/NVIDIA GeForce GTX 680 (kepler) architecture.png" srcset="/img/loading.gif" lazyload alt="NVIDIA GeForce GTX 680 (kepler) high level architecture" style="zoom:80%;"></p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/GeForce_GTX_680_SM_Diagram_FINAL.jpeg" srcset="/img/loading.gif" lazyload alt="GeForce GTX 680 SMX Diagram" style="zoom:80%;"></p>
+<table>
+<thead>
+<tr class="header">
+<th>GPU</th>
+<th>GF110 (Fermi)</th>
+<th>GK104 (Kepler)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Per GPU:</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SM / SMXs</td>
+<td>16</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>Per SM unit counts :</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>CUDA Cores</td>
+<td>32</td>
+<td>192</td>
+</tr>
+<tr class="odd">
+<td>Special Function (Units SFU)</td>
+<td>4</td>
+<td>32</td>
+</tr>
+<tr class="even">
+<td>load/store units (LD/ST)</td>
+<td>16</td>
+<td>32</td>
+</tr>
+<tr class="odd">
+<td>Texture units (Tex)</td>
+<td>4</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Polymorph</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Warp schedulers</td>
+<td>2</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>SMX means a powerful SM</p>
+</blockquote>
+<h4 id="nvidia-gk110">NVIDIA GK110</h4>
+<p>SMX: 192 single-precision CUDA cores, 64 double-precision units, 32 special function units (SFU), and 32 load/store units (LD/ST).</p>
+<h2 id="gpu-memory-design">GPU memory design</h2>
+<h4 id="the-importance-of-bandwidth">The importance of bandwidth</h4>
+<h5 id="gpu-memory-design-1">GPU memory design</h5>
+<p>Compare with CPU-Style core:</p>
+<p><img src="/2022/08/25/CUDA-fundamental-3/CPU_GPU_cores.PNG" srcset="/img/loading.gif" lazyload alt="CPU GPU cores comparison" style="zoom:100%;"></p>
+<p>The cache area in CPU is huge, and is is divided into 3 levels, L1, L2 and L3 caches. Inside the caches, the latency (length of stalls) is low and the bandwidth is big. Yet the bandwidth is low to the outside memory, as low as 12GB/s. The CPU cores run efficiently when data is resident in caches.</p>
+<p>In GPU (throughput style), no large cache hierarchy exists. As a result a high bandwidth to the memory is required, as high as 150GB/s.</p>
+<p>Although the GPU memory bandwidth is high, it is only 6 times to the CPU. It is still not enough compared with the compute performance of GPU(over 10 times to the CPU).</p>
+<h5 id="bandwidth-thought-experiment">Bandwidth thought experiment</h5>
+<p>Task: element-wise multiply two long vectors A and B then plus C of the same length, save the result to vector D. here are the steps:</p>
+<ol type="1">
+<li>Load input <code>A[i]</code></li>
+<li>Load input <code>B[i]</code></li>
+<li>load input <code>C[i]</code></li>
+<li>Compute <code>A[i]*B[i]+C[i]</code></li>
+<li>Store result into <code>D[i]</code></li>
+</ol>
+<p>There are 4 memory operations (16 bytes) for every MUL-ADD operation.</p>
+<p>Radeon HD 5870 can do 1600 MUL-ADDs per clock</p>
+<p>Need ~20TB/s of bandwidth to keep ALUs busy</p>
+<p>It is less than 1% efficiency, but still 6x faster than CPU, because of the bandwidth limit.</p>
+<h5 id="bandwidth-limited">Bandwidth limited</h5>
+<p>If processors request data at too high a rate, the memory system cannot keep up. No amount of latency hiding helps this. Overcoming bandwidth limits are a common challenge for GPU-compute application developers.</p>
+<blockquote>
+<p>In practice, when working on a large nerual networks, say BERT or GPT-2. The actual FLOPS will not reach the thoretical FLOPS calculated by the number of the matrix operations. The main reason are the activation layers and operation of SGD. They are compuational light yet memory heavy operations. The bandwidth will deter the calculation on these steps.</p>
+</blockquote>
+<h4 id="reducing-bandwidth-requirments">Reducing bandwidth requirments</h4>
+<ul>
+<li>Request data less often (do more math instead), "arithmetic intensity"</li>
+<li>Fetch data from memory less oftern (share/reuse data across fagments)
+<ul>
+<li>on-chip communication or storage</li>
+</ul></li>
+</ul>
+<h5 id="examples">Examples</h5>
+<ul>
+<li>Texture caches
+<ul>
+<li>Capture reuse across fragments, not temporal reuse within a single shader program</li>
+</ul></li>
+<li>OpenCL "local memory", CUDA shared memory</li>
+</ul>
+<blockquote>
+<p>Note: OpenCL is an open standards version of CUDA - CUDA only runs on NVIDIA GPUs - OpenCL runs on CPUs and GPUs from many vendors - Almost everything about CUDA also holds for OpenCL - CUDA is better documented, thus I find it preferable to teach with.</p>
+</blockquote>
+<h4 id="mordern-gpu-memory-hierarchy">Mordern GPU memory hierarchy</h4>
+<p>Shown on pictures above, the GPU possesses:</p>
+<ul>
+<li><p>On-chip storage takes load off memory system</p></li>
+<li><p>Many developers calling for more cache-like storage</p>
+<p>(particularly GPU-compute applications)</p></li>
+</ul>
+<h2 id="a-good-gpu-task">A good GPU task</h2>
+<ol type="1">
+<li>Many many independent tasks
+<ul>
+<li>exploiting massive ALUs</li>
+<li>many fragments switch to hide latency</li>
+</ul></li>
+<li>Shared instructions
+<ul>
+<li>suitable for SIMD processes</li>
+</ul></li>
+<li>arithmitic intense task
+<ul>
+<li>suitable commination and computation proportion</li>
+<li>not limited by share-load bandwidth</li>
+</ul></li>
+</ol>
+<h2 id="references">References</h2>
+<p><a target="_blank" rel="noopener" href="https://course.ece.cmu.edu/~ece740/f13/doku.php?id=home">15-740 Computer Architecture – Fall 2013</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15418-s21/www/index.html">CMU 15-418/618 (2018)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qT411g7n9">VIDEO: CMU15-418并行体系结构与编程（spring 2018）</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>GPU architecture</div>
+      <div>https://daydreamatnight.github.io/2022/08/25/CUDA-fundamental-3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 25, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/30/CUDA-fundamental-4/" title="GPU/CUDA programming models">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">GPU/CUDA programming models</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/15/A-collection-of-stupid-Errors/" title="A collection of stupid Errors">
+                        <span class="hidden-mobile">A collection of stupid Errors</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

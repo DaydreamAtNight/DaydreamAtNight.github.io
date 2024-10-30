@@ -1,0 +1,1220 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Warning: a set of stupid errors occur when compiling c++ and OpenFOAM.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A collection of stupid Errors">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/08/15/A-collection-of-stupid-Errors/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Warning: a set of stupid errors occur when compiling c++ and OpenFOAM.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/stupiderrors.png">
+<meta property="article:published_time" content="2022-08-15T15:00:59.000Z">
+<meta property="article:modified_time" content="2022-09-09T15:23:23.793Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="OpenFOAM">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/stupiderrors.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>A collection of stupid Errors - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="A collection of stupid Errors"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-15 23:00" pubdate>
+          August 15, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          17k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          59 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">A collection of stupid Errors</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Warning: a set of stupid errors occur when compiling c++ and OpenFOAM.</p>
+          </div>
+<span id="more"></span>
+<h2 id="c">c++</h2>
+<h3 id="this-pointer-in-inherited-template-class"><code>this</code> pointer in inherited template class</h3>
+<p>I tried to write a simple snippet of inheriting template class, I wrote this simple code and it gave me such errors.</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span>
+&#123;
+<span class="hljs-keyword">public</span>:
+    T m_data;
+&#125;;
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">child_template</span>: <span class="hljs-keyword">public</span> Base&lt;T&gt;
+&#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_child</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        cout &lt;&lt; m_data &lt;&lt; endl; <span class="hljs-comment">// error: use of undeclared identifier &#x27;m_data&#x27;; did you mean &#x27;child_class::m_data&#x27;?</span>
+        <span class="hljs-comment">// cout &lt;&lt; this-&gt;m_data &lt;&lt; endl; // no error</span>
+    &#125;
+&#125;;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    child_template&lt;<span class="hljs-type">int</span>&gt; child_obj;
+    child_obj.m_data = <span class="hljs-number">20</span>;
+    child_obj.<span class="hljs-built_in">print_child</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></div>
+<p>the error is such that:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">template_cls_inherit.cpp:17:17: error: use of undeclared identifier &#x27;m_data&#x27;; did you mean &#x27;__nl_cat_d::__data&#x27;?
+        cout &lt;&lt; m_data &lt;&lt; endl; // error: use of undeclared identifier &#x27;m_data&#x27;; did you mean &#x27;child_class::m_data&#x27;?
+                ^~~~~~
+                __nl_cat_d::__data
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/nl_types.h:90:8: note: &#x27;__nl_cat_d::__data&#x27; declared here
+        void    *__data;
+                 ^
+template_cls_inherit.cpp:17:17: error: &#x27;__nl_cat_d::__data&#x27; is not a member of class &#x27;child_template&lt;int&gt;&#x27;
+        cout &lt;&lt; m_data &lt;&lt; endl; // error: use of undeclared identifier &#x27;m_data&#x27;; did you mean &#x27;child_class::m_data&#x27;?
+                ^~~~~~
+template_cls_inherit.cpp:26:15: note: in instantiation of member function &#x27;child_template&lt;int&gt;::print_child&#x27; requested here
+    child_obj.print_child();
+              ^
+2 errors generated.</code></pre></div>
+<h4 id="error-addressed-by">Error addressed by</h4>
+<p>I used <code>this-&gt;m_data</code> instead of <code>m_data</code> and the error gone</p>
+<p>the use of <code>this</code> pointer is necessary here.</p>
+<h4 id="more-of-this-pointer-in-template-class-inheriting">More of <code>this</code> pointer in template class inheriting</h4>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4643074/why-do-i-have-to-access-template-base-class-members-through-the-this-pointer">c++ - Why do I have to access template base class members through the this pointer? - Stack Overflow</a></p>
+<h3 id="put-typename-and-before-dependent-names">put <code>typename</code> and before dependent names</h3>
+<p>I wrote this function template to print the vector and I got this ERROR. Here's my code:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// some vector features</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printVector</span><span class="hljs-params">(vector&lt;T&gt; v)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">for</span> (vector&lt;T&gt;::iterator it = v.<span class="hljs-built_in">begin</span>(); it != v.<span class="hljs-built_in">end</span>(); it++) <span class="hljs-comment">// error: missing &#x27;typename&#x27; prior to dependent type name &#x27;vector&lt;T&gt;::iterator&#x27;</span>
+    <span class="hljs-comment">// for (vector&lt;int&gt;::iterator it = v.begin(); it != v.end(); it++) // works when gives the type &#x27;int&#x27;</span>
+    <span class="hljs-comment">// for (auto it = v.begin(); it != v.end(); it++) // works in c++11</span>
+    &#123;
+        cout &lt;&lt; *it &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;
+    &#125;
+    cout &lt;&lt; endl;
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// constructor</span>
+
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">v1</span><span class="hljs-params">(<span class="hljs-number">10</span>)</span></span>; <span class="hljs-comment">//size 10, all elements are 0</span>
+
+    <span class="hljs-built_in">printVector</span>&lt;<span class="hljs-type">int</span>&gt; (v1);
+
+&#125;</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">g++ codeName.cpp</span>
+error: missing &#x27;typename&#x27; prior to dependent type name &#x27;vector&lt;T&gt;::iterator&#x27;
+    for(vector&lt;T&gt;::iterator it=v.begin(); it!=v.end(); it++)
+        ^~~~~~~~~~~~~~~~~~~
+        typename 
+1 error generated.</code></pre></div>
+<p>I know it can be solved by algorithm <code>for_each</code>, and the <code>auto</code> type in c++11. I just don't understand why I can't use <code>T</code> over here and how to address this error.</p>
+<h4 id="error-addressed-by-1">Error addressed by</h4>
+<p>substitute the error line with</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">typename</span> vector&lt;T&gt;::iterator it = v.<span class="hljs-built_in">begin</span>(); it != v.<span class="hljs-built_in">end</span>(); it++)</code></pre></div>
+<p>Add a <code>typename</code> before the <code>'vector&lt;T&gt;::iterator'</code>, just like the error message suggested.</p>
+<h4 id="more-about-typename">More about typename</h4>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords">c++ - Where and why do I have to put the "template" and "typename" keywords? - Stack Overflow</a></p>
+<h3 id="compile-with-c11">Compile with c++11</h3>
+<p>When compile this code:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">return</span>  a &lt; b;
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    vector&lt;<span class="hljs-type">int</span>&gt; myvec&#123;<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">4</span>,<span class="hljs-number">3</span>,<span class="hljs-number">6</span>&#125;; <span class="hljs-comment">// vector initialisation, also in c++11</span>
+    <span class="hljs-comment">// vector myvec&#123;3,2,5,6,4,3,6&#125;; // alto deduction data type, available in c++17</span>
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">lbvec</span><span class="hljs-params">(myvec)</span></span>;
+
+    <span class="hljs-built_in">sort</span>(myvec.<span class="hljs-built_in">begin</span>(), myvec.<span class="hljs-built_in">end</span>(), cmp);  <span class="hljs-comment">// before c++ 11</span>
+    cout &lt;&lt; <span class="hljs-string">&quot;predicate function:&quot;</span> &lt;&lt; endl;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> it : myvec)                    <span class="hljs-comment">// range-based for loop, also is a C++11 extension [-Wc++11-extensions]</span>
+        cout &lt;&lt; it &lt;&lt; <span class="hljs-string">&#x27; &#x27;</span>;
+    cout &lt;&lt; endl;
+
+    <span class="hljs-built_in">sort</span>(lbvec.<span class="hljs-built_in">begin</span>(), lbvec.<span class="hljs-built_in">end</span>(), [](<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b) -&gt; <span class="hljs-type">bool</span> &#123; <span class="hljs-keyword">return</span> a &lt; b; &#125;);   <span class="hljs-comment">// Lambda</span>
+    cout &lt;&lt; <span class="hljs-string">&quot;lambda expression:&quot;</span> &lt;&lt; endl;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> it : lbvec)
+        cout &lt;&lt; it &lt;&lt; <span class="hljs-string">&#x27; &#x27;</span>;
+    cout &lt;&lt; endl;
+&#125;</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">clang++ 2_lambda_expression.cpp</span> 
+2_lambda_expression.cpp:16:22: error: expected &#x27;;&#x27; at end of declaration
+    vector&lt;int&gt; myvec&#123;3,2,5,6,4,3,6&#125;; // vector initialisation, also in c++11
+                     ^
+                     ;
+2_lambda_expression.cpp:22:17: warning: range-based for loop is a C++11 extension [-Wc++11-extensions]
+    for (int it : myvec)                    // range-based for loop, also is a C++11 extension [-Wc++11-extensions]
+                ^
+2_lambda_expression.cpp:26:38: error: expected expression
+    sort(lbvec.begin(), lbvec.end(), [](int a, int b) -&gt; bool &#123; return a &lt; b; &#125;);   // Lambda
+                                     ^
+2_lambda_expression.cpp:28:17: warning: range-based for loop is a C++11 extension [-Wc++11-extensions]
+    for (int it : lbvec)
+                ^
+2 warnings and 2 errors generated.</code></pre></div>
+<h4 id="error-addressed-by-2">Error addressed by</h4>
+<p>lambda function is only supported in <code>c++11</code>.</p>
+<p>compile with c++11 flag:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">clang++ --std=c++11  2_lambda_expression.cpp</span></code></pre></div>
+<h4 id="more-about-default-standard-c-version">More about default standard c++ version</h4>
+<p>show <code>g++</code>/<code>clang++</code> standard c++ version, type in the terminal:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">g++ -dM -E -x c++  /dev/null | grep __cplusplus</span>
+<span class="hljs-meta">#</span><span class="language-bash">define __cplusplus 201402L</span></code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">clang++ -dM -E -x c++ /dev/null | grep __cplusplus</span>
+<span class="hljs-meta">#</span><span class="language-bash">define __cplusplus 199711L</span></code></pre></div>
+<h3 id="priority-of-and-.">priority of * and .</h3>
+<p>When compile this code, use <code>vector</code> container with custom data structure:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;deque&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;typeinfo&gt;</span></span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Player</span>
+&#123;
+<span class="hljs-keyword">public</span>:
+    string m_name;
+    <span class="hljs-type">int</span> m_score;
+
+<span class="hljs-keyword">public</span>:
+
+    <span class="hljs-built_in">Player</span>()&#123;&#125;
+
+    <span class="hljs-built_in">Player</span>(string name, <span class="hljs-type">int</span> score)
+    &#123;
+        m_name = name;
+        m_score = score;
+    &#125;
+
+    <span class="hljs-function">string <span class="hljs-title">getName</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        <span class="hljs-keyword">return</span> m_name;
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getScore</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        <span class="hljs-keyword">return</span> m_score;
+    &#125;
+&#125;;
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printVector</span><span class="hljs-params">(<span class="hljs-type">const</span> T v)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">typename</span> T::const_iterator it = v.<span class="hljs-built_in">begin</span>(); it != v.<span class="hljs-built_in">end</span>(); it++)
+    &#123;
+        <span class="hljs-comment">// print name and score</span>
+        cout &lt;&lt; <span class="hljs-string">&quot;name: &quot;</span> &lt;&lt; *it.<span class="hljs-built_in">getName</span>() &lt;&lt; <span class="hljs-string">&quot; score: &quot;</span> &lt;&lt; *it.<span class="hljs-built_in">getScore</span>() &lt;&lt; endl; <span class="hljs-comment">// error: no member named &#x27;getName&#x27; in &#x27;__gnu_cxx::__normal_iterator&lt;const Player *, std::vector&lt;Player, std::allocator&lt;Player&gt; &gt; &gt;&#x27;</span>
+        <span class="hljs-comment">// // debug</span>
+        <span class="hljs-comment">// cout &lt;&lt; &quot;typeid(*it).name() = &quot; &lt;&lt; typeid(*it).name() &lt;&lt; endl; // 6Player</span>
+        <span class="hljs-comment">// cout &lt;&lt; &quot;typeid(it).name() = &quot; &lt;&lt; typeid(it).name() &lt;&lt; endl; // N9__gnu_cxx17__normal_iteratorIPK6PlayerSt6vectorIS1_SaIS1_EEEE</span>
+        <span class="hljs-comment">// cout &lt;&lt; &quot;name: &quot; &lt;&lt; (*it).getName() &lt;&lt; &quot; score: &quot; &lt;&lt; (*it).getScore() &lt;&lt; endl; // no error</span>
+        <span class="hljs-comment">// cout &lt;&lt; &quot;name: &quot; &lt;&lt; it -&gt; getName() &lt;&lt; &quot; score: &quot; &lt;&lt; it -&gt; getScore() &lt;&lt; endl; // no error</span>
+    &#125;
+    cout &lt;&lt; endl;
+&#125;
+
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;   
+    <span class="hljs-comment">// init players with name and score = 0</span>
+    vector&lt;Player&gt; playerList;
+    string base_name = <span class="hljs-string">&quot;player_&quot;</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">5</span>; i++)
+    &#123;
+        playerList.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">Player</span>(base_name+(<span class="hljs-type">char</span>)(<span class="hljs-number">65</span>+i), i));
+    &#125;
+    <span class="hljs-built_in">printVector</span>(playerList);
+&#125;
+</code></pre></div>
+<p>The Error occurs as:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">clang++ test.cpp</span>
+test.cpp:40:33: error: no member named &#x27;getName&#x27; in &#x27;__gnu_cxx::__normal_iterator&lt;const Player *, std::vector&lt;Player, std::allocator&lt;Player&gt; &gt; &gt;&#x27;
+        cout &lt;&lt; &quot;name: &quot; &lt;&lt; *it.getName() &lt;&lt; &quot; score: &quot; &lt;&lt; *it.getScore() &lt;&lt; endl; // error: no member named &#x27;getName&#x27; in &#x27;std::__wrap_iter&lt;Player *&gt;&#x27;
+                             ~~ ^
+test.cpp:60:5: note: in instantiation of function template specialization &#x27;printVector&lt;std::vector&lt;Player, std::allocator&lt;Player&gt; &gt; &gt;&#x27; requested here
+    printVector(playerList);
+    ^
+1 error generated.</code></pre></div>
+<h4 id="debug">Debug</h4>
+<p>Have a look at the type of <code>*it</code> and <code>it</code>, the output shows:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">typeid(*it).name() = 6Player
+typeid(it).name() = N9__gnu_cxx17__normal_iteratorIPK6PlayerSt6vectorIS1_SaIS1_EEEE</code></pre></div>
+<p>The type of the <code>it</code> matches that in the error message.</p>
+<p>So the bug is because the priority of the <code>*</code> is lower than <code>.</code>.</p>
+<h4 id="error-addressed-by-3">Error addressed by</h4>
+<p>Need a pair of parenthesizes to wrap the <code>*it</code>, then use the <code>.</code>.</p>
+<h4 id="more">More</h4>
+<p>Alternatively, techniques such as ostream <code>&lt;&lt;</code> overloading, <code>-&gt;</code> operator and be used.</p>
+<p>And the <code>constant_iterator</code> is necessary with a <code>const</code> parameter.</p>
+<h2 id="openfoam">OpenFOAM</h2>
+<h3 id="change-the-wmake-compiler">change the <code>wmake</code> compiler</h3>
+<p>Try to make use <code>wmake</code> and the c++ fatal error occurs:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">wmake</span>
+Making dependency list for source file onlyMainFunction.C
+g++ -std=c++11 -m64 -pthread -DOPENFOAM=2006 -DWM_DP -DWM_LABEL_SIZE=64 -Wall -Wextra -Wold-style-cast -Wnon-virtual-dtor -Wno-unused-parameter -Wno-invalid-offsetof -Wno-attributes -Wno-unknown-pragmas  -O3  -DNoRepository -ftemplate-depth-100  -iquote. -IlnInclude -I/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/OpenFOAM/lnInclude -I/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/OSspecific/POSIX/lnInclude   -fPIC -c onlyMainFunction.C -o Make/linux64GccDPInt64Opt/onlyMainFunction.o
+onlyMainFunction.C:1:10: fatal error: iostream: No such file or directory
+    1 | #include &lt;iostream&gt;
+      |          ^~~~~~~~~~
+compilation terminated.
+make: *** [Make/linux64GccDPInt64Opt/onlyMainFunction.o] Error 1</code></pre></div>
+<h4 id="debug-by">Debug by</h4>
+<p>Read the Error message and try compile with <code>g++</code>directory:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">g++ --std=c++11 onlyMainFunction.C</span>
+onlyMainFunction.C:1:10: fatal error: iostream: No such file or directory
+    1 | #include &lt;iostream&gt;
+      |          ^~~~~~~~~~
+compilation terminated.</code></pre></div>
+<p>Same error occurs, try compile with <code>clang++</code> instead:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">clang++ --std=c++11 onlyMainFunction.C -o <span class="hljs-variable">$FOAM_USER_APPBIN</span>/onlyMainFunction-clang_complied</span></code></pre></div>
+<p>success, so the error is the <code>Gcc</code> compiler.</p>
+<h4 id="error-addressed-by-4">Error addressed by</h4>
+<p>change the <code>wmake</code> compiler to<code>clang</code>:</p>
+<p>in <code>tcsh</code> shell:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">setenv WM_COMPILER Clang</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">wmake</span>
+clang++ -std=c++11 -m64 -pthread -DOPENFOAM=2006 -DWM_DP -DWM_LABEL_SIZE=64 -Wall -Wextra -Wold-style-cast -Wnon-virtual-dtor -Wno-unused-parameter -Wno-invalid-offsetof -Wno-undefined-var-template -Wno-unknown-warning-option  -O3  -DNoRepository -ftemplate-depth-100  -iquote. -IlnInclude -I/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/OpenFOAM/lnInclude -I/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/OSspecific/POSIX/lnInclude   -fPIC -c onlyMainFunction.C -o Make/linux64GccDPInt64Opt/onlyMainFunction.o
+clang++ -std=c++11 -m64 -pthread -DOPENFOAM=2006 -DWM_DP -DWM_LABEL_SIZE=64 -Wall -Wextra -Wold-style-cast -Wnon-virtual-dtor -Wno-unused-parameter -Wno-invalid-offsetof -Wno-undefined-var-template -Wno-unknown-warning-option  -O3  -DNoRepository -ftemplate-depth-100  -iquote. -IlnInclude -I/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/OpenFOAM/lnInclude -I/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/OSspecific/POSIX/lnInclude   -fPIC -Xlinker --add-needed  Make/linux64GccDPInt64Opt/onlyMainFunction.o -L/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/platforms/linux64GccDPInt64Opt/lib \
+     -lOpenFOAM -ldl  \
+     -lm -o /data/epblsr/OpenFOAM/epblsr-v2006/platforms/linux64GccDPInt64Opt/bin/onlyMainFunction-wmake_complied</code></pre></div>
+<p>success!</p>
+<h4 id="more-about-wm_compiler">More about <code>$WM_COMPILER</code></h4>
+<p>The<code>$WM_COMPILER</code> is set in <code>$FOAM_ETC/cshrc</code> and <code>$FOAM_ETC/bashrc</code></p>
+<p>The default setting is:</p>
+<div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment">#------------------------------------------------------------------------------</span>
+<span class="hljs-comment"># Configuration environment variables.</span>
+<span class="hljs-comment"># Override with &lt;prefs.csh&gt; instead of editing here.</span>
+
+<span class="hljs-comment"># [WM_COMPILER_TYPE] - Compiler location:</span>
+<span class="hljs-comment"># = system | ThirdParty</span>
+setenv WM_COMPILER_TYPE system
+
+<span class="hljs-comment"># [WM_COMPILER] - Compiler:</span>
+<span class="hljs-comment"># = Gcc | Clang | Icc | Cray | Amd | Arm | Pgi | Fujitsu |</span>
+<span class="hljs-comment">#   Gcc&lt;digits&gt; | Clang&lt;digits&gt;</span>
+setenv WM_COMPILER Gcc
+
+<span class="hljs-comment"># [WM_PRECISION_OPTION] - Floating-point precision:</span>
+<span class="hljs-comment"># = DP | SP | SPDP</span>
+setenv WM_PRECISION_OPTION DP
+
+<span class="hljs-comment"># [WM_LABEL_SIZE] - Label size in bits:</span>
+<span class="hljs-comment"># = 32 | 64</span>
+setenv WM_LABEL_SIZE 64
+
+<span class="hljs-comment"># [WM_COMPILE_OPTION] - Optimised(default), debug, profiling, other:</span>
+<span class="hljs-comment"># = Opt | Debug | Prof</span>
+<span class="hljs-comment"># Other is processor or packaging specific (eg, OptKNL)</span>
+setenv WM_COMPILE_OPTION Opt
+
+<span class="hljs-comment"># [WM_MPLIB] - MPI implementation:</span>
+<span class="hljs-comment"># = SYSTEMOPENMPI | OPENMPI | SYSTEMMPI | MPI | MPICH | MPICH-GM |</span>
+<span class="hljs-comment">#   HPMPI | CRAY-MPICH | FJMPI | QSMPI | SGIMPI | INTELMPI | USERMPI</span>
+<span class="hljs-comment"># Also possible to use INTELMPI-xyz etc and define your own wmake rule</span>
+setenv WM_MPLIB OPENMPI
+
+
+<span class="hljs-comment">#------------------------------------------------------------------------------</span>
+<span class="hljs-comment"># (advanced / legacy)</span>
+
+<span class="hljs-comment"># [WM_PROJECT] - This project is &quot;OpenFOAM&quot; - do not change</span>
+setenv WM_PROJECT OpenFOAM</code></pre></div>
+<h3 id="case-insensitive-filenames">Case insensitive filenames</h3>
+<p>The <code>onlyMainFunction.C</code> can be complied successfully by <code>g++</code> .</p>
+<p>Try to make with <code>wmake</code> and ERROR arose:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">wmake</span>
+make: *** No rule to make target `Make/linux64GccDPInt64Opt/onlyMainFunction.c.dep&#x27;, needed by `Make/linux64GccDPInt64Opt/onlyMainFunction.o&#x27;.  Stop.</code></pre></div>
+<h4 id="debug-by-1">Debug by</h4>
+<p>Have a look at the file structure:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">tree .</span>
+.
+├── Make
+│   ├── files
+│   └── options
+└── onlyMainFunction.C
+
+1 directory, 3 files
+</code></pre></div>
+<p>nothing wrong.</p>
+<p>look into the <code>Make/files</code> and the stupidity is found:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash"><span class="hljs-built_in">cat</span> Make/files</span> 
+onlyMainFunction.c
+EXE = $(FOAM_USER_APPBIN)/onlyMainFunction-wmake_complied
+</code></pre></div>
+<h4 id="error-addressed-by-5">Error addressed by</h4>
+<p>change the <code>onlyMainFunction.c</code> with <code>onlyMainFunction.C</code> in the <code>Make/file</code>.</p>
+<h3 id="define-namespace-foam">Define namespace Foam</h3>
+<p>When try to compile a default solver,</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">foamNewApp DefaultApp</span>
+Creating application code directory DefaultApp
+Creating Make subdirectory
+<span class="hljs-meta">&gt; </span><span class="language-bash"><span class="hljs-built_in">cd</span> DefaultApp</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">wmake</span></code></pre></div>
+<p>A long series of Errors occur, a summery of it shows:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:51:15: error: ‘label’ was not declared in this scope
+ typedef Field&lt;label&gt; labelField;
+               ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:51:20: error: template argument 1 is invalid
+ typedef Field&lt;label&gt; labelField;
+                    ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:51:32: error: invalid type in declaration before ‘;’ token
+ typedef Field&lt;label&gt; labelField;
+                                ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:52:15: error: ‘scalar’ was not declared in this scope
+ typedef Field&lt;scalar&gt; scalarField;
+               ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:52:34: error: invalid type in declaration before ‘;’ token
+ typedef Field&lt;scalar&gt; scalarField;
+                                  ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:53:15: error: ‘solveScalar’ was not declared in this scope
+ typedef Field&lt;solveScalar&gt; solveScalarField;
+               ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:53:26: error: template argument 1 is invalid
+ typedef Field&lt;solveScalar&gt; solveScalarField;
+                          ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:53:44: error: invalid type in declaration before ‘;’ token
+ typedef Field&lt;solveScalar&gt; solveScalarField;
+                                            ^
+OpenFOAM-v2006/src/OpenFOAM/lnInclude/primitiveFieldsFwd.H:54:15: error: ‘vector’ was not declared in this scope
+ typedef Field&lt;vector&gt; vectorField;
+               ^</code></pre></div>
+<p>Have a look into the <code>primitiveFieldsFwd.H</code> file, the error are summarized as notations:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> primitiveFieldsFwd_H</span>
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> primitiveFieldsFwd_H</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;fieldTypes.H&quot;</span></span>
+
+<span class="hljs-comment">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
+
+<span class="hljs-keyword">namespace</span> 
+&#123;
+
+<span class="hljs-comment">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Type</span>&gt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">Field</span>;
+
+<span class="hljs-keyword">typedef</span> Field&lt;<span class="hljs-type">bool</span>&gt; boolField;
+<span class="hljs-keyword">typedef</span> Field&lt;label&gt; labelField; <span class="hljs-comment">// error: ‘label’ was not declared in this scope</span>
+<span class="hljs-keyword">typedef</span> Field&lt;scalar&gt; scalarField; <span class="hljs-comment">// error: ‘scalar’ was not declared in this scope</span>
+<span class="hljs-keyword">typedef</span> Field&lt;solveScalar&gt; solveScalarField;  <span class="hljs-comment">// error: ‘solveScalar’ was not declared in this scope</span>
+<span class="hljs-keyword">typedef</span> Field&lt;vector&gt; vectorField; <span class="hljs-comment">// error: ‘vector’ was not declared in this scope</span>
+<span class="hljs-keyword">typedef</span> Field&lt;sphericalTensor&gt; sphericalTensorField; <span class="hljs-comment">// error: ‘sphericalTensor’ was not declared in this scope</span>
+<span class="hljs-keyword">typedef</span> Field&lt;symmTensor&gt; symmTensorField; <span class="hljs-comment">// error: ‘symmTensor’ was not declared in this scope</span>
+<span class="hljs-keyword">typedef</span> Field&lt;tensor&gt; tensorField; <span class="hljs-comment">// error: ‘tensor’ was not declared in this scope</span>
+
+<span class="hljs-comment">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
+
+&#125; <span class="hljs-comment">// End namespace Foam</span>
+
+<span class="hljs-comment">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+
+<span class="hljs-comment">// ************************************************************************* //</span>
+</code></pre></div>
+<p>It is the source code going wrong</p>
+<h4 id="debug-by-2">Debug by</h4>
+<p>compare the code with backup, using commands: <code>vimdiff</code> and <code>diff -r</code></p>
+<h4 id="error-addressed-by-6">Error addressed by</h4>
+<p>The <code>namespace</code> is not defined in the code, it should be</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">namespace</span> Foam
+&#123;
+    ...
+&#125;</code></pre></div>
+<h4 id="more-1">More</h4>
+<p><strong>Don't turn the <code>autosave on</code> in the VS code!</strong></p>
+<p>Again, the error message tells everything, when foo is not declared in this scope occurs, one should check the scope.</p>
+<h3 id="typo-in-the-filename">Typo in the filename</h3>
+<p>When trying to implement a solver <code>SolidParticleInterFoam</code> combining Lagrangian Particle Tracking with VoF <code>InterFoam</code> solver, I compile the solver successfully but encountered big obstacle with the test case.</p>
+<p>I run the solver in the test case directory:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">blockMesh</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">setFields</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">solidParticleInterFoam</span>
+<span class="hljs-meta"></span>
+<span class="hljs-meta">--&gt; </span><span class="language-bash">FOAM FATAL ERROR:</span> 
+Size of origProcId field 0 does not match the number of particles 2
+
+    From void Foam::Cloud&lt;ParticleType&gt;::checkFieldIOobject(const Foam::Cloud&lt;ParticleType&gt;&amp;, const Foam::IOField&lt;DataType&gt;&amp;) const [with DataType = long int; ParticleType = Foam::solidParticle]
+    in file /data/CFD/linux/software/OpenFOAM/OpenFOAM-v2006/src/lagrangian/basic/lnInclude/CloudIO.C at line 215.
+</code></pre></div>
+<h4 id="debug-by-3">Debug by</h4>
+<p>Read the error message, it seems like the error is because it cannot read the <code>procid</code> file, because I set 2 particles to track and the size of the <code>origProcId field</code> and the number of <code>particles</code> should both be 2.</p>
+<p>Have a look at the case structure:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">tree</span> 
+.
+├── 0
+│   ├── alpha.water
+│   ├── lagrangian
+│   │   └── defaultCloud
+│   │       ├── d
+│   │       ├── orgId 					// it should be origId
+│   │       ├── orgProcId				// it should be origProcId
+│   │       ├── positions
+│   │       └── U
+│   ├── p_rgh
+│   ├── U
+│   └── uniform
+│       └── lagrangian
+│           └── defaultCloud
+│               └── cloudProperties
+├── constant
+│   ├── g
+│   ├── particleProperties
+│   ├── transportProperties
+│   └── turbulenceProperties
+└── system
+    ├── blockMeshDict
+    ├── controlDict
+    ├── decomposeParDict
+    ├── fvSchemes
+    ├── fvSolution
+    ├── sampling
+    └── setFieldsDict
+
+8 directories, 20 files
+</code></pre></div>
+<p>And I did NOT spot the typo in the <code>0/lagrangian/defaultCloud/orgId</code> and <code>orgProcId</code>!</p>
+<p>I dig into the source code that went wrong, applied <code>grep</code> to search for the error flag, read the constructors of the <code>solidParticleCloud Class</code> class in the <a target="_blank" rel="noopener" href="https://www.openfoam.com/documentation/guides/latest/api/classFoam_1_1solidParticleCloud.html">Doxygen</a>, etc.</p>
+<p>such as:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">grep -rn origProcId</span>
+lagrangian/basic/particle/particleTemplates.C:144:    IOobject procIO(c.fieldIOobject(&quot;origProcId&quot;, IOobject::MUST_READ));
+lagrangian/basic/particle/particleTemplates.C:148:    IOField&lt;label&gt; origProcId(procIO, valid &amp;&amp; haveFile);
+lagrangian/basic/particle/particleTemplates.C:149:    c.checkFieldIOobject(c, origProcId);
+lagrangian/basic/particle/particleTemplates.C:161:        p.origProc_ = origProcId[i];
+lagrangian/basic/particle/particleTemplates.C:200:        c.fieldIOobject(&quot;origProcId&quot;, IOobject::NO_READ),
+lagrangian/basic/particle/particleTemplates.C:245:        const auto&amp; origProcId = cloud::lookupIOField&lt;label&gt;(&quot;origProc&quot;, obr);
+lagrangian/basic/particle/particleTemplates.C:257:            p.origProc_ = origProcId[i];
+</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">&gt; </span><span class="language-bash">find */ -iname <span class="hljs-string">&quot;Cloud.*&quot;</span></span>
+lagrangian/basic/lnInclude/Cloud.C
+lagrangian/basic/lnInclude/Cloud.H
+lagrangian/basic/Cloud/Cloud.C
+lagrangian/basic/Cloud/Cloud.H
+OpenFOAM/fields/cloud/cloud.H
+OpenFOAM/fields/cloud/cloud.C
+OpenFOAM/lnInclude/cloud.H
+OpenFOAM/lnInclude/cloud.C</code></pre></div>
+<h4 id="error-addressed-by-7">Error addressed by</h4>
+<p>Simply change the file names into the right ones...</p>
+<p>Always check the file name carefully! It happens twice and it is really a wast of time!</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OpenFOAM/">#OpenFOAM</a>
+      
+        <a href="/tags/C/">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>A collection of stupid Errors</div>
+      <div>https://daydreamatnight.github.io/2022/08/15/A-collection-of-stupid-Errors/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 15, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/25/CUDA-fundamental-3/" title="GPU architecture">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">GPU architecture</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/02/CUDA-fundamental-2/" title="Parallelism Concepts">
+                        <span class="hidden-mobile">Parallelism Concepts</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

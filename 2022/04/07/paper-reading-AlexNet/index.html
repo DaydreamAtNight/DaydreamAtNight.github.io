@@ -1,0 +1,838 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="It has been 10 years since AlexNet has been brought out. It is one of the cornerstones of this surge of deep learning.   This is a series of paper reading notes, hopefully, to push me to read paper c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AlexNet">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="It has been 10 years since AlexNet has been brought out. It is one of the cornerstones of this surge of deep learning.   This is a series of paper reading notes, hopefully, to push me to read paper c">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/paper-reading-AlexNet.png">
+<meta property="article:published_time" content="2022-04-07T14:25:50.000Z">
+<meta property="article:modified_time" content="2022-06-09T10:24:20.197Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/paper-reading-AlexNet.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>AlexNet - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AlexNet"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-07 22:25" pubdate>
+          April 7, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          7.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          26 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">AlexNet</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>It has been 10 years since AlexNet has been brought out. It is one of the cornerstones of this surge of deep learning.</p>
+</blockquote>
+<blockquote>
+<p>This is a <a href="/2022/04/02/paper-reading-start/">series of paper reading notes</a>, hopefully, to push me to read paper casually and to leave some record of what I've learned.</p>
+</blockquote>
+<span id="more"></span>
+<p>paper link: <a target="_blank" rel="noopener" href="https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html">ImageNet Classification with Deep Convolutional Neural Networks</a></p>
+<p>useful link: https://www.bilibili.com/video/BV1ih411J7Kz</p>
+<h2 id="little-history">Little history</h2>
+<p>It hasn't gotten much attention by the area of machine learning for the first 2-3 years since it got published, because this paper is written rather as a technical report than an academic paper. A good paper needs new thoughts for the model, or at least some explanations, while this paper only presented how they applied 3 tricks and how good their results are. However, there was no doubt an influential hit in the area of computer vision, which has a passion for refreshing the top list. And this influence spread to other areas gradually with deeper studies on it.</p>
+<h2 id="notes-by-sections">Notes by sections</h2>
+<h3 id="absturct">0. Absturct</h3>
+<blockquote>
+<p>To make training faster, we used non-saturating neurons and a very efficient GPU implementation of the convolution operation.</p>
+</blockquote>
+<p>In addition to a brief introduction to the model, the use of GPU is also mentioned in the abstract. And works around GPU are mentioned all the time. It was really a tough engineering job from the perspective of the first writer. But it is not important for an acdemic paper. Besides, since the emergence of CUDA in 2007, the application of GPU in the ML field in 2012 is not uncommon, and MATLAB is mainly used as a ML tool with a large number of GPU acceleration libraries.</p>
+<blockquote>
+<p>We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the second-best entry</p>
+</blockquote>
+<p>At last, the result in the ILSVRC-2012 competition is as good as knocking the second to the ground and then showing off with a set of backflips. So personally it might look like a technical report, but it's still an outstanding paper and absolutly worth reading.</p>
+<h3 id="discussion">7. Discussion</h3>
+<p>In stead of conclusion, this paper leaves a discussion as the last section, which is unsual.</p>
+<blockquote>
+<p>For example, removing any of the middle layers results in a loss of about 2% for the top-1 performance of the network. So the depth really is important for achieving our results</p>
+</blockquote>
+<p>The depth is important, but it is insufficient to be simply concluded from the degradation caused by removing one middle layer, ignoring other effects such as superparameter settings. And, considering only the conculsion, a more complete one might be, depth and width are both very important. The ratio of height and width matters.</p>
+<blockquote>
+<p>To simplify our experiments, we did not use any unsupervised pre-training even though we expect that it will help</p>
+</blockquote>
+<p>Before AlexNet, it was common to warm up the NN with massive unlabelled images before the actual training i.e. use an unsupervised model as an initial. And the goal of the field of machine learning was to extract the features of data through large-scale unsupervised models. However, this sentence steered the entire field from unsupervised to supervised learning, which, according to the machine learning pioneers such as Hinton and LeCun, was a "wrong route". But with the rise of the pre-trained language models such as Bert, and the contrative learning model in CV field such as MoCo, the unsupervised route is gradually comming back to the foreground.</p>
+<p><img src="/2022/04/07/paper-reading-AlexNet/unsupervise learning cake.png" srcset="/img/loading.gif" lazyload alt="unsupervise learning cake" style="zoom:80%;"></p>
+<blockquote>
+<p>Ultimately we would like to use very large and deep convolutional nets on video sequences where the temporal structure provides very helpful information that is missing or far less obvious in static images.</p>
+</blockquote>
+<p>Actually video sequences are still a tough area beacause of the high computational comsumpution and the copyright issues.</p>
+<h3 id="key-figure">Key figure</h3>
+<p><img src="/2022/04/07/paper-reading-AlexNet/alexnet results.png" srcset="/img/loading.gif" lazyload alt="alexnet results" style="zoom:67%;"></p>
+<p>The right part is the most important result in this paper, though it isn't been discussed much in this paper. Actually it shows the last layer feature vectors perform really well in the semantic space i.e. deep neural network is very suitable to extract features from data.</p>
+<h3 id="introduction">1. Introduction</h3>
+<blockquote>
+<p>To improve their performance, we can collect larger datasets, learn more powerful models, and use better techniques for preventing overfitting.</p>
+</blockquote>
+<p>The paper leads one route of deep learning, which is, with large dataset and model, developing powerful regularization methods to prevent overfitting. However there is a new route, which is focusing on designing good architecture s.t. the overfitting won't happen with large model.</p>
+<blockquote>
+<p>Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 3.</p>
+</blockquote>
+<blockquote>
+<p>we used several effective techniques for preventing overfitting, which are described in Section 4.</p>
+</blockquote>
+<p>These two are the innovative points. People can then follow their work later, which makes this paper a cornerstone.</p>
+<h3 id="dataset">2. Dataset</h3>
+<blockquote>
+<p>We did not pre-process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels.</p>
+</blockquote>
+<p>There is one more point that is not emphasized. Previously, features of an image (such as SIFT) were always used as input instead of raw RGB values. Datasets such as ImageNet provided SIFT of their image set as well. The end-to-end nature is the selling point of a series of deep learning papers that follow.</p>
+<h3 id="architecture">3. Architecture</h3>
+<h4 id="relu">3.1. ReLU</h4>
+<p>From a present point of view, ReLU is not that important for speeding up the training process. Other activation functions still work. It's the simplicity of ReLU that makes it stick.</p>
+<h3 id="reducing-overfitting">4. Reducing Overfitting</h3>
+<p>A metaphore of overfitting: In order to get a high score on an exam, you memorize all the answers to the exercises instead of understanding the question.</p>
+<h4 id="data-augmentation">4.1 Data Augmentation</h4>
+<blockquote>
+<p>The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.</p>
+</blockquote>
+<p>PCA is here use as a augmentation method which follow-up work don't follow. For example, in ResNet a standard color augmentation is used with no fancy methods. And nowadays, standard color augmentation wins.</p>
+<h4 id="dropout">4.2 dropout</h4>
+<blockquote>
+<p>There is, however, a very efficient version of model combination that only costs about a factor of two during training. The recently-introduced technique, called “dropout”</p>
+</blockquote>
+<p>Here dropout is considered a light version of model ensembling, but later <a target="_blank" rel="noopener" href="https://jmlr.org/papers/volume15/srivastava14a.old/srivastava14a.pdf">study below</a> has shown that the effect of dropout is actually equivalent to weight decay/regularization, yet there is no specific weight decay method equivalent to it algorithmically.</p>
+<blockquote>
+<blockquote>
+<p>one way to obtain some of the benefits of dropout without stochasticity is to marginalize the noise to obtain a regularizer that does the same thing as the dropout procedure, in expectation. We showed that for linear regression this regularizer is a modified form of L2 regularization. For more complicated models, it is not obvious how to obtain an equivalent regularizer.</p>
+</blockquote>
+</blockquote>
+<h3 id="details-of-learning">5. Details of learning</h3>
+<blockquote>
+<p>we trained our models using stochastic gradient descent with a batch size of 128 examples, momentum of 0.9, and weight decay of 0.0005</p>
+</blockquote>
+<p>momentum, weight decay with SGD has become a standard method afterwards.</p>
+<blockquote>
+<p>We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01</p>
+</blockquote>
+<p>(0, 0.01) is usually chosen as the initialization parameter pair in most standard-sized models. (0, 0.02) is in use even for large models like Bert.</p>
+<blockquote>
+<p>We trained the network for roughly 90 cycles through the training set of 1.2 million images, which took five to six days on two NVIDIA GTX 580 3GB GPUs.</p>
+</blockquote>
+<p>Similar to what is happening now with training NLP, maybe it will drive the next evolution in hardware. And probably hardware similar to TPU would be popular.</p>
+<h3 id="results">6. Results</h3>
+<h4 id="qualitative-evaluations">6.1 Qualitative Evaluations</h4>
+<blockquote>
+<p>The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific</p>
+</blockquote>
+<p>Interesting problem but less focused by follow up work.</p>
+<blockquote>
+<p>consider the feature activations induced by an image at the last, 4096-dimensional hidden layer. If two images produce feature activation vectors with a small Euclidean separation, we can say that the higher levels of the neural network consider them to be similar.</p>
+</blockquote>
+<p>This is an intuitive work as talked before, and follow up work such as <a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-319-10590-1_53">Visualizing and understanding convolutional networks</a> dig deeper trying to interperate the NN. And interpretion is very important for works related to physics or <a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/9113719/">fairness</a>.</p>
+<h2 id="reference">Reference</h2>
+<p><a target="_blank" rel="noopener" href="https://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf?utm_content=buffer79b43&amp;utm_medium=social&amp;utm_source=twitter.com&amp;utm_campaign=buffer,">Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., &amp; Salakhutdinov, R. (2014). Dropout: a simple way to prevent neural networks from overfitting. <em>The journal of machine learning research</em>, <em>15</em>(1), 1929-1958.</a></p>
+<p><a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-319-10590-1_53">Zeiler, M. D., &amp; Fergus, R. (2014, September). Visualizing and understanding convolutional networks. In <em>European conference on computer vision</em> (pp. 818-833). Springer, Cham.</a></p>
+<p><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/9113719/">Du, M., Yang, F., Zou, N., &amp; Hu, X. (2020). Fairness in deep learning: A computational perspective. <em>IEEE Intelligent Systems</em>, <em>36</em>(4), 25-34.</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/paper-reading/">#paper reading</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AlexNet</div>
+      <div>https://daydreamatnight.github.io/2022/04/07/paper-reading-AlexNet/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 7, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/09/paper-reading-ResNet/" title="ResNet">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ResNet</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/02/paper-reading-start/" title="paper reading: start">
+                        <span class="hidden-mobile">paper reading: start</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,839 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="After ViT, Swin-transformer further demonstrated the potential of transformer in CV. This work has swept all major CV tasks since its publication, including COCO and ADE20K. And it&#39;s awar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swin transformer">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="After ViT, Swin-transformer further demonstrated the potential of transformer in CV. This work has swept all major CV tasks since its publication, including COCO and ADE20K. And it&#39;s awar">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/paper-reading-Swin-transformer.png">
+<meta property="article:published_time" content="2022-05-09T03:37:19.000Z">
+<meta property="article:modified_time" content="2022-09-25T15:55:57.700Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/paper-reading-Swin-transformer.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Swin transformer - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Swin transformer"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-09 11:37" pubdate>
+          May 9, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          7.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          26 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Swin transformer</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>After ViT, Swin-transformer further demonstrated the potential of transformer in CV. This work has swept all major CV tasks since its publication, including <a target="_blank" rel="noopener" href="https://paperswithcode.com/sota/object-detection-on-coco">COCO</a> and <a target="_blank" rel="noopener" href="https://paperswithcode.com/sota/semantic-segmentation-on-ade20k">ADE20K</a>. And it's awarded as best paper by <a target="_blank" rel="noopener" href="https://iccv2021.thecvf.com/iccv-2021-paper-awards">ICCV2021</a>.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>This is a <a href="/2022/04/02/paper-reading-start/">series of paper reading notes</a>, hopefully, to push me to read paper casually and to leave some record of what I've learned.</p>
+          </div>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/CoCo and ADE20K SOTA.png" srcset="/img/loading.gif" lazyload alt="CoCo and ADE20K SOTA" style="zoom:100%;"></p>
+<p><em>Paper link:</em></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</a>(newer version on arXiv)</p>
+<p><em>Useful links:</em></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV13L4y1475U?share_source=copy_web">Paper explanation video</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/Swin-Transformer">Official Github</a></p>
+<h3 id="abstract">Abstract</h3>
+<p>It is a general-purpose backbone, unlike ViT which only covers the classification task instead of detection and segmentation. Swin Transformer extends the jobs to all the vision jobs.</p>
+<p>Two challenges of using transformer on vision tasks:</p>
+<ul>
+<li>Large scale difference of vision entities (multi-scale)</li>
+<li>high resolution of pixels compared with words (former works use feature map, divide as patch, or self-attention in windows divided from the whole image, to reduce the sequence length)</li>
+</ul>
+<p>Main contribution is the Shifted window that brings the Hierarchy to ViT. It has several merits:</p>
+<ul>
+<li>greater efficiency, reduced sequence length</li>
+<li>cross-window connection is allowed with shifted window</li>
+<li>multi-scales</li>
+<li>linear computational complexity with respect to image size, instead of square (foundation for larger Swin Transformer V2, pretrained model on huge resolution)</li>
+</ul>
+<p>Many downstream tasks are tested including classification, detection and segmentation.</p>
+<div class="note note-second">
+            <p>One line is added to the abstract in this version, after MLPmixer in order to further prove the method of sifted window: shifted window is also beneficial for all-MLP architectures.</p>
+          </div>
+<h3 id="key-figures">Key figures</h3>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/Swin transformer architecture.png" srcset="/img/loading.gif" lazyload alt="Swin transformer architecture" style="zoom:20%;"></p>
+<p>ViT and Swin Transformer are compared in the above illustration, for ViT, the feature map is single and with low resolution (all *16 downsampling <span class="math inline">\(patchSize = 16\)</span>). For Swin Transformer, the hierarchical feature map is introduced.</p>
+<div class="note note-info">
+            <p>Importance of multi-scale feature for detection and segmentation:</p><p>For detection, take the most common FPN as an example, features from different layers of feature map of different reception field are collected to ensure the multi scale performance.</p><p>For segmentation, take the common UNet as an example, the skip connection of different layers also provide a hierarchy of scales.</p>
+          </div>
+<p>Besides, ViT performs self-attention for the whole image, leading to the quadratic computation complexity. Swin transformer instead perform self-attention on the patches. The computational cost for each window is fixed for fixed patch size. As a result the computation complexity is linear.</p>
+<p>To some extend, swin transformer takes a lot of prior information of CNNs as:</p>
+<ul>
+<li>the locality inductive bias, i.e. the objects are locally consecutive. The full space self attention is kinda a wast of source.</li>
+<li>For CNN, pooling layers increase the receptive field of each layers, enabling them to catch features with different scales. The <strong>patch merging</strong> is a mimic of this operation. A bigger patch is merged by 4 smaller patch, so that the receptive field of the bigger patch is increased. The multi scale feature maps can feed a FPN for detection or UNet for segmentation, i.e. a general purpose backbone.</li>
+</ul>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/shifted window illustration.png" srcset="/img/loading.gif" lazyload alt="shifted window illustration" style="zoom:40%;"></p>
+<p>It illustrates how the window is shifted in layers. The unit patch is the grey on with patch size = 4. In the next layer, the window is shifted 2 patches to the right and bottom. The main benefit of this is the ability of cross-window interaction. Without shifting, the self-attention operations are limited to non-overlap patches. The global information is inaccessible, broke the key idea of transformer. The memory can be saved with an ability to global modelling.</p>
+<h3 id="introduction">1 Introduction</h3>
+<p>The motivation is to prove the ability of Vision Transformer as a general backbone.</p>
+<p>The mechanism is well illustrated from the key figures above.</p>
+<p>The good results are next presented.</p>
+<p>In future, a unified architecture will benefits both the CV and NLP world. Actually, Swin transformer leverages a lot vision inductive bias to perform well on vision tasks. The unifying is done better for ViT, as it does not change any of the transformer architecture. Very easy for multi modelling learning.</p>
+<h3 id="method">3.Method</h3>
+<h4 id="overall-architecture">3.1 Overall Architecture</h4>
+<p>Feed forward process and patch merging method are mainly discussed.</p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/Overall architecture.png" srcset="/img/loading.gif" lazyload alt="Overall architecture" style="zoom:67%;"></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/patch merging illustration.png" srcset="/img/loading.gif" lazyload alt="patch merging illustration" style="zoom:48%;"></p>
+<p>The key process of swin transformer is the patch merging. After merging, the width and height get halved while the length is doubled, just like the convolutional method.</p>
+<p>The dimensions of each layer is very similar to CNNs', identical to ResNet. Besides, in order to keep aligned with CNN, the CLS token used in ViT is deprecated.</p>
+<div class="note note-info">
+            <p>CLS token is an extra token along with the training tokens in ViT. It contains all the information from every can be directly trained in classification last. For swin transform, the last feature map is flattened into a list, and the result can be used for classification, detection and segmenting, just like CNNs.</p>
+          </div>
+<p>There is always a global average pooling layer after the architecture above. For example, if for image classification on ImageNet, the feather length of next two layers are: [1, 768] -&gt; [1, 1000].</p>
+<h4 id="shifted-window-based-self-attention">3.2 Shifted Window based Self-Attention</h4>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/window and patch illustration.png" srcset="/img/loading.gif" lazyload alt="window and patch arrangement in swin transformer" style="zoom:38%;"></p>
+<p>As shown above, the image with <span class="math inline">\(H \times W\)</span> patches is divided into non-overlapping windows such a way that each window has <span class="math inline">\(M \times M\)</span> patches (<span class="math inline">\(M = 7\)</span> for default). The self-attention is computed within each windows, instead of the whole image as in the standard one.</p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/computational complexity comparison with MSA and W-MSA.png" srcset="/img/loading.gif" lazyload alt="computational complexity comparison with MSA and W-MSA" style="zoom:38%;"></p>
+<p>The complexity difference between standard shelf attention (<span class="math inline">\(\mathrm{MSA}\)</span>) and window base self-attention (<span class="math inline">\(\mathrm{W}-\mathrm{MSA}\)</span>) is further estimated:</p>
+<p>For an image with <span class="math inline">\(h\times w\)</span> patches: <span class="math display">\[
+\begin{aligned}
+&amp;\Omega(\mathrm{MSA})=4 h w C^2+2(h w)^2 C \\
+&amp;\Omega(\mathrm{W}-\mathrm{MSA})=4 h w C^2+2 M^2 h w C
+\end{aligned}
+\]</span> Note that <span class="math inline">\(M = 7\)</span>, the complexity decrease is huge.</p>
+<div class="note note-info">
+            <p>The complexity of the multiplication of two matrices with dimensions <span class="math inline">\(a\times b\)</span> and <span class="math inline">\(b \times c\)</span> is <span class="math inline">\(a\times b \times c\)</span>.</p>
+          </div>
+<p>After reducing the complexity, the shifting method is introduced to address the problem of cross-window communication, as shown in the <a href="#key-figures">key figures</a> and <a href="#overall-architecture">overall architecture</a> sections, a shifted window layer (<span class="math inline">\(\mathrm{SW}-\mathrm{MSA}\)</span>) always follows a window layer (<span class="math inline">\(\mathrm{W}-\mathrm{MSA}\)</span>). <span class="math display">\[
+\begin{aligned}
+&amp;\hat{\mathbf{z}}^l=\mathbf{W}-\mathbf{M S A}\left(\mathbf{L N}\left(\mathbf{z}^{l-1}\right)\right)+\mathbf{z}^{l-1} \\
+&amp;\mathbf{z}^l=\mathbf{M L P}\left(\mathbf{L N}\left(\hat{\mathbf{z}}^l\right)\right)+\hat{\mathbf{z}}^l \\
+&amp;\hat{\mathbf{z}}^{l+1}=\mathbf{S W}-\mathbf{M S A}\left(\mathbf{L N}\left(\mathbf{z}^l\right)\right)+\mathbf{z}^l \\
+&amp;\mathbf{z}^{l+1}=\mathbf{M L P}\left(\mathbf{L N}\left(\hat{\mathbf{z}}^{l+1}\right)\right)+\hat{\mathbf{z}}^{l+1}
+\end{aligned}
+\]</span> <div class="note note-secondary">
+            <p>Below is some technical details with shifted window, not related to the main idea of swin-transformer.</p>
+          </div></p>
+<p>Recalling the illustration of shifted windows in <a href="#key-figures">key figures</a>, the unlike the window layer, the shifted window layer has more resulting windows (9 instead of 4) with different scales ($2, 4, 4  $), it is impossible to compute efficiently in parallel. Another simple idea is padding, extra 0 is padded so that the scales of windows are identical. But the authors come up with a better one:</p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/illustration of masked MSA.png" srcset="/img/loading.gif" lazyload alt="illustration of masked MSA" style="zoom:25%;"></p>
+<p>The idea is cyclic shift, pretty much like the periodic boundary condition, the windows out of the "boundary" is glutted back from the left bottom of the image, and after the SW-MSA, a reversed operation is applied. However, unlike the real periodic boundary condition, the glutted windows are actually far from each other, no attention operations should be applied across these windows. In order to do this, the familiar masking technique is introduced</p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/masks for each window.png" srcset="/img/loading.gif" lazyload alt="masks for each window, modified from https://github.com/microsoft/Swin-Transformer/issues/38#issuecomment-823806591" style="zoom:28%;"></p>
+<p><img src="/2022/05/09/paper-reading-Swin-transformer/mask detail for window 2.png" srcset="/img/loading.gif" lazyload alt="mask detail for window 2" style="zoom:37%;"></p>
+<p>As shown above, for window 2 and 1, only half of the resultant window is useful, the other half needed to be masked. And it is applied by add a mask matrix, where the useful and masked area are set to be <span class="math inline">\(0\)</span> and <span class="math inline">\(-100\)</span>, respectively. After softmax, the infinite negative number results in 0.</p>
+<h4 id="architecture-variants">3.3 Architecture variants</h4>
+<p>Different <span class="math inline">\(C\)</span> and block numbers of 4 stages differs the variants.</p>
+<ul>
+<li>Swin-T: <span class="math inline">\(C=96\)</span>, layer numbers <span class="math inline">\(=\{2,2,6,2\}\)</span> -- ResNet50</li>
+<li>Swin-S: <span class="math inline">\(C=96\)</span>, layer numbers <span class="math inline">\(=\{2,2,18,2\}\)</span> -- ResNet101</li>
+<li>Swin-B: <span class="math inline">\(C=128\)</span>, layer numbers <span class="math inline">\(=\{2,2,18,2\}\)</span></li>
+<li>Swin-L: <span class="math inline">\(C=192\)</span>, layer numbers <span class="math inline">\(=\{2,2,18,2\}\)</span></li>
+</ul>
+<h3 id="conclusion">5 Conclusion</h3>
+<p>Swin transformer is presented with linear increase of computational complexity. Good results are shown not only on classification, but in dense tasks such as detection and segmentation.</p>
+<p>Patch merging is introduced to percept a hierarchical of feature maps as in CNNs, better for resolving features with a range of scales of an image.</p>
+<p>A key element is self attention based on window followed by shifted windows, which is very help for dense tasks.</p>
+<p>As the extra shifted window mechanism breaks the potential of multi modelling learning. They are working on use this technique to NLP fields.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/paper-reading/">#paper reading</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Swin transformer</div>
+      <div>https://daydreamatnight.github.io/2022/05/09/paper-reading-Swin-transformer/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 9, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/" title="Derivation of Integral Fluid Equations">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Derivation of Integral Fluid Equations</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/03/paper-reading-contrastive-learning-review/" title="Contrastive learning review">
+                        <span class="hidden-mobile">Contrastive learning review</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

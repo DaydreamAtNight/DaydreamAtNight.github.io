@@ -1,0 +1,1186 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Last blog is only 1-equation. In this blog we are going to multi-equation and artificial viscosity.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numerical schemes fundamentals 2">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/06/28/FVM-schemes-fundamentals2/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Last blog is only 1-equation. In this blog we are going to multi-equation and artificial viscosity.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes2.png">
+<meta property="article:published_time" content="2022-06-28T14:48:37.000Z">
+<meta property="article:modified_time" content="2022-09-18T17:54:38.063Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/fdm_schemes2.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Numerical schemes fundamentals 2 - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Numerical schemes fundamentals 2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-28 22:48" pubdate>
+          June 28, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          25k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          84 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Numerical schemes fundamentals 2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p><a href="/2022/06/18/FVM-schemes-fundamentals/">Last blog</a> is only 1-equation. In this blog we are going to multi-equation and artificial viscosity.</p>
+          </div>
+<span id="more"></span>
+<p>overview:</p>
+
+<div class="markmap-container" style="height:300px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#scalar-conservation-laws\&quot;&gt;1-equation PDE theories (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;a href=\&quot;/2022/06/18/FVM-schemes-fundamentals/#numerical-representation-of-discontinuities\&quot;&gt;Schemes for 1-equation PDE (last blog)&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;a href=\&quot;#systems-of-conservation-laws\&quot;&gt;Multi-equation PDE theories&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-form\&quot;&gt;Characteristic form method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;a href=\&quot;#euler-equation\&quot;&gt;Euler equation&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristic-forms-of-euler-equation\&quot;&gt;Characteristic forms&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;a href=\&quot;#closure-of-euler-equation\&quot;&gt;Closure&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;&lt;a href=\&quot;#characteristics-method-of-euler-equation\&quot;&gt;Characteristics method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;&lt;a href=\&quot;#shock-tube-solution-for-euler-equations\&quot;&gt;Shock tube solution&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes-for-non-linear-conservation-laws\&quot;&gt;Schemes for multi-equation PDE&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;&lt;a href=\&quot;#cases-to-be-tested\&quot;&gt;3 test cases illustration&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-friedrichs-method\&quot;&gt;Lax Friedrich&#39;s method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-friedrichs-method\&quot;&gt;Lax Wendroff family&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-wendroff-method\&quot;&gt;Lax Wendroff&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;&lt;a href=\&quot;#two-step-lax-wendroff-method-richtmyer-method\&quot;&gt;Richtmyer method&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;&lt;a href=\&quot;#two-step-maccormacks-method\&quot;&gt;MacCormack’s method&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity\&quot;&gt;Artificial Viscosity&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity-for-scalar-conservation-law\&quot;&gt;Scalar equation&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[20,21]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity-form\&quot;&gt;Artificial viscosity form&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[21,22]},&quot;v&quot;:&quot;&lt;a href=\&quot;#artificial-viscosity-for-system-of-conservation-laws\&quot;&gt;System of laws&lt;/a&gt;&quot;}]}],&quot;p&quot;:{}}"/>
+</div>
+
+<h2 id="systems-of-conservation-laws">Systems of conservation laws</h2>
+<div class="note note-info">
+            <p>Jacobian matrices, linearised equations, conservative and characteristic variables. Rankine-Hugoniot jump conditions. Boundary conditions.</p>
+          </div>
+<p>After dealing with the one-equation task, let's expand to a more general form, recall the 1D inviscid Euler equation in a form of vectors:</p>
+<h3 id="characteristic-form">Characteristic form</h3>
+<p>Before moving forward, recall some linear algebra, consider a general 1<sup>st</sup> order hyperbolic PDE, <span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\mathbf{A}\frac{\partial\mathbf{U}}{\partial x}=0
+\]</span> with a square matrix <span class="math inline">\(\mathbf{A}\)</span>,</p>
+<div class="note note-info">
+            <p>The PDE is</p><ul><li>linear if <span class="math inline">\(\mathbf{A} = const\)</span>,</li><li>quasi-linear if <span class="math inline">\(\mathbf{A} = f(\mathbf{U},x,t)\)</span></li></ul>
+          </div>
+<p>The equation is hyperbolic, then <span class="math inline">\(\mathbf{A}\)</span> is diagonalisable, which means <span class="math display">\[
+\exists \mathbf{R}:  \mathbf{R^{-1} A R=\Lambda}, \quad\text{where } \mathbf{\Lambda} \text{ is diagonal matrix}
+\]</span> and the diagonal elements <span class="math inline">\(\lambda_i\)</span> is the eigenvalues / <font color="#75147c">characteristic values</font> of <span class="math inline">\(\mathbf{A}\)</span>, and <span class="math inline">\(\mathbf{R}\)</span> is a matrix whose columns <span class="math inline">\(\mathbf{r_i}\)</span> are the right eigenvectors / <font color="#75147c">characteristic vectors</font> of <span class="math inline">\(\mathbf{A}\)</span>. Therefore, multiply by <span class="math inline">\(\mathbf{R^{-1}}\)</span> both sides of the PDE above to obtain: <span class="math display">\[
+\mathbf{R^{-1}}\frac{\partial \mathbf{U}}{\partial t}+\mathbf{R^{-1}}\mathbf{A}\frac{\partial\mathbf{U}}{\partial x}=0
+\]</span> Define the <font color="#75147c">characteristic variables</font> <span class="math inline">\(\mathbf{V}\)</span> as <span class="math inline">\(d\mathbf{V} = \mathbf{R^{-1}}d\mathbf{U}\)</span>, we have the <font color="#75147c">characteristic form</font> equation: <span class="math display">\[
+\begin{aligned}
+\frac{\partial \mathbf{V}}{\partial t}+\mathbf{R^{-1}}\mathbf{A}\mathbf{R}\frac{\partial\mathbf{V}}{\partial x}=0 \\
+\frac{\partial \mathbf{V}}{\partial t}+\mathbf{\Lambda}\frac{\partial\mathbf{V}}{\partial x}=0
+\end{aligned}
+\]</span> It is a wave form and be can decompose the system of PDE into a set of independent equations, such as the <span class="math inline">\(i^{th}\)</span> equation: <span class="math display">\[
+\frac{\partial \mathbf{V_i}}{\partial t}+\lambda_i\frac{\partial\mathbf{V_i}}{\partial x}=0
+\]</span> so that we can treat the equation as a set (3 for 3D, one for each equation) of independent advection equations, <font color="#75147c">method of characteristics </font>analysis we talked about before can be carried out for each sub-equations. <span class="math display">\[
+\begin{aligned}
+\text{Characterstics/wavefronts: } \qquad &amp;dx = \lambda_idt,\\
+\text{Characterstic speeds/wave speeds: } \qquad&amp; \lambda_i
+\end{aligned}
+\]</span> <div class="note note-info">
+            <p>So far we have 3 forms:</p><p>non-conservative form: no obvious advantage,</p><p>conservative form: locate the shock well,</p><p>characteristic form: decompose a system of equations into set of independent equations</p>
+          </div></p>
+<h3 id="euler-equation">Euler equation</h3>
+<p>Its time to introduce the 1D Euler equations: NS equations with 0 viscosity or heat conduction terms:</p>
+<ul>
+<li><p>Conservation form: <span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0
+\]</span> for the quantity vector <span class="math inline">\(\mathbf{U}\)</span> with the flux vector <span class="math inline">\(\mathbf{F}\)</span>, <span class="math display">\[
+\mathbf{U}=\left[\begin{array}{l}
+\rho \\
+\rho u \\
+\rho E
+\end{array}\right] = \left[\begin{array}{l}
+u_1 \\
+u_2 \\
+u_3
+\end{array}\right] 
+\quad\text{and}\quad
+\mathbf{F(U)}=\left[\begin{array}{l}
+\rho u \\
+\rho u^{2}+P \\
+\rho u\left(E+\frac{P}{\rho}\right)
+\end{array}\right] = \left[\begin{array}{l}
+F_1 \\
+F_2 \\
+F_3
+\end{array}\right]
+\]</span></p></li>
+<li><p>Primitive form: <span class="math display">\[
+\frac{\partial \mathbf{W}}{\partial t}+\mathbf{C}\frac{\partial \mathbf{W}}{\partial x}=0
+\]</span> where: <span class="math display">\[
+\mathbf{W}=\left[\begin{array}{l}
+\rho \\
+u \\
+p
+\end{array}\right]
+\quad\text{and}\quad
+\mathbf{C}=\left[\begin{array}{ccc}
+u &amp; p &amp; \\
+ &amp;u &amp; \frac{1}{\rho}\\
+&amp; \rho c^2 &amp; u
+\end{array}\right]
+\]</span> and <span class="math inline">\(c=\sqrt{\frac{\gamma p}{\rho}}\)</span>, speed of sound.</p></li>
+</ul>
+<h4 id="characteristic-forms-of-euler-equation">Characteristic forms of Euler equation</h4>
+<h5 id="from-conservative-form">From conservative form</h5>
+<p>Along with previous method, we can construct the matrix <span class="math inline">\(\mathbf{A}\)</span> for the conservative Euler equation, <span class="math display">\[
+\mathbf{A}(\mathbf{U})=\frac{d \mathbf{F}}{d \mathbf{U}}=\left[\begin{array}{ccc}
+0 &amp; 1 &amp; 0 \\
+\frac{\gamma-3}{2} u^{2} &amp; (3-\gamma) u &amp; \gamma-1 \\
+-\gamma u E+(\gamma-1) u^{3} &amp; \gamma E-\frac{3}{2}(\gamma-1) u^{2} &amp; \gamma u
+\end{array}\right]
+\]</span> and we have a non-conservation form of the Euler equation, same as the general equation above: <span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\mathbf{A}\frac{\partial\mathbf{U}}{\partial x}=0
+\]</span> <div class="note note-secondary">
+            <p>It is actually non-linear PDE, but we can apply a linear approximation when dealing with small variations around mean values, and the linear approximation form is exactly the same as the non-linear form.</p><p>Linear approximation steps:</p><p><span class="math inline">\(\mathbf{U}\)</span> can be expressed as a constant mean flow <span class="math inline">\(\mathbf{U_0}\)</span> with a small perturbation <span class="math inline">\(\mathbf{\tilde{U}}\)</span>, substitute the expression into the conservative form of equation: <span class="math display">\[\begin{aligned}\frac{\partial \mathbf{(U_0 + \tilde{U})}}{\partial t}+\frac{\partial\mathbf{F(U_0 + \tilde{U})}}{\partial x}=0 \\\frac{\partial \mathbf{U_0}}{\partial t}+\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\frac{\partial\mathbf{F(U_0 + \tilde{U})}}{\partial x}=0 \\\frac{\partial \mathbf{U_0}}{\partial t}+\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\frac{\partial\left(\mathbf{F}\left(\mathbf{U}_{0}\right)+\left.\frac{\partial \mathbf{F}}{\partial \mathbf{U}}\right|_{\mathbf{U}_{0}} \tilde{\mathbf{U}}\right)}{\partial x}=0 \\\underbrace{\frac{\partial \mathbf{U_0}}{\partial t}+\frac{\partial\mathbf{F}\left(\mathbf{U}_{0}\right)}{\partial x}}_{0}+\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\mathbf{\left.A\right|_{U_0}}\frac{\partial\tilde{\mathbf{U}}}{\partial x}=0 \\\end{aligned}\]</span> As a result, with <span class="math inline">\(\mathbf{A_0=A|_{U_0}}\)</span>: <span class="math display">\[\frac{\partial \mathbf{ \tilde{U}}}{\partial t}+\mathbf{A_0}\frac{\partial\tilde{\mathbf{U}}}{\partial x}=0\]</span></p>
+          </div></p>
+<p>With some further tedious calculations, we have <span class="math display">\[
+\mathbf{R}=\left[\begin{array}{ccc}
+1 &amp; \frac{\rho}{2 c} &amp; -\frac{\rho}{2 c} \\
+u &amp; \frac{\rho}{2 c}(u+c) &amp; -\frac{\rho}{2 c}(u-c) \\
+\frac{u^{2}}{2} &amp; \frac{\rho}{2 c}\left(\frac{u^{2}}{2}+\frac{c^{2}}{\gamma-1}+c u\right) &amp; -\frac{\rho}{2 c}\left(\frac{u^{2}}{2}+\frac{c^{2}}{\gamma-1}-c u\right)
+\end{array}\right]
+\]</span> where <span class="math inline">\(c=\sqrt{\frac{\gamma p}{\rho}}\)</span>, speed of sound,</p>
+<p>and <span class="math inline">\(\mathbf{\Lambda}\)</span>: <span class="math display">\[
+\mathbf{\Lambda}=\left[\begin{array}{ccc}
+u &amp;  &amp; \\
+ &amp;u+c &amp; \\
+&amp; &amp; u-c
+\end{array}\right]
+\]</span></p>
+<h5 id="from-primitive-form">From primitive form</h5>
+<p>The same <span class="math inline">\(\mathbf{\Lambda}\)</span> can also be obtained by the primitive form of the Euler equation:</p>
+<p>We have <span class="math inline">\(\mathbf{Q^{-1}CQ=\Lambda}\)</span> with， <span class="math display">\[
+\mathbf{Q}=\left[\begin{array}{ccc}
+1 &amp; \frac{\rho}{2 c} &amp; -\frac{\rho}{2 c} \\
+0 &amp; \frac{1}{2} &amp; \frac{1}{2} \\
+0 &amp; \frac{\rho c}{2} &amp; -\frac{\rho c}{2}
+\end{array}\right] \quad \text { and } \quad \mathbf{Q}^{-1}=\left[\begin{array}{ccc}
+1 &amp; 0 &amp; -\frac{1}{c^{2}} \\
+0 &amp; 1 &amp; \frac{1}{\rho c} \\
+0 &amp; 1 &amp; -\frac{1}{\rho c}
+\end{array}\right]
+\]</span> Therefore the characteristic equations <span class="math inline">\(d \mathbf{V}=\mathbf{Q}^{-1} d \mathbf{W}\)</span> become <span class="math display">\[
+\begin{aligned}
+&amp;d V_{1}=d \rho-\frac{d p}{c^{2}}=0 \quad &amp;\text{for} \quad \frac{d x}{d t}=u \\
+&amp;d V_{2}=d u+\frac{d p}{\rho c}=0 \quad &amp;\text{for} \quad \frac{d x}{d t}=u+c \\
+&amp;d V_{3}=d u-\frac{d p}{\rho c}=0 \quad &amp;\text{for}\quad \frac{d x}{d t}=u-c
+\end{aligned}
+\]</span> Integrating we get <span class="math display">\[
+\begin{aligned}
+&amp;V_{1}=const\quad &amp;\text{for}\quad \frac{d x}{d t}=u \quad(\text { entropy wave) } \\
+&amp;V_{2}=u+\int \frac{d p}{\rho c}=const \quad &amp;\text{for} \quad \frac{d x}{d t}=u+c \text { (acoustic wave) } \\
+&amp;V_{3}=u-\int \frac{d p}{\rho c}=const \quad &amp;\text{for} \quad \frac{d x}{d t}=u-c \text { (acoustic wave) }
+\end{aligned}
+\]</span> These 3 equations can not be solved properly, unless we introduce assumptions.</p>
+<h4 id="closure-of-euler-equation">Closure of Euler equation</h4>
+<p>For the first equation <span class="math inline">\(V_1\)</span>, we need <font color="#75147c">perfect gas</font>. The equation of state can be used to quantify the specific entropy <span class="math inline">\(s\)</span> <span class="math display">\[
+s=c_{v} \ln (p)-c_{p} \ln (\rho)
+\]</span> with <span class="math inline">\(c^{2}=\frac{\gamma p}{\rho}\)</span>, the ratio of specific heats with <span class="math inline">\(\gamma=\frac{c_{p}}{c_{v}}\)</span>, the constant pressure specific heat <span class="math inline">\(c_{P}\)</span> and the constant volume specific heat <span class="math inline">\(c_{v}\)</span>. We have <span class="math display">\[
+d s=-\frac{c_{p}}{\rho}\left(d \rho-\frac{d p}{c^{2}}\right)=-\frac{c_{p}}{\rho} d V_{1}
+\]</span> <span class="math inline">\(d V_{1}=0 \Rightarrow\)</span> entropy is constant along a path line <span class="math inline">\(\frac{d x}{d t}=u\)</span> The other 2 characteristic equations <span class="math inline">\(V_2, V_3\)</span> can not be analytically integrated, unless further assumptions are made.</p>
+<p>For example, assume the flow is <font color="#75147c">homentropic</font>, which means that the entropy is constant everywhere. Inviscid flows are often homoentropic (except at shocks). We have <span class="math display">\[
+p=A \rho^{\gamma} \quad c=B \rho^{(\gamma-1) / 2} \quad \text { with } \quad \frac{A}{B^{2}}=\frac{1}{\gamma}
+\]</span> We can show that <span class="math inline">\(\int \frac{d p}{\rho c}=\frac{2 c}{\gamma-1}+const.\)</span> which lead to <span class="math display">\[
+\begin{aligned} 
+&amp;S=const &amp;\text{ for }\quad \frac{d x}{d t}=u \text { (entropy wave) } \\
+&amp;V_{2}=u+\frac{2 c}{\gamma-1}=const \quad &amp;\text{ for }\quad \frac{d x}{d t}=u+c \text { (acoustic wave) } \\
+&amp;V_{3}=u-\frac{2 c}{\gamma-1}=\text { const } \quad &amp;\text{ for } \quad \frac{d x}{d t}=u-c \quad(\text { acoustic wave) }
+\end{aligned}
+\]</span> The characteristics <span class="math inline">\(V_{2}\)</span> and <span class="math inline">\(V_{3}\)</span> are also known as Riemann invariants. But <span class="math inline">\(V_{2}\)</span> and <span class="math inline">\(V_{3}\)</span> have <font color="#75147c">no physical meaning</font>. And this will be a problem in later section.</p>
+<p>At this point, the characteristics analysis can be applied, such as:</p>
+<ul>
+<li>Courant number checking</li>
+<li>Rankine-Hugoniot jump condition</li>
+</ul>
+<h4 id="characteristics-method-of-euler-equation">Characteristics method of Euler equation</h4>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Euler fuction characteristics.png" srcset="/img/loading.gif" lazyload alt="Euler fuction characteristics, in supersonic (left) and subsonic (right) flows." style="zoom:67%;"></p>
+<p>We have three families of characteristics:</p>
+<ol type="1">
+<li>Characteristics which travel with the local flow speed <span class="math inline">\(u\)</span></li>
+<li>Characteristics which travel with the local flow speed <span class="math inline">\(+\)</span> the local speed of sound <span class="math inline">\(u+c\)</span></li>
+<li>Characteristics which travel with the local flow speed <span class="math inline">\(-\)</span> the local speed of sound $u-c $</li>
+</ol>
+<p>The signal carried out by acoustic waves does not correspond to any well-known physical quantity. In a supersonic context, all the waves travel in the same direction (it is impossible to have a conversation in supersonic flows). Numerical methods can be easily chose.</p>
+<p>In a subsonic context, two wave speeds are positive and one wave speed is negative. That means we have to very carefully to design a numerical scheme considering information from all the directions.</p>
+<h5 id="boundary-conditions-problem">Boundary conditions problem</h5>
+<p>Given the characteristics in supersonic and subsonic flows, the boundary condition must be carefully designed. As shown below, in the supersonic flow, <span class="math inline">\(V_1,V_2,V_3\)</span> only need inlet boundary conditions. There is not a big problem. But in the subsonic condition, <span class="math inline">\(V_1,V_2\)</span> need the inlet boundary conditions, while <span class="math inline">\(V_3\)</span> needs the outlet boundary condition. Here comes the nightmare. <font color="#75147c">In a subsonic regime, we can't asset the boundary condition for <span class="math inline">\(V_1,V_2\)</span> and <span class="math inline">\(V_3\)</span> exactly what they need, because they are non-physical.</font> We don't have direct access of the Riemann variables, the only available conditions are just velocities and pressures. So the characteristic information might have to be defined in an iterative or approximate way</p>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Euler equation boundary condition problem.png" srcset="/img/loading.gif" lazyload alt="Euler equation boundary condition problem" style="zoom:67%;"></p>
+<h3 id="shock-tube-solution-for-euler-equations">Shock tube solution for Euler equations</h3>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/shock tube regime.png" srcset="/img/loading.gif" lazyload alt="shock tube regime" style="zoom:67%;"></p>
+<p>The famous shock tube have 3 regimes:</p>
+<ul>
+<li><p>Moving shock / shock wave: For the ID Euler equations, the second law of thermodynamics requires that the Mach number <span class="math inline">\(M = u/c\)</span> must decrease from greater than one to less than one in a coordinate system moving with the shock.</p></li>
+<li><p>Centred expansion fan / rarefaction wave: expansion wave in which all characteristics originate from a single point in the <span class="math inline">\(x—t\)</span> plane</p></li>
+<li><p>Contact discontinuity: occurs when the wave speed <span class="math inline">\(\lambda_1 = u\)</span> and pressure are continuous while other flow properties jump. In other words, for a contact discontinuity <span class="math display">\[
+u_L=u_R \quad and \quad p_L=p_R
+\]</span> In multidimensional flows, contact discontinuities are also called <font color="#75147c">slip lines</font> or <font color="#75147c">vortex sheets</font>. Like shocks, contact discontinuities obey the Rankine-Hugoniot relations. Unlike shocks, contacts cannot form spontaneously.</p></li>
+</ul>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/shock tube solution.png" srcset="/img/loading.gif" lazyload alt="shock tube solution" style="zoom:67%;"></p>
+<h2 id="numerical-schemes-for-non-linear-conservation-laws">Numerical schemes for non-linear conservation laws</h2>
+<div class="note note-info">
+            <p>It is still an active research area and these are the classical methods:</p><p>Centred schemes: one-step and two-step Lax Wendroff, MacCormack predictor-corrector. Artificial dissipation. Upwind schemes: flux vector and flux difference splitting. Monotone schemes: Godunov and Harten theorems. Exact and approximate Riemann solvers. High-order upwind schemes: the TVD property. The construction of TVD schemes using slope and flux limiters. WENO schemes: weighted essentially non-oscillatory methods</p>
+          </div>
+<h3 id="numerical-schemes-for-euler-equations">Numerical schemes for Euler equations</h3>
+<h4 id="cases-to-be-tested">Cases to be tested</h4>
+<h5 id="case-1-linear-advection-fuu-of-a-sine-wave">Case 1: linear advection (<span class="math inline">\(f(u)=u\)</span>) of a sine wave:</h5>
+<p><span class="math display">\[
+\frac{\partial u}{\partial t}+\frac{\partial u}{\partial x} = 0, \quad \text{with } u(x,0)=-sin(\pi x)
+\]</span></p>
+<p>Test on <span class="math inline">\(t=30\)</span>, i.e. <span class="math inline">\(u(x,30)=u(x,0)\)</span></p>
+<h5 id="case-2-burger-equation-fufrac12u2-with-riemann-problem">Case 2: Burger equation (<span class="math inline">\(f(u)=\frac{1}{2}u^2\)</span>) with Riemann problem,</h5>
+<p><span class="math display">\[
+\frac{\partial u}{\partial t}+\frac{\partial}{\partial x}\left(\frac{1}{2}u^2\right) = 0, \quad \text{with } u(x, 0)=\left\{\begin{array}{ccc}
+1 &amp; \text { if } &amp; |x|&lt;\frac{1}{3} \\
+-1 &amp; \text { if } &amp; \frac{1}{3}&lt;|x| \leq 1
+\end{array}\right.
+\]</span></p>
+<h5 id="case-3-euler-equation-with-riemann-problem">Case 3: Euler equation with Riemann problem</h5>
+<p><span class="math display">\[
+\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0
+\]</span></p>
+<p><span class="math display">\[
+\mathbf{U}=\left[\begin{array}{l}
+\rho \\
+\rho u \\
+\rho E
+\end{array}\right] = \left[\begin{array}{l}
+u_1 \\
+u_2 \\
+u_3
+\end{array}\right] 
+\quad\text{and}\quad
+\mathbf{F(U)}=\left[\begin{array}{l}
+\rho u \\
+\rho u^{2}+P \\
+\rho u\left(E+\frac{P}{\rho}\right)
+\end{array}\right] = \left[\begin{array}{l}
+F_1 \\
+F_2 \\
+F_3
+\end{array}\right]
+\]</span></p>
+<p>and <span class="math inline">\(c=\sqrt{\frac{\gamma p}{\rho}}\)</span>, speed of sound, <span class="math inline">\(p=(\gamma-1)\rho(E-\frac{u^2}{2})\)</span>. <span class="math display">\[
+\begin{gathered}
+\mathbf{W}(x, 0)=\left\{\begin{array}{c}
+\mathbf{W}_{\mathbf{L}} \text { if } x&lt;0 \\
+\mathbf{W}_{\mathbf{R}} \text { if } x \geq 0
+\end{array}\right. \\
+\mathbf{W}_{L}=\left[\begin{array}{c}
+\rho_{L} \\
+u_{L} \\
+p_{L}
+\end{array}\right]=\left[\begin{array}{c}
+1 K g / m^{3} \\
+0 \mathrm{~m} / \mathrm{s} \\
+100,000 \mathrm{~N} / \mathrm{m}^{2}
+\end{array}\right] \quad \mathbf{W}_{R}=\left[\begin{array}{c}
+\rho_{R} \\
+u_{R} \\
+p_{R}
+\end{array}\right]=\left[\begin{array}{c}
+0.010 \mathrm{~kg} / \mathrm{m}^{3} \\
+0 \mathrm{~m} / \mathrm{s} \\
+1,000 \mathrm{~N} / \mathrm{m}^{2}
+\end{array}\right]
+\end{gathered}
+\]</span></p>
+<h4 id="lax-friedrichs-method">Lax-Friedrichs Method</h4>
+<p>Recall <a href="/2022/06/18/FVM-schemes-fundamentals/#lax-friedrichs-scheme">last time derivation</a></p>
+<p>for case 1 and 2: <span class="math display">\[
+U^{n+1}_i = \frac{U^n_{i+1}+U^n_{i-1}}{2} - \frac{\Delta t}{\Delta x}\left(\frac{F^n_{i+1}-F^n_{i-1}}{2} \right)
+\]</span></p>
+<p>for case 3: <span class="math display">\[
+\begin{gathered}
+\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0 \Rightarrow \frac{\partial \mathbf{U}}{\partial t}+\mathbf{A}(\mathbf{U}) \frac{\partial \mathbf{U}}{\partial x}=0 \\
+\mathbf{U}_i^{n+1}=\frac{1}{2}\left(\mathbf{U}_{i+1}^n+\mathbf{U}_{i-1}^n\right)-\frac{\Delta t}{2 \Delta x} \mathbf{\Lambda}\left(\mathbf{U}_{i+1}^n-\mathbf{U}_{i-1}^n\right)
+\end{gathered}
+\]</span></p>
+<h5 id="case-1-result">case 1 result</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Lax Friedrichs result on linear advection of a sine wave.png" srcset="/img/loading.gif" lazyload alt="Lax Friedrichs result on linear advection of a sine wave" style="zoom:23%;"></p>
+<p>The dissipation effect is huge, but from last blog, we know it can be controlled with higher resolution of <span class="math inline">\(\Delta x, \Delta t\)</span>. (consistent, diffusivity controlled by CFL)</p>
+<div class="note note-info">
+            <p>How to control the diffusivity? We can write the scheme in the artificial viscosity form, which will be discussed later.</p>
+          </div>
+<h5 id="case-2-result">case 2 result</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Lax-Friedrichs Method on Burger equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="Lax-Friedrichs Method on Burger equation with Riemann problem" style="zoom:25%;"></p>
+<p>Odd-even oscillations exist, but no over/under shoot.</p>
+<h5 id="case-3-results">case 3 results</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Lax-Friedrichs Method on Euler equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="Lax-Friedrichs Method on Euler equation with Riemann problem" style="zoom:48%;"></p>
+<p>Odd-even oscillations exist. The results are smoothed out. It's difficult to capture the discontinuity of density and pressure. But the results will be fine with increased resolution.</p>
+<h4 id="lax-wendroff-method">Lax-Wendroff Method</h4>
+<p>Recall the <a href="/2022/06/18/FVM-schemes-fundamentals/#lax-wendroff-scheme">derivation last time</a>, consider a Taylor serie for <span class="math inline">\(\mathrm{U}(x, t+\Delta t)\)</span> <span class="math display">\[
+\mathbf{U}(x, t+\Delta t)=\mathbf{U}(x, t)+\Delta t \frac{\partial \mathbf{U}(x, t)}{\partial t}+\frac{\Delta t^2}{2} \frac{\partial^2 \mathbf{U}(x, t)}{\partial t^2}+O\left(\Delta t^3\right)
+\]</span> The temporal derivative can be transformed in spatial derivative using the original conservation laws <span class="math display">\[
+\frac{\partial \mathbf{U}(x, t)}{\partial t}=-\frac{\partial \mathbf{F(U)}}{\partial x} = -\mathbf{A}(\mathbf{U}) \frac{\partial \mathbf{U}}{\partial x}\\
+\]</span> <span class="math display">\[
+\begin{aligned}
+\frac{\partial^2 \mathbf{U}(x, t)}{\partial t^2}=\frac{\partial}{\partial t}\left(\frac{\partial \mathbf{U}}{\partial t}\right)=-\frac{\partial}{\partial t}\left(\frac{\partial \mathbf{F(U)}}{\partial x}\right) &amp;=-\frac{\partial}{\partial x}\left(\frac{\partial \mathbf{F(U)}}{\partial t}\right) \\
+&amp;=-\frac{\partial}{\partial x}\left(\mathbf{A(U)} \frac{\partial \mathbf{U}}{\partial t}\right) \\
+&amp;=\frac{\partial}{\partial x}\left(\mathbf{A(U)} \frac{\partial \mathbf{F(U）}}{\partial x}\right)
+\end{aligned}
+\]</span> Put the two expressions into the Taylor series, discretise using central differences: <span class="math display">\[
+\begin{aligned}
+\mathbf{U}^{n+1}_i=&amp;\mathbf{U}^n_i-\Delta t \frac{\mathbf{F}(\mathbf{U}^n_{i+1})-\mathbf{F}(\mathbf{U}^n_{i-1})}{2\Delta x}+ \\
+&amp;\frac{\Delta t^2}{2} \frac{\mathbf{A}_{i+1 / 2}^n\frac{\mathbf{F}(\mathbf{U}^n_{i+1})-\mathbf{F}(\mathbf{U}^n_{i})}{\Delta x}
+-\mathbf{A}_{i-1 / 2}^n\frac{\mathbf{F}(\mathbf{U}^n_{i})-\mathbf{F}(\mathbf{U}^n_{i-1})}{\Delta x}}
+{\Delta x^2}
+\end{aligned}
+\]</span> There are two choice of defininig <span class="math inline">\(\mathbf{A}_{i+1 / 2}^n\)</span>, <span class="math inline">\(\mathbf{A}\left(\mathbf{U}_{i+\frac{1}{2}}^n\right)\)</span> or <span class="math inline">\(\frac{1}{2}\left(\mathbf{A}_i^n+\mathbf{A}_{i+1}^n\right)\)</span>, taking <span class="math inline">\(\mathbf{U}_{i+\frac{1}{2}}\)</span> to calculate <span class="math inline">\(\mathbf{A}\)</span> or average <span class="math inline">\(\mathbf{A}\)</span> from the its neighbouring time steps.</p>
+<p>Recall that <span class="math inline">\(\mathbf{A}\)</span> is a matrix with 9 elements, and it is a function of <span class="math inline">\(x\)</span> and <span class="math inline">\(t\)</span>. i.e. <span class="math inline">\(\mathbf{A}\)</span> updates with every time step at every nodes. And <strong>this will lead to a cost problem</strong></p>
+<div class="note note-info">
+            <p>In the Lax-Wendroff method, the average wave speeds <span class="math inline">\(\mathbf{A}_{i+1 / 2}^n\)</span> may be defined in a variety of different ways. It is actually an entire class of methods depending on the choice of the wave speeds.</p>
+          </div>
+<p>Furthermore, we write the Lax-Wendroff method in conservation form: <span class="math display">\[
+\mathbf{U}_i^{n+1}=\mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left(\mathbf{F}_{i+\frac{1}{2}}^n-\mathbf{F}_{i-\frac{1}{2}}^n\right)
+\]</span> with <span class="math display">\[
+\mathbf{F}_{i+\frac{1}{2}}^n=\frac{\mathbf{F}\left(\mathbf{U}_i^n\right)+\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)}{2}-\frac{\Delta t}{2 \Delta x} \mathbf{A}_{i+\frac{1}{2}}^n\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right)
+\]</span> for case1 and 2, the linear advection equation, <span class="math inline">\(f(u)=a u\)</span> it takes the form <span class="math display">\[
+u_i^{n+1}=u_i^n-\frac{\sigma}{2}\left(u_{i+1}^n-u_{i-1}^n\right)+\frac{\sigma^2}{2}\left(u_{i+1}^n-2 u_i+u_{i-1}^n\right)
+\]</span> where <span class="math inline">\(\sigma=a \frac{\Delta t}{\Delta x}\)</span>. The corresponding conservative flux is <span class="math display">\[
+F_{i+\frac{1}{2}}^n=a \frac{u_i^n+u_{i+1}^n}{2}-\frac{\Delta t}{2 \Delta x} a^2\left(u_{i+1}^n-u_i^n\right)
+\]</span></p>
+<h5 id="case-1-result-1">case 1 result</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Lax Wendroff result on linear advection of a sine wave.png" srcset="/img/loading.gif" lazyload alt="Lax Wendroff result on linear advection of a sine wave" style="zoom:25%;"></p>
+<p>The Lax Wendroff result slightly shifted (delay), because the schemes is not consistent as discussed in last blog. It can beed seen that the Lax Wendroff method is not suitable for simple non-discontinue problems.</p>
+<h5 id="case-2-result-1">case 2 result</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Lax Wendroff Method on Burger equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="Lax Wendroff Method on Burger equation with Riemann problem" style="zoom:25%;"></p>
+<p>Here the rarefaction wave is not captured, WRONG SOLUTION! As discussed before, the conservation form locates the shock perfectly but the result cannot be guaranteed as physical. And it is not suitable for system of conservation.</p>
+<p>There is no need to test case 3 because we know it will have a slight delay, and wrong solution.</p>
+<h4 id="two-step-lax-wendroff-method-richtmyer-method">Two-step Lax-Wendroff Method (Richtmyer method)</h4>
+<p>This is an optimisation of Lax-Wendroff. The idea is to reduce the cost by the <span class="math inline">\(\mathbf{A}\)</span> matrix</p>
+<p>There are two options:</p>
+<ul>
+<li>Option 1: Approximate matrix <span class="math inline">\(\mathbf{A}\)</span>: Still too expensive.</li>
+<li>Option 2: Avoid computation of matrix <span class="math inline">\(\mathbf{A}\)</span> (Jacobian free methods): Richtmyer method introducing intermedia time steps <span class="math inline">\(n+\frac{1}{2}\)</span> as follows</li>
+</ul>
+<p>Step 1 <span class="math display">\[
+\begin{aligned}
+&amp;\mathbf{U}_{i+1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_{i+1}^n+\mathbf{U}_i^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right) \\
+&amp;\mathbf{U}_{i-1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_i^n+\mathbf{U}_{i-1}^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_i^n\right)-\mathbf{F}\left(\mathbf{U}_{i-1}^n\right)\right)
+\end{aligned}
+\]</span> Step 2 <span class="math display">\[
+\mathbf{U}_i^{n+1}=\mathbf{U}_i^n + \Delta t \frac{\partial\mathbf{U}_{i}^{n+1 / 2}}{\partial t} = \mathbf{U}_i^n-\Delta t\frac{\partial\mathbf{F}_{i}^{n+1 / 2}}{\partial x} = \mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left[\mathbf{F}\left(\mathbf{U}_{i+1 / 2}^{n+1 / 2}\right)-\mathbf{F}\left(\mathbf{U}_{i-1 / 2}^{n+1 / 2}\right)\right]
+\]</span> Conservative form are used to avoid the calculation of <span class="math inline">\(\mathbf{A}\)</span> matrix.</p>
+<ul>
+<li>This first step is called the <strong>predictor</strong> (here Lax-Friedriechs method)</li>
+<li>The second step is called the <strong>corrector</strong> (here Leapfrog method)</li>
+</ul>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Idea of the two step Lax wendroff method.png" srcset="/img/loading.gif" lazyload alt="Idea of the two step Lax wendroff method" style="zoom:20%;"></p>
+<p>The idea is inspired from the <a target="_blank" rel="noopener" href="https://epubs.siam.org/doi/abs/10.1137/0728062">Two-step runge–kutta methods</a> for ordinary differential equations. Apart from the standard grid <span class="math inline">\(x_i\)</span>; another the staggered grid <span class="math inline">\(x_{i+ 1/2} = (x_{i+1} + x_i )/2\)</span> lies halfway between the standard grid points.</p>
+<div class="note note-info">
+            <p>Staggered grids are extremely common in predictor-corrector methods.</p>
+          </div>
+<h5 id="case-3-results-1">case 3 results</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/two step Lax Wendroff Method on Euler equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="two step Lax Wendroff Method on Euler equation with Riemann problem" style="zoom:48%;"></p>
+<p>The result is highly diffusive on the shock. For velocity, although the shock and rarefaction wave are captured, oscillations exist because of the second order. For pressure, a slight overshoot also exit on the upstream of the shock.</p>
+<div class="note note-info">
+            <p>Note the scheme is upwind, so if there is a bidirectional supersonic flow, this scheme will not work well.</p>
+          </div>
+<h4 id="two-step-maccormacks-method">Two-step MacCormack’s method</h4>
+<p>This is another variance of the two step lax wandroff method, and it is one of the most used method for compressible flow.</p>
+<p>The idea is to combine upwind and downwind method so that the bidirectional supersonic wave can be evaluated well.</p>
+<p>Predictor step: 1<sup>st</sup> order upwind (first guess) <span class="math display">\[
+\mathbf{U}_i^*=\mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right)
+\]</span> Corrector step: 1<sup>st</sup> order down wind <span class="math display">\[
+\mathbf{\hat U}_i=
+\mathbf{U}_i^* + \Delta t \frac{\partial\mathbf{U}_i^*}{\partial t}=
+\mathbf{U}_i^* - \Delta t \frac{\partial\mathbf{F}(\mathbf{U}_i^*)}{\partial t}
+=\mathbf{U}_i^*-\frac{\Delta t}{\Delta x}\left[\mathbf{F}\left(\mathbf{U}_i^*\right)-\mathbf{F}\left(\mathbf{U}_{i-1}^*\right)\right]
+\]</span> Finally step, average <span class="math display">\[
+\mathbf{U}_i^n = (\mathbf{\hat{U}}_{i}+\mathbf{U}_{i}^{*})/2
+\]</span> The predictor and corrector in MacCormack’s method can be reversed depending if we have left-running or right-running waves. The two versions of MacCormack’s method are often combined to a mix of left and right running waves.</p>
+<p>The predictor or corrector are both unconditionally unstable, yet the sequence is stable if <span class="math inline">\(CFL&lt;1\)</span>.</p>
+<div class="note note-info">
+            <p>The MacCormack’s method is still second order although two two steps are first order.</p><p>Even with the sophisticated methods available today, many people still turn to MacCormack’s method first, especially in the absence of shocks, mainly because of its simplicity and efficiency.</p>
+          </div>
+<h5 id="case-3-result">case 3 result</h5>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/MacCormack's Method on Euler equation with Riemann problem.png" srcset="/img/loading.gif" lazyload alt="MacCormack's Method on Euler equation with Riemann problem" style="zoom:48%;"></p>
+<p>Oscillation with shocks because the second order.</p>
+<h3 id="artificial-viscosity">Artificial viscosity</h3>
+<h4 id="artificial-viscosity-for-scalar-conservation-law">Artificial viscosity for Scalar Conservation Law</h4>
+<p><img src="/2022/06/28/FVM-schemes-fundamentals2/Difference between diffusion and dispersion.png" srcset="/img/loading.gif" lazyload alt="Difference between diffusion and dispersion" style="zoom:30%;"></p>
+<p>Firstly, recall the difference between diffusion and dispersion. Diffusion(left) means the smearing effect with convection, while dispersion(right) represents the effect of oscillation. We are seeking a method to control the balance of diffusion and dispersion of a numerical method.</p>
+<p>The idea of artificial viscosity is that, there is no viscous terms in Euler equations but we can have some viscous effect (diffusive effects) inside numerical methods.</p>
+<p>For example, a scalar conservation law with a viscous-like term (like in N-S): A conservative forward <span class="math display">\[
+\frac{\partial u}{\partial t}+\frac{\partial f(u)}{\partial x}=\frac{\partial}{\partial x}\left(d(u) \frac{\partial u}{\partial x}\right)\\
+\]</span> where <span class="math inline">\(d(u)\)</span> is the viscous term and it should be as small as possible. Besides, unlike the constant real viscosity in the N-S, <span class="math inline">\(d\)</span> can be non-constant locally.</p>
+<p>Use central difference to discretise this formula as: <span class="math display">\[
+\frac{u_i^{n+1}-u_i^n}{\Delta t}+\frac{f\left(u_{i+1}^n\right)-f\left(u_{i-1}^n\right)}{2 \Delta x}=\frac{d_{i+1 / 2} \frac{u_{i+1}^n-u_i^n}{\Delta x} - d_{i-1 / 2} \frac{u_i^n-u_{i-1}^n}{\Delta x}}{\Delta x}
+\]</span> <div class="note note-info">
+            <p>A oscillatory scheme can be controlled by introducing diffusion, i.e. artificial viscosity.</p>
+          </div></p>
+<h4 id="artificial-viscosity-form">Artificial Viscosity Form</h4>
+<p>Take The Lax-Friedrich's method as an example, the conservative form can be written in the artificial viscosity form.</p>
+<p>Non-conservative form: <span class="math display">\[
+u_i^{n+1}=\frac{1}{2}\left(u_{i-1}^n+u_{i+1}^n\right)-\frac{\Delta t}{2 \Delta x}\left[f\left(u_{i+1}^n\right)-f\left(u_{i-1}^n\right)\right]
+\]</span> Conservative form: <span class="math display">\[
+u_i^{n+1}=u_i^n-\frac{\Delta t}{\Delta x}\left[F_{i+1 / 2}^n-F_{i-1 / 2}^n\right]$ with $F_{i+1 / 2}^n=\frac{\Delta x}{2 \Delta t}\left(u_i^n-u_{i+1}^n\right)+\frac{1}{2}\left[f\left(u_i^n\right)+f\left(u_{i+1}^n\right)\right]
+\]</span></p>
+<p>Artificial viscosity form: <span class="math display">\[
+u_i^{n+1}=u_i^n-\frac{\Delta t}{2 \Delta x}\left[f\left(u_{i+1}^n\right)-f\left(u_{i-1}^n\right)\right]+\frac{\Delta t}{2 \Delta x}\left[d_{i+1 / 2}\left(u_{i+1}^n-u_i^n\right)-d_{i-1 / 2}\left(u_i^n-u_{i-1}^n\right)\right]
+\]</span> with <span class="math inline">\(d_{i+1 / 2}=\frac{\Delta x}{\Delta t}\)</span>,</p>
+<div class="note note-primary">
+            <p>Most of the schemes can be written in artificial viscosity form so that one can quantify the diffusivity by inspecting the <span class="math inline">\(d_{i+1 / 2}\)</span>. We can as a result analysis, then control the diffusivity of a scheme.</p><p>For example for Lax-Friedrich's method:</p><ul><li><p>reduce $x $, the diffusivity will be reduced.</p></li><li><p>reduce <span class="math inline">\(\Delta t\)</span> the diffusivity will be increased.</p></li></ul><p>The dissipation can be easily controlled by increasing the space resolution, or selecting the highest possible CFL number.</p>
+          </div>
+<p>Some points:</p>
+<ul>
+<li>The discretisation of this term does not need to be acurate; all we want is to have desirable numerical effects.</li>
+<li>Implicit artificial viscosity: arises naturally as part of the discretisation of the first derivative.</li>
+<li>Explicit artificial viscosity: added on purpose to remove oscillations.</li>
+</ul>
+<h4 id="artificial-viscosity-for-system-of-conservation-laws">Artificial Viscosity for System of Conservation Laws</h4>
+<p>For systems of conservation laws, the artificial dissipation term can be considered a discretisation of <span class="math display">\[
+\frac{\partial}{\partial x}\left(\mathbf{D(u)} \frac{\partial \mathbf{U}}{\partial x}\right)\\
+\]</span> where <span class="math inline">\(\mathbf{D}\)</span> is used to add explicit artificial dissipation on the scheme to control the high-frequency oscilations. This is analogous to <span class="math display">\[
+\frac{\partial}{\partial x}\left(d(u) \frac{\partial u}{\partial x}\right)\\
+\]</span></p>
+<p>for scalar conservation laws as seen in previous subsection.</p>
+<h4 id="requirement-for-artificial-dissipation">Requirement for artificial dissipation</h4>
+<p>The (explicit) dissipation matrix <span class="math inline">\(\mathbf{D}\)</span> should satisfy:</p>
+<ul>
+<li>The dimensions of <span class="math inline">\(\mathbf{D}\)</span> are those of <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li>Its influence in smooth regions should be negligible. It should act only around discontinuities (i.e in areas with strong gradients).</li>
+<li>It should be non-linear, i.e. depends on <span class="math inline">\(\mathbf{U}\)</span></li>
+<li><span class="math inline">\(\mathbf{D}\)</span> should be proportional to, at least, <span class="math inline">\(\Delta x\)</span> in order to maintain second-order accuracy.</li>
+<li>Different schemes may need different levels of dissipation.</li>
+<li>Explicit artificial dissipation terms are added to the numerical flux.</li>
+</ul>
+<p>For example, the Richtmyer method with this sort of artificial viscosity becomes</p>
+<p>Step 1, not changed <span class="math display">\[
+\begin{aligned}
+&amp;\mathbf{U}_{i+1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_{i+1}^n+\mathbf{U}_i^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_{i+1}^n\right)-\mathbf{F}\left(\mathbf{U}_i^n\right)\right) \\
+&amp;\mathbf{U}_{i-1 / 2}^{n+1 / 2}=\frac{1}{2}\left(\mathbf{U}_i^n+\mathbf{U}_{i-1}^n\right)-\frac{\Delta t}{2 \Delta x}\left(\mathbf{F}\left(\mathbf{U}_i^n\right)-\mathbf{F}\left(\mathbf{U}_{i-1}^n\right)\right)
+\end{aligned}
+\]</span> Step 2, add artificial viscosity <span class="math display">\[
+\mathbf{U}_i^{n+1}= \mathbf{U}_i^n-\frac{\Delta t}{\Delta x}\left[\mathbf{F}\left(\mathbf{U}_{i+1 / 2}^{n+1 / 2}\right)-\mathbf{F}\left(\mathbf{U}_{i-1 / 2}^{n+1 / 2}\right)\right]
++d[\mathbf{U}_{i+1}^n-\mathbf{U}_{i}^n+\mathbf{U}_{i-1}^n]
+\]</span> But both Richtmyer and MacCormack’s methods remain oscillate with artificial viscosity.</p>
+<blockquote>
+<ul>
+<li>For the Euler equations, without artificial viscosity, neither MacCormack’s method nor the Richtmyer method can complete the first time step without overshooting and creating negative pressures.</li>
+<li>Both methods take two time steps with a constant coefficient of second-order artificial viscosity d = 0.02. After the first two time steps have smoothed the initial conditions, both methods are able to continue without artificial viscosity.</li>
+<li>Overshoots and oscillations without continued use of artificial viscosity.</li>
+</ul>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Numerical schemes fundamentals 2</div>
+      <div>https://daydreamatnight.github.io/2022/06/28/FVM-schemes-fundamentals2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 28, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/29/FVM-schemes-comparison-on-OpenFOAM/" title="FVM schemes comparison on OpenFOAM">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">FVM schemes comparison on OpenFOAM</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/18/FVM-schemes-fundamentals/" title="Numerical schemes fundamentals">
+                        <span class="hidden-mobile">Numerical schemes fundamentals</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+
+<script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
+<script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
+
+
+<style>
+.markmap-container{
+  display:flex;
+  justify-content:center;
+  margin:0 auto;
+  width:90%;
+  height:500px
+}
+.markmap-container svg{
+  width:100%;height:100%
+}
+@media(max-width:768px){
+  .markmap-container{
+    height:400px
+  }
+}</style>
+<script>
+function initMarkMap(){
+  document.querySelectorAll('.markmap-container>svg').forEach(el =>{
+    markmap.Markmap.create(el, null, JSON.parse(el.getAttribute('data')))
+  })
+};
+initMarkMap();
+
+</script></body>
+</html>

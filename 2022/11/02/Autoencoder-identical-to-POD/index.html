@@ -1,0 +1,1569 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Build a Linear Autoencoder (LAE) comparable to Proper orthogonal decomposition (POD) in two ways. The modes extracted by the two algorithms are compared on the wide (MINST [28*28, 60000])">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Autoencoder identical to POD">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/11/02/Autoencoder-identical-to-POD/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Build a Linear Autoencoder (LAE) comparable to Proper orthogonal decomposition (POD) in two ways. The modes extracted by the two algorithms are compared on the wide (MINST [28*28, 60000])">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/Autoencoder%20vs%20POD.png">
+<meta property="article:published_time" content="2022-11-02T13:55:17.000Z">
+<meta property="article:modified_time" content="2022-12-11T17:50:16.197Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/Autoencoder%20vs%20POD.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Autoencoder identical to POD - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Autoencoder identical to POD"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-02 21:55" pubdate>
+          November 2, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          28k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          95 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Autoencoder identical to POD</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Build a Linear Autoencoder (LAE) comparable to Proper orthogonal decomposition (POD) in two ways. The modes extracted by the two algorithms are compared on the wide (MINST [28*28, 60000]) and slim (Flow past cylinder snapshots [465*354, 110]) datasets. In addition, several regularization methods to improve the orthogonality and optimality of LAE modes are proposed and tested.</p>
+          </div>
+<span id="more"></span>
+<h2 id="theories">Theories</h2>
+<p>The relation between POD and equivalent linear Autoencoder is first identified by M Milano et.al<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Milano, M., &amp; Koumoutsakos, P. (2002). Neural network modeling for near wall turbulent flow. *Journal of Computational Physics*, *182*(1), 1-26.">[1]</span></a></sup>. They use the nonlinear Autoencoder extension for reconstruction and prediction for near wall turbulence flow. And it has been seen as the first application of neural networks into the field of fluid mechanics<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brunton, S. L., Noack, B. R., &amp; Koumoutsakos, P. (2020). Machine learning for fluid mechanics. *Annual review of fluid mechanics*, *52*, 477-508.">[2]</span></a></sup>.</p>
+<h3 id="podpca-and-svd">POD/PCA and SVD</h3>
+<p>A more detailed description can be found in the last <a href="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/">post</a>. Only the essence of it is shown below.</p>
+<p>Consider a vector space <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{m\times n}\)</span> as <span class="math inline">\(\mathbf{X}=\left[\begin{array}{llll}x^1 &amp; x^2 &amp; \ldots &amp; x^n\end{array}\right]\)</span>, where <span class="math inline">\(x^i=\left[\begin{array}{llll}x^i_1 &amp; x^i_2 &amp; \ldots &amp; x^i_m\end{array}\right]^T\)</span>. The reduced-order representation <span class="math inline">\(\tilde{\mathbf{X}}\in \mathbb{R}^{m\times n}\)</span> can be established by POD as: <span class="math display">\[
+\tilde{\mathbf{X}}=\sum_{i=1}^p \alpha_i \boldsymbol{\phi}_i=\boldsymbol{\Phi} \boldsymbol{\alpha},\qquad \tilde{\mathbf{X}}\in\mathbb{R}^{m\times n}, \mathbf{\Phi}\in\mathbb{R}^{m\times p}, \boldsymbol{\alpha}\in\mathbb{R}^{p\times n}
+\]</span> where the columns of <span class="math inline">\(\mathbf{\Phi}\)</span> is called <strong>modes</strong> representing the optimal set of basis spanned by which the reconstructed space <span class="math inline">\(\tilde{\mathbf{X}}\)</span> has mathematically the lowest <span class="math inline">\(L2\)</span> loss to the original space <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>These modes can be extracted by <strong>SVD</strong> (or efficient SVD): <span class="math display">\[
+\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V^T},\qquad \mathbf{U}\in\mathbb{R}^{m\times m}, \boldsymbol{\Sigma}\in\mathbb{R}^{m\times n}, \mathbf{V}\in\mathbb{R}^{n\times n}
+\]</span> And the reduced order representation can be reconstructed as: <span class="math display">\[
+\tilde{\mathbf{X}} = \underbrace{\tilde{\mathbf{U}}}_{\boldsymbol{\Phi}}\underbrace{\tilde{\boldsymbol{\Sigma}}\tilde{\mathbf{V}}^\mathbf{T}}_{\boldsymbol{\alpha}},\qquad \tilde{\mathbf{U}}\in\mathbb{R}^{m\times p}, \tilde{\boldsymbol{\Sigma}}\in\mathbb{R}^{p\times p}, \tilde{\mathbf{V}}\in\mathbb{R}^{n\times p}
+\]</span> where <span class="math inline">\(\tilde{\mathbf{U}}, \tilde{\mathbf{V}}\)</span> is the first <span class="math inline">\(p\)</span> columns of <span class="math inline">\(\mathbf{U},\mathbf{V}\)</span> respectively. <span class="math inline">\(\tilde{\boldsymbol{\Sigma}}\)</span> is the first <span class="math inline">\(p\)</span> dimensional diagonal sub-matrix of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>. Relating to POD, we have <span class="math inline">\(\boldsymbol{\Phi} = \tilde{\mathbf{U}}\)</span> and <span class="math inline">\(\boldsymbol{\alpha} = \tilde{\boldsymbol{\Sigma}}\tilde{\mathbf{V}}^\mathbf{T}\)</span>.</p>
+<h3 id="linear-autoencoder-lae">Linear autoencoder (LAE)</h3>
+<p>One-layer linear neural network (without nonlinear activation function layer) can be concluded with an input data <span class="math inline">\(\mathbf{X_0}\in\mathbb{R}^{m\times n}\)</span> and the output <span class="math inline">\(\mathbf{X_1}\in \mathbb{R}^{p\times n}\)</span>: <span class="math display">\[
+\mathbf{X_1}=\boldsymbol{W_1}\mathbf{X_0} + \mathbf{b_1},\qquad \mathbf{X_1}\in \mathbb{R}^{p\times n}, \mathbf{W_1}\in\mathbb{R}^{p\times m}, \mathbf{X_0}\in\mathbb{R}^{m\times n}, \mathbf{b_1}\in\mathbb{R}^{p\times 1}\text{(broundcast)}
+\]</span> <img src="/2022/11/02/Autoencoder-identical-to-POD/2 layer linear autoencoder.png" srcset="/img/loading.gif" lazyload alt="2 layer linear autoencoder" style="zoom:35%;"></p>
+<p>As the architecture shown above, a linear autoencoder stacks two of linear layer with a lower dimensional intermediate output acting as a bottleneck, also called the latent space. The first and second layer of the autoencoder are always referred to as the encoder and decoder.</p>
+<p>With a well trained LAE, the original input data <span class="math inline">\(\mathbf{X_0}\)</span> can be reconstructed from a latent space <span class="math inline">\(\mathbf{X_1}\)</span>, the error between original data <span class="math inline">\(\mathbf{X_0}\)</span> and the reconstructed data <span class="math inline">\(\mathbf{X_2}\)</span> can be minimized regressively via back propagation and gradient descent. When choosing mean square error (MSE) as error/loss function, the optimal latent space extracted by the optimal LAE is identical with that extracted by POD/PCA.</p>
+<h3 id="equivalent-lae-to-pod">Equivalent LAE to POD</h3>
+<h4 id="straightforward-method">Straightforward method</h4>
+<p>To get a autoencoder equivalent to POD, set <span class="math inline">\(\mathbf{b_1} = \mathbf{b_2}=0\)</span>, a <strong>straightforward</strong> way is to make the auto encoder process <span class="math inline">\(\mathbf{X}\)</span> and reconstruct it as <span class="math inline">\(\tilde{\mathbf{X}}\)</span>. The mathematical representation is: <span class="math display">\[
+\begin{aligned}
+layer1: \qquad \mathbf{X_1}=\boldsymbol{W_1}{\color{purple}\mathbf{X}},&amp;\qquad \mathbf{X_1}\in \mathbb{R}^{p\times n}, \mathbf{W_1}\in\mathbb{R}^{p\times m}, \mathbf{X}\in\mathbb{R}^{m\times n} \\
+layer2: \qquad {\color{purple}\tilde{\mathbf{X}}}=\boldsymbol{W_2}\mathbf{X_1},&amp;\qquad \tilde{\mathbf{X}}\in \mathbb{R}^{m\times n}, \mathbf{W_2}\in\mathbb{R}^{m\times p}
+\end{aligned}
+\]</span> associated with the above symbols, the weights of the second layer are used as the modes i.e. <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\Phi} &amp;=  \mathbf{W_2} \\
+\boldsymbol{\alpha} &amp;= \mathbf{X_1}
+\end{aligned}
+\]</span></p>
+<h4 id="transposition-method">Transposition method</h4>
+<p>Although, there is another equivalence, if we make the autoencoder process a transposition of data, we have a bottleneck mapping from <span class="math inline">\(\mathbf{X&#39;}\)</span> to <span class="math inline">\(\tilde{\mathbf{X}}&#39;\)</span>: <span class="math display">\[
+\begin{aligned}
+layer1: \qquad \mathbf{X_1&#39;}=\boldsymbol{W_1}&#39;{\color{purple}\mathbf{X}&#39;},&amp;\qquad \mathbf{X_1&#39;}\in \mathbb{R}^{p\times m}, \mathbf{W_1&#39;}\in\mathbb{R}^{p\times n}, \mathbf{X&#39;}\in\mathbb{R}^{n\times m} \\
+layer2: \qquad {\color{purple}\tilde{\mathbf{X}}&#39;}=\boldsymbol{W_2}&#39;\mathbf{X_1&#39;},&amp;\qquad \tilde{\mathbf{X}}\in \mathbb{R}^{n\times m}, \mathbf{W_2&#39;}\in\mathbb{R}^{n\times p}
+\end{aligned}
+\]</span> In this case, we have the intermediate latent space related to the modes, that is <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\Phi} &amp;= \mathbf{X_1&#39;} \\
+\boldsymbol{\alpha}&amp;= \mathbf{W_2&#39;}
+\end{aligned}
+\]</span></p>
+<h3 id="improvement">Improvement</h3>
+<p>Well, those equivalences only exist in imagination because of the large freedom of gradient descend process</p>
+<ul>
+<li>non-orthogonality: modes extracted by LAE is not necessarily orthogonal</li>
+<li>non-optimality: (L2) energy preserved by the modes are not ranked in descending order</li>
+</ul>
+<p>There might be several methods to obtain a set of modes comparable with the POD modes:</p>
+<ul>
+<li>Two-stage:
+<ul>
+<li><code>[method 1]</code> run another SVD on the raw modes extracted by the LAE, it works on both the two methods.</li>
+</ul></li>
+<li>End-to-end:
+<ul>
+<li>Straightforward method
+<ul>
+<li><code>[method 2]</code> Orthonormal regularization on the weight</li>
+<li><code>[method 3]</code> Orthogonalized the weight every step (<a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/intermediate/parametrizations.html">parameterization</a>)
+<ul>
+<li><code>[method 4]</code> SVD the weight every step (custom SVD parameterization)</li>
+</ul></li>
+</ul></li>
+<li>Transpose method
+<ul>
+<li><code>[method 5]</code> Add an SVD layer after the 1st layer output.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>All these improvements will be compared and tested in the <a href="#case-study">case study</a> section. In this section, the <code>[method 2]</code> regularization methods and the <code>[method 4]</code> SVD parameterization will be further talked about.</p>
+<h4 id="l2-regularization">L2 regularization</h4>
+<p>Before introducing the orthogonal regularization used in <code>[method 2]</code>, let's recall the popular L2 regularization. For dataset <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{m\times n}\)</span> as <span class="math inline">\(\mathbf{X}=\left[\begin{array}{llll}x^1 &amp; x^2 &amp; \ldots &amp; x^n\end{array}\right]\)</span>, where <span class="math inline">\(x^i=\left[\begin{array}{llll}x^i_1 &amp; x^i_2 &amp; \ldots &amp; x^i_m\end{array}\right]^T\)</span>, the L2 regularized loss function of the 2-layer linear autoencoder is: <span class="math display">\[
+\begin{aligned}
+\mathbf{\hat{\mathcal{L}}_{(W_1,W_2)}} &amp;= \mathcal{L}_{ms} + \mathcal{L}_{L2} \\ 
+\text{where:}\qquad {\mathcal{L}_{ms}}_{\mathbf{(W_1,W_2)}} &amp;= \frac{1}{n}\sum_{i=1}^{n} MSE(\mathbf{\tilde{x^{i}},x^{i}}), \\
+{\mathcal{L}_{L2}}_{\mathbf{(W_1,W_2)}} &amp;=\frac{\lambda_{L2}}{2n}\sum_{l=1}^2 (\left\|\mathbf{W}_{l}\right\|^2_F), \\
+\left\|\mathbf{W}_1\right\|^2_F &amp;=\sum_{i=1}^{p}\sum_{j=1}^{m}{\mathbf{W}_1}_{i}^{j2} = trace(\mathbf{W}^T_1\mathbf{W}_1), \\
+\quad \left\|\mathbf{W}_2\right\|^2_F &amp;= \sum_{i=1}^{p}\sum_{j=1}^{m}{\mathbf{W}_2}_i^{j2} = trace(\mathbf{W}^T_2\mathbf{W}_2)
+\end{aligned}
+\]</span> <div class="note note-secondary">
+            <p>Normally, the L2 regularization is not applied by tailoring the loss function, but more simply and efficiently, the weight updating process, referring as the weight decay.</p><p>In the gradient descend algorithm, weights are updated by the gradient of loss function w.r.t. the weights: <span class="math display">\[\mathbf{W}_l = \mathbf{W}_l-\alpha \frac{\partial{\hat{\mathcal{L}}}}{\partial\mathbf{W}_l}\]</span> With <span class="math inline">\(\hat{\mathcal{L}} = \mathcal{L}_{ms} + \mathcal{L}_{L2}\)</span>, we have: <span class="math display">\[\begin{aligned}\mathbf{W}_l  &amp;= \mathbf{W}_l-\alpha \left(\frac{\partial\mathcal{L}_{ms}}{\partial\mathbf{W}_l}+\frac{\partial\mathcal{L}_{L2}}{\partial\mathbf{W}_l}\right) \\&amp;= \mathbf{W}_l-\alpha \left(\frac{\partial\mathcal{L}_{ms}}{\partial\mathbf{W}_l}+\frac{\lambda_{L2}}{n}\mathbf{W}_l\right) \\\end{aligned}\]</span> And <span class="math inline">\(\lambda_{L2}\)</span> is called the weight decay parameter, with <span class="math inline">\(\alpha\)</span> being the learning rate.</p><p>We can't do such simplification with other regularization methods.</p>
+          </div></p>
+<div class="note note-success">
+            <p>Ablation tests on the <strong>L2 regularization</strong> (weight decay) and learning rate are carried out with MNIST dataset. <code>[method 1]</code> is used to inspect the results. Some interesting results are shown in the <a href="#appendix">Appendix</a>. It turns out that a small L2 regularization leads to more orthogonal modes and lower reconstruction error. Too much L2 regularization leads to high bias/under fitting.</p>
+          </div>
+<h4 id="orthonormal-regularization">Orthonormal regularization</h4>
+<p>One attractive property of the POD modes is the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Orthogonal_matrix">(semi) orthonormality</a>, i.e. the modes are independent with each others i.e. the inner product of the mode matrix is identity. <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\Phi}^T\boldsymbol{\Phi}&amp;=\mathbf{I}, \qquad\mathbf{I} \text{ is the identity matrix} \\
+\left\langle \phi_i, \phi_j\right\rangle &amp;= \delta_{i j}, \qquad\forall i, j
+\end{aligned}
+\]</span> To impose an orthonormal penalty on the weight of LAE, mimicking the L2 regularization, we can design an orthonormal regularization: <span class="math display">\[
+{\mathcal{L}_{ortho}}_{\mathbf{(W_1,W_2)}} =\lambda_{ortho}\sum_{l=1}^2\left\|\mathbf{W}^T_l\mathbf{W}_l-\mathbf{I}\right\|^2_F
+\]</span> <div class="note note-info">
+            <p>Orthogonal regularization is a technique first proposed in CNNs.</p><p>Brock et.al first proposed that maintaining an orthogonal weight is desirable when training neural networks. And they proposed the orthogonal regularization in L1 norm <sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brock, A., Lim, T., Ritchie, J. M., &amp; Weston, N. (2016). Neural photo editing with introspective adversarial networks. *arXiv preprint arXiv:1609.07093*.">[4]</span></a></sup>. Then they upgraded it to a new variation in BigGAN<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Brock, A., Donahue, J., &amp; Simonyan, K. (2018). Large scale GAN training for high fidelity natural image synthesis. *arXiv preprint arXiv:1809.11096*.">[5]</span></a></sup> based on the L2 norm. Lubana et.al<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Lubana, E. S., Trivedi, P., Hougen, C., Dick, R. P., &amp; Hero, A. O. (2020). OrthoReg: Robust Network Pruning Using Orthonormality Regularization. *arXiv preprint arXiv:2009.05014*.">[6]</span></a></sup> applied the same method to the field of neural network pruning<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Blalock, D., Gonzalez Ortiz, J. J., Frankle, J., &amp; Guttag, J. (2020). What is the state of neural network pruning?. *Proceedings of machine learning and systems*, *2*, 129-146.">[7]</span></a></sup>.</p>
+          </div></p>
+<h4 id="svd-parameterization">SVD parameterization</h4>
+<p>Parameterization is a method transforming the parameter of neural network in an appropriate way before using it. For example, <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.utils.parametrizations.orthogonal.html">orthogonal parameterization</a> orthogonalizes the weight matrix of a layer of the neural network.</p>
+<p>Orthogonal parameterization guarantees a arbitrary orthogonal basis, but we want more. So here it is possible to define a SVD parameterization regulating the the decoder such that: <span class="math display">\[
+\begin{aligned}
+layer2:&amp; \qquad \tilde{\mathbf{X}}=\boldsymbol{W_2}\mathbf{X_1}= \mathbf{U}\boldsymbol{\Sigma}\mathbf{V^T}\mathbf{X_1} = \boldsymbol{\hat{W_2}}\mathbf{\hat{X_1}} \\
+\text{where:}&amp; \qquad \boldsymbol{\hat{W_2}} = \mathbf{U}, \quad \mathbf{\hat{X_1}}=\boldsymbol{\Sigma}\mathbf{V^T}\mathbf{X_1} \\
+&amp;\qquad \mathbf{U},\boldsymbol{\Sigma},\mathbf{V} = SVD(\boldsymbol{W_2})
+\end{aligned}
+\]</span> In this case the modes <span class="math inline">\(\hat{W_2}\)</span> automatically gets singular value decomposed.</p>
+<div class="note note-info">
+            <p>Parameterization only affects the weight, i.e. <span class="math inline">\(\boldsymbol{\hat{W_2}} = \mathbf{U}\)</span> not <span class="math inline">\(\mathbf{\hat{X_1}}=\boldsymbol{\Sigma}\mathbf{V^T}\mathbf{X_1}\)</span>.</p><p>The intermediate output <span class="math inline">\(\mathbf{\hat{X_1}}\)</span> should be designed in the forwarding process. See the <a href="#method-4-best">code</a>.</p>
+          </div>
+<h2 id="case-study">Case study</h2>
+<h3 id="mnist">MNIST</h3>
+<p>The <a target="_blank" rel="noopener" href="https://paperswithcode.com/dataset/mnist">MNIST handwritten digits dataset</a> contains 70,000 (60,000 training, 1000 testing) greyscale fixed-size (28 * 28) images and is a standard dataset for benchmarking computer vision and deep learning algorithms.</p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST original.png" srcset="/img/loading.gif" lazyload alt="First 32 MNIST training set images, two-value images (0 or 1) are rerendered with a color mapping ranging [-0.2,0.2], consistent to the color mapping below" style="zoom:20%;"></p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch
+<span class="hljs-keyword">from</span> torchvision <span class="hljs-keyword">import</span> datasets, transforms, utils
+<span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+<span class="hljs-comment"># GPU if is available</span>
+device = torch.device(<span class="hljs-string">&quot;cuda:0&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)
+<span class="hljs-comment"># device = torch.device(&quot;mps&quot; if torch.backends.mps.is_available() else &quot;cpu&quot;)</span>
+<span class="hljs-built_in">print</span>(device, <span class="hljs-string">&quot; is in use&quot;</span>)
+
+<span class="hljs-comment"># Load MNIST to a PyTorch Tensor</span>
+dataset = datasets.MNIST(root=<span class="hljs-string">&quot;./data&quot;</span>,
+                         train=<span class="hljs-literal">True</span>,
+                         download=<span class="hljs-literal">False</span>,
+                         transform=transforms.ToTensor())</code></pre></div>
+<h4 id="pod-result">POD result</h4>
+<p>In order to run POD , the training set is flattened, scaled to range [0,1] then centred by subtracting the mean image, resulting a data matrix <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{784\times60000}\)</span></p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># Flatten from [60000, 28, 28] to [28*28, 60000], move to gpu</span>
+flatten_data = dataset.data.reshape(dataset.data.shape[<span class="hljs-number">0</span>], -<span class="hljs-number">1</span>).<span class="hljs-built_in">type</span>(torch.FloatTensor)/<span class="hljs-number">255</span>  
+mean_data = flatten_data.mean(axis=<span class="hljs-number">0</span>)
+flatten_data = flatten_data - mean_data
+flatten_data = flatten_data.T.to(device)</code></pre></div>
+<p>The <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.svd.html">PyTorch SVD API</a> is used for extracting POD modes, and the first 81 modes are selected to recover the data</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># SVD and truncation</span>
+U, S, V = torch.svd(flatten_data)
+k = <span class="hljs-number">81</span>
+Uk = U[:, :k] <span class="hljs-comment"># pod modes</span>
+Sk = torch.diag(S[:k]) <span class="hljs-comment"># energy</span>
+Vk = V[:, :k]</code></pre></div>
+<div class="note note-warning">
+            <p>The memory requirements for direct SVD are high on a dataset of this size. For larger data, such a direct approach is not practical.</p>
+          </div>
+<p>The energy spectral/division of each mode are shown below:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy spectual of MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of MNIST-mean" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of MNIST - mean" style="zoom:50%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>the first 81 modes (in use) captured 89.2% of the total energy</li>
+<li>the first 87 modes captured 90% of the energy</li>
+<li>the first 331 modes captured 99% of the energy</li>
+</ul>
+<p>Estimated data can be reconstructed from the extracted modes and associated weights. The error can be therefore calculated by the <span class="math inline">\(L2\)</span> norm.</p>
+<div class="code-wrapper"><pre><code class="hljs python">reconstructed = Uk@Sk@Vk.T
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;MSE loss&quot;</span>, torch.square(reconstructed - flatten_data).mean().cpu().numpy())</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>SVD reconstructed</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST SVD reconstructed with 81 modes.png" srcset="/img/loading.gif" lazyload alt="MNIST SVD reconstructed with 81 modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST SVD error.png" srcset="/img/loading.gif" lazyload alt="MNIST SVD error" style="zoom:70%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>the MSE error is 0.007265054</li>
+<li>pixel-to-pixel difference ranges from -0.997 to 0.920</li>
+</ul>
+<div class="note note-secondary">
+            <p>Note in this case, the color mapping ranges are all set to be [-0.2, 0.2] for consistence.</p>
+          </div>
+<p>The modes can also be extracted easily. Note that these modes are orthonormal.</p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 POD modes extracted from MNIST - mean" style="zoom:30%;"></p>
+<h4 id="lae-results">LAE results</h4>
+<p>The <a href="#straightforward-method">straightforward method</a> is adopted, otherwise the size of weights is too large. The architecture is therefore:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torchinfo <span class="hljs-keyword">import</span> summary
+<span class="hljs-comment"># ...</span>
+
+k = <span class="hljs-number">81</span>
+
+<span class="hljs-comment"># Creating a AE class</span>
+<span class="hljs-comment"># 28*28 ==&gt; k ==&gt; 28*28</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AE</span>(torch.nn.Module):
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">super</span>().__init__()
+        self.encoder = torch.nn.Sequential(torch.nn.Linear(flatten_data.shape[<span class="hljs-number">1</span>], k, bias=<span class="hljs-literal">False</span>))
+        self.decoder = torch.nn.Sequential(torch.nn.Linear(k, flatten_data.shape[<span class="hljs-number">1</span>], bias=<span class="hljs-literal">False</span>))
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        <span class="hljs-keyword">return</span> encoded, decoded
+      
+<span class="hljs-comment"># Loss function and optimizer</span>
+loss_function = torch.nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=<span class="hljs-number">0.005</span>)
+
+<span class="hljs-comment"># Summary</span>
+summary(model, input_size=(<span class="hljs-number">60000</span>, <span class="hljs-number">784</span>))</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+AE                                       [60000, 81]               --
+├─Sequential: 1-1                        [60000, 81]               --
+│    └─Linear: 2-1                       [60000, 81]               63,504
+├─Sequential: 1-2                        [60000, 784]              --
+│    └─Linear: 2-2                       [60000, 784]              63,504
+==========================================================================================
+Total params: 127,008
+Trainable params: 127,008
+Non-trainable params: 0
+Total mult-adds (G): 7.62
+==========================================================================================
+Input size (MB): 188.16
+Forward/backward pass size (MB): 415.20
+Params size (MB): 0.51
+Estimated Total Size (MB): 603.87
+==========================================================================================</code></pre></div>
+<p>An iterative mini batch training is implemented with <code>batch_size = 25</code>, <code>epochs = 3</code>.</p>
+<p>The data reconstructed by LAE and the error of it are shown below.</p>
+<table>
+<thead>
+<tr class="header">
+<th>LAE Reconstructed</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST AE reconstructed with 81 hidden size.png" srcset="/img/loading.gif" lazyload alt="MNIST AE reconstructed with 81 hidden size" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/MNIST LAE error.png" srcset="/img/loading.gif" lazyload alt="MNIST LAE error" style="zoom:70%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MSE loss 0.00777</li>
+<li>pixel-to-pixel error ranges from -1.01 to 0.938</li>
+</ul>
+<div class="note note-info">
+            <p>Note the optimal least error (error of POD) is not possible to reach because of nature of mini-batch regression.</p>
+          </div>
+<p>The set of mode is obtained by:</p>
+<div class="code-wrapper"><pre><code class="hljs python">modes = np.array(model.decoder[<span class="hljs-number">0</span>].weight.data.cpu())</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>raw modes</th>
+<th>[method 1] error 0.00777</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 LAE modes extracted from MNIST - mean" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD orthonormalized LAE modes, reconstruction loss 0.00777" style="zoom:50%;"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="method-1">[method 1]</h4>
+<p>The raw modes constructed by LAE is obviously not identical to that of POD, in order to show the new spaces spanned by these two set of modes are identical/similar, orthonormalized the LAE modes by SVD, we can also get energy spectral (below) and a orthonormalized set of modes (above).</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy spectual of MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of LAE modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of LAE modes" style="zoom:50%;"></td>
+</tr>
+</tbody>
+</table>
+<p>The singular values of each orthonormalized mode are more similar to each other, implying the orthogonality of the raw modes extracted by LAE is stronger, but still far from orthogonal.</p>
+<p>The orthonormalized modes are, well, not quite same to that extracted by POD. So we do a small scale convergence check, taking some tricks (bigger batch size, learning rate scheduler etc) to have a better reconstruction result with MSE loss 0.0072723706, applying the similar process to get a orthonormalized set of modes.</p>
+<table>
+<thead>
+<tr class="header">
+<th>[method 1] error 0.007272370</th>
+<th>SVD, error 0.007265054</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE first 81 modes extracted from MNIST - mean larger bs.png" srcset="/img/loading.gif" lazyload alt="SVD orthonormalized LAE modes, reconstruction loss 0.0072723706" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="First 81 POD modes, reconstruction loss  0.007265054, just copy here for easier comparison" style="zoom:50%;"></td>
+</tr>
+</tbody>
+</table>
+<p>The better equivalence (at least in terms of the first 2 modes) indicating the space spanned by LAE converges to that spanned by POD modes.</p>
+<h4 id="method-2">[method 2]</h4>
+<p>In order to apply orthogonal weights, first initialize the weight with radom orthogonal data.</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> scipy.stats <span class="hljs-keyword">import</span> ortho_group
+<span class="hljs-comment"># define flatten data, LAE, k = 81</span>
+model.encoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.tensor(ortho_group.rvs(dim=flatten_data.shape[<span class="hljs-number">0</span>])[:,:k].T).<span class="hljs-built_in">float</span>())
+model.decoder[<span class="hljs-number">0</span>].weight = nn.Parameter(torch.tensor(ortho_group.rvs(dim=flatten_data.shape[<span class="hljs-number">0</span>])[:,:k]).<span class="hljs-built_in">float</span>())</code></pre></div>
+<p>Then add another orthogonal losses to the MSE loss function</p>
+<div class="code-wrapper"><pre><code class="hljs python">ortho_lambd = <span class="hljs-number">0.01</span>
+<span class="hljs-comment"># in the iteration loop:</span>
+  loss_ortho_de = torch.square(torch.dist(model.decoder[<span class="hljs-number">0</span>].weight.T @ model.decoder[<span class="hljs-number">0</span>].weight, torch.eye(k).to(device)))
+  loss_ortho_en = torch.square(torch.dist(model.encoder[<span class="hljs-number">0</span>].weight @ model.encoder[<span class="hljs-number">0</span>].weight.T, torch.eye(k).to(device)))
+  loss = loss_function(reconstructed, image) + ortho_lambd*(loss_ortho_de+loss_ortho_en)</code></pre></div>
+<p>The resulting modes and the singular value energy division is:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method2 energy spectural of MNIST - mean.png.png" srcset="/img/loading.gif" lazyload alt="SVD AE method2 energy spectural of MNIST - mean.png" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method2 energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method2 energy division of MNIST - mean" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>[method 2] raw error 0.007268394</th>
+<th>[method 1] of [method 2]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE method 2 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 2 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method 2 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 2 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MSE loss 0.007268394</li>
+<li>pixel-to-pixel error ranges from -0.99917483 to 0.91432786</li>
+</ul>
+<p>The modes is nearly orthogonal yet it needs a good fine tuning of <span class="math inline">\(\lambda_{ortho}\)</span> to balance the MSE error with the orthogonality error.</p>
+<p>Neither the raw <code>[method 2]</code> modes nor the SVD orthogonalized modes associated to the POD modes, we will talk about that soon later.</p>
+<h4 id="method-3">[method 3]</h4>
+<p>Take advantage of the <code>torch.nn.utils.parametrizations.orthogonal</code> library, when define the LAE:</p>
+<div class="code-wrapper"><pre><code class="hljs diff">class AE(torch.nn.Module):
+
+    def __init__(self):
+        super().__init__()
+<span class="hljs-addition">+ 			self.encoder = torch.nn.Sequential(torch.nn.utils.parametrizations.orthogonal(torch.nn.Linear(flatten_data.shape[1], k, bias=False)))</span>
+<span class="hljs-addition">+ 			self.decoder = torch.nn.Sequential(torch.nn.utils.parametrizations.orthogonal(torch.nn.Linear(k, flatten_data.shape[1], bias=False)))</span>
+<span class="hljs-deletion">- 			self.encoder = torch.nn.Sequential(torch.nn.Linear(flatten_data.shape[1], k, bias=False))</span>
+<span class="hljs-deletion">- 			self.decoder = torch.nn.Sequential(torch.nn.Linear(k, flatten_data.shape[1], bias=False))</span>
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return encoded, decoded
+</code></pre></div>
+<p>The the singular value energy division and resulting modes are:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy spectual of method3 MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of method3 MNIST-mean" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy division of method3 MNIST-mean.png" srcset="/img/loading.gif" lazyload alt="SVD division spectual of method3 MNIST-mean" style="zoom:72%;"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>[method 3] raw error 0.0072978497</th>
+<th>[method 1] of [method 3]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE method 3 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 3 first 81 modes extracted from MNIST - mean" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method 3 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 3 first 81 modes extracted from MNIST - mean" style="zoom:72%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MSE loss 0.0072978497</li>
+<li>pixel-to-pixel error ranges from -0.9987151 to 0.9268836</li>
+</ul>
+<p>The modes is perfect orthogonal, the loss is also small.</p>
+<p>But the <code>[method 2,3]</code> modes are totally different from the POD modes. Because there is no regulation of the singular value of the modes, i.e. the optimality is not guaranteed.</p>
+<h4 id="method-4-best">[method 4] <span style="color:red">( best )</span></h4>
+<p>Writing a custom parameterization class and apply to the decoder weights as:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Svd_W_de</span>(nn.Module):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, W2</span>):
+        U,_,_ = torch.svd(W2)
+        <span class="hljs-keyword">return</span> U
+
+torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decoder[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;weight&quot;</span>, Svd_W_de())</code></pre></div>
+<p>Tailer the network as</p>
+<div class="code-wrapper"><pre><code class="hljs diff">class AE(torch.nn.Module):
+
+    def __init__(self):
+        super().__init__()
+        self.encoder = torch.nn.Sequential(torch.nn.utils.parametrizations.orthogonal(torch.nn.Linear(flatten_data.shape[1], k, bias=False)))
+        self.decoder = torch.nn.Sequential(torch.nn.Linear(k, flatten_data.shape[1], bias=False))
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+<span class="hljs-addition">+      	_,S,V = torch.svd(self.decoder[0].parametrizations.weight.original)</span>
+<span class="hljs-addition">+       encoded = encoded@V@torch.diag(S)</span>
+        decoded = self.decoder(encoded)
+        return encoded, decoded</code></pre></div>
+<p>The results are:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method4 energy spectural of MNIST - mean.png.png" srcset="/img/loading.gif" lazyload alt="SVD AE method4 energy spectural of MNIST - mean.png" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method4 energy division of MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method4 energy division of MNIST - mean" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>[method 4] raw error 0.007290172</th>
+<th>[method 1] of [method 4]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE method 4 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="AE method 4 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE method 4 first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD AE method 4 first 81 modes extracted from MNIST - mean" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MSE loss 0.007290172</li>
+<li>pixel-to-pixel error ranges from -1.005479 to 0.9235858</li>
+</ul>
+<p>Great! The result is guaranteed as orthogonal and optimal, the error is small, and the model is end-to-end.</p>
+<h3 id="flow-past-a-cylinder">Flow past a cylinder</h3>
+<p>Flow over a 2D cylinder is the fundamental flow that captures the essential features of bluff-body flows. The periodic nature of it known as the von Kármán vortex shedding at Re&gt;47 is always treated as an attractive initial test bed for decomposition methods. The POD result of the DNS simulation snapshots at <strong>Re=100</strong> is shown below, the first 8 modes captures 99.97% of the flow fluctuations in terms of the KE.<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Taira, K., Hemati, M. S., Brunton, S. L., Sun, Y., Duraisamy, K., Bagheri, S., ... &amp; Yeh, C. A. (2020). Modal analysis of fluid flows: Applications and outlook. *AIAA journal*, *58*(3), 998-1022.">[3]</span></a></sup>.</p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/POD analysis of cylinder flow.png" srcset="/img/loading.gif" lazyload alt="POD analysis of cylinder flow: a) original flowfield under study (vorticity shown), b) first 8 dominant POD modes, and c) amount of KE of unsteadiness captured by the POD modes." style="zoom:50%;"></p>
+<p>Note that these modes appear in pairs because of the periodical flow field and the real value nature of POD modes. Also note that the first two dominant modes are top-down asymmetry, associated with the asymmetry of the flow field.</p>
+<div class="note note-info">
+            <p>Compared with dynamic mode decomposition (DMD), 2 POD modes in a pair are concluded by the real and imaginary parts of only one complex DMD mode. In another words, the 1st, 3rd, 5th, and the 2nd, 4th, 6th POD modes are identical with the real parts and imaginary parts of the 1st, 2nd, 3rd DMD modes respectively. (only true for exact periodical flow like this case)</p>
+          </div>
+<p>For simplicity, here we take an unsteady FVM result at <strong>Re=200</strong>, from <a target="_blank" rel="noopener" href="http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif">wolfdynamics OpenFOAM turtorial</a> and perform POD and LAE decomposition based on the snapshots of velocity field from time 250 to 350. The resulting data matrix <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{192080 \times 101}\)</span></p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/movvmag_o.gif" srcset="/img/loading.gif" lazyload alt="See the high resolution result on link http://www.wolfdynamics.com/wiki/cylinder_vortex_shedding/movvmag.gif" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/Incompressible flow – Reynolds 200.png" srcset="/img/loading.gif" lazyload alt="Incompressible flow - Reynolds 200" style="zoom:28%;"></td>
+</tr>
+</tbody>
+</table>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># Load the fluid Dataset, flattened from [392, 490, 351] to [192080, 351]</span>
+flatten_data = load_img_as_matrix(<span class="hljs-string">&quot;./data/cylinder&quot;</span>)
+mean_data = flatten_data[<span class="hljs-number">250</span>:,:].mean(axis=<span class="hljs-number">0</span>)
+flatten_data = flatten_data - mean_data
+flatten_data = torch.tensor(flatten_data.T[:,<span class="hljs-number">250</span>:])</code></pre></div>
+<h4 id="pod-result-1">POD result</h4>
+<p>Follow the process of <a href="#mnist">last case</a>, the energy spectral/division of each mode:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy spectual of cylinder-mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy spectual of cylinder-mean" style="zoom:75%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD energy division of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="SVD energy division of fluid - mean" style="zoom:75%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>First 2 modes capture 76.95% of energy</li>
+<li>First 4 modes capture 86.81% of energy</li>
+<li>First 6 modes capture 88.61% of energy</li>
+<li>First 8 modes capture 89.51%of energy</li>
+</ul>
+<p>And the original, reconstructed, error results are</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid original.png" srcset="/img/loading.gif" lazyload alt="fluid original" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid - mean + mean SVD reconstructed with 8 modes.png" srcset="/img/loading.gif" lazyload alt="fluid SVD reconstructed with 8 modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid - mean + mean error SVD reconstructed with 8 modes.png" srcset="/img/loading.gif" lazyload alt="error between original and SVD reconstructed with 8 modes" style="zoom:50%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MSE loss 7.4397925e-05</li>
+<li>pixel-to-pixel error ranges from -0.1370289 to 0.12152482</li>
+</ul>
+<p>The first 8 dominant POD modes are shown bleow:</p>
+<p><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="SVD first 8 modes extracted from fluid - mean" style="zoom:50%;"></p>
+<p>Note the modes looks very similar to the <a href="#flow-past-a-cylinder">standard result</a> at the beginning of this case at Re = 100.</p>
+<h4 id="lae-results-1">LAE results</h4>
+<h5 id="straightforward-failed">Straightforward <span style="color:red">( FAILED )</span></h5>
+<p>With straightforward method, it is really difficult for autoencoder to converge, and the model is prone to gradient vanishing because of the big data size compared with the length of data.</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;shape of dataset:&quot;</span>, flatten_data.shape)
+summary(model, input_size=(<span class="hljs-number">101</span>, <span class="hljs-number">192080</span>))
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;encoder weight shape: &quot;</span>, model.encoder[<span class="hljs-number">0</span>].weight.shape)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;decoder weight shape: &quot;</span>, model.decoder[<span class="hljs-number">0</span>].weight.shape)</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">shape of dataset: torch.Size([101, 192080])
+==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+AE                                       [101, 8]                  --
+├─Sequential: 1-1                        [101, 8]                  --
+│    └─Linear: 2-1                       [101, 8]                  1,536,640
+├─Sequential: 1-2                        [101, 192080]             --
+│    └─Linear: 2-2                       [101, 192080]             1,536,640
+==========================================================================================
+Total params: 3,073,280
+Trainable params: 3,073,280
+Non-trainable params: 0
+Total mult-adds (M): 310.40
+==========================================================================================
+Input size (MB): 77.60
+Forward/backward pass size (MB): 155.21
+Params size (MB): 12.29
+Estimated Total Size (MB): 245.10
+==========================================================================================
+encoder weight shape:  torch.Size([8, 192080])
+decoder weight shape:  torch.Size([192080, 8])</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>reconstructed</th>
+<th>error</th>
+<th>raw modes</th>
+<th>[method 1]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid reconstructed with AE st.png" srcset="/img/loading.gif" lazyload alt="fluid reconstructed with strightforward AE" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid error reconstructed with AE st.png" srcset="/img/loading.gif" lazyload alt="fluid error reconstructed with strightforward AE st" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE st first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="original strightforward AE modes" style="zoom:50%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE st first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="[method 1] orthogonalized strightforward AE modes" style="zoom:50%;"></td>
+</tr>
+</tbody>
+</table>
+<p>The fluid data FAILs being recovered, the repetitive pattern shown on the recovered images is the mean flow.</p>
+<p>Compared the recovered orthonormal modes extracted by straightforward AE with POD modes, only the first dominant POD mode is barely captured with low amplitude (note the data range difference), indicating a gradient vanishing.</p>
+<h5 id="transposition-method-1">Transposition [method 1]</h5>
+<p>To take advantage of the better performance of neural network on large data length, and to prevent the overfitting and gradient vanishing, transpose the flattened data and make LAE compress it in terms of the data length dimension. (<code>101 -&gt; 8 -&gt; 101</code>)</p>
+<div class="code-wrapper"><pre><code class="hljs diff"><span class="hljs-addition">+  flatten_data = flatten_data.T</span>
+print(&quot;shape of dataset:&quot;, flatten_data.shape)
+<span class="hljs-deletion">- summary(model, input_size=(101, 192080))</span>
+<span class="hljs-addition">+ summary(model, input_size=(192080, 101))</span>
+print(&quot;encoder weight shape: &quot;, model.encoder[0].weight.shape)
+print(&quot;decoder weight shape: &quot;, model.decoder[0].weight.shape)</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">shape of dataset: torch.Size([192080, 101])
+==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+AE                                       [192080, 8]               --
+├─Sequential: 1-1                        [192080, 8]               --
+│    └─Linear: 2-1                       [192080, 8]               808
+├─Sequential: 1-2                        [192080, 101]             --
+│    └─Linear: 2-2                       [192080, 101]             808
+==========================================================================================
+Total params: 1,616
+Trainable params: 1,616
+Non-trainable params: 0
+Total mult-adds (M): 310.40
+==========================================================================================
+Input size (MB): 77.60
+Forward/backward pass size (MB): 167.49
+Params size (MB): 0.01
+Estimated Total Size (MB): 245.10
+==========================================================================================
+encoder weight shape:  torch.Size([8, 101])
+decoder weight shape:  torch.Size([101, 8])</code></pre></div>
+<p>This autoencoder can be well trained in seconds, and the reconstruction and error result are:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid reconstructed with AE t.png" srcset="/img/loading.gif" lazyload alt="fluid reconstructed with transposed AE" style="zoom:70%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/fluid error reconstructed with AE t.png" srcset="/img/loading.gif" lazyload alt="fluid error reconstructed with transposed AE" style="zoom:70%;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MSE loss 7.4815114e-05</li>
+<li>pixel-to-pixel error ranges from -0.13534062 to 0.12123385</li>
+</ul>
+<p>The first 8 modes and [method 1] normalized modes extracted by LAE are:</p>
+<table>
+<thead>
+<tr class="header">
+<th>energy</th>
+<th>raw modes</th>
+<th>[method 1] error 7.4815114e-05</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy spectual of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="AE energy spectual" style="zoom:32%;"><br><img src="/2022/11/02/Autoencoder-identical-to-POD/AE energy division of fluid - mean.png" srcset="/img/loading.gif" lazyload alt="AE energy division" style="zoom:32%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE t first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="original transposed AE modes" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD AE t first 8 modes extracted from fluid - mean.png" srcset="/img/loading.gif" lazyload alt="orthogonalized transposed AE modes" style="zoom:72%;"></td>
+</tr>
+</tbody>
+</table>
+<p>It can be seen that the latent space spanned by LAE modes and POD are nearly identical.</p>
+<div class="note note-secondary">
+            <p>Note the data range for the raw mode is different (-0.4~0.4 instead of -0.04~0.04)</p>
+          </div>
+<h5 id="method-5-failed">[method 5] <span style="color:red">( FAILED )</span></h5>
+<p>The easiest way is applying SVD to the bottleneck feature every step as:</p>
+<div class="code-wrapper"><pre><code class="hljs diff">class AE(torch.nn.Module):
+
+    def __init__(self):
+        super().__init__()
+        self.encoder = torch.nn.Sequential(torch.nn.Linear(flatten_data.shape[1], k, bias=False))
+        self.decoder = torch.nn.Sequential(torch.nn.Linear(k, flatten_data.shape[1], bias=False))
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+<span class="hljs-addition">+       svd_encoded,_,_ = torch.svd(encoded)</span>
+        decoded = self.decoder(encoded)
+<span class="hljs-deletion">-       return encoded, decoded</span>
+<span class="hljs-addition">+       return svd_encoded, decoded        </span></code></pre></div>
+<p>This operation has no advantage but 3 drawbacks:</p>
+<ul>
+<li>Exactly identical to the result of <code>[method 1]</code> in full batch training. But the resulting mode is wrong with mini-batch gradient descend.</li>
+<li>This operation does not affect the training process.</li>
+<li>It is computational heavier than <code>[method 1]</code> as the latter only requires one singular value decomposition step</li>
+</ul>
+<p>Another way is to pass the <span class="math inline">\(\mathbf{U}\)</span> (<code>svd_encoded</code>) to the decoder and multiplying the weight by <span class="math inline">\(\boldsymbol{\Sigma}\mathbf{V^T}\)</span>, mimicking <code>[method 4]</code>.</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">AE</span>(torch.nn.Module):
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">super</span>().__init__()
+        self.encoder = torch.nn.Sequential(torch.nn.Linear(flatten_data.shape[<span class="hljs-number">1</span>], k, bias=<span class="hljs-literal">False</span>))
+        self.decoder = torch.nn.Sequential(torch.nn.Linear(k, flatten_data.shape[<span class="hljs-number">1</span>], bias=<span class="hljs-literal">False</span>))
+        self.SVT = torch.zeros((k,k))
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):
+        encoded = self.encoder(x)
+        svd_encoded,S,V = torch.svd(encoded)
+        decoded = self.decoder(svd_encoded)
+        self.SVT = V@torch.diag(S)
+        <span class="hljs-keyword">return</span> svd_encoded, decoded
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Svd_W_de</span>(nn.Module):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, SVT</span>):
+        <span class="hljs-built_in">super</span>().__init__()
+        self.SVT = SVT
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, X</span>):
+        <span class="hljs-keyword">return</span> X.to(device)@self.SVT.to(device)
+
+
+<span class="hljs-comment"># Model Initialization</span>
+model = AE()
+torch.nn.utils.parametrizations.parametrize.register_parametrization(model.decoder[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;weight&quot;</span>, Svd_W_de(model.SVT))</code></pre></div>
+<p>This operation has no advantage but 2 vital drawbacks:</p>
+<ul>
+<li>Cannot be trained</li>
+<li>The resulting mode is wrong with mini-batch gradient descend</li>
+</ul>
+<p>As a result, <code>[method 5]</code> is therefore deprecated.</p>
+<h2 id="conclusion">Conclusion</h2>
+<ol type="1">
+<li><p>When to use linear autoencoder?</p>
+<p>When data is big, the latent space can be well captured with a much lower memory requirement.</p>
+<p>When offline training is impractical, for example when new data coming through constantly.</p></li>
+<li><p>The relationship between LAE and POD modes?</p>
+<p>There is no regulation to the form of LAE modes while the POD modes are orthonormal which is suitable to design a sparse representation.</p>
+<p>The latent space captured by LAE converges to the optimal space spanned by POD modes.</p></li>
+<li><p>Straightforward vs transposition LAE?</p>
+<p>It mainly depends on the aspect ratio of input data. In order to decrease the number of weights/parameters, it is better to choose a type such that the longer dimension of data is preserved.</p>
+<ul>
+<li>Straightforward method suitable for very wide data, like MNIST.</li>
+<li>Transposition method for very thin data like flow velocity snapshots.
+<ul>
+<li>If a multi-layer non-linear Autoencoder is applied, the modes extracted by the transposed AE are still easy to get access</li>
+</ul></li>
+</ul></li>
+<li><p>Conclusion on the improvement methods?</p>
+<table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>[method1]</th>
+<th>[method2]</th>
+<th>[method3]</th>
+<th>[method4]</th>
+<th>[method5]</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>suitable LAE</td>
+<td>both</td>
+<td>straightforward</td>
+<td>straightforward</td>
+<td>straightforward</td>
+<td>transposition</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>end-to-end</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>orthogonality of the modes</td>
+<td>perfect</td>
+<td>nearly perfect</td>
+<td>perfect</td>
+<td>perfect</td>
+<td>perfect</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>optimality</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>converge to the POD modes</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>reconstruction error (straightforward)</td>
+<td>7.272e-3</td>
+<td>7.268e-3</td>
+<td>7.298e-3</td>
+<td>7.290e-3</td>
+<td>NAN</td>
+<td>POD error<br> 7.265e-3</td>
+</tr>
+<tr class="odd">
+<td>reconstruction error (transposition)</td>
+<td>7.48e-5</td>
+<td>NAN</td>
+<td>NAN</td>
+<td>NAN</td>
+<td>7.03e-4</td>
+<td>POD error<br> 7.44e-05</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<h2 id="appendix">Appendix</h2>
+<p><strong>Ablation test of L2 regularization of LAE on MNIST</strong></p>
+<p>Different weight decay and learning rate are applied, and the raw modes are inspected by <code>[method 1]</code>.</p>
+<p>For learning rate <span class="math inline">\(\alpha = 0.005\)</span>, the energy spectral and division for weight decay <span class="math inline">\(\lambda\)</span> from <span class="math inline">\(0.005\)</span> to <span class="math inline">\(0\)</span> are plotted animately as below:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/Energy_spectral_opt.gif" srcset="/img/loading.gif" lazyload alt="Energy_spectral_opt" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/Energy_division_opt.gif" srcset="/img/loading.gif" lazyload alt="Energy_division_opt" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<p>and the raw modes and orthogonal modes recovered by <code>[method 1]</code> are shown below:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE_modes_opt.gif" srcset="/img/loading.gif" lazyload alt="AE_modes_opt" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/orthogonalized_modes_opt.gif" srcset="/img/loading.gif" lazyload alt="orthogonalized_modes_opt" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<p>The MSE error and the range of the mode value is plotted with the weight decay and learning rate as well:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/ablation error with weight decay.png" srcset="/img/loading.gif" lazyload alt="ablation error with weight decay" style="zoom:48%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/ablation range with weight decay.png" srcset="/img/loading.gif" lazyload alt="ablation range with weight decay" style="zoom:48%;"></td>
+</tr>
+</tbody>
+</table>
+<p>As we can see, learning rate does not affect the mean square error, but the range of the mode value. And weight decay can be used to control the modes' orthogonality, a suitable weight decay for example <span class="math inline">\(8e-5\)</span> results in a better orthogonality and the recovered modes (shown below)· shows a better resemblance of the POD modes.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/orthogonalized modes wd 8e-05, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="orthogonalized modes wd 8e-05, lr 0.005" style="zoom:72%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/SVD first 81 modes extracted from MNIST - mean.png" srcset="/img/loading.gif" lazyload alt="SVD first 81 modes extracted from MNIST - mean" style="zoom:38%;"></td>
+</tr>
+</tbody>
+</table>
+<p>Besides, it is interesting to see that although the biggest weight decay <span class="math inline">\(0.005\)</span> fail to recover most of the modes, the raw modes are very similar to the its recovered modes, like a shuffled version of many copies of the recovered modes regardless the magnitude difference.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/AE modes wd 0.005, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="AE modes wd 0.005, lr 0.005" style="zoom:67%;"></td>
+<td><img src="/2022/11/02/Autoencoder-identical-to-POD/orthogonalized modes wd 0.005, lr 0.005.png" srcset="/img/loading.gif" lazyload alt="orthogonalized modes wd 0.005, lr 0.005" style="zoom:67%;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span>Milano, M., &amp; Koumoutsakos, P. (2002). Neural network modeling for near wall turbulent flow. <em>Journal of Computational Physics</em>, <em>182</em>(1), 1-26. <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span>Brunton, S. L., Noack, B. R., &amp; Koumoutsakos, P. (2020). Machine learning for fluid mechanics. <em>Annual review of fluid mechanics</em>, <em>52</em>, 477-508. <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Taira, K., Hemati, M. S., Brunton, S. L., Sun, Y., Duraisamy, K., Bagheri, S., ... &amp; Yeh, C. A. (2020). Modal analysis of fluid flows: Applications and outlook. <em>AIAA journal</em>, <em>58</em>(3), 998-1022. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Brock, A., Lim, T., Ritchie, J. M., &amp; Weston, N. (2016). Neural photo editing with introspective adversarial networks. <em>arXiv preprint arXiv:1609.07093</em>. <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span>Brock, A., Donahue, J., &amp; Simonyan, K. (2018). Large scale GAN training for high fidelity natural image synthesis. <em>arXiv preprint arXiv:1809.11096</em>. <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:6" class="footnote-text"><span>Lubana, E. S., Trivedi, P., Hougen, C., Dick, R. P., &amp; Hero, A. O. (2020). OrthoReg: Robust Network Pruning Using Orthonormality Regularization. <em>arXiv preprint arXiv:2009.05014</em>. <a href="#fnref:6" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:7" class="footnote-text"><span>Blalock, D., Gonzalez Ortiz, J. J., Frankle, J., &amp; Guttag, J. (2020). What is the state of neural network pruning?. <em>Proceedings of machine learning and systems</em>, <em>2</em>, 129-146. <a href="#fnref:7" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Autoencoder identical to POD</div>
+      <div>https://daydreamatnight.github.io/2022/11/02/Autoencoder-identical-to-POD/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 2, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/16/test-GPU-server-singleGpu/" title="test GPU servers single GPU">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">test GPU servers single GPU</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/" title="from ROMs to Discretization Methods">
+                        <span class="hidden-mobile">from ROMs to Discretization Methods</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

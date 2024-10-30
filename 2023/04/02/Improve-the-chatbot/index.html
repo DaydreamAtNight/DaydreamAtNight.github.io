@@ -1,0 +1,1110 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="The process to further improve the current alpaca model with larger datasets.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Improve the chatbot">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/04/02/Improve-the-chatbot/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="The process to further improve the current alpaca model with larger datasets.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/own_llama.png">
+<meta property="article:published_time" content="2023-04-02T03:29:00.000Z">
+<meta property="article:modified_time" content="2023-04-08T17:26:50.938Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/own_llama.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Improve the chatbot - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Improve the chatbot"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-02 11:29" pubdate>
+          April 2, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          23 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Improve the chatbot</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>The process to further improve the current alpaca model with larger datasets.</p>
+          </div>
+<span id="more"></span>
+<h2 id="dataset">Dataset</h2>
+<p>First of all, a big thank to <strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong> for collecting and formatting such a detailed dataset. And a great training framework for efficient training process.</p>
+<p>I desided to further improve current model alpaca 7B/13B in 2 steps:</p>
+<ul>
+<li>First step we test for our training process, take a small dataset to improve stories, Chinese, and COT performance
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/alpaca/alpaca_data_cleaned.json">alpaca_data_cleaned.json</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/Chain-of-Thought/CoT_data.json">CoT_data.json</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/belle_cn/belle_instructions/belle_data0.5M_cn.json">belle_data0.5cn.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong> for more details</li>
+</ul></li>
+<li>Second step, after tuned the superparameters and the training process, we add more dataset, improve the Chinese, dialogue, reasoning, coding performance
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/gpt4all_without_p3.json">gpt4all_without_p3.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/nomic-ai/gpt4all">gpt4all</a></strong> for more details</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/blob/main/belle_cn/belle_instructions/belle_data1M_cn.json">belle_data1.0M_cn.json</a>, refer to <strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong> for more details</li>
+</ul></li>
+</ul>
+<p>The final dataset results in:</p>
+<div id="echarts3649" style="width: 100%;height: 600px;margin: 0 auto"></div>
+<script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+<script type="text/javascript" src="https://www.makeapie.com/dep/echarts/map/js/china.js"></script>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('echarts3649'));
+  // 指定图表的配置项和数据
+  
+option = {
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: <br/> {c} <br/>({d}%)'
+  },
+  legend: {
+    data: [
+      'alpaca.json',
+      'CoT_data.json',
+      'gpt4all_without_p3_formatted.json',
+      'Vicuna.json',
+      'belle_data1M_cn.json',
+     'dialog_w_context/train.json',
+      'Chinese',
+      'dialoag',
+      'coding',
+      'reasoning'
+    ]
+  },
+  series: [
+    {
+      name: 'dataset',
+      type: 'pie',
+      selectedMode: 'single',
+      radius: [0, '30%'],
+      label: {
+        position: 'inner',
+        fontSize: 14
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1079517, name: 'Chinese' },
+        { value: 165681, name: 'dialoag' },
+        { value: 806199, name: 'coding' },
+        { value: 74771+51974, name: 'reasoning' }
+      ]
+    },
+    {
+      name: 'dataset',
+      type: 'pie',
+      radius: ['45%', '60%'],
+      labelLine: {
+        length: 30
+      },
+      label: {
+        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}\n  {per|{d}%}  ',
+        backgroundColor: '#F6F8FC',
+        borderColor: '#8C8D8E',
+        borderWidth: 1,
+        borderRadius: 4,
+        rich: {
+          a: {
+            color: '#6E7079',
+            lineHeight: 22,
+            align: 'center'
+          },
+          hr: {
+            borderColor: '#8C8D8E',
+            width: '100%',
+            borderWidth: 1,
+            height: 0
+          },
+          b: {
+            color: '#4C5058',
+            fontSize: 14,
+            fontWeight: 'bold',
+            lineHeight: 33
+          },
+          per: {
+            color: '#fff',
+            backgroundColor: '#4C5058',
+            padding: [3, 4],
+            borderRadius: 4
+          }
+        }
+      },
+      data: [
+        { value: 52002, name: 'alpaca.json' },
+        { value: 74771, name: 'CoT_data.json' },
+        { value: 806199, name: 'gpt4all_without_p3_formatted.json' },
+        { value: 51974, name: 'Vicuna.json' },
+        { value: 1079517, name: 'belle_data1M_cn.json' },
+        { value: 165681, name: 'dialog_w_context/train.json' }
+      ]
+    }
+  ]
+};
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+<p>And we combine json files with:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> json
+
+files=[<span class="hljs-string">&#x27;file1.json&#x27;</span>,<span class="hljs-string">&#x27;file2.json&#x27;</span>,<span class="hljs-string">&#x27;file3.json&#x27;</span>]
+output_file = <span class="hljs-string">&#x27;combined.json&#x27;</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">merge_JsonFiles</span>(<span class="hljs-params">filename</span>):
+    result = <span class="hljs-built_in">list</span>()
+    <span class="hljs-keyword">for</span> f1 <span class="hljs-keyword">in</span> filename:
+        <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(f1, <span class="hljs-string">&#x27;r&#x27;</span>) <span class="hljs-keyword">as</span> infile:
+            result.extend(json.load(infile))
+
+    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(output_file, <span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> output_file:
+        json.dump(result, output_file)
+
+merge_JsonFiles(files)</code></pre></div>
+<h2 id="train-steps">Train steps</h2>
+<h3 id="step-1">step 1:</h3>
+<p>After setting up the dependencies with:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">git clone git@github.com:PhoebusSi/Alpaca-CoT.git
+pip install -r requirements.txt</code></pre></div>
+<p>First we train a small size mode with small size of dataset to validate the training process.</p>
+<p>Combine the jsons:</p>
+<div class="code-wrapper"><pre><code class="hljs python">files=[<span class="hljs-string">&#x27;alpaca_data_cleaned.json&#x27;</span>,<span class="hljs-string">&#x27;CoT_data.json&#x27;</span>,<span class="hljs-string">&#x27;belle_data05cn.json&#x27;</span>]</code></pre></div>
+<p>Train with</p>
+<div class="code-wrapper"><pre><code class="hljs shell">export HF_DATASETS_CACHE=&quot;/home/.cache&quot;
+torchrun --nproc_per_node 8  \
+    --nnodes=1 --node_rank=0 uniform_finetune.py \
+    --model_type llama --model_name_or_path ../llama_weights_converted/7B \
+    --data alpaca-cot-belle --lora_target_modules q_proj v_proj \
+    --per_gpu_train_batch_size 128 --gradient_accumulation_steps 32 \
+    --learning_rate 3e-4 --epochs 1</code></pre></div>
+<p>We found durining training, the convergence speed is slow, and the memory usage is not optimized using lora method. As a result we add the learning rate as well as the batch size and per_gpu_train_batch_size.</p>
+<p>Second, when deploiying the test model, it still doesn’t know where to stop for each model, and the dialogue performance is poor as well. We decided to change <code>add_eos_token=False</code> to <code>True</code>. And decided to include more dialog related dataset.</p>
+<h3 id="step-2-bigger-dataset">Step 2: bigger dataset</h3>
+<p>At this stage, we only fine tune the 7B model, applying the above measurements, we</p>
+<p>combine the jsons:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">files=[&#x27;CoT_data.json&#x27;,&#x27;gpt4all_without_p3_formatted.json&#x27;, &#x27;Vicuna.json&#x27;, &#x27;belle_data1M_cn.json&#x27;, &#x27;dialog_w_context/train.json&#x27;]</code></pre></div>
+<p>train with</p>
+<div class="code-wrapper"><pre><code class="hljs shell">export HF_DATASETS_CACHE=&quot;/home/.cache&quot;
+torchrun --nproc_per_node 8 uniform_finetune.py --model_type llama  \
+		--model_name_or_path ../llama_weights_converted/13B  \
+		--data gpt4-cot-belle1M-vicuna-dialog --lora_target_modules q_proj v_proj  \
+		--per_gpu_train_batch_size 32 --gradient_accumulation_steps 1  \
+		--learning_rate 4.5e-4 --epochs 1 &amp;</code></pre></div>
+<p>It takes 1h for data spliting and mapping and 10h 37m 26s for training on 8 NVIDIA A800-SXM4-80GB GPUs. And the training summary is presented in the Appendix.</p>
+<div class="note note-warning">
+            <p>Note that the training process is badly inefficient, refer to the appendix, the memory accessing takes as high as 75% time of training. The high memory accessing problem might because of training 7B on 8 devices is too much. And the low memory usage is because I want to keep to batch size not higher than 256 to get a good generalization ability. But I have no time to do ablation on this super parameter.</p>
+          </div>
+<h2 id="deployment-and-comparision">Deployment and comparision</h2>
+<p>We deploy the model with context using the same way as the last section of previous blog.</p>
+<p>Actually it is really difficult to evaluate a large language model. Using GPT4 is a possible approach but I don’t have OpenAI plus. So at this stage, I evaluate by myself.</p>
+<p>Here are some example results between the further fine tuned model and the alpaca model from precious blog.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">python alpaca_backend.py --size 7 --data gpt4-cot-belle1M-vicuna-dialog --bit 1
+python alpaca_backend.py --size 7 --data alpaca --bit 1</code></pre></div>
+<h3 id="dialog-discourse-ability">dialog &amp; discourse ability</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Alpaca</th>
+<th>Fine tuned alpaca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2014-27-04.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 14-27-04"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2014-27-15.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 14-27-15"></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="chinese-ability">Chinese ability</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Alpaca</th>
+<th>Fine tuned alpaca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-27-04-16808597894931.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-27-04"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-27-04.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-27-04"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-37-13.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-37-13"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-39-48.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-39-48"></td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-34-39.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-34-39"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/Screenshot%20from%202023-04-07%2017-25-09.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-07 17-25-09"></td>
+</tr>
+</tbody>
+</table>
+<p>We can the Chinese ability of fine tuned version shows a big improvement. Impressively, even though Alpaca hasn't been trained in Chinese. It can understand Chinese prompt. As I shown in the first example, when I asked "What is the emergent abilities of LLM<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Wei, J., Tay, Y., Bommasani, R., Raffel, C., Zoph, B., Borgeaud, S., ... &amp; Fedus, W. (2022). Emergent abilities of large language models. *arXiv preprint arXiv:2206.07682*.](https://arxiv.org/abs/2206.07682)">[1]</span></a></sup>?" The Alpaca model gives the model perfectly.</p>
+<p>In the second example, when I ask "Introduce Shanghai" in Chinese. The model also clearly understands my instruction and gives me what I want, though in English.</p>
+<p>However, the translation ability is still poor. It's too hard for it.</p>
+<h2 id="appendix">Appendix</h2>
+<table>
+
+<thead>
+<tr class="header">
+<th>Overview</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State</td>
+<td>finished</td>
+</tr>
+<tr class="even">
+<td>Start time</td>
+<td>April 6th, 2023 at 4:55:13 pm</td>
+</tr>
+<tr class="odd">
+<td>Duration</td>
+<td>10h 37m 26s</td>
+</tr>
+<tr class="even">
+<td>Hostname</td>
+<td>localhost.localdomain</td>
+</tr>
+<tr class="odd">
+<td>OS</td>
+<td>Linux-3.10.0-957.el7.x86_64-x86_64-with-glibc2.17</td>
+</tr>
+<tr class="even">
+<td>Python version</td>
+<td>3.9.12</td>
+</tr>
+<tr class="odd">
+<td>Python executable</td>
+<td>/home/conda/llama/bin/python</td>
+</tr>
+<tr class="even">
+<td>Command</td>
+<td>/home/singleGPU/chatbot/fintune/Alpaca-CoT-main/uniform_finetune.py --model_type llama --model_name_or_path ../llama_weights_converted/7B --data gpt4-cot-belle1M-vicuna-dialog --lora_target_modules q_proj v_proj --per_gpu_train_batch_size 32 --gradient_accumulation_steps 1 --learning_rate 4.5e-4 --epochs 1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>System Hardware</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPU count</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<td>GPU count</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>GPU type</td>
+<td>NVIDIA A800-SXM4-80GB</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Train logs:</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>epoch</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>global_step</td>
+<td>6573</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>9.732735980225552e-7</td>
+</tr>
+<tr class="even">
+<td>loss</td>
+<td>0.8531</td>
+</tr>
+<tr class="odd">
+<td>total_flos</td>
+<td>34166331403636048000</td>
+</tr>
+<tr class="even">
+<td>train_loss</td>
+<td>0.8965309444272535</td>
+</tr>
+<tr class="odd">
+<td>train_runtime</td>
+<td>38249.6774</td>
+</tr>
+<tr class="even">
+<td>train_samples_per_second</td>
+<td>43.989</td>
+</tr>
+<tr class="odd">
+<td>train_steps_per_second</td>
+<td>0.172</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Training process visualization</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_32_33%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_32_33 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_33_38%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_33_38 PM" style="zoom:80%;"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_33_12%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_33_12 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_32_57%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_32_57 PM" style="zoom:80%;"></td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_23%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_23 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_05%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_05 PM" style="zoom:80%;"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_36%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_36 PM" style="zoom:80%;"></td>
+<td><img src="/2023/04/02/Improve-the-chatbot/W&amp;B%20Chart%204_7_2023,%204_34_54%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_7_2023, 4_34_54 PM" style="zoom:80%;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<p>Belle: <a target="_blank" rel="noopener" href="https://github.com/LianjiaTech">LianjiaTech</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/BELLE">BELLE</a></strong></p>
+<p>alpaca COT: <a target="_blank" rel="noopener" href="https://github.com/PhoebusSi">PhoebusSi</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong></p>
+<p>alpaca COT dataset: <a target="_blank" rel="noopener" href="https://huggingface.co/datasets/QingyiSi/Alpaca-CoT">Alpaca-CoT</a></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2206.07682">Wei, J., Tay, Y., Bommasani, R., Raffel, C., Zoph, B., Borgeaud, S., ... &amp; Fedus, W. (2022). Emergent abilities of large language models. <em>arXiv preprint arXiv:2206.07682</em>.</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Improve the chatbot</div>
+      <div>https://daydreamatnight.github.io/2023/04/02/Improve-the-chatbot/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 2, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/12/scale-up-the-language-model/" title="scale up and benchmark the language model">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">scale up and benchmark the language model</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/01/Chinese-chatbot/" title="Chinese chatbot summary">
+                        <span class="hidden-mobile">Chinese chatbot summary</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

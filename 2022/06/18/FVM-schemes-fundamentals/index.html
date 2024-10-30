@@ -1,0 +1,1313 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is the essence of CFD, advecting with the discontinuities due to inviscid fluid PDEs. Several computational schemes are introduced with fortran scripts.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numerical schemes fundamentals">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/06/18/FVM-schemes-fundamentals/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is the essence of CFD, advecting with the discontinuities due to inviscid fluid PDEs. Several computational schemes are introduced with fortran scripts.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
+<meta property="article:published_time" content="2022-06-18T10:08:24.000Z">
+<meta property="article:modified_time" content="2022-09-27T12:35:57.471Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/fdm_schemes.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Numerical schemes fundamentals - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Numerical schemes fundamentals"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-18 18:08" pubdate>
+          June 18, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          27k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          90 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Numerical schemes fundamentals</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>This is the <strong>essence</strong> of CFD, advecting with the discontinuities due to inviscid fluid PDEs. Several computational schemes are introduced with fortran scripts.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>This is a revise of my graduate CFD course and fortran. The aim is to further the understanding of finite volume method and the <code>fvscheme</code> dict in OpenFOAM. But in this blog finite difference method is used all the time for the simplicity.</p>
+          </div>
+<p><strong>Reference books:</strong></p>
+<p>E.F. Toro, Riemann Solvers and Numerical Methods for Fluid Dynamics, Springer-Verlag.</p>
+<p>R.J. LeVeque, Finite Volume Methods for Hyperbolic Problems, Cambridge University Press.</p>
+<p><strong>Overview:</strong></p>
+
+<div class="markmap-container" style="height:300px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;a href=\&quot;#scalar-conservation-laws\&quot;&gt;1-equation PDE theories&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;a href=\&quot;#integral-differential-conservative-and-primitive-forms\&quot;&gt;conservation vs non-conservative&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;a href=\&quot;#analytical-solutions-of-euler-equations\&quot;&gt;exact solutions of reduced Euler equations&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;a href=\&quot;#linear-advection-equation\&quot;&gt;Linear Advection Equation&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;a href=\&quot;#inviscid-burgers-equation\&quot;&gt;Non-linear Burgar Equation&lt;/a&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;a href=\&quot;#rankine-hugoniot-condition\&quot;&gt;characteristics discontinuities and jump conditions&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;a href=\&quot;/#the-riemann-problem\&quot;&gt;Riemann problem&lt;/a&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;&lt;a href=\&quot;#non-uniqueness-of-weak-solutions\&quot;&gt;weak solutions and entropy condition&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;&lt;a href=\&quot;#example-of-non-unique-reverse-riemann-problem-with-burgerss-equation\&quot;&gt;Reverse Riemann problem&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-representation-of-discontinuities\&quot;&gt;Schemes for 1-equation PDE&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;Riemann problem&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;&lt;a href=\&quot;#schemes-on-linear-advection-equation\&quot;&gt;linear advection law&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;&lt;a href=\&quot;#base-finite-difference-scheme\&quot;&gt;basic scheme&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-friedrichs-scheme\&quot;&gt;Lax-Friedich&#39;s scheme&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;&lt;a href=\&quot;#st-order-upwind-method\&quot;&gt;1&lt;sup&gt;st&lt;/sup&gt; order upwind&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;&lt;a href=\&quot;#lax-wendroff-scheme\&quot;&gt;Lax-Wendroff&lt;/a&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[17,18]},&quot;v&quot;:&quot;&lt;a href=\&quot;#schemes-on-non-linear-burger-equation\&quot;&gt;non-linear burger law&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;&lt;a href=\&quot;#st-order-upwind-scheme\&quot;&gt;conserv. vs non-conserv.&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;&lt;a href=\&quot;#scheme-on-reverse-riemann-problem\&quot;&gt;reverse Riemann problem&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[20,21]},&quot;v&quot;:&quot;&lt;a href=\&quot;#numerical-schemes\&quot;&gt;non-uniqueness, entropy condition&lt;/a&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[22,23]},&quot;v&quot;:&quot;Multi-equation PDE theories&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[23,24]},&quot;v&quot;:&quot;add complexity, system of conservation laws&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[25,26]},&quot;v&quot;:&quot;Schemes for Multi-equation PDE&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[26,27]},&quot;v&quot;:&quot;add complexity, system of conservation laws&quot;}]}],&quot;p&quot;:{}}"/>
+</div>
+
+<h2 id="scalar-conservation-laws">Scalar conservation laws</h2>
+<div class="note note-info">
+            <p>1-D theory. Examples of 1-D hyperbolic conservation laws. Characteristics discontinuities and jump conditions. Weak solutions and entropy condition. Linear versus non-linear advection</p>
+          </div>
+<h3 id="challenges">Challenges</h3>
+<p>As we all know, flow fluids are governed by 3 hyperbolic PDEs (conservation of mass, momentum and energy). These equations are highly non-linear and they can lead to discontinuities even with a smooth initial conditions, which is very difficult to solve numerically. Simple FDM will definitely fail on these discontinuities and shocks.</p>
+<p>Recall the incompressible NS equation that we've learned in the kindergarten: <span class="math display">\[
+\frac{\partial \mathbf{V}}{\partial t} + \underbrace{\left(\boldsymbol{\nabla}\cdot\mathbf{V}\right)\mathbf{V}}_{\text{convection}} = \frac{\nabla p}{\rho} + \mathbf{g}+ \underbrace{\nu \boldsymbol{\nabla}^2\mathbf{V}}_{\text{diffusion}}
+\]</span> the viscous diffusion term in the equation leads to parabolic equations with smooth solutions, which will save our life. But with very high <span class="math inline">\(Re\)</span>, the equation reduces to pure <font color="#75147c">hyperbolic inviscid Euler Equation</font>, and the resultant discontinuity is a nightmare for most of the numerical schemes.</p>
+<p>The presence of discontinuities requires <font color="#75147c">weak solutions</font>, as oppose to <font color="#75147c">strong solutions</font>.</p>
+<p>However, the weak solutions give up the uniqueness in math, i.e there exist a large number of solutions that may not be physical acceptable, i.e. extra conditions are needed to justify the solution. They are:</p>
+<ul>
+<li><font color="#75147c">Rankine-Hugoniot</font> condition deals with the discontinuity</li>
+<li><font color="#75147c">Entropy</font> condition satisfies the physics</li>
+</ul>
+<div class="note note-info">
+            <p>Just here to remind that we are dealing with inviscid flow, shocks, nothing to do with turbulence.</p>
+          </div>
+<h3 id="scalar-conservation-law">Scalar conservation law</h3>
+<h4 id="d-law">1D law</h4>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/1D scalar convection.png" srcset="/img/loading.gif" lazyload alt="1D scalar convection control volume" style="zoom:70%;"></p>
+<p>First let's introduce a simple example to present the problem: consider an 1D control volume <span class="math inline">\([a,b]\)</span>, during the time interval <span class="math inline">\([t_1,t_2]\)</span> . The scalar conservation law can be stated as that during <span class="math inline">\([t_1,t_2]\)</span> , change in total conserved quantity in <span class="math inline">\([a,b]\)</span> equals the net flux through the boundaries <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>:</p>
+<p><span class="math display">\[
+\frac{d}{dt}\int_a^bu(x,t) = -\left[f(u(b,t))-f(u(a,t))\right]
+\]</span> where <span class="math inline">\(u(x,t)\)</span> is called the conserved quantity while <span class="math inline">\(f\)</span> denotes the flux. This equation often describes the <font color="#75147c">transport phenomena</font>.</p>
+<div class="note note-info">
+            <p>You can not create, you can not destroy.</p>
+          </div>
+<h4 id="integral-differential-conservative-and-primitive-forms">Integral, differential conservative and primitive forms</h4>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/2D scalar convection control volume.png" srcset="/img/loading.gif" lazyload alt="2D scalar convection control volume" style="zoom:48%;"></p>
+<p>The 1D law can be extended in 2D with the relation, in <font color="#75147c">integral form</font>. <span class="math display">\[
+\frac{d}{d t} \int_{\Omega} \mathbf{u} d \Omega+\int_{\Gamma} \mathbf{f}(\mathbf{u}) \cdot \mathbf{n} d \Gamma=0
+\]</span> <div class="note note-info">
+            <p>The FVM and FEM solves the integral form, while the FDM solves the primitive form.</p>
+          </div></p>
+<p>Apply the Gauss divergence theorem the relation can be represented as <font color="#75147c">differential form</font>: <span class="math display">\[
+\begin{aligned}
+\int_{\Omega}\left\{\frac{\partial \mathbf{u}}{\partial t}+\nabla \cdot \mathbf{f}(\mathbf{u})\right\} d \Omega=0&amp;  \\ 
+\Rightarrow 
+\color{purple}{
+\forall \Omega,\quad \frac{\partial \mathbf{u}}{\partial t}+\nabla \cdot \mathbf{f}(\mathbf{u})=0} &amp;
+\end{aligned}
+\]</span> above is called the <font color="#75147c">differential conservative form</font>. The only <span class="math inline">\(u\)</span> changed in time is due to the flux <span class="math inline">\(f\)</span>. There is no extra assumptions introduced.</p>
+<p>In comparison, with an assumption of <span class="math inline">\(\mathbf{a} = \frac{d\mathbf{f}}{d\mathbf{u}}\)</span>, the equation can be rewritten with the chain rule, as the <font color="#75147c">differential primitive form</font> : <span class="math display">\[
+\quad \frac{\partial \mathbf{u}}{\partial t}+\mathbf{a}(\mathbf{u})\nabla \cdot \mathbf{u}=0, \quad \text{where }\mathbf{a} =  \frac{d\mathbf{f}}{d\mathbf{u}}
+\]</span> This form is identical to above in mathematics, but it will lead to problems numerically when dealing with discontinuities (to be discussed later).</p>
+<h4 id="rankine-hugoniot-jump-condition">Rankine-Hugoniot Jump condition</h4>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/shock wave.png" srcset="/img/loading.gif" lazyload alt="1D jump discontinuity illustration" style="zoom:70%;"></p>
+<p>When dealing with discontinuities, the integral form is well defined, but not the differential forms. The differential solvers can't deal with the drastic derivatives so instead they solve an extra <font color="#75147c">jump condition</font> which can be derived from the well-defined integral form (discussed later).</p>
+<p>For an 1D jump discontinuity travelling at the speed <span class="math inline">\(s\)</span>: <span class="math display">\[
+f(u_r)-f(u_l) = s(u_r-u_s)
+\]</span> where <span class="math inline">\(u_r\)</span>, <span class="math inline">\(u_l\)</span> represent the speeds just at the left and the right of the discontinuity.</p>
+<h3 id="d-euler-equations">1D Euler equations</h3>
+<p>Its time to introduce the 1D Euler equations: NS equations with 0 viscosity or heat conduction terms: <span class="math display">\[
+\frac{\partial}{\partial t}\left[\begin{array}{l}
+\rho \\
+\rho u \\
+\rho E
+\end{array}\right]+\frac{\partial}{\partial x}\left[\begin{array}{l}
+\rho u \\
+\rho u^{2}+P \\
+\rho u\left(E+\frac{P}{\rho}\right)
+\end{array}\right]=0
+\]</span> And the conservation form is: <span class="math display">\[
+\frac{\partial \mathbf{q}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{q})}{\partial x}=0
+\]</span> for the quantity vector <span class="math inline">\(\mathbf{q}\)</span> with the flux vector <span class="math inline">\(\mathbf{F}\)</span>.</p>
+<h4 id="conservation-vs-non-conservation-form">Conservation vs non-conservation form</h4>
+<p>Similar to before, with terms in a form of <span class="math inline">\(\partial_x{uv}\)</span>: <span class="math display">\[
+\frac{\partial uv}{\partial x} \neq u\frac{\partial v}{\partial x}+ v\frac{\partial u}{\partial x}
+\]</span> When dealing with the discontinuities, the conservative LHS locates the shock directly, while the non-conservative RHS does not. (to be discussed later)</p>
+<h4 id="close-the-euler-equation">Close the Euler equation</h4>
+<p>Unlike the well-posed NS equation, in Euler equation, we have 4 unknowns but only 3 equations. So an extra state equation, i.e. extra assumption of the gas state is needed. Sometimes it's the idea gas assumption <span class="math inline">\(p = \rho RT\)</span>, but for high <span class="math inline">\(Re\)</span> compressible flows, equations of state are required to describe the relation between <span class="math inline">\(p, \rho \text{ and }T\)</span>.</p>
+<div class="note note-primary">
+            <p>We are going to use the 1D Euler equations to evaluate the numerical methods.</p>
+          </div>
+<h3 id="analytical-solutions-of-euler-equations">Analytical solutions of Euler equations</h3>
+<h4 id="linear-advection-equation">Linear Advection Equation</h4>
+<p>In 1D, the linear advection law for <span class="math inline">\(u(x,t)\)</span> is: <span class="math display">\[
+\color{purple}
+\frac{\partial u }{\partial t} + a(u)\frac{\partial u }{\partial x} = 0
+\]</span> where <span class="math inline">\(a(u)\)</span> denotes the advection speed. Plus an <font color="#75147c">initial condition</font> <span class="math inline">\(u(x,0)\)</span> and <font color="#75147c">boundary condition</font> (discuss later).</p>
+<h5 id="solution">solution</h5>
+<p>This is a simple 2-variable PDE and we can apply the method of characteristics:</p>
+<ol type="1">
+<li><p>Imagine a characteristic line <span class="math inline">\(s\)</span>, we have the chain rule: <span class="math display">\[
+\frac{d u(x,t)}{d s} = \frac{d t}{d s}\frac{\partial u}{\partial t} + \frac{d x}{d s} \frac{\partial u}{\partial x}
+\]</span></p></li>
+<li><p>As a result we can construct, <span class="math display">\[
+\begin{aligned}
+\frac{d u(x,t)}{d s} = 0,\quad\frac{d t}{d s}=1, \quad \frac{d x}{d s}= a \\
+\Rightarrow \quad \frac{d u}{0}=\frac{d t}{1}=\frac{d x}{a}= d s
+\end{aligned}
+\]</span></p></li>
+<li><p>Select the available equations we have the characteristic equation: <span class="math display">\[
+\begin{aligned}
+\frac{d x}{d t} &amp;= a \\
+\Rightarrow\quad x &amp;= x_0 + a(u)t
+\end{aligned}
+\]</span> If <span class="math inline">\(u(x_0,0)=u_0\)</span>, then <span class="math inline">\(\frac{dx}{dt}=a(u_0)\)</span>, the characteristic equation is therefore: <span class="math display">\[
+\color{purple}
+x = x_0 + a(u_0)t
+\]</span></p></li>
+<li><p>And the solution to the problem is: <span class="math display">\[
+u(x,t) = f(x_0) = f(x-a(u_0)t)
+\]</span></p></li>
+</ol>
+<h4 id="linear-advection-equation-example">Linear Advection Equation Example</h4>
+<p>Solve the following advection equation where <span class="math inline">\(a = 0.5\)</span> <span class="math display">\[
+\frac{\partial u}{\partial t} + a \frac{\partial u}{\partial x }= 0
+\]</span> with initial condition <span class="math display">\[
+u(x,0) = exp(-32x^2)
+\]</span></p>
+<h5 id="solution-1">solution</h5>
+<p>The characteristics are straight lines in the <span class="math inline">\((x,t)\)</span> plane: <span class="math display">\[
+x = 0.5t+x_0
+\]</span> And the solutions are therefore: <span class="math display">\[
+u(x,t) = f(x_0) = exp(-32(x-0.5t)^2)
+\]</span> <img src="/2022/06/18/FVM-schemes-fundamentals/Linear Advection Solutions.png" srcset="/img/loading.gif" lazyload alt="Linear Advection Characteristic Lines and Solutions, From my graduate course slides" style="zoom:28%;"></p>
+<h4 id="inviscid-burgers-equation">Inviscid Burgers' equation</h4>
+<p>In 1D, the inviscid Burgers' equation for <span class="math inline">\(u(x,t)\)</span> is: <span class="math display">\[
+\color{purple}
+\frac{\partial u }{\partial t} + \frac{f(u) }{\partial x} = 0,\quad\text{where }f(u)=\frac{1}{2}u^2
+\]</span> The conservative form for this equation： <span class="math display">\[
+\frac{\partial u }{\partial t} + \frac{\partial(\frac{1}{2}u^2) }{\partial x} = 0
+\]</span> and the primitive form: <span class="math display">\[
+\frac{\partial u }{\partial t} + u\frac{\partial u }{\partial x} = 0
+\]</span> same form as the 1D linear advection equation with <span class="math inline">\(a(u)=u\)</span>.</p>
+<h4 id="burgers-equation-example">Burgers' equation Example</h4>
+<p>Solve the advection equation: <span class="math display">\[
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x }= 0
+\]</span> with initial condition: <span class="math display">\[
+u(x,0) = 1-\cos(x)
+\]</span></p>
+<h5 id="solution-2">solution</h5>
+<p>Similarly, the characteristics are described by: <span class="math display">\[
+x = x_0 + ut
+\]</span> and the solution: <span class="math display">\[
+u = 1-\cos(x-ut)
+\]</span> which is <em><u>implicit</u></em>. It is can be plotted anyway:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/Inviscid Burgers' equation Solutions.png" srcset="/img/loading.gif" lazyload alt="Inviscid Burgers' equation Solutions, From my graduate course slides" style="zoom:28%;"></p>
+<h5 id="discussion">discussion</h5>
+<p>For non-linear conservation laws, the characteristics may cross within finite time. This would suggest a multi-valued solution which does not make sense physically.</p>
+<p>Where the characteristics start crossing, the solution become discontinuous. And the formation of discontinuities is possible even for smooth initial data. So the differential primitive form of the equations is no longer valid</p>
+<p><span class="math inline">\(\Rightarrow\)</span> only the integral form can deal with discontinuities. And the differential form can be completed by a <font color="#75147c">jump condition</font> derived from the integral form.</p>
+<p><span class="math inline">\(\Rightarrow\)</span> we need <font color="#75147c">weak solutions</font>. The mathematical theory of partial differential equations introduces the concept of weak solutions.</p>
+<h3 id="rankine-hugoniot-condition">Rankine-Hugoniot condition</h3>
+<h4 id="the-riemann-problem">The Riemann Problem</h4>
+<div class="note note-info">
+            <p>In order to understand the behaviour of the solution at discontinuities, it is useful to start with a simplified problem.</p>
+          </div>
+<p>The Riemann problem is a conservation law with a single discontinuity. <span class="math display">\[
+\color{purple}
+\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0
+\]</span> with <span class="math display">\[
+\color{purple}
+u(x, 0)= \begin{cases}u_{L} &amp; x \leq 0 \\ u_{R} &amp; x&gt;0\end{cases}
+\]</span> <img src="/2022/06/18/FVM-schemes-fundamentals/Riemann problem illustration.png" srcset="/img/loading.gif" lazyload alt="Riemann problem illustration" style="zoom:48%;"></p>
+<h4 id="shock-path">Shock Path</h4>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/shock path control volume.png" srcset="/img/loading.gif" lazyload alt="shock path control volume" style="zoom:80%;"></p>
+<p>Take the control volume between boundaries <span class="math inline">\(x_L\)</span> and <span class="math inline">\(x_R\)</span>, which are taken sufficient close to the shock so that spatial variations of the solution become unimportant. and are taken sufficient apart from the shock so that the boundary will note interfere with the shock motion over time interval <span class="math inline">\(\delta t\)</span>.</p>
+<p>Recall the integral function: <span class="math display">\[
+\frac{d}{dt}\int_{x_L}^{x_R}udx = f(u_L)-f(u_R)
+\]</span> If the position of the shock is <span class="math inline">\(x = X(t)\)</span>, with <span class="math inline">\(x_L&lt; X (t) &lt;x_R\)</span>, the values of <span class="math inline">\(u(x,t)\)</span> inside the integral are close to the constants <span class="math inline">\(u_L\)</span> and <span class="math inline">\(u_R\)</span> and we can write: <span class="math display">\[
+\begin{aligned}
+\frac{d}{dt}\int_{x_L}^{X}u_Ldx + \frac{d}{dt}\int_{X}^{x_R}u_Rdx= f(u_L)-f(u_R)\\
+\frac{d}{dt}\left[(x_L-X)u_L + (X-x_R)u_R\right]= f(u_L)-f(u_R)\\
+\end{aligned}
+\]</span></p>
+<p>Given the shock speed (slope of the shock path) <span class="math inline">\(s = \frac{dX}{dt}\)</span>, we have: <span class="math display">\[
+\begin{aligned}
+s\left(u_L - u_R\right)&amp;= f(u_L)-f(u_R)\\
+\color{purple}
+s= \frac{dX}{dt}&amp;\color{purple}
+= \frac{f(u_L)-f(u_R)}{\left(u_L - u_R\right)}= \frac{f(u_R)-f(u_L)}{\left(u_R - u_L\right)}
+\end{aligned}
+\]</span> The equation above is the <font color="#75147c">Rankine-Hugoniot condition</font>, also called the "jump condition".</p>
+<p>Correspondingly, <font color="#75147c">weak solutions</font> represents the solutions of the PDE where the solution is smooth and of a Rankine-Hugoniot condition at discontinuities. And they are <font color="#75147c">not unique</font>.</p>
+<div class="note note-info">
+            <p>Strong solution <span class="math inline">\(\Rightarrow\)</span> weak solution</p><p>Weak solution <span class="math inline">\(\nLeftarrow\)</span> Strong solution</p>
+          </div>
+<h3 id="non-uniqueness-of-weak-solutions">Non-uniqueness of weak solutions</h3>
+<h4 id="example-of-riemann-problem-with-burgerss-equation">Example of Riemann Problem with Burgers's equation</h4>
+<p>Consider the <a href="#inviscid-burgers-equation">Burgers' equation</a> under a <a href="#the-riemann-problem">Riemann Problem</a>: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x }&amp;= 0, \\
+\text{with }
+u(x, 0)&amp;= \begin{cases}1 &amp; x \leq 0 \\ 0 &amp; x&gt;0\end{cases}
+\end{aligned}
+\]</span> The characteristics are of the form: <span class="math inline">\(x = x_0 + ut\)</span></p>
+<p>In <span class="math inline">\(x-t\)</span> plane, the characteristics line: <span class="math display">\[
+\begin{cases} x = t - x_0 &amp; x_0 \leq 0 \\ x = x_0 &amp; x_0 &gt; 0\end{cases}
+\]</span> And the according to the Rankine-Hugonoit condition, the speed of the shock is: <span class="math display">\[
+s = \frac{f(u_L)-f(u_R)}{\left(u_L - u_R\right)}= \frac{-1/2-0}{\left(1-0\right)} = \frac{1}{2}
+\]</span> and the shock path is: <span class="math display">\[
+x = \frac{1}{2} t
+\]</span> therefore, the solution is: <span class="math display">\[
+u(x,t) = \begin{cases} 1 &amp; x \leq \frac{1}{2}t \\ 0 &amp; x&gt; \frac{1}{2}t\end{cases}
+\]</span> <img src="/2022/06/18/FVM-schemes-fundamentals/Burgers's equation under Riemann Problem with uL = 1, uR=0.png" srcset="/img/loading.gif" lazyload alt="General solution (left) and characteristics (right) of Burgers's equation under Riemann Problem. From my graduate course slides" style="zoom:50%;"></p>
+<h4 id="riemann-problem-with-burgerss-equation">Riemann Problem with Burgers's equation</h4>
+<p>For the upwind case: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x }&amp;= 0, \\
+\text{with }
+u(x, 0)&amp;= \begin{cases}u_L &amp; x \leq 0 \\ u_R &amp; x&gt;0\end{cases}
+\end{aligned}
+\]</span> with <span class="math inline">\(u_L&gt;u_R\)</span>.</p>
+<p>And the shock is created with a speed: <span class="math display">\[
+s = \frac{1}{2}(u_R+u_L)
+\]</span> and the solution: <span class="math display">\[
+u(x,t) = \begin{cases} u_L &amp; x \leq \frac{1}{2}t \\ u_R &amp; x&gt; \frac{1}{2}t\end{cases}
+\]</span> <img src="/2022/06/18/FVM-schemes-fundamentals/Burgers's equation under Riemann Problem general solution.png" srcset="/img/loading.gif" lazyload alt="Solution (left) and characteristics (right) of Burgers's equation under Riemann Problem with uL = 1, uR=0. From my graduate course slides" style="zoom:50%;"></p>
+<h4 id="example-of-non-unique-reverse-riemann-problem-with-burgerss-equation">Example of non-unique reverse Riemann Problem with Burgers's equation</h4>
+<p>Reverse the initial condition in the previous example:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x }&amp;= 0, \\
+\text{with }
+u(x, 0)&amp;= \begin{cases}0 &amp; x \leq 0 \\ 1 &amp; x&gt;0\end{cases}
+\end{aligned}
+\]</span> the characteristics become:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/Burgers's equation under Riemann Problem with uL = 0, uR=1.png" srcset="/img/loading.gif" lazyload alt="Solution (left) and characteristics (right) of Burgers's equation under Riemann Problem with uL = 1, uR=0. From my graduate course slides" style="zoom:50%;"></p>
+<p>Solution in the blue area (<span class="math inline">\(0&lt;x&lt;t\)</span>) is not defined. So here proposes 2 possible solutions, both are mathematical acceptable:</p>
+<p>Solution A: <span class="math display">\[
+u(x, t)= \begin{cases}0 &amp; \text { if } \quad \frac{x}{t}&lt;s(=0.5) \\ 1 &amp; \text { if } \quad \frac{x}{t}&gt;s(=0.5)\end{cases}
+\]</span> <img src="/2022/06/18/FVM-schemes-fundamentals/Expansion shock solution to the Riemann Problem.png" srcset="/img/loading.gif" lazyload alt="Expansion shock solution to the Riemann Problem" style="zoom:50%;"></p>
+<p>Solution B: <span class="math display">\[
+u(x, t)=\left\{\begin{array}{ccc}
+0 &amp; \text { if } &amp; \frac{x}{t}&lt;0 \\
+\frac{x}{t} &amp; \text { if } &amp; 0&lt;\frac{x}{t}&lt;1 \\
+1 &amp; \text { if } &amp; \frac{x}{t}&gt;1
+\end{array}\right.
+\]</span> <img src="/2022/06/18/FVM-schemes-fundamentals/Rarefaction wave solution to the Riemann Problem.png" srcset="/img/loading.gif" lazyload alt="Rarefaction wave solution to the Riemann Problem" style="zoom:50%;"></p>
+<div class="note note-info">
+            <p>A little spoiler alert there: Solution B is physical, discussed in the <a href="#non-uniqueness-and-entropy-conditions">next section</a>.</p>
+          </div>
+<h4 id="exact-solution-to-riemann-problem-with-burgerss-equation">Exact solution to Riemann Problem with Burgers's equation</h4>
+<p>In conclusion,</p>
+<p>For the Riemann Problem with Burgers's equation: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x }&amp;= 0, \\
+\text{with }
+u(x, 0)&amp;= \begin{cases}u_L &amp; x \leq 0 \\ u_R &amp; x&gt;0\end{cases}
+\end{aligned}
+\]</span></p>
+<ul>
+<li><p>with <span class="math inline">\(u_L&gt;u_R\)</span></p>
+<p>A shock wave is created with a speed: <span class="math display">\[
+V_s = \frac{u_L+u_R}{2}
+\]</span> and the exact solution is: <span class="math display">\[
+u(x, t)=\left\{\begin{array}{ccc}
+u_L &amp; \text { if } &amp; \frac{x}{t}\leq V_s \\
+u_R &amp; \text { if } &amp; \frac{x}{t}&gt;V_s
+\end{array}\right.
+\]</span></p></li>
+<li><p>with <span class="math inline">\(u_L&lt;u_R\)</span></p>
+<p>the exact solution is the rarefaction wave: <span class="math display">\[
+u(x, t)=\left\{\begin{array}{ccc}
+u_L &amp; \text { if } &amp; \frac{x}{t}&lt;0 \\
+\frac{x}{t} &amp; \text { if } &amp; 0&lt;\frac{x}{t}&lt;1 \\
+u_R &amp; \text { if } &amp; \frac{x}{t}&gt;1
+\end{array}\right.
+\]</span> if <span class="math inline">\(u_L = -u_R\)</span>, we have a sonic rarefaction wave.</p></li>
+</ul>
+<h3 id="entropy-conditions">Entropy Conditions</h3>
+<p>Why solution A is wrong? we need to impose additional conditions. There are two ways.</p>
+<ul>
+<li><p>Add a small diffusion term (2 <sup>nd</sup> order) manually on the RHS to remove the discontinuity. The weak solution then must satisfy: <span class="math display">\[
+\frac{\partial u^\epsilon}{\partial t} + \frac{\partial f(u^\epsilon)}{\partial x} = \epsilon\frac{\partial^2u^\epsilon}{\partial x^\epsilon}
+\]</span> where <span class="math inline">\(\epsilon\)</span> is the <font color="#75147c">viscosity coefficient</font>, it introduces the dissipation, known as the vanishing viscosity concept, into the equation to smooth the solution. A little bit cheating but most of people do this.</p></li>
+<li><p>Add the <font color="#75147c">entropy solution</font></p>
+<div class="note note-info">
+            <p>I first hearted Entropy back in my undergraduate thermodynamic course. But I still don't know what is Entropy. So here are some answers:</p><p>In gas dynamics, entropy is a constant physical quantity along particles in smooth flow which can jump to a higher value through a shock.</p><p>The second law of thermodynamics says that entropy can never go down.</p><p>For an evolution equation the information should always flow from the initial data.</p><p>We can see it is very difficult to define it, but in order to translate the defination into the entropy condition, we see entropy as the extra amount of energy that is not available to the system.</p>
+          </div>
+<p>There are again two options of entropy condition:</p>
+<ul>
+<li><p><font color="#75147c">Convex (concave) fluxes / Lax entropy condition</font> <span class="math display">\[
+f&#39;(u_L) &gt; s &gt; f&#39;(u_R)
+\]</span> and the characteristics must run into the shock, not emerge from it.</p></li>
+<li><p><font color="#75147c">Oleinik entropy condition</font></p>
+<p>Similar to Lax entropy condition, it says: <span class="math display">\[
+\frac{f(u)-f(u_L)}{u-u_L}\geq s \geq \frac{f(u_R)-f(u)}{u_R-u}
+\]</span></p></li>
+</ul>
+<p>and Lax and Oleinik are equivalent if <span class="math inline">\(f(u)\)</span> is strictly convex i.e. <span class="math inline">\(f&#39;&#39;(u)&lt;0\)</span>.</p></li>
+</ul>
+<h2 id="numerical-representation-of-discontinuities">Numerical representation of discontinuities</h2>
+<div class="note note-info">
+            <p>Requirements on numerical schemes. Conservative discretisation: Lax-Wendroff theorem. First versus second order schemes. Representation of discontinuities: physical aspects, shock fitting/capturing.</p>
+          </div>
+<h3 id="problems-with-lax-equivalence-theorem">Problems with Lax Equivalence Theorem</h3>
+<p>There are 3 fundamental properties of a numerical scheme:</p>
+<ul>
+<li><p>Consistency: how good you approximate operators and functions.</p></li>
+<li><p>Convergence: error between the exact and discrete solutions converges to zero.</p></li>
+<li><p>Stability: solution of the difference equation is not too sensitive to small perturbations.</p></li>
+</ul>
+<p>The convergence needs to be evaluated with exact solutions. So we always need analytical solutions to verify it. If we don't have access to the analytical solutions, we have a <font color="#75147c">Lax Equivalence Theorem </font>says <span class="math display">\[
+\text{consistency + stability $\Rightarrow$ convergence}
+\]</span> It is a fundamental convergence theorem but</p>
+<ul>
+<li>it is valid <font color="#75147c">only for linear PDEs</font> and there is no non-linear equivalent theorem</li>
+<li>this theorem <font color="#75147c">does not tell if the weak solution physically acceptable or not</font>.</li>
+</ul>
+<p>For non-linear PDEs, we only have one experience,</p>
+<p>If a scheme is stable on linear PDEs, it will often (not all the time) be stable on non-linear PDEs. If a scheme is unstable on linear, it won't be stable on non-linear.</p>
+<p>So the work flow is, 1. Given a non-linear PDE, 2. Linearise it to explore the stabilities of schemes on it. 3. Test the winners on non-linear PDEs.</p>
+<h3 id="schemes-on-linear-advection-equation">Schemes on linear advection equation</h3>
+<p>First we consider a <font color="#75147c">1D linear</font> case, linear advection equation: <span class="math display">\[
+\frac{\partial u}{\partial t} + a\frac{\partial u}{\partial x} = 0
+\]</span> with <span class="math inline">\(a\)</span> a positive scalar constant, representing the wave speed. So we have: <span class="math display">\[
+f(u) = au
+\]</span></p>
+<h4 id="base-finite-difference-scheme">Base finite difference scheme</h4>
+<p>try to solve it numerically, with finite difference, Euler forward difference in time and central difference in space. we have: <span class="math display">\[
+\frac{u^{n+1}_i-u^n_i}{\Delta t} + a \frac{u^n_{i+1}-u^n_{i-1}}{2\Delta x} = 0
+\]</span></p>
+<p><span class="math display">\[
+u^{n+1}_i = u^n_i - \frac{a\Delta t}{\Delta x}\left(\frac{u^n_{i+1}-u^n_{i-1}}{2} \right)
+\]</span></p>
+<p>It is consistency, and the Von Neumann analysis shows it is stable if the CFL condition (Courant number <span class="math inline">\(a\frac{\Delta t}{\Delta x}&lt;1\)</span>) is satisfied. It should converge to the exact solution.</p>
+<h5 id="numerical-practice">Numerical practice</h5>
+<p>Consider a convection equation <span class="math display">\[
+\frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} = 0
+\]</span> with a Riemann initial condition <span class="math display">\[
+u(x, 0)= \begin{cases} 1.2 &amp;x \leq 0 \\ 0.4 &amp; x&gt;0\end{cases}
+\]</span> The <font color="#75147c">Euler in time, central difference in space</font> scheme is applied on fortran script (<a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/Numerical-schemes-for-discontinuities/blob/master/1_linear_convection_eq/base.f90">base.f90</a>, all the scripts in this post are annotated and modified from my graduate CFD course material). And the result is shown here:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/base_advection.png" srcset="/img/loading.gif" lazyload alt="Euler forward in time, central in space FDM for Riemann problem" style="zoom:67%;"></p>
+<p>And the solver crashed, which means the scheme is unstable. And with finer mesh and smaller time step (controlled by Courant number), the scheme still does not converge to the exact solution.</p>
+<h4 id="lax-friedrichs-scheme">Lax-Friedrich's scheme</h4>
+<p>Lax-Friedrich replaces the term <span class="math inline">\(u^n_i\)</span> by the average <span class="math inline">\(u^n_i = \frac{1}{2}(u^n_{i+1}+u^n_{i-1})\)</span>, <span class="math display">\[
+u^{n+1}_i = \underbrace{\frac{u^n_{i+1}+u^n_{i-1}}{2}}_{\text{only change}} - \frac{a\Delta t}{\Delta x}\left(\frac{u^n_{i+1}-u^n_{i-1}}{2} \right)
+\]</span></p>
+<h5 id="numerical-practice-1">Numerical practice</h5>
+<p>Based on the same equation and initial condition, with same time &amp; space intervals, iteration times, Courant numbers, the <font color="#75147c">Lax-Friedrich's scheme in time, central difference in space</font> is applied (<a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/Numerical-schemes-for-discontinuities/blob/master/1_linear_convection_eq/Lax-Friedrichs_scheme.f90">Lax-Friedrichs_scheme.f90</a>). And the result is shown here:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/Lax-Friedrichs_scheme.png" srcset="/img/loading.gif" lazyload alt="Lax-Friedrichs_scheme" style="zoom:67%;"></p>
+<p>This scheme is a little better</p>
+<ul>
+<li>there are oscillations yet with smaller <span class="math inline">\(\Delta x\)</span> and <span class="math inline">\(\Delta t\)</span>, the oscillations are smoothed out.</li>
+<li>the solution does not converge to the exact.
+<ul>
+<li>This scheme is highly diffusive and the discontinuity is more smoothed out with higher resolution.</li>
+<li>The location of the shock is not captured.</li>
+</ul></li>
+</ul>
+<h4 id="st-order-upwind-method">1<sup>st</sup> order Upwind method</h4>
+<p>Keep the Euler forward time difference, give up the order of the spatial central difference scheme to have a first order backward/forward scheme as: <span class="math display">\[
+\frac{\partial u}{\partial x}= 
+\begin{cases}  
+\frac{u^n_{i}-u^n_{i-1}}{\Delta x} &amp;a \geq 0 \\ 
+\frac{u^n_{i+1}-u^n_{i}}{\Delta x} &amp; a&lt;0
+\end{cases}
+\]</span> as a result: <span class="math display">\[
+u^{n+1}_i = 
+\begin{cases}  
+u^n_i - \frac{a\Delta t}{\Delta x}\left(u^n_{i}-u^n_{i-1} \right)
+&amp;a \geq 0 \\ 
+u^n_i - \frac{a\Delta t}{\Delta x}\left(u^n_{i+1}-u^n_{i} \right)
+&amp; a&lt;0
+\end{cases}
+\]</span> <div class="note note-info">
+            <p>The idea is that because the downstream of the shock will not feel the upstream, so this upwind scheme may be able to capture this kind of discontinuity.</p>
+          </div></p>
+<h5 id="numerical-practice-2">Numerical practice</h5>
+<p>Similarly, <font color="#75147c">Euler in time, First Order Upwind in space</font> is applied on the same problem (<a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/Numerical-schemes-for-discontinuities/blob/master/1_linear_convection_eq/first_order_upwind.f90">first_order_upwind.f90</a>. And the result is shown below:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/first_order_upwind.png" srcset="/img/loading.gif" lazyload alt="first order upwind scheme" style="zoom:67%;"></p>
+<p>This scheme is the best so far,</p>
+<ul>
+<li>there is no oscillation because it is first order</li>
+<li>the solution converge to the exact
+<ul>
+<li>This scheme is slightly diffusive and the discontinuity is better captured with higher resolution.</li>
+<li>The location of the shock is well captured.</li>
+</ul></li>
+</ul>
+<div class="note note-secondary">
+            <p>Just for fun, we can apply the Lax-Friedrich in time and first order upwind in space, we still have the oscillations. It is explainable, maybe because the Lax-Friedrich's scheme breaks the intent of the linear upwind scheme to isolate upwind information.</p><p><img src="/2022/06/18/FVM-schemes-fundamentals/Lax-Friedrich_linear_upwind.png" srcset="/img/loading.gif" lazyload alt="Lax-Friedrich in time and first order upwind in space result" style="zoom:67%;"></p>
+          </div>
+<h4 id="lax-wendroff-scheme">Lax-Wendroff scheme</h4>
+<p>It is one of the most well known second order schemes, based on the Taylor's theorem for <span class="math inline">\(u^{n+1}_i\)</span>: <span class="math display">\[
+u_{i}^{n+1} \approx u_{i}^{n}+\left.\Delta t \frac{\partial u}{\partial t}\right|_{i} ^{n}+\left.\frac{\Delta t^{2}}{2} \frac{\partial^{2} u}{\partial t^{2}}\right|_{i} ^{n}+\ldots
+\]</span> with <span class="math inline">\(\frac{\partial u}{\partial t} = -a\frac{\partial u}{\partial x}\)</span> and <span class="math inline">\(\frac{\partial u}{\partial t} = a^2\frac{\partial^2 u}{\partial x^2}\)</span>, plus the Euler scheme, we have: <span class="math display">\[
+u^{n+1}_i = u^n_i - \frac{a\Delta t}{\Delta x}\left(\frac{u^n_{i+1}-u^n_{i}}{2} \right) + \frac{a^2\Delta t^2}{\Delta x^2}\left(\frac{u^n_{i+1}-2u^n_{i}+u^n_{i-1}}{2} \right)
+\]</span> <div class="note note-info">
+            <p>We know the original central space scheme creates the oscillations, and Lax-Wendroff decides to add an another <font color="#75147c">second order derivative term</font>. According to the NS equation, the second derivative acts like a viscous term, bringing the diffusion, so it might be able to stabilise the scheme.</p><p>This scheme is <font color="#75147c">not consistent</font>, because of this additional second order term.</p>
+          </div></p>
+<h5 id="numerical-practice-3">Numerical practice</h5>
+<p><font color="#75147c">Euler in time, Lax-Wendroff scheme in space</font> is applied on the same problem (<a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/Numerical-schemes-for-discontinuities/blob/master/1_linear_convection_eq/Lax-Wendroff.f90">Lax-Wendroff.f90</a>). And the result is shown below:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/Lax-Wendroff.png" srcset="/img/loading.gif" lazyload alt="Euler in time, Lax-Wendroff scheme in space solution" style="zoom:67%;"></p>
+<p>This scheme,</p>
+<ul>
+<li>the oscillation area on the top grows with the resolution</li>
+<li>the solution converge to the exact
+<ul>
+<li>The discontinuity is better captured with higher resolution.</li>
+<li>The location of the shock is well captured.</li>
+</ul></li>
+</ul>
+<div class="note note-secondary">
+            <p>The oscillated behaviour exist may be because the contribution of the stabiliser is too small. Try adding a coefficient to the second-order term, we have: <span class="math display">\[u^{n+1}_i = u^n_i - \frac{a\Delta t}{\Delta x}\left(\frac{u^n_{i+1}-u^n_{i}}{2} \right) + \phi \frac{a^2\Delta t^2}{\Delta x^2}\left(\frac{u^n_{i+1}-2u^n_{i}+u^n_{i-1}}{2} \right)\]</span> With code: <a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/Numerical-schemes-for-discontinuities/blob/master/1_linear_convection_eq/Lax-Wendroff_coefficient.f90">Lax-Wendroff_coefficient.f90</a>,</p><p><img src="/2022/06/18/FVM-schemes-fundamentals/Lax-Wendroff_coefficient.png" srcset="/img/loading.gif" lazyload alt="Lax Wendroff coefficient search" style="zoom:67%;"></p><p>It can be seen that increasing the value of <span class="math inline">\(\phi\)</span> brings more diffusion to the equation, and oppositely, increasing the number of nodes brings more oscillation to the system.</p><p>The appropriate value of <span class="math inline">\(\phi\)</span> may be proportional to the mesh resolution. And actually it is also a function of the initial equation (the speed gap across the shock).</p>
+          </div>
+<div class="note note-primary">
+            <p>In conclusion,</p><ul><li>First order scheme is <font color="#75147c">diffusive</font></li><li>Second order scheme is <font color="#75147c">dispensive</font></li><li>First order solution is <font color="#75147c">smooth / not accurate / stable</font> (it is impossible for first order scheme to oscillate, it is the most used scheme in the industry when dealing with discontinuities)</li><li>Second order solution is <font color="#75147c">more accurate / oscillation</font> (there is always more oscillations with more accurate solutions, more points, more values of the differences)</li></ul><p>The goal is to balance the accuracy with oscillation.</p><p>Cancellation of oscillations is an active field of research</p>
+          </div>
+<h3 id="schemes-on-non-linear-burger-equation">Schemes on non-linear Burger equation</h3>
+<p>After linear PDE, we consider a <font color="#75147c">1D non-linear</font> case, burger equation, with two forms,</p>
+<ul>
+<li><p>primitive form: <span class="math display">\[
+\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0
+\]</span></p></li>
+<li><p>conservative form: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0, \\
+\text{with }f(u)=\frac{1}{2}u^2
+\end{aligned}
+\]</span></p></li>
+</ul>
+<h4 id="st-order-upwind-scheme">1<sup>st</sup> order upwind scheme</h4>
+<p>We consider forward difference (Euler) in time and 1<sup>st</sup> order upwind (backward in this case) in space, we have</p>
+<ul>
+<li><p>primitive form: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} = \frac{u^{n+1}_{i}-u^{n}_{i}}{\Delta t} \\
+\frac{\partial u}{\partial x} = \frac{u^{n+1}_{i}-u^{n}_{i}}{\Delta x}
+\end{aligned}
+\]</span> As a result: <span class="math display">\[
+u^{n+1}_{i}= u^{n}_{i}-u^{n}_{i}\frac{\Delta t}{\Delta x}\left(u^{n+1}_{i}-u^{n}_{i}\right)
+\]</span></p></li>
+<li><p>conservative form: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} = \frac{u^{n+1}_{i}-u^{n}_{i}}{\Delta t} \\
+\frac{\partial f(u)}{\partial x} = \frac{(u^{n+1}_{i})^2-(u^{n}_{i})^2}{2\Delta x}
+\end{aligned}
+\]</span></p>
+<p>As a result: <span class="math display">\[
+u^{n+1}_{i}= u^{n}_{i}-\frac{\Delta t}{2\Delta x}\left((u^{n+1}_{i})^2-(u^{n}_{i})^2\right)
+\]</span></p></li>
+</ul>
+<h5 id="numerical-practice-4">Numerical practice</h5>
+<p>Consider a burger equation <span class="math display">\[
+\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0
+\]</span> with a Riemann initial condition <span class="math display">\[
+u(x, 0)= \begin{cases} 1.2 &amp;x \leq 0 \\ 0.4 &amp; x&gt;0\end{cases}
+\]</span> <font color="#75147c">Euler in time, first order upwind (backward in this case)scheme in space</font> is applied on the same Riemann problem(). Set <code>endtime</code> as 2.5 to maintain the same shock position as before. And the result is shown below:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/burger_first_order_upwind.png" srcset="/img/loading.gif" lazyload alt="base_burger" style="zoom:67%;"></p>
+<p>As we can see:</p>
+<ul>
+<li>the non-conservative form failed to locate the shock position properly.</li>
+<li>Increase the resolution, the conservative form converges nicely.</li>
+</ul>
+<div class="note note-info">
+            <p>Conservative form performs better than the non-conservative, but the non-conservative form is alway easy to implement when dealing with the Euler equation. There is never a win-win situation.</p>
+          </div>
+<h4 id="conservative-form-schemes">Conservative Form Schemes</h4>
+<p>Now we know the conservative form is better, and here is a way of writing the scheme in the conservative form. First we need to go back the integral form with the finite volume methods.</p>
+<h5 id="finite-volume-methods">Finite-Volume Methods</h5>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/FVM cells illustration.png" srcset="/img/loading.gif" lazyload alt="FVM cells illustration" style="zoom:40%;"></p>
+<p>With the mesh above, we have the equation below, the change of cell values is only determined by the edge values. <span class="math display">\[
+\int_{x_{i-1 / 2}}^{x_{i+1 / 2}}\left[u\left(x, t^{n+1}\right)-u\left(x, t^{n}\right)\right] d x=-\int_{t^{n}}^{t^{n+1}}\left[f\left(u\left(x_{i+1 / 2}, t\right)-f\left(u\left(x_{i-1 / 2}, t\right)\right)\right] d t\right.
+\]</span> Then define the cell-averaged <span class="math inline">\(\bar{u}_{i}^{n}\)</span> and <span class="math inline">\(\bar{u}_{i}^{n+1}\)</span> at time <span class="math inline">\(t^{n}\)</span> and <span class="math inline">\(t^{n+1}\)</span> : <span class="math display">\[
+\bar{u}_{i}^{n}=\frac{1}{\Delta x} \int_{x_{i-1 / 2}}^{x_{i+1 / 2}} u\left(x, t^{n}\right) d x \quad \bar{u}_{i}^{n+1}=\frac{1}{\Delta x} \int_{x_{i-1 / 2}}^{x_{i+1 / 2}} u\left(x, t^{n+1}\right) d x
+\]</span> plus the time averaged flux <span class="math inline">\(f_{i-1 / 2}\)</span> and <span class="math inline">\(f_{i+1 / 2}\)</span> as <span class="math display">\[
+f_{i-1 / 2}=\frac{1}{\Delta t} \int_{t^{n}}^{t^{n+1}} f\left(u\left(x_{i-1 / 2}, t\right)\right) d t \quad f_{i+1 / 2}=\frac{1}{\Delta t} \int_{t^{n}}^{t^{n+1}} f\left(u\left(x_{i+1 / 2}, t\right)\right) d t
+\]</span> We get the general form for a conservative numerical scheme: <span class="math display">\[
+\bar{u}_{i}^{n+1}=\bar{u}_{i}^{n}-\frac{\Delta t}{\Delta x} \left(f_{i+1 / 2}-f_{i-1 / 2}\right)
+\]</span> We need consistency check as:</p>
+<ul>
+<li><p>for numerical flux <span class="math inline">\(f_{i+1 / 2}\)</span>: <span class="math inline">\(f\left(\ldots, \bar{u}_{i-1}, \bar{u}_{i}, \bar{u}_{i+1}, \ldots\right)=f(u)\)</span></p></li>
+<li><p>for the conservative scheme: the velocity can only change due to the fluxes:</p>
+<p>we can easily have: <span class="math display">\[
+(\bar{u}_{i-1}^{n+1}+\bar{u}_{i}^{n+1}+\bar{u}_{i+1}^{n+1})=(\bar{u}_{i}^{n-1}+\bar{u}_{i}^{n}+\bar{u}_{i}^{n+1})-\frac{\Delta t}{\Delta x} \left(f_{i+3 / 2}-f_{i-3 / 2}\right)
+\]</span> passed.</p></li>
+</ul>
+<h5 id="conservative-finite-difference-methods">Conservative Finite-Difference Methods</h5>
+<p>Inspired by the FVM methods, we have the general form of a conservative FDM method: <span class="math display">\[
+\color{purple}
+\bar{u}_{i}^{n+1}=\bar{u}_{i}^{n}-\frac{\Delta t}{\Delta x} \left(F^{n}_{i+1 / 2}-F^{n}_{i-1 / 2}\right)
+\]</span> We can try to write the conservative version of most of the FDM methods, (but not all):</p>
+<ul>
+<li><p>Upwind method: <span class="math display">\[
+F^{n}_{i+1 / 2} = \frac{1}{2}(u^{n}_{i})^2
+\]</span></p></li>
+<li><p>Lax-Friedrich's scheme: <span class="math display">\[
+F^{n}_{i+1 / 2} = \frac{\Delta x}{2\Delta t}(u^{n}_{i}-u^{n}_{i+1})+\frac{1}{2}\left[F(u^{n}_{i+1})+F(u^{n}_{i-1})\right]
+\]</span></p></li>
+</ul>
+<div class="note note-info">
+            <p>Some facts about conservative methods:</p><ul><li>Conservative methods automatically locate the shocks correctly (only the location, not the shape)</li><li>Conservative methods may show large spurious oscillation and smoothing near shocks</li><li>If not strictly conservative, then incorrect shock speeds. One way to deal with is manually impose the Rankine-Hugoniot jump condition, with awareness of shock locations.</li></ul><p>Two main strategies for discontinuities,</p><ul><li><p>shock capturing (99%)</p><p>Use a numerical scheme, in general conservative and with some added mechanism, to ensure that an entropy solution is obtained. (what we will discuss next)</p></li><li><p>shock fitting</p><p>Shocks (and other discontinuities) are treated as internal boundaries and the jump conditions are imposed as compatibility conditions across them.</p></li></ul>
+          </div>
+<div class="note note-secondary">
+            <p>Moreover, here is a theorem which is not very influential:</p><h5 id="lax-wendroff-theorem">Lax-Wendroff Theorem</h5><p>If a consistent (numerical flux consistent with physical flux), conservative scheme for the numerical solution of a hyperbolic conservation law converges (as <span class="math inline">\(\Delta x \rightarrow 0\)</span> and <span class="math inline">\(\Delta t\rightarrow 0\)</span>), it converges to a weak solution.</p><ul><li>It's only a weak solution, not guarantee if it is physically acceptable</li><li>not guarantee it actually does converge</li></ul>
+          </div>
+<h3 id="scheme-on-reverse-riemann-problem">Scheme on reverse Riemann problem</h3>
+<p>So far our schemes only meet the Riemann problems with <span class="math inline">\(u_L&gt;u_R\)</span>, for the reverse problem, we consider the Burger equation with initial condition: <span class="math display">\[
+u(x,0)= 
+\begin{cases}  
+-1 &amp;x&lt;0 \\ 
+1 &amp; x&gt;0
+\end{cases}
+\]</span> We have two mathematical solutions as:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/two solutions for reverse Riemann problem.png" srcset="/img/loading.gif" lazyload alt="two solutions for reverse Riemann problem, rarefaction wave (left) and stationary discontinuity (right)" style="zoom:67%;"></p>
+<h4 id="numerical-schemes">Numerical schemes</h4>
+<p>we set 2 different initial conditions:</p>
+<p><span class="math display">\[
+u_i^0= 
+\begin{cases}  
+-1 &amp;i\leq0 \\ 
+1 &amp; i&gt;0
+\end{cases}
+\]</span></p>
+<p><span class="math display">\[
+u_i^0= 
+\begin{cases}  
+-1 &amp;i&lt;0 \\ 
+0 &amp;i=0 \\ 
+1 &amp; i&gt;0
+\end{cases}
+\]</span></p>
+<p>And use the first order upwind scheme as <span class="math display">\[
+\frac{\partial u}{\partial t}=\frac{u_i^{n+1}-u_i^{n}}{\Delta t}, \qquad 
+\frac{\partial (1/2u^2)}{\partial x}= 
+\begin{cases}  
+\frac{(u_{i}^{n})^2-(u_{i-1}^{n})^2}{2\Delta x} &amp;u_i^n\geq0 \\ 
+\frac{(u_{i+1}^{n})^2-(u_i^{n})^2}{2\Delta x} &amp; u_i^n&lt;0
+\end{cases}
+\]</span></p>
+<h4 id="numerical-practice-5">Numerical Practice</h4>
+<p>Solving the system with <a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/Numerical-schemes-for-discontinuities/blob/master/2_non_linear_burger_eq/reverse_burger_first_order_upwind.f90">reverse_burger_first_order_upwind.f90</a>, we have the result:</p>
+<p><img src="/2022/06/18/FVM-schemes-fundamentals/reverse_burger_first_order_upwind.png" srcset="/img/loading.gif" lazyload alt="reverse_burger_first_order_upwind" style="zoom:67%;"></p>
+<p>As we can see a single change of the initial condition results in different solutions.</p>
+<ul>
+<li>conservative methods can converge to non-physical solutions rather than to the physically correct rarefaction wave.</li>
+<li>the solution is very sensitive to initial data.</li>
+</ul>
+<div class="note note-danger">
+            <p>Actually it is also very sensitive the node number, and the CFL number, we change the nodes number to 100, keep the initial condition that converges to the entropy satisfying solution, we have another weak solution.</p><p><img src="/2022/06/18/FVM-schemes-fundamentals/reverse_burger_first_order_upwind_compare.png" srcset="/img/loading.gif" lazyload alt="reverse burger first order upwind comparison" style="zoom:67%;"></p><p>Different node number i.e. mesh resolution result in different weak solutions. Two main findings:</p><ul><li>The code crashed at some node numbers.</li><li>Two types of solutions are found, either almost align with the smooth former result, or presents a bumpy at the centre.</li><li>The relationship between the node number and the type of the solutions possesses a bifurcation behaviours.</li></ul><p>I can't explain... Maybe still because the initial condition slightly changes with different resolutions. Need more work on searching more nodes numbers, and more initial condition settings.</p>
+          </div>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Numerical schemes fundamentals</div>
+      <div>https://daydreamatnight.github.io/2022/06/18/FVM-schemes-fundamentals/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 18, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/28/FVM-schemes-fundamentals2/" title="Numerical schemes fundamentals 2">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Numerical schemes fundamentals 2</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/09/Build-OpenFOAM-from-source-on-M1-Mac/" title="Compile OpenFOAM from source on M1 Mac">
+                        <span class="hidden-mobile">Compile OpenFOAM from source on M1 Mac</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+
+<script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
+<script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
+
+
+<style>
+.markmap-container{
+  display:flex;
+  justify-content:center;
+  margin:0 auto;
+  width:90%;
+  height:500px
+}
+.markmap-container svg{
+  width:100%;height:100%
+}
+@media(max-width:768px){
+  .markmap-container{
+    height:400px
+  }
+}</style>
+<script>
+function initMarkMap(){
+  document.querySelectorAll('.markmap-container>svg').forEach(el =>{
+    markmap.Markmap.create(el, null, JSON.parse(el.getAttribute('data')))
+  })
+};
+initMarkMap();
+
+</script></body>
+</html>

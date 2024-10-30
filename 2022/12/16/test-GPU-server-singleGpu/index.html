@@ -1,0 +1,2408 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Perform a cross-benchmark on between 8 Tesla A800 GPU server and GeForce RTX 3090. Single GPU performances on the basic matrix operations (Python C++) and real life large-scale neural net">
+<meta property="og:type" content="article">
+<meta property="og:title" content="test GPU servers single GPU">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/12/16/test-GPU-server-singleGpu/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Perform a cross-benchmark on between 8 Tesla A800 GPU server and GeForce RTX 3090. Single GPU performances on the basic matrix operations (Python C++) and real life large-scale neural net">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/gpu_benchmark.png">
+<meta property="article:published_time" content="2022-12-16T02:19:46.000Z">
+<meta property="article:modified_time" content="2023-09-16T03:56:22.612Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/gpu_benchmark.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>test GPU servers single GPU - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="test GPU servers single GPU"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-16 10:19" pubdate>
+          December 16, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          27k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          89 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">test GPU servers single GPU</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Perform a cross-benchmark on between 8 Tesla A800 GPU server and GeForce RTX 3090. Single GPU performances on the basic matrix operations (Python C++) and real life large-scale neural networks.</p>
+          </div>
+<span id="more"></span>
+<p>Benchmark configuration:</p>
+<ul>
+<li>target:
+<ul>
+<li>Floating point operations per second (FLOPS)</li>
+<li>Bandwidth</li>
+<li>State monitoring
+<ul>
+<li>pcie.link.gen.current</li>
+<li>pcie.link.gen.max</li>
+<li>pstate</li>
+<li>clocks.current.graphics [MHz]</li>
+<li>clocks.max.graphics [MHz]</li>
+</ul></li>
+<li><strong>accuracy (future)</strong></li>
+</ul></li>
+<li>Platforms:
+<ul>
+<li>8 NVIDIA A800s</li>
+<li>GeForce RTX 3090</li>
+<li>Intel® Xeon® Gold 6234 Processor (cpu)</li>
+</ul></li>
+<li>Implementations:
+<ul>
+<li>Python(PyTorch backended with cuBLAS)</li>
+<li>C++(cuBLAS directly)</li>
+</ul></li>
+<li>Precisions:
+<ul>
+<li>Float64(double),</li>
+<li>Float32(single)</li>
+<li>Float16(half)</li>
+</ul></li>
+<li>Tasks (single):
+<ul>
+<li>Basic:
+<ul>
+<li>Matrix matrix multiplication</li>
+<li>Vector multiply a number</li>
+</ul></li>
+<li>Neural network layer
+<ul>
+<li>Bert</li>
+<li>GPT-2</li>
+<li>T5</li>
+</ul></li>
+<li>Simulations
+<ul>
+<li>nbody (flowlling blogs)</li>
+<li>SPH</li>
+<li><strong>FVM (suspended)</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+<tr>
+<th class="tg-0pky" colspan="3" rowspan="2">
+Single GPU<br>cross benchmark
+</th>
+<th class="tg-0pky" colspan="2">
+basic
+</th>
+<th class="tg-0pky" colspan="3">
+NN layer
+</th>
+<th class="tg-0pky" colspan="3">
+simulation
+</th>
+<th class="tg-0pky" rowspan="2">
+note
+</th>
+</tr>
+<tr>
+<th class="tg-0pky">
+GEMM
+</th>
+<th class="tg-0pky">
+SCAL
+</th>
+<th class="tg-0pky">
+BERT
+</th>
+<th class="tg-0pky">
+GPT2
+</th>
+<th class="tg-0pky">
+T5
+</th>
+<th class="tg-0pky">
+nbody
+</th>
+<th class="tg-0pky">
+SPH
+</th>
+<th class="tg-0pky">
+FVM
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tg-0pky" rowspan="6">
+A800*8<br>(w NV)
+</td>
+<td class="tg-0pky" rowspan="3">
+torch
+</td>
+<td class="tg-0pky">
+FP64
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP32
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√#
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP16
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky" rowspan="3">
+cuda
+</td>
+<td class="tg-0pky">
+FP64
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP32
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP16
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky" rowspan="6">
+3090
+</td>
+<td class="tg-0pky" rowspan="3">
+torch
+</td>
+<td class="tg-0pky">
+FP64
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP32
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√#
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP16
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky" rowspan="3">
+cuda
+</td>
+<td class="tg-0pky">
+FP64
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP32
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP16
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky" rowspan="6">
+cpu
+</td>
+<td class="tg-0pky" rowspan="3">
+torch
+</td>
+<td class="tg-0pky">
+FP64
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP32
+</td>
+<td class="tg-0pky">
+√
+</td>
+<td class="tg-0pky">
+√#
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP16
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky" rowspan="3">
+c++
+</td>
+<td class="tg-0pky">
+FP64
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP32
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+o
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+<tr>
+<td class="tg-0pky">
+FP16
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+<td class="tg-0pky">
+</td>
+</tr>
+</tbody>
+</table>
+<p><small><code>√</code> indicates that it FLOPS has been bechmarked, <code>#</code> indicates that it bandwidth has been bechmarked, <code>o</code> indicates that we plan to do benchmarks but need more support. <code>ALL</code> GPU benchmarks are performed under status monitoring.</small></p>
+<p>In the <a href="#specifications">specifications</a> section below, the on-paper performance data is collected and analyzed. In the <a href="#benchmark-process-of-single-gpu">process section</a>, only python code snippets and partial results are included for illustration and explanation. The full data is in the <a href="#matrix-operation-full-report-single-gpu">full report</a> sections.</p>
+<h2 id="specifications">Specifications</h2>
+<p>Specifications and other useful information related to the scientific computing performance of the A800, A100, RTX3090, and Xeon® Gold 6234(CPU) are listed below:</p>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Architecture</th>
+<th>Memory<br>(GB)</th>
+<th>ECC</th>
+<th>Bandwidth<br>(GB/s)</th>
+<th>CUDA Cores</th>
+<th>FP16 Tensor Cores</th>
+<th>FP64 GFLOPS</th>
+<th>FP32 TFLOPS</th>
+<th>FP16 TFLOPS</th>
+<th>Compute Capability</th>
+<th>PCIE<br>(Gen)</th>
+<th>PCIE<br>(GB/s )</th>
+<th>NVLink<br>(Gen)</th>
+<th>NVLink<br>(GB/s )</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A100</td>
+<td>Ampere</td>
+<td>80</td>
+<td>√</td>
+<td>2039</td>
+<td>6912</td>
+<td>432</td>
+<td>19500</td>
+<td>19.5</td>
+<td>312</td>
+<td>8.0</td>
+<td>4.0</td>
+<td>2*32</td>
+<td>3</td>
+<td>50*12</td>
+</tr>
+<tr class="even">
+<td>A800</td>
+<td>Ampere</td>
+<td>80</td>
+<td>√</td>
+<td>2039</td>
+<td>6912</td>
+<td>432</td>
+<td>19500</td>
+<td>19.5</td>
+<td>312</td>
+<td>8.0</td>
+<td>4.0</td>
+<td>2*32</td>
+<td>3</td>
+<td>50*8</td>
+</tr>
+<tr class="odd">
+<td>RTX 3090</td>
+<td>Ampere</td>
+<td>24</td>
+<td>x</td>
+<td>936</td>
+<td>10496</td>
+<td>328</td>
+<td><font color="blue"> <em>556</em> </font></td>
+<td>35.6</td>
+<td>142</td>
+<td>8.6</td>
+<td>4.0</td>
+<td>2*16</td>
+<td>3</td>
+<td><font color="blue"> <em>50*4</em> </font></td>
+</tr>
+<tr class="even">
+<td>Xeon® Gold 6234</td>
+<td>CPU</td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+<td>√</td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+<td>x</td>
+<td>x</td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+<td><font color="orange"> <em>0.2158</em> </font></td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+<td>x</td>
+<td>3.0</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+</tbody>
+</table>
+<p><small>Data marked as <font color="blue"><em>italic</em></font> is from <a target="_blank" rel="noopener" href="https://www.techpowerup.com/gpu-specs/"><em>(unofficial)</em> TechPowerUp GPU Database</a>. See the <a href="#references">references list</a>. Data of A4000 marked as <font color="orange"><em>orange italic</em></font> is inaccessible or likely not true. Xeon® Gold 6234 (CPU) is added to this list, only the Geekbench (not the theory) F32 performance of a similar CPU <a target="_blank" rel="noopener" href="https://gadgetversus.com/processor/intel-xeon-gold-gflops-performance/">Xeon® Gold 6230</a> was found. Data of A100 80GB PCIE and A800 80GB PCIE are selected.</small></p>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th><font color="red"> <em>instruction throughput</em> </font><br>Compute Capability</th>
+<th>5.0, 5.2</th>
+<th>5.3</th>
+<th>6.0</th>
+<th>6.1</th>
+<th>6.2</th>
+<th>7.x</th>
+<th>8.0</th>
+<th>8.6</th>
+<th>8.9</th>
+<th>9.0</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16-bit floating-point add, multiply, multiply-add</td>
+<td>N/A</td>
+<td>256</td>
+<td>128</td>
+<td>2</td>
+<td>256</td>
+<td>128</td>
+<td>256<sup><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#fn3">3</a></sup></td>
+<td>256<sup><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#fn3">3</a></sup></td>
+<td>128</td>
+<td>256</td>
+</tr>
+<tr class="even">
+<td>32-bit floating-point add, multiply, multiply-add</td>
+<td>128</td>
+<td>128</td>
+<td>64</td>
+<td>128</td>
+<td>128</td>
+<td>64</td>
+<td>64</td>
+<td>128</td>
+<td>128</td>
+<td>128</td>
+</tr>
+<tr class="odd">
+<td>64-bit floating-point add, multiply, multiply-add</td>
+<td>4</td>
+<td>4</td>
+<td>32</td>
+<td>4</td>
+<td>4</td>
+<td>32<sup><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#fn5">5</a></sup></td>
+<td>32</td>
+<td>2</td>
+<td>2</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<p><small>[3] 128 for <code>__nv_bfloat16</code> [5] 2 for compute capability 7.5 GPUs</small></p>
+<p>The TFLOPS in each precision are dependent on the number of CUDA cores, related <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/tensor-cores/">Tensor Cores</a>, and the <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#maximize-instruction-throughput">instruction throughput</a>.</p>
+<p>For A100, the Float64 performance is much better because of its extra Float64 tensor cores and its high instruction throughput. See also <a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/why-cuBLAShgemm-is-slower-more-than-cuBLASsgemm-when-i-use/45607">why cuBLASHgemm is slower more than cuBLASSgemm when I use?</a> (Because GTX1070 (6.1) has very low throughput for FP16(6.0) The only Pascal GPU with “fast” FP16 currently is P100)</p>
+<p>Starting with cuBLAS version 11.0.0, there is no longer any restriction on matrix dimensions and memory alignments to use Tensor Cores. However, the best performance can be obtained using Tensor Cores when the matrix size and pointers meet certain memory alignment requirements. Specifically, all of the following conditions must be met to get the maximum performance from Tensor Cores.</p>
+<ul>
+<li><code>m % 8 == 0</code></li>
+<li><code>k % 8 == 0</code></li>
+<li><code>op_B == cuBLAS_OP_N || n%8 == 0</code></li>
+<li><code>intptr_t(A) % 16 == 0</code></li>
+<li><code>intptr_t(B) % 16 == 0</code></li>
+<li><code>intptr_t(C) % 16 == 0</code></li>
+<li><code>intptr_t(A+lda) % 16 == 0</code></li>
+<li><code>intptr_t(B+ldb) % 16 == 0</code></li>
+<li><code>intptr_t(C+ldc) % 16 == 0</code></li>
+</ul>
+<p>Bandwidth is also a very important factor and is always a key bottleneck in real-life performance. We will see this repeatedly in the next sections. That's why a large bandwidth (fast) memory can be really expensive. In parallel computation, the bandwidth of interconnect interface is more important. Take A40 as an example, the GPU-GPU bandwidth through PCIE can only reach 64 GB/s in the absence of the <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/nvlink/">NVLink</a>. And this speed highly depends on the PCIE configuration of the motherboard. If the motherboard only supports 16 lane PCIE, the bandwidth can only be 32 GB/s. With <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/nvlink/">NVLink</a>, the GPU-to-GPU communication can be much faster, in A40, it can be 112.5GB/s.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="/2022/12/16/test-GPU-server-singleGpu/image-20230106154415737.png" srcset="/img/loading.gif" lazyload alt="NVLink connecting 2 RTX3090TI GPUs." style="zoom:50%;"></td>
+<td><img src="/2022/12/16/test-GPU-server-singleGpu/image-20230106154716006.png" srcset="/img/loading.gif" lazyload alt="DGX A100 server" style="zoom:80%;"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2022/12/16/test-GPU-server-singleGpu/537759_1_En_23_Fig1_HTML.webp" srcset="/img/loading.gif" lazyload alt="537759_1_En_23_Fig1_HTML" style="zoom:50%;"></p>
+<p>Note that NVLink only connects 2 GPUs. In a 4-GPU machine, PCIE is still used for GPUs not connected by NVLink. Another configuration is using NVSwitch + NVLinks to connect multiple cards. For example in above right <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/dgx-a100/">NVIDIA DGX A10</a> containing 8x NVIDIA A100 GPUs. 12 NVLinks/GPU provide 600 GB/s GPU-to-GPU Bi-directional Bandwidth. 6x NVIDIA NVSwitches give 4.8 TB/s Bi-directional Bandwidth across all GPUs.</p>
+<blockquote>
+<p>PCIe 4 doubles the data transfer speed of the previous generation (PCIe 3.0) from 1GB/s per lane to 2GB/s per lane, providing users with a total of 32GB/s in a 16 lane configuration. Furthermore, PCIe provides up to 16GT/s per lane when compared to the previous generation's 8GT/s. Each new generation of PCIe doubles the data transfer rate and total bandwidth per lane of the prior generation, paving the way for new, faster PCIe devices.</p>
+</blockquote>
+<blockquote>
+<p>NVLink is a direct GPU-to-GPU interconnect that scales multi-GPU input/output (IO) within the server. NVSwitch connects multiple NVLinks to provide all-to-all GPU communication at full NVLink speed within a single node and between nodes. NVLink and NVSwitch for NVIDIA Ampere architecture provide extra 600GB/s GPU-to-GPU bandwidth.</p>
+</blockquote>
+<h2 id="benchmark-process-of-single-gpu">Benchmark Process of single GPU</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Create a new conda environment, install PyTorch, hugging face transformer packages from for testing, Jupyter notebook (not required) and pandas.</p>
+<h3 id="preparations">Preparations</h3>
+<p>The GPU server (A800), GeForce RTX 3090 on my own computer.</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch
+
+torch.cuda.set_device(<span class="hljs-number">1</span>) <span class="hljs-comment"># for gpu server</span>
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Pytorch version\t:&#x27;</span>, torch.__version__)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;CUDA version\t:&#x27;</span>, torch.version.cuda)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;GPU\t\t:&#x27;</span>,torch.cuda.get_device_name())</code></pre></div>
+<table>
+<tr>
+<td>
+A800
+</td>
+<td>
+3090
+</td>
+</tr>
+<tr>
+<td>
+<div class="code-wrapper"><pre><code class="hljs bash">Pytorch version : 1.13.1+cu117
+CUDA version    : 11.7
+GPU             : NVIDIA A800</code></pre></div>
+</td>
+<td>
+<div class="code-wrapper"><pre><code class="hljs bash">Pytorch version : 1.8.0+cu111
+CUDA version    : 11.1
+GPU             : GeForce RTX 3090</code></pre></div>
+</td>
+</tr>
+</table>
+<p>Define benchmark functions:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> inspect
+<span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> defaultdict
+<span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+<span class="hljs-keyword">from</span> torch.utils <span class="hljs-keyword">import</span> benchmark 
+
+pd.options.display.precision = <span class="hljs-number">3</span>
+
+<span class="hljs-comment"># transfer inspect datatype into dict</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">var_dict</span>(<span class="hljs-params">*args</span>):
+    callers_local_vars = inspect.currentframe().f_back.f_locals.items()
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">dict</span>([(name, val) <span class="hljs-keyword">for</span> name, val <span class="hljs-keyword">in</span> callers_local_vars <span class="hljs-keyword">if</span> val <span class="hljs-keyword">is</span> arg][<span class="hljs-number">0</span>] 
+                <span class="hljs-keyword">for</span> arg <span class="hljs-keyword">in</span> args)
+
+<span class="hljs-comment"># return the median of mutiple benchmark results</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">walltime</span>(<span class="hljs-params">stmt, arg_dict, duration=<span class="hljs-number">60</span></span>):
+    <span class="hljs-keyword">return</span> benchmark.Timer(stmt=stmt, <span class="hljs-built_in">globals</span>=arg_dict).blocked_autorange(
+        min_run_time=duration).median</code></pre></div>
+<h3 id="matrix-operations">Matrix operations</h3>
+<h4 id="matrix-matrix-multiplication-gemm">Matrix matrix multiplication (GEMM)</h4>
+<p>The performance of matrix multiplications represents the <strong>upper bound</strong> of the hardware.</p>
+<div class="note note-info">
+            <p>The matrix multiplication performance is a main topic in HPC. There are a large number of research papers and libraries. For example, for CPU, <a target="_blank" rel="noopener" href="https://netlib.org/blas/">BLAS</a>(FORTRAN)/cBLAS(C) is one mainstream API containing all Basic Linear Algebra Subprograms and the backend library includes open-sourced <a target="_blank" rel="noopener" href="https://math-atlas.sourceforge.net/">ATLAS</a>, <a target="_blank" rel="noopener" href="https://www.openblas.net/">OpenBLAS</a>, close-sourced <a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html">Intel® MKL</a>. For Nvidia GPU, the backend library, cuBLAS, is not open-sourced. You may check <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/cutlass">cutlass</a>, which claimed similar performance as cuBLAS, for some implementation details. And there is a new coming AI accelerated library <a target="_blank" rel="noopener" href="https://github.com/openai/openai-gemm">openai-gemm</a> only for faster GEMM operations.</p>
+          </div>
+<p>The example code of <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/FLOPS">TFLOPS</a> of matrix multiplication is shown below. 4 different sizes of square matrices in 3 different precisions are tested.</p>
+<div class="code-wrapper"><pre><code class="hljs python">matmul_tflops = defaultdict(<span class="hljs-keyword">lambda</span>: &#123;&#125;)
+<span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> [<span class="hljs-number">128</span>, <span class="hljs-number">512</span>, <span class="hljs-number">2048</span>, <span class="hljs-number">8192</span>]:
+    <span class="hljs-keyword">for</span> dtype <span class="hljs-keyword">in</span> (torch.float64, torch.float32, torch.float16):
+        a = torch.randn(n, n, dtype=dtype).cuda()
+        b = torch.randn(n, n, dtype=dtype).cuda()   
+        t = walltime(<span class="hljs-string">&#x27;a @ b&#x27;</span>, var_dict(a, b))
+        matmul_tflops[<span class="hljs-string">f&#x27;n=<span class="hljs-subst">&#123;n&#125;</span>&#x27;</span>][dtype] = <span class="hljs-number">2</span>*n**<span class="hljs-number">3</span> / t / <span class="hljs-number">1e12</span> <span class="hljs-comment">#*</span>
+        <span class="hljs-keyword">del</span> a, b
+        
+pd.DataFrame(matmul_tflops)</code></pre></div>
+<div class="note note-secondary">
+            <p>*The number of floating point operations of</p><ul><li><p>multiplication of two <span class="math inline">\(n \times n\)</span> matrices: <span class="math inline">\(2n^3\)</span></p></li><li><p>multiplication of two <span class="math inline">\(n-dimension\)</span> vectors: <span class="math inline">\(2n^2\)</span></p></li></ul><p>For example, the inner product of two vectors <span class="math inline">\(a=[a_0, a_1, ... a_n]\)</span> and <span class="math inline">\(b=[b_0, b_1, ... b_n]\)</span> can be expanded by: <span class="math display">\[&lt;a,b&gt; = a_0*b_0 + a_0*b_1 + a_0*b_2 ... a_n*b_n\]</span> Although in hardware, one multiplication and one addition are done at once, referring as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation">Multiply–accumulate operation (MAC)</a>. But normally, they are treated as two separate floating point operations when calculating FLOPs.</p>
+          </div>
+<p>A selection of results on different platforms are shown as:</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">A800</th>
+<th style="text-align: left;">n=128</th>
+<th style="text-align: left;">n=512</th>
+<th style="text-align: left;">n=2048</th>
+<th style="text-align: left;">n=8192</th>
+<th>Theory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Float64</td>
+<td style="text-align: left;">0.45773<font color="green"> (+359.49%) </font></td>
+<td style="text-align: left;">10.662<font color="green"> (+2430.5%) </font></td>
+<td style="text-align: left;">17.188<font color="green"> (+3059.44%) </font></td>
+<td style="text-align: left;">18.023<font color="green"> (+3209.95%) </font></td>
+<td>19.5<font color="green"> (+3407.19%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Float32</td>
+<td style="text-align: left;">0.34396<font color="red"> (-12.28%) </font></td>
+<td style="text-align: left;">9.7233<font color="red"> (-49.8%) </font></td>
+<td style="text-align: left;">17.575<font color="red"> (-34.89%) </font></td>
+<td style="text-align: left;">18.993<font color="red"> (-43.89%) </font></td>
+<td>19.5<font color="red"> (-45.22%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Float16</td>
+<td style="text-align: left;">0.20737<font color="red"> (-49.62%) </font></td>
+<td style="text-align: left;">18.949<font color="red"> (-30.22%) </font></td>
+<td style="text-align: left;">201.77<font color="green"> (+242.0%) </font></td>
+<td style="text-align: left;">257.4<font color="green"> (+242.28%) </font></td>
+<td>312<font color="green"> (+119.72%) </font></td>
+</tr>
+</tbody>
+</table>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">3090</th>
+<th style="text-align: left;">n=128</th>
+<th style="text-align: left;">n=512</th>
+<th style="text-align: left;">n=2048</th>
+<th style="text-align: left;">n=8192</th>
+<th>Theory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Float64</td>
+<td style="text-align: left;">0.099616<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">0.42134<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">0.54402<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">0.54451<font color="grey"> (100.0%) </font></td>
+<td><font color="blue"> <em>0.556</em> </font><font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Float32</td>
+<td style="text-align: left;">0.3921<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">19.37<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.991<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">33.852<font color="grey"> (100.0%) </font></td>
+<td>35.6<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Float16</td>
+<td style="text-align: left;">0.41158<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">27.157<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">58.997<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">75.201<font color="grey"> (100.0%) </font></td>
+<td>142<font color="grey"> (100.0%) </font></td>
+</tr>
+</tbody>
+</table>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">cpu</th>
+<th style="text-align: left;">n=128</th>
+<th style="text-align: left;">n=512</th>
+<th style="text-align: left;">n=2048</th>
+<th style="text-align: left;">n=8192</th>
+<th>Standard</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Float64</td>
+<td style="text-align: left;">0.0975<font color="red"> (-2.09%) </font></td>
+<td style="text-align: left;">0.09918<font color="red"> (-76.46%) </font></td>
+<td style="text-align: left;">0.09824 <font color="red">(-81.94%) </font></td>
+<td style="text-align: left;">0.09729<font color="red"> (-82.1%) </font></td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Float32</td>
+<td style="text-align: left;">0.1853<font color="red"> (-52.7%) </font></td>
+<td style="text-align: left;">0.2042 <font color="red">(-98.9%) </font></td>
+<td style="text-align: left;">0.2080<font color="red"> (-99.2%) </font></td>
+<td style="text-align: left;">0.2066<font color="red"> (-99.4%) </font></td>
+<td><font color="orange"> <em>0.216</em> </font><font color="red"> (-99.4%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Float16</td>
+<td style="text-align: left;">NAN</td>
+<td style="text-align: left;">NAN</td>
+<td style="text-align: left;">NAN</td>
+<td style="text-align: left;">NAN</td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+</tr>
+</tbody>
+</table>
+<p>The general rule can be concluded as:</p>
+<ul>
+<li>the performance increases with the matrix size i.e. occupancy.</li>
+<li>a big performance jump is seen when converting from 64-bit floating points to 32-bit floating points, and from 32-bit floating points to 16-bit floating points.</li>
+<li>the best TFLOPS number ever got is still far away from the theoretical TFLOPS. Because the performance is bottlenecked by the memory bandwidth.</li>
+</ul>
+<p>From the comparison, we can see that:</p>
+<ul>
+<li>For A800:
+<ul>
+<li>it has much higher FLoat64 and Float16 FLOPS than the others</li>
+<li>the Float32 performance is slightly lower, stick to the theory.</li>
+</ul></li>
+</ul>
+<h4 id="vector-multiply-a-number-scal">Vector multiply a number (SCAL)</h4>
+<p>The number of computations (FLOPs) is only part of the story. Memory bandwidth is the other part, and most of the time is even more important! On current computer architectures, a single memory access from main memory is much slower than a single computation — by a factor of about 100 or more. As a result, the amount of memory read/writes will have a big impact on the speed — bigger perhaps than the FLOPs.</p>
+<p>In order to test the bandwidth, we designed a task that scales a vector by a constant. The actual scaling operation is as fast as a snap. The main bottleneck is the bandwidth.</p>
+<div class="note note-info">
+            <p>Element-wised tasks like this are very common, such as the time integrating step in simulations, the activation function layer and model updating process in Neural Networks. Such types of tasks are always ignored when calculating the complexity (FLOPs). But they can be actually very slow.</p><blockquote><p>It’s actually common to <em>not</em> count these operations, as they only take up a small fraction of the overall time. We’re mostly interested in the (big) matrix multiplies and dot products, and we’ll simply assume that the activation function is free.</p></blockquote>
+          </div>
+<p>We only test on torch (code below) to illustrate the problem. And we only choose precision FP32, because the calculation overhead of large dimension FP64 vector is still big. We are seeking an operation with ignorable calculation overhead compare to the memory access. Besides, FP16 scaling is not supported in cuBLAS, neither level-1 routine <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuBLAS/index.html#cuBLAS-t-scal">cuBLASscal</a> nor BLAS-like routine <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuBLAS/index.html#cuBLASscalex">cuBLASScalEx()</a>.</p>
+<p>For a more detailed pure bandwidth benchmark, refer to the beginning section of <a href="/2023/02/01/test-GPU-server-multiGPU/">next blog</a>.</p>
+<div class="code-wrapper"><pre><code class="hljs python">vector = defaultdict(<span class="hljs-keyword">lambda</span>: &#123;&#125;)
+<span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> [<span class="hljs-number">1024</span>*<span class="hljs-number">64</span>, <span class="hljs-number">1024</span>*<span class="hljs-number">256</span>, <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>, <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>*<span class="hljs-number">4</span>]:
+    a = torch.randn(n).cuda()
+    t = walltime(<span class="hljs-string">&#x27;a * 1.2&#x27;</span>, var_dict(a))
+    vector[n][<span class="hljs-string">&#x27;TFLOPS&#x27;</span>] = n / t / <span class="hljs-number">1e12</span>
+    vector[n][<span class="hljs-string">&#x27;GB/s&#x27;</span>] = <span class="hljs-number">8</span> * n / t / <span class="hljs-number">1e9</span> <span class="hljs-comment"># **</span>
+    
+pd.DataFrame(vector)</code></pre></div>
+<div class="note note-secondary">
+            <p>**The size of <span class="math inline">\(n\)</span> dimensional Float32 vector is <span class="math inline">\(4n\)</span> bits. In one scaling operation, each element of the vectors need to be distributed to each thread, and moved back to the main memory after computing.</p><p>In a storing dense task like this, assuming the time spend on operating is much lower than storing, the bandwidth is therefore <span class="math inline">\(8n/t\)</span> bits/s.</p>
+          </div>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">A800</th>
+<th style="text-align: left;">n=65536</th>
+<th style="text-align: left;">n=262144</th>
+<th style="text-align: left;">n=1048576</th>
+<th style="text-align: left;">n=4194304</th>
+<th>Peak</th>
+<th>Theory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">F32 TFLOPS</td>
+<td style="text-align: left;">0.0081949</td>
+<td style="text-align: left;">0.033527</td>
+<td style="text-align: left;">0.13034</td>
+<td style="text-align: left;">0.21234</td>
+<td>18.993</td>
+<td>19.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bandwidth<br>(GB/s)</td>
+<td style="text-align: left;">65.559<font color="red"> (-19.37%) </font></td>
+<td style="text-align: left;">268.22<font color="red"> (-20.5%) </font></td>
+<td style="text-align: left;">1042.7<font color="green"> (+19.53%) </font></td>
+<td style="text-align: left;">1698.7<font color="green"> (+114.33%) </font></td>
+<td>N/A</td>
+<td>2039<br><font color="green">(+117.8%) </font></td>
+</tr>
+</tbody>
+</table>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">RTX3090</th>
+<th style="text-align: left;">n=65536</th>
+<th style="text-align: left;">n=262144</th>
+<th style="text-align: left;">n=1048576</th>
+<th style="text-align: left;">n=4194304</th>
+<th>Peak</th>
+<th style="text-align: left;">Theory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">F32 TFLOPS</td>
+<td style="text-align: left;">0.010163</td>
+<td style="text-align: left;">0.042172</td>
+<td style="text-align: left;">0.10904</td>
+<td style="text-align: left;">0.09907</td>
+<td>33.852</td>
+<td style="text-align: left;">35.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bandwidth<br>(GB/s)</td>
+<td style="text-align: left;">81.306<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">337.38<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">872.31<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">792.56<font color="grey"> (100.0%) </font></td>
+<td>N/A</td>
+<td style="text-align: left;">936<br><font color="grey">(100.0%) </font></td>
+</tr>
+</tbody>
+</table>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">CPU</th>
+<th style="text-align: left;">n=65536</th>
+<th style="text-align: left;">n=262144</th>
+<th style="text-align: left;">n=1048576</th>
+<th style="text-align: left;">n=4194304</th>
+<th>Peak</th>
+<th>Standard</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">F32 TFLOPS</td>
+<td style="text-align: left;">0.0068965</td>
+<td style="text-align: left;">0.0024492</td>
+<td style="text-align: left;">0.002599</td>
+<td style="text-align: left;">0.0021311</td>
+<td>0.2066</td>
+<td><font color="orange"> <em>0.216</em> </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bandwidth<br>(GB/s)</td>
+<td style="text-align: left;">55.172<font color="red"> (-32.14%) </font></td>
+<td style="text-align: left;">19.594<font color="red"> (-94.19%) </font></td>
+<td style="text-align: left;">20.792<font color="red"> (-97.62%) </font></td>
+<td style="text-align: left;">17.048<font color="red"> (-97.85%) </font></td>
+<td>N/A</td>
+<td><font color="orange"> <em>N/A</em> </font></td>
+</tr>
+</tbody>
+</table>
+<p>The TFLOPS is way far from the peak performance even with large vector size.</p>
+<p>From the comparison, the bandwidth of A800 has as much as <font color="green"> +114.33% </font> gain from the 3090.</p>
+<h3 id="gpu-state-monitoring">GPU state monitoring</h3>
+<p>This task is firstly designed for a wired bug when running GEMM with CUDA. It is not surprising that running cuBLAS directly gives better peak results than the indirect approach i.e. torch calling cuBLAS. However, there is a large <strong>drop</strong> in performance for Float32, RTX3090, CUDA compared to its torch counterparts. And this result is repeatable.</p>
+<p>To check the reason, run the same GEMM benchmark again with CUDA and torch on Float32, RTX3090 while recording the GPU state, the result is shown below:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">================== CUDA ==================
+INFO: Running test for all 1 GPU deivce(s) on host tehp1308
+
+==================
+INFO: testing GPU0
+==================
+timestamp, index, name, pcie.link.gen.current, pcie.link.gen.max, pstate, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+2022/12/22 14:26:29.629, 0, GeForce RTX 3090, 1, 3, P8, 210 MHz, 2100 MHz
+2022/12/22 14:26:34.631, 0, GeForce RTX 3090, 3, 3, P2, 1695 MHz, 2100 MHz
+2022/12/22 14:26:39.633, 0, GeForce RTX 3090, 3, 3, P2, 1695 MHz, 2100 MHz
+2022/12/22 14:26:44.635, 0, GeForce RTX 3090, 3, 3, P2, 1575 MHz, 2100 MHz
+2022/12/22 14:26:49.636, 0, GeForce RTX 3090, 3, 3, P2, 1530 MHz, 2100 MHz
+2022/12/22 14:26:54.638, 0, GeForce RTX 3090, 3, 3, P2, 1440 MHz, 2100 MHz
+2022/12/22 14:26:59.640, 0, GeForce RTX 3090, 3, 3, P2, 1515 MHz, 2100 MHz
+2022/12/22 14:27:04.643, 0, GeForce RTX 3090, 3, 3, P2, 1485 MHz, 2100 MHz
+
+cuBLASSgemm test result:
+8.5635e-07
+1.6361e-05
+0.00013088
+0.0010519
+0.0085015
+0.081756
+0.29769
+2.6873
+9.7986
+12.518
+18.074
+16.447
+20.891
+20.691</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">================== TORCH ==================
+INFO: Running test for all 1 GPU deivce(s) on host tehp1308
+
+==================
+INFO: testing GPU0
+==================
+timestamp, index, name, pcie.link.gen.current, pcie.link.gen.max, pstate, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+2022/12/22 14:42:38.925, 0, GeForce RTX 3090, 1, 3, P8, 255 MHz, 2100 MHz
+2022/12/22 14:42:43.927, 0, GeForce RTX 3090, 3, 3, P2, 1695 MHz, 2100 MHz
+2022/12/22 14:42:48.929, 0, GeForce RTX 3090, 3, 3, P2, 1950 MHz, 2100 MHz
+2022/12/22 14:42:53.930, 0, GeForce RTX 3090, 3, 3, P2, 1950 MHz, 2100 MHz
+2022/12/22 14:42:58.931, 0, GeForce RTX 3090, 3, 3, P2, 1950 MHz, 2100 MHz
+2022/12/22 14:43:03.933, 0, GeForce RTX 3090, 3, 3, P2, 1950 MHz, 2100 MHz
+2022/12/22 14:43:08.934, 0, GeForce RTX 3090, 3, 3, P2, 1935 MHz, 2100 MHz
+2022/12/22 14:43:13.950, 0, GeForce RTX 3090, 3, 3, P2, 1890 MHz, 2100 MHz
+2022/12/22 14:43:18.952, 0, GeForce RTX 3090, 3, 3, P2, 1800 MHz, 2100 MHz
+2022/12/22 14:43:23.953, 0, GeForce RTX 3090, 3, 3, P2, 1740 MHz, 2100 MHz
+2022/12/22 14:43:28.954, 0, GeForce RTX 3090, 3, 3, P2, 1695 MHz, 2100 MHz
+2022/12/22 14:43:33.956, 0, GeForce RTX 3090, 3, 3, P2, 1935 MHz, 2100 MHz
+Pytorch version : 1.8.0+cu111
+CUDA version : 11.1
+GPU : GeForce RTX 3090
+8.5315e-07
+1.6369e-05
+0.00013096
+0.0010552
+0.0084168
+0.06718
+0.39649
+2.9674
+20.268
+27.827
+29.288
+35.074
+35.671
+31.058</code></pre></div>
+<p>We can see except for the beginning moment, the range of GPU frequencies are:</p>
+<ul>
+<li>cuBLAS: [1485, 1695] MHz</li>
+<li>torch: [1695, 1950] MHz</li>
+</ul>
+<p>The peak frequency when running cuBLAS directly is the same as the lowest frequency when running torch!</p>
+<p>Check the benchmark logs of A800,</p>
+<div class="code-wrapper"><pre><code class="hljs shell">================== CUDA ==================
+Running test for all 8 GPU deivce(s) on host localhost.localdomain
+
+==================
+testing GPU0
+==================
+timestamp, index, name, pcie.link.gen.current, pcie.link.gen.max, pstate, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+2023/02/13 00:46:32.488, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 210 MHz, 1410 MHz
+2023/02/13 00:46:37.491, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:46:42.495, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:46:47.496, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:46:52.938, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:46:57.940, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:47:02.941, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:47:07.943, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:47:12.944, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:47:18.320, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1155 MHz, 1410 MHz
+2023/02/13 00:47:23.321, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:28.425, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:33.427, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:38.428, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:43.879, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:48.880, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:53.953, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:47:58.955, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:48:03.957, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:48:08.959, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz
+2023/02/13 00:48:13.962, 0, NVIDIA A800-SXM4-80GB, 4, 4, P0, 1410 MHz, 1410 MHz</code></pre></div>
+<p>No major problem is found.</p>
+<p>Below are some more information extracted from the GPU state comparison when running GEMM:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>pcie state</th>
+<th>pstate</th>
+<th>freq</th>
+<th>freq stability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A800</td>
+<td>4/4</td>
+<td>8-0</td>
+<td>1410/1410 MHZ</td>
+<td>high</td>
+</tr>
+<tr class="even">
+<td>RTX3090</td>
+<td>3/3</td>
+<td>8-2</td>
+<td>1950/2100 MHz</td>
+<td>low</td>
+</tr>
+</tbody>
+</table>
+<p>It is worth mentioning that, although the max frequencies of A800 is not comparable with that of RTX3090, the frequency of them stick to the maximum during the entire period of calculation. On the contrary, the frequencies of RTX3090 reaches their peak performances, lower than the max frequency, for a short time then deteriorates because of their less heat dissipation capabilities.</p>
+<p>Also, the pstate represents to the current performance state of GPU, ranging from P0 max to P12 min. A800 immediately reaches P0 but RTX3090 only reach P2. Maybe that's why the frequency of RTX3090 never reach the highest. There is a way of forcing the graphic card to be P0 state is a kind of overclock, which can cause a crash, I did not try it. See <a target="_blank" rel="noopener" href="https://github.com/trexminer/T-Rex/issues/923">Issues with P-state "--pstate p0" on 3080ti &amp; 0.24.8</a>.</p>
+<p>Last but not least, note that A800 has a higher PCIE state than RTX3090. In fact, RTX3090 supports PCIE 4.0, but the connected CPU and motherboard only supports PCIE 3.0. See <a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/products/sku/193954/intel-xeon-gold-6234-processor-24-75m-cache-3-30-ghz/specifications.html">Intel® Xeon® Gold 6234 Processor</a>. This means that the A800 has twice the CPU-GPU bandwidth of the RTX3090 per PCIE lane. This is a benefit for multi-GPU computing, especially in the absence of NVLink.</p>
+<h3 id="large-scale-neural-networks">Large scale neural networks</h3>
+<p>Now, test the performance of a series of large scale transformer neural networks<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... &amp; Polosukhin, I. (2017). Attention is all you need. *Advances in neural information processing systems*, *30*.">[1]</span></a></sup>, then split it into pieces to analysis the performance of each kernel.</p>
+<p>The original interpretation of transformer is a encode-decode structure containing several transformer blocks. Each transformer block contains one (or two in decoder block) multi-head attention layer and a feed forward layer (with residual connection and layer norm layers) as shown below.</p>
+<p><img src="/2022/12/16/test-GPU-server-singleGpu/transformer architecture.jpg" srcset="/img/loading.gif" lazyload alt="the classic architecture of transformer nerual network" style="zoom:67%;"></p>
+<p>Define a function to benchmark both forward and forward with backward performance using different sequence lengths and batch sizes:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">layer_benchmark</span>(<span class="hljs-params">layer, hidden_size, seq_lens, batch_sizes, cross_attention=<span class="hljs-literal">False</span></span>):
+    h = hidden_size
+    results = defaultdict(<span class="hljs-keyword">lambda</span>: &#123;&#125;)
+    encoder_state = <span class="hljs-string">&#x27;encoder_hidden_states=X&#x27;</span> <span class="hljs-keyword">if</span> cross_attention <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;&#x27;</span>
+    <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> seq_lens:
+        <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> batch_sizes:            
+            ffn = <span class="hljs-number">16</span>*b*s*h*h / <span class="hljs-number">1e12</span>  <span class="hljs-comment"># TFLOPS for the Feed-Forward Network</span>
+            atten = (<span class="hljs-number">4</span>*b*h*s*s + <span class="hljs-number">8</span>*b*s*h*h) / <span class="hljs-number">1e12</span>  <span class="hljs-comment"># TFLOPS for attention            </span>
+            forward = ffn + (<span class="hljs-number">2</span> <span class="hljs-keyword">if</span> cross_attention <span class="hljs-keyword">else</span> <span class="hljs-number">1</span>) * atten
+            
+            X = torch.randn(b, s, h).half().cuda()
+            results[<span class="hljs-string">f&#x27;batch=<span class="hljs-subst">&#123;b&#125;</span>&#x27;</span>][<span class="hljs-string">f&#x27;fwd seq_len=<span class="hljs-subst">&#123;s&#125;</span>&#x27;</span>] = forward / walltime(
+                <span class="hljs-string">f&#x27;layer(X, <span class="hljs-subst">&#123;encoder_state&#125;</span>)&#x27;</span>, var_dict(layer, X))
+            results[<span class="hljs-string">f&#x27;batch=<span class="hljs-subst">&#123;b&#125;</span>&#x27;</span>][<span class="hljs-string">f&#x27;fwd+bwd seq_len=<span class="hljs-subst">&#123;s&#125;</span>&#x27;</span>] = <span class="hljs-number">3</span> * forward / walltime(
+                <span class="hljs-string">f&#x27;layer(X, <span class="hljs-subst">&#123;encoder_state&#125;</span>)[0].sum().backward()&#x27;</span>, var_dict(layer, X))            
+    <span class="hljs-keyword">return</span> pd.DataFrame(results)</code></pre></div>
+<h4 id="bert">Bert</h4>
+<p>The architecture of BERT<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Devlin, J., Chang, M. W., Lee, K., &amp; Toutanova, K. (2018). Bert: Pre-training of deep bidirectional transformers for language understanding. *arXiv preprint arXiv:1810.04805*.">[2]</span></a></sup> is a multi-layer bidirectional transformer encoder (stage 1-3 in the image above). There are two types of BERT:</p>
+<ul>
+<li>BERT Base, 12 (Nx) transformer (encoder) blocks, 12 attention heads, and 110 million parameters</li>
+<li>BERT Large, 24 (Nx) transformer (encoder) blocks, 16 attention heads and 340 million parameters</li>
+</ul>
+<p>BERT large is adopted in this test. The hidden size is 1024, sequence length is chosen from [128, 512], and selected batch sizes are [4, 16, 32, 64], the result is shown below:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(layer_benchmark(layer, config.hidden_size, [<span class="hljs-number">128</span>, <span class="hljs-number">512</span>], [<span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">32</span>, <span class="hljs-number">64</span>]).to_markdown())</code></pre></div>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">A800_0</th>
+<th style="text-align: left;">batch=4</th>
+<th style="text-align: left;">batch=16</th>
+<th style="text-align: left;">batch=32</th>
+<th style="text-align: left;">batch=64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=128</td>
+<td style="text-align: left;">19.2772<font color="green"> (+8.7%) </font></td>
+<td style="text-align: left;">73.497<font color="green"> (+98.49%) </font></td>
+<td style="text-align: left;">111.482<font color="green"> (+194.8%) </font></td>
+<td style="text-align: left;">117.696<font color="green"> (+194.67%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=128</td>
+<td style="text-align: left;">16.5694<font color="red"> (-30.17%) </font></td>
+<td style="text-align: left;">88.1707<font color="green"> (+192.16%) </font></td>
+<td style="text-align: left;">107.347<font color="green"> (+150.18%) </font></td>
+<td style="text-align: left;">135.874<font color="green"> (+197.25%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=512</td>
+<td style="text-align: left;">77.2078<font color="green"> (+139.87%) </font></td>
+<td style="text-align: left;">94.9238<font color="green"> (+171.26%) </font></td>
+<td style="text-align: left;">97.682<font color="green"> (+171.89%) </font></td>
+<td style="text-align: left;">101.759<font color="green"> (+178.88%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=512</td>
+<td style="text-align: left;">50.4813<font color="green"> (+57.09%) </font></td>
+<td style="text-align: left;">111.566<font color="green"> (+179.85%) </font></td>
+<td style="text-align: left;">117.27<font color="green"> (+183.52%) </font></td>
+<td style="text-align: left;">122.327<font color="green"> (+188.88%) </font></td>
+</tr>
+</tbody>
+</table>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">3090</th>
+<th style="text-align: left;">batch=4</th>
+<th style="text-align: left;">batch=16</th>
+<th style="text-align: left;">batch=32</th>
+<th style="text-align: left;">batch=64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=128</td>
+<td style="text-align: left;">17.7345<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">37.0276<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">37.8156<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">39.9415<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=128</td>
+<td style="text-align: left;">23.729<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">30.1785<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">42.9077<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">45.7111<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=512</td>
+<td style="text-align: left;">32.1873<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">34.9941<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">35.9264<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">36.4884<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=512</td>
+<td style="text-align: left;">32.1356<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">39.8661<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">41.3627<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">42.3451<font color="grey"> (100.0%) </font></td>
+</tr>
+</tbody>
+</table>
+<p>No surprise that a large batch size helps. But the best TFLOPS number is below the matrix multiplication TFLOPS.</p>
+<p>In order to see the reason, take <strong>A40_0</strong> and inspect the performance on each part of a <strong>BERT</strong> layer. The hidden size is 1024, sequence length is 128, and batch size is 64.</p>
+<div class="code-wrapper"><pre><code class="hljs python">h, b, s = config.hidden_size, <span class="hljs-number">64</span>, <span class="hljs-number">128</span>
+X = torch.randn(b, s, h).half().cuda()
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Dense layer TFLOPS: %.3f&#x27;</span> % (<span class="hljs-number">8</span>*b*s*h*h / <span class="hljs-number">1e12</span> / walltime(    
+    <span class="hljs-string">&#x27;layer.intermediate.dense(X)&#x27;</span>, var_dict(layer, X))))
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Dense+Activation TFLOPS: %.3f&#x27;</span> % (<span class="hljs-number">8</span>*b*s*h*h / <span class="hljs-number">1e12</span> / walltime(
+    <span class="hljs-string">&#x27;layer.intermediate(X)&#x27;</span>, var_dict(layer, X))))
+
+ffn = <span class="hljs-number">16</span>*b*s*h*h / <span class="hljs-number">1e12</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;FFN TFLOPS: %.3f&#x27;</span>%(ffn / walltime(
+    <span class="hljs-string">&#x27;layer.output(layer.intermediate(X),X)&#x27;</span>, var_dict(layer, X))))
+
+att = (<span class="hljs-number">4</span>*b*h*s*s + <span class="hljs-number">8</span>*b*s*h*h) / <span class="hljs-number">1e12</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Attention TFLOPS: %.3f&#x27;</span>%(
+    att / walltime(<span class="hljs-string">&#x27;layer.attention(X)&#x27;</span>, var_dict(layer, X))))
+
+<span class="hljs-built_in">print</span>(att / ffn)</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">Dense layer TFLOPS: 95.531
+Dense+Activation TFLOPS: 73.538
+FFN TFLOPS: 72.570
+Attention TFLOPS: 37.845
+0.53125</code></pre></div>
+<p>We first benchmark the first dense layer in the Feed-Forward Network (FFN) layer. The number of TFLOPS is quite good, 95.510, with a peak GEMM TFLOPS of 101.26.</p>
+<p>Then run this dense layer with the GeLU activation. Even though the activation function has a negligible complexity (<code>n</code>), it reduces the TFLOPS. The reason is that the elemental-wise operation of the activation function is bounded by the memory bandwidth.</p>
+<p>Then we test the entire FFN, including the residual block and normalization and the TFLOPS number gains a little bit.</p>
+<p>The other part of the BERT layer is the multi-head self-attention. Even though the main computation part of the attention block is still matrix multiplication, it has more memory constrained operators compared to FFN. So we see a lower TFLOPS.</p>
+<h4 id="gpt-2">GPT-2</h4>
+<p>Instead of encoder, GPT-2<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Devlin, J., Chang, M. W., Lee, K., &amp; Toutanova, K. (2018). Bert: Pre-training of deep bidirectional transformers for language understanding. *arXiv preprint arXiv:1810.04805*.">[2]</span></a></sup> takes the decoder part of the original transformer architecture. GPT-2 Medium is used for</p>
+<ul>
+<li>GPT-2 small, 12 (Nx) transformer (decoder) blocks, 117 million parameters</li>
+<li>GPT-2 medium, 24 (Nx) transformer (decoder) blocks, 345 million parameters</li>
+<li>GPT-2 large, 36 (Nx) transformer (decoder) blocks, 762 million parameters</li>
+<li>GPT-2 XL, 48 (Nx) transformer (decoder) blocks, 1542 million parameters</li>
+</ul>
+<p>GPT-2 medium is adopted in this test, with a equivalent size to BERT large. Hidden size is 1024 as well, but GPT-2 is trained with a 1024 sequence length.</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">A800_0</th>
+<th style="text-align: left;">batch=4</th>
+<th style="text-align: left;">batch=16</th>
+<th style="text-align: left;">batch=32</th>
+<th style="text-align: left;">batch=64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=512</td>
+<td style="text-align: left;">58.4751<font color="green"> (+125.14%) </font></td>
+<td style="text-align: left;">65.4225<font color="green"> (+136.48%) </font></td>
+<td style="text-align: left;">68.0979<font color="green"> (+150.45%) </font></td>
+<td style="text-align: left;">69.3883<font color="green"> (+154.31%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=512</td>
+<td style="text-align: left;">49.0019<font color="green"> (+86.13%) </font></td>
+<td style="text-align: left;">76.031<font color="green"> (+148.75%) </font></td>
+<td style="text-align: left;">78.9392<font color="green"> (+157.0%) </font></td>
+<td style="text-align: left;">80.8344<font color="green"> (+168.09%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=1024</td>
+<td style="text-align: left;">49.5448<font color="green"> (+121.18%) </font></td>
+<td style="text-align: left;">52.8486<font color="green"> (+125.33%) </font></td>
+<td style="text-align: left;">53.5561<font color="green"> (+137.26%) </font></td>
+<td style="text-align: left;">53.6964<font color="green"> (+142.32%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=1024</td>
+<td style="text-align: left;">57.3693<font color="green"> (+131.83%) </font></td>
+<td style="text-align: left;">63.1987<font color="green"> (+140.25%) </font></td>
+<td style="text-align: left;">64.1421<font color="green"> (+144.76%) </font></td>
+<td style="text-align: left;">64.4187<font color="green"> (+141.87%) </font></td>
+</tr>
+</tbody>
+</table>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">3090</th>
+<th style="text-align: left;">batch=4</th>
+<th style="text-align: left;">batch=16</th>
+<th style="text-align: left;">batch=32</th>
+<th style="text-align: left;">batch=64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=512</td>
+<td style="text-align: left;">25.973<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">27.6646<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">27.19<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">27.2853<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=512</td>
+<td style="text-align: left;">26.3274<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">30.5657<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">30.716<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">30.1517<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>seq_len=1024</td>
+<td style="text-align: left;">22.4006<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">23.4543<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">22.573<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">22.1597<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>seq_len=1024</td>
+<td style="text-align: left;">24.7468<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.305<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.2063<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.634<font color="grey"> (100.0%) </font></td>
+</tr>
+</tbody>
+</table>
+<p>As we can see, despite GPT-2 and BERT has the same complexity, GPT-2 has worse TFLOPS when using the same batch size and sequence length. And the performance of 3090 nearly reach A40. Also, using a larger sequence length 1024 further harms the performance.</p>
+<h4 id="t5">T5</h4>
+<p>T5<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Devlin, J., Chang, M. W., Lee, K., &amp; Toutanova, K. (2018). Bert: Pre-training of deep bidirectional transformers for language understanding. *arXiv preprint arXiv:1810.04805*.">[2]</span></a></sup> takes the full transformer architecture. The encoder and decoder performance are tested separately. The performance of encoder is similar to BERT. The decoder has an additional cross attention, which increases the time complexity and also hurts TFLOPS.</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">A800_0</th>
+<th style="text-align: left;">batch=4</th>
+<th style="text-align: left;">batch=16</th>
+<th style="text-align: left;">batch=32</th>
+<th style="text-align: left;">batch=64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>encoder</td>
+<td style="text-align: left;">38.8697<font color="green"> (+74.31%) </font></td>
+<td style="text-align: left;">57.0796<font color="green"> (+123.16%) </font></td>
+<td style="text-align: left;">59.3724<font color="green"> (+126.56%) </font></td>
+<td style="text-align: left;">61.1527<font color="green"> (+130.66%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>encoder</td>
+<td style="text-align: left;">40.6477<font color="green"> (+71.46%) </font></td>
+<td style="text-align: left;">70.3433<font color="green"> (+139.4%) </font></td>
+<td style="text-align: left;">75.9491<font color="green"> (+150.57%) </font></td>
+<td style="text-align: left;">78.273<font color="green"> (+148.64%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>decoder</td>
+<td style="text-align: left;">31.965<font color="green"> (+64.45%) </font></td>
+<td style="text-align: left;">46.5513<font color="green"> (+114.58%) </font></td>
+<td style="text-align: left;">48.3616<font color="green"> (+112.88%) </font></td>
+<td style="text-align: left;">49.7627<font color="green"> (+118.77%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>decoder</td>
+<td style="text-align: left;">33.5017<font color="green"> (+62.1%) </font></td>
+<td style="text-align: left;">59.5139<font color="green"> (+128.58%) </font></td>
+<td style="text-align: left;">62.4874<font color="green"> (+132.72%) </font></td>
+<td style="text-align: left;">64.1493<font color="green"> (+134.82%) </font></td>
+</tr>
+</tbody>
+</table>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">3090</th>
+<th style="text-align: left;">batch=4</th>
+<th style="text-align: left;">batch=16</th>
+<th style="text-align: left;">batch=32</th>
+<th style="text-align: left;">batch=64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>encoder</td>
+<td style="text-align: left;">22.2991<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">25.5779<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.206<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.5121<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>encoder</td>
+<td style="text-align: left;">23.7068<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">29.3832<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">30.3106<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">31.4801<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fwd<br>decoder</td>
+<td style="text-align: left;">19.4381<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">21.6942<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">22.7182<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">22.7463<font color="grey"> (100.0%) </font></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fwd+bwd<br>decoder</td>
+<td style="text-align: left;">20.6679<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.0369<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">26.8509<font color="grey"> (100.0%) </font></td>
+<td style="text-align: left;">27.3184<font color="grey"> (100.0%) </font></td>
+</tr>
+</tbody>
+</table>
+<p>In conclusion, to achieve the best performance for a Transformer layer, we need to use a fast data type and a large batch size. For further improvement, we may need to rewrite the code. For example, <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/recipes/recipes/tuning_guide.html#fuse-pointwise-operations">fusing</a> multiple kernels into a single one.</p>
+<h2 id="future">Future</h2>
+<ul>
+<li><p>The accuracy is not checked in this benchmark.</p>
+<p>Note the memory of A800 is externally equipped with ECC compared with 3090. Theoretically, the accuracy of A800 is better than 3090.</p>
+<table>
+<thead>
+<tr class="header">
+<th>A800</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPU Memory</td>
+<td>80 GB GDDR6 with error-correcting code (ECC)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>3090</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Memory Type</td>
+<td>GDDR6X</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>The FLOPS of particles method remain unknown, the benchmark of it is suspended.</p></li>
+<li><p>Multiple GPU performance will be tested in next blog.</p></li>
+</ul>
+<h2 id="references">References</h2>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Nvidia_Tesla">Nvidia_Tesla, wikipedia</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.cn/content/dam/en-zz/Solutions/Data-Center/a40/proviz-print-nvidia-a40-datasheet-us-nvidia-1469711-r8-web.pdf">NVIDIA A40 datasheet</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/quadro-product-literature/quadro-rtx-8000-us-nvidia-946977-r1-web.pdf">Quadro RTX 8000 datasheet</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/content/dam/en-zz/Solutions/gtcs21/rtx-a4000/nvidia-rtx-a4000-datasheet.pdf">NVIDIA RTX A4000 datasheet</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a40/NVIDIA%20A40%20Product%20Brief.pdf">NVIDIA A40 brief</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-us-nvidia-1758950-r4-web.pdf">NVIDIA A100 | Tensor Core GPU</a></p>
+<p>https://www.viperatech.com/product/nvidia-a800-customer-deck/</p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/gpu-specs/a40-pcie.c3700">NVIDIA A40 PCIe Specs | TechPowerUp GPU Database</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/gpu-specs/quadro-rtx-8000.c3306">Quadro RTX 8000 Specs | TechPowerUp GPU Database</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622">NVIDIA GeForce RTX 3090 Specs | TechPowerUp GPU Database</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/gpu-specs/rtx-a4000.c3756">NVIDIA RTX A4000 Specs | TechPowerUp GPU Database</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/gpu-specs/a100-pcie-80-gb.c3821">NVIDIA A100 PCIe 80 GB Specs | TechPowerUp GPU Database</a></p>
+<p><a target="_blank" rel="noopener" href="https://premioinc.com/blogs/blog/pcie-4-0-pci-express-gen-4">PCIe 4.0 (Ultimate Guide to Understanding PCI Express Gen ...</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/nvlink/">NVLink &amp; NVSwitch:Advanced Multi-GPU Systems | NVIDIA</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/design-visualization/nvlink-bridges/">NVIDIA NVLink</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/dgx-a100/">DGX A100 : Universal System for AI Infrastructure</a></p>
+<p><a target="_blank" rel="noopener" href="https://netlib.org/blas/">BLAS (Basic Linear Algebra Subprograms)</a></p>
+<p><a target="_blank" rel="noopener" href="https://math-atlas.sourceforge.net/">Automatically Tuned Linear Algebra Software (ATLAS)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.openblas.net/">OpenBLAS : An optimized BLAS library</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/develop/documentation/get-started-with-mkl-for-dpcpp/top.html">Get Started with Intel® oneAPI Math Kernel Library</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/openai/openai-gemm">GitHub - openai/openai-gemm: Open single and half …</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuBLAS/index.html">cuBLAS documentation</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuBLAS/index.html#cuBLAS-level-3-function-reference">cuBLAS Level-3 Function Reference</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuBLAS/index.html#cuBLASgemmex">2.8.12. cuBLASGemmEx</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html">Matrix Multiplication Background User's Guide - NVIDIA</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hma02/cuBLASgemm-benchmark">cuBLASgemm-benchmark</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/openai/openai-gemm">openai-gemm</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/FLOPS">TFLOPS, wikipedia</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/cutlass">cutlass, GitHub</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation">Multiply–accumulate operation (MAC), wikipedia</a></p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/recipes/recipes/tuning_guide.html#fuse-pointwise-operations">fusing pointwise operations, PyTorch tutorials</a></p>
+<p><a target="_blank" rel="noopener" href="https://machinethink.net/blog/how-fast-is-my-model/">How fast is my model? - Machine, Think</a></p>
+<p><a target="_blank" rel="noopener" href="https://paperswithcode.com/method/bert">BERT Explained | Papers With Code</a></p>
+<p><a target="_blank" rel="noopener" href="https://paperswithcode.com/method/gpt-2">GPT-2 Explained | Papers With Code</a></p>
+<p><a target="_blank" rel="noopener" href="https://paperswithcode.com/method/t5">T5 Explained | Papers With Code</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">your GPU Compute Capability</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capabilities">16. Compute Capabilities</a></p>
+<p><a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/why-cuBLAShgemm-is-slower-more-than-cuBLASsgemm-when-i-use/45607">why cuBLASHgemm is slower more than cuBLASSgemm when I use?</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/trexminer/T-Rex/issues/923">Issues with P-state "--pstate p0" on 3080ti &amp; 0.24.8</a>.</p>
+<p><a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/products/sku/193954/intel-xeon-gold-6234-processor-24-75m-cache-3-30-ghz/specifications.html">Intel® Xeon® Gold 6234 Processor</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/products/sku/212458/intel-xeon-gold-6330-processor-42m-cache-2-00-ghz/specifications.html">Intel® Xeon® Gold 6330 Processor</a></p>
+<p><a target="_blank" rel="noopener" href="https://gadgetversus.com/processor/intel-xeon-gold-gflops-performance/">Intel Xeon Gold GFLOPS performance</a></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... &amp; Polosukhin, I. (2017). Attention is all you need. <em>Advances in neural information processing systems</em>, <em>30</em>. <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span>Devlin, J., Chang, M. W., Lee, K., &amp; Toutanova, K. (2018). Bert: Pre-training of deep bidirectional transformers for language understanding. <em>arXiv preprint arXiv:1810.04805</em>. <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., &amp; Sutskever, I. (2019). Language models are unsupervised multitask learners. <em>OpenAI blog</em>, <em>1</em>(8), 9. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., ... &amp; Liu, P. J. (2020). Exploring the limits of transfer learning with a unified text-to-text transformer. <em>J. Mach. Learn. Res.</em>, <em>21</em>(140), 1-67. <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span>Choi, Y. R., &amp; Stegailov, V. (2022). Multi-GPU GEMM Algorithm Performance Analysis for Nvidia and AMD GPUs Connected by NVLink and PCIe. In <em>International Conference on Mathematical Modeling and Supercomputer Technologies</em> (pp. 281-292). Springer, Cham. <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>test GPU servers single GPU</div>
+      <div>https://daydreamatnight.github.io/2022/12/16/test-GPU-server-singleGpu/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 16, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/01/test-GPU-server-multiGPU/" title="test GPU server multiGPU performance">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">test GPU server multiGPU performance</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/02/Autoencoder-identical-to-POD/" title="Autoencoder identical to POD">
+                        <span class="hidden-mobile">Autoencoder identical to POD</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

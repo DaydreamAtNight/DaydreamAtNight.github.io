@@ -1,0 +1,805 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="The BERT is the most important achievement in the NLP field in the last 4 years. It makes the transfer learning of NLP tasks possible and the transformer framework dominant the NLP field.   This is a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bert">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="The BERT is the most important achievement in the NLP field in the last 4 years. It makes the transfer learning of NLP tasks possible and the transformer framework dominant the NLP field.   This is a">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/paper-reading-bert.png">
+<meta property="article:published_time" content="2022-04-15T10:01:32.000Z">
+<meta property="article:modified_time" content="2022-06-09T10:24:26.184Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/paper-reading-bert.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Bert - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Bert"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-15 18:01" pubdate>
+          April 15, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          21 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Bert</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>The BERT is the most important achievement in the NLP field in the last 4 years. It makes the transfer learning of NLP tasks possible and the transformer framework dominant the NLP field.</p>
+</blockquote>
+<blockquote>
+<p>This is a <a href="/2022/04/02/paper-reading-start/">series of paper reading notes</a>, hopefully, to push me to read paper casually and to leave some record of what I've learned.</p>
+</blockquote>
+<span id="more"></span>
+<p>Paper link: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">Bert: Pre-training of deep bidirectional transformers for language understanding</a></p>
+<p>Useful links: https://www.bilibili.com/video/BV1PL411M7eQ</p>
+<p>​ https://youtu.be/UYPa347-DdE</p>
+<p>​ <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.05365">Deep contextualized word representations - arXiv</a></p>
+<h2 id="notes-by-sections">Notes by sections</h2>
+<h3 id="abstract">0. Abstract</h3>
+<p><em>The name of BERT might come from one of its important related work, ELMo. And Elmo and Bert are both characters in a TV show Sesame Street.</em></p>
+<p>The abstract focus on the two related work, ELMo and GPT. The bidirectional feature is in contrast to the unidirectional GPT model. And the "without substantial task specific architecture modifications" feature compares with the RNN-based ELMo model, whose architecture might get modified when training downstream tasks. Yet the ELMo model is bidirectional and GPT model is easy to use.</p>
+<p>When claiming a model is great, it is good to provide both the absolute accuracy and the relative accuracy compared with others. Just like this paper does.</p>
+<h3 id="conclusion">6. Conclusion</h3>
+<p>To summarise, this is a classical <strong>A+B</strong> type of research. The idea of BERT is simple, combine the advantages of the bidirectional network with a rather old RNN base (ELMo), and the unidirectional network with a transformer base (GPT). And in detail, 2 pre-training tasks are designed.</p>
+<p>The main contribution of this network is showing that bidirectional information is important.</p>
+<h3 id="introduction">1. Introduction</h3>
+<p>From the history introduction, it turns out BERT is not the first to apply pre-training on NLP. It's been a while. But BERT makes it popular.</p>
+<h3 id="related-work">2. Related work</h3>
+<p><strong>2.3 Transfer Learning from Supervised data</strong></p>
+<p>This is what the CV area does most often. Yet it is not effective in NLP. It is partly because of the lacking of data. Another reason might be the existing labeled data focus only on language inference and machine translation, which are too different from other NLP tasks. So BERT and GPT use unlabelled data to pre-train and prove that unsupervised pre-train on a massive data is more effective than supervised pre-train on a relatively small data set. And, interestingly, this trend in NLP gradually effects the CV world. Nowadays unsupervised fine-tuning is becoming more and more popular in CV area.</p>
+<h3 id="bert">3. Bert</h3>
+<p>In the first part, the pre-training and fine-tuning framework is briefly covered. A paper should be self-consistent, meaning that if a mechanic is fundamental in your area and essential to your work. It is a good habit to briefly introduce it, even if all the people in the area know it.</p>
+<p><strong>Model Architecture</strong></p>
+<p>And the architecture is as simple as just take the encoder part of the transformer model.</p>
+<blockquote>
+<p>number of layers (i.e., Transformer blocks) as L, the hidden size as H, and the number of self-attention heads as A.</p>
+<p>BERTBASE(L=12, H=768, A=12, Total Parameters=110M) and BERTLARGE(L=24, H=1024, A=16, Total Parameters=340M).</p>
+</blockquote>
+<p>Because the hidden size of each multi-head attention sublayer is set as 64. And in transformer tradition, H = A * 64. So the multi-head number A actually depends on the hidden size H. As a result, the way of calculating the number of parameters is shown below.</p>
+<p><img src="/2022/04/15/paper-reading-bert/BERT learnable paramters.png" srcset="/img/loading.gif" lazyload alt="BERT learnable paramters" style="zoom:48%;"></p>
+<p><strong>Input/Output Representations</strong></p>
+<p>Why Bert need a pair of sentence to handle downstream tasks such as Machine Translation, unlike its predecessor Transformer?</p>
+<p>Because in Transformer, the input is a pair of sequences, taken by encoder and decoder respectively. But Bert is only an encoder. In English-Chinese Translation task for example, for transformer, the encoder take the English version and the decoder take the Chinese version, for Bert, the English version and Chinese version are glued with a special token [sept] then be inputed to the model.</p>
+<p>Besides the [sept] token, another embedding is introduced into the embedding layer, the sequence model. Details are shown below.</p>
+<p><img src="/2022/04/15/paper-reading-bert/BERT segment embedding.png" srcset="/img/loading.gif" lazyload alt="BERT segment embedding" style="zoom:50%;"></p>
+<p><strong>3.1 Pre-training BERT</strong></p>
+<p>The paper provides an example of each task in Appendix section <strong>Masked LM and the Masking Procedure</strong>, just go for it and have a look if don't understand.</p>
+<blockquote>
+<p>Next Sentence Prediction The next sentence prediction task can be illustrated in the following examples.</p>
+<p>Input = [CLS] the man went to [MASK] store [SEP] he bought a gallon [MASK] milk [SEP]</p>
+<p>Label = IsNext</p>
+<p>Input = [CLS] the man [MASK] to the store [SEP] penguin [MASK] are <strong>flight ##less</strong> birds [SEP]</p>
+<p>Label = NotNext</p>
+</blockquote>
+<p>The "flight ##less" is because of the WordPiece embedding method that Bert uses. "##" means this token is split from last token, in this case, flightless is the original token. Because flightless is rarely used, the WordPiece embedding split this word into two.</p>
+<p><strong>3.2 Fine-tuning BERT</strong></p>
+<p>Bert's architecture has one advantage over the transformer's, the self-attention allows model look both the two sentences. And the encoder-decoder model can't do that. As a result, the fine-tuning can be a little bit hazy.</p>
+<h3 id="experiments">4 Experiments</h3>
+<p><strong>4.2 SQuAD v1.1</strong></p>
+<blockquote>
+<p>We fine-tune for 3 epochs with a learning rate of 5e-5 and a batch size of 32.</p>
+</blockquote>
+<p>This misleads the people for a while. People found when fine-tuning with Bert, the variance of each results are high i.e. the result of fine-tuning is unstable. Then people found it is because 3 epochs are not enough. Besides, the optimiser that the original Bert model used is an incomplete version of Adam which is not stable for small epoch number. And the follow-ups change it into the original Adam.</p>
+<p>From the processes of the 3 experiments, it can be seen it is easy for BERT to be applied to downstream tasks. Just need to modify the input data in the form of the Bert sequence, and add another output layer. As a result, with BERT, massive number of tasks can be trained under a rather simple architecture.</p>
+<h3 id="ablation-studies">5 Ablation Studies</h3>
+<p><img src="/2022/04/15/paper-reading-bert/BERT alibation study 1.png" srcset="/img/loading.gif" lazyload alt="BERT alibation study 1" style="zoom:30%;"></p>
+<p>It is obvious the 4th architecture BiLSTM is from the idea of ELMO. And all the variation lead to a deterioration of the acc, especially in the MRPC task.</p>
+<blockquote>
+<p><strong>Microsoft Research Paraphrase Corpus (MRPC) Dataset</strong></p>
+<p>Created by Dolan et al. at 2005, the Microsoft Research Paraphrase Corpus (MRPC) Dataset contains pairs of sentences which have been extracted from news sources on the web, along with human annotations indicating whether each pair captures a paraphrase/semantic equivalence relationship., in English language. Containing 5,8 in Text file format.</p>
+</blockquote>
+<p><img src="/2022/04/15/paper-reading-bert/model size graph.webp" srcset="/img/loading.gif" lazyload alt="model size graph" style="zoom:50%;"></p>
+<p>In the Effect of model size part, they claim with a large model size, huge improvement can be reached. And this leads a trend of increasing the model size in NLP, for example, the 100 billon GPT-3, and 500 billion model Megatron-Turing Natural Language Generation (MT-NLG). The boundary of NLP will be push further.</p>
+<h2 id="reviews">Reviews</h2>
+<p>Writing: The biggest sell point in this paper is chosen as the "bidirectional". From today's view, the contributions of BERT are so more than this. Besides, when say to choose a feature, it is better to discuss both the pros and the cons of the choice. For example, compared with GPT, the encoder is used instead of the decoder. The pros are the bidirectional feature, but the cons is the resulting difficulty in applying on generative tasks such as the machine translation.</p>
+<p>Besides, BERT follows a whole ideal path of solving deep learning problems. That is after pre-training on a deep and huge model on a huge unlabelled dataset, the model can be applied to many small tasks with a few steps of fine tuning.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/paper-reading/">#paper reading</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Bert</div>
+      <div>https://daydreamatnight.github.io/2022/04/15/paper-reading-bert/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 15, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/18/paper-reading-GPT1-3/" title="GPT1-3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">GPT1-3</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/14/paper-reading-A-gentle-introduction-to-graph-neural-networks/" title="Introduction to GNN">
+                        <span class="hidden-mobile">Introduction to GNN</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,911 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/hard%20label.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/soft%20label.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Cross%20entropy%20loss%20function.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Label%20smoothing%20feature%20norm.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20applying%20label%20smoothing.png">
+<meta property="article:published_time" content="2022-03-04T05:59:58.000Z">
+<meta property="article:modified_time" content="2022-05-02T09:41:10.804Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="deep learning tricks">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Intro and Pytorch Implementation of Label Smoothing Regularization (LSR) - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-04 13:59" pubdate>
+          March 4, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          22 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>Soft label is a commonly used trick to prevent overfitting. It can always gain some extra points on the image classification tasks. In this article, I have put together useful information from theory to implementation of it.</p>
+</blockquote>
+<blockquote>
+<p>Recently, I joined a <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, I used the pretrained ResNet50 plus other tricks and here is to record some of them I've learned for now.</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="introduction-from-hard-label-to-soft-label">Introduction: from hard label to soft label</h3>
+<p>In deep learning, the neural network is basically a super powerful non-linear regression machine aimed to fit a function between the input and the label. And the result is always called label.</p>
+<p>Hard label, in another word: the one-hot vector, is the most commonly type of label that is used. For example, in this <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, to digitalize the different name of the leaves, it is intuitive to encode the leaves categories as: 0, 1, 2, 3. And the factorized target labels would be somehow like [1,3,0...] where each element stands for the categories of the data. With the resulting category dictionary, it can be easily decoded after the training.</p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/leave%20class%20code.png" srcset="/img/loading.gif" lazyload alt="leave class code" style="zoom:22%;"></p>
+<p>Actually, there is a slightly difference in the binary world. What usually do is, the previously factorized label will be extended to be a 2-dimensional "on-hot" matrix where the elements stands for the probability of each class. And the network is aimed to train itself to make inference label nearest to the target label.</p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/hard%20label.png" srcset="/img/loading.gif" lazyload alt="hard label" style="zoom:22%;"></p>
+<p>Soft label is just slightly deteriorate the strong one-hot label into a weaker one.</p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/soft%20label.png" srcset="/img/loading.gif" lazyload alt="soft label" style="zoom:22%;"></p>
+<h3 id="simple-explanation-how-loss-function-lost-information">Simple explanation: How loss function lost information?</h3>
+<p>In the cross entropy loss function, where <code>y_inference</code> and <code>y_grountruth</code> stands for inference and target label, n stands for the number of class.</p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Cross%20entropy%20loss%20function.png" srcset="/img/loading.gif" lazyload alt="Cross entropy loss function" style="zoom:22%;"></p>
+<p>With the one-hot label, the components are 0 except for the true category. In a other word, the <code>y_inference</code> of the wrong category is not considered at all i.e. the information of the wrong category is lost. Which is against the real word classification.</p>
+<h3 id="effectiveness-visualization">Effectiveness: Visualization</h3>
+<p>In <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1906.02629.pdf">When does label smoothing help?</a> Hinton shows the feature map difference between without and with LSR:</p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/Label%20smoothing%20feature%20norm.png" srcset="/img/loading.gif" lazyload alt="Label smoothing feature norm" style="zoom:80%;"></p>
+<blockquote>
+<ul>
+<li>When label smoothing is applied, the clusters are much tighter because label smoothing encourages that each example in the training set is to be equidistant from all other class’s templates.</li>
+<li>With hard targets, the clusters for semantically similar classes (for example different breed of dogs in ImageNet), are isotropic whereas, with label smoothing, clusters lie in an arc as shown in the third row. If you mix two semantically similar classes with a third semantically different class, the clusters are still much better than the ones obtained with hard targets as shown in the fourth row.</li>
+</ul>
+</blockquote>
+<h3 id="experiment-apply-in-competition">Experiment: apply in competition</h3>
+<p>Label smoothing can be easily applied in <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalCrossentropy">Tensorflow</a>, but there is no such thing in PyTorch. So overwrite the Cross-entropy loss function with LSR (implemented in 2 ways):</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LSR</span>(nn.Module):
+    <span class="hljs-string">&quot;&quot;&quot;NLL loss with label smoothing.</span>
+<span class="hljs-string">    &quot;&quot;&quot;</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, smoothing=<span class="hljs-number">0.0</span></span>):
+        <span class="hljs-string">&quot;&quot;&quot;Constructor for the LSR module.</span>
+<span class="hljs-string">        :param smoothing: label smoothing factor</span>
+<span class="hljs-string">        &quot;&quot;&quot;</span>
+        <span class="hljs-built_in">super</span>(LSR, self).__init__()
+        self.confidence = <span class="hljs-number">1.0</span> - smoothing
+        self.smoothing = smoothing
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x, target</span>):
+        logprobs = torch.nn.functional.log_softmax(x, dim=-<span class="hljs-number">1</span>)
+        nll_loss = -logprobs.gather(dim=-<span class="hljs-number">1</span>, index=target.unsqueeze(<span class="hljs-number">1</span>))
+        nll_loss = nll_loss.squeeze(<span class="hljs-number">1</span>)
+        smooth_loss = -logprobs.mean(dim=-<span class="hljs-number">1</span>)
+        loss = self.confidence * nll_loss + self.smoothing * smooth_loss
+        <span class="hljs-keyword">return</span> loss.mean()
+    
+loss = LSR(<span class="hljs-number">0.1</span>)</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LSR2</span>(nn.Module):
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, e=<span class="hljs-number">0.01</span>,reduction=<span class="hljs-string">&#x27;mean&#x27;</span></span>):
+        <span class="hljs-built_in">super</span>().__init__()
+
+        self.log_softmax = nn.LogSoftmax(dim=<span class="hljs-number">1</span>)
+        self.e = e
+        self.reduction = reduction
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">_one_hot</span>(<span class="hljs-params">self, labels, classes, value=<span class="hljs-number">1</span></span>):
+        <span class="hljs-string">&quot;&quot;&quot;</span>
+<span class="hljs-string">            Convert labels to one hot vectors</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">        Args:</span>
+<span class="hljs-string">            labels: torch tensor in format [label1, label2, label3, ...]</span>
+<span class="hljs-string">            classes: int, number of classes</span>
+<span class="hljs-string">            value: label value in one hot vector, default to 1</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">        Returns:</span>
+<span class="hljs-string">            return one hot format labels in shape [batchsize, classes]</span>
+<span class="hljs-string">        &quot;&quot;&quot;</span>
+        <span class="hljs-comment">#print(&quot;classes&quot;, classes)</span>
+        one_hot = torch.zeros(labels.size(<span class="hljs-number">0</span>), classes)
+
+        <span class="hljs-comment"># labels and value_added  size must match</span>
+        labels = labels.view(labels.size(<span class="hljs-number">0</span>), -<span class="hljs-number">1</span>)
+        value_added = torch.Tensor(labels.size(<span class="hljs-number">0</span>), <span class="hljs-number">1</span>).fill_(value)
+
+        value_added = value_added.to(labels.device)
+        one_hot = one_hot.to(labels.device)
+
+        one_hot.scatter_add_(<span class="hljs-number">1</span>, labels, value_added)
+
+        <span class="hljs-keyword">return</span> one_hot
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">_smooth_label</span>(<span class="hljs-params">self, target, length, smooth_factor</span>):
+        <span class="hljs-string">&quot;&quot;&quot;convert targets to one-hot format, and smooth</span>
+<span class="hljs-string">        them.</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">        Args:</span>
+<span class="hljs-string">            target: target in form with [label1, label2, label_batchsize]</span>
+<span class="hljs-string">            length: length of one-hot format(number of classes)</span>
+<span class="hljs-string">            smooth_factor: smooth factor for label smooth</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">        Returns:</span>
+<span class="hljs-string">            smoothed labels in one hot format</span>
+<span class="hljs-string">        &quot;&quot;&quot;</span>
+        <span class="hljs-comment">#print(&quot;length&quot;, length)</span>
+        <span class="hljs-comment">#print(&quot;smooth_fact&quot;, smooth_factor)</span>
+        one_hot = self._one_hot(target, length, value=<span class="hljs-number">1</span> - smooth_factor)
+        one_hot += smooth_factor / length
+
+        <span class="hljs-keyword">return</span> one_hot.to(target.device)
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x, target</span>):
+
+        <span class="hljs-keyword">if</span> x.size(<span class="hljs-number">0</span>) != target.size(<span class="hljs-number">0</span>):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&#x27;Expected input batchsize (&#123;&#125;) to match target batch_size(&#123;&#125;)&#x27;</span>
+                             .<span class="hljs-built_in">format</span>(x.size(<span class="hljs-number">0</span>), target.size(<span class="hljs-number">0</span>)))
+
+        <span class="hljs-keyword">if</span> x.dim() &lt; <span class="hljs-number">2</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&#x27;Expected input tensor to have least 2 dimensions(got &#123;&#125;)&#x27;</span>
+                             .<span class="hljs-built_in">format</span>(x.size(<span class="hljs-number">0</span>)))
+
+        <span class="hljs-keyword">if</span> x.dim() != <span class="hljs-number">2</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&#x27;Only 2 dimension tensor are implemented, (got &#123;&#125;)&#x27;</span>
+                             .<span class="hljs-built_in">format</span>(x.size()))
+        <span class="hljs-comment">#print(&quot;x: &quot;, x)</span>
+        <span class="hljs-comment">#print(&quot;target&quot;, target)</span>
+
+        smoothed_target = self._smooth_label(target, x.size(<span class="hljs-number">1</span>), self.e)
+        x = self.log_softmax(x)
+        loss = torch.<span class="hljs-built_in">sum</span>(- x * smoothed_target, dim=<span class="hljs-number">1</span>)
+        <span class="hljs-keyword">if</span> self.reduction == <span class="hljs-string">&#x27;none&#x27;</span>:
+            <span class="hljs-keyword">return</span> loss
+
+        <span class="hljs-keyword">elif</span> self.reduction == <span class="hljs-string">&#x27;sum&#x27;</span>:
+            <span class="hljs-keyword">return</span> torch.<span class="hljs-built_in">sum</span>(loss)
+
+        <span class="hljs-keyword">elif</span> self.reduction == <span class="hljs-string">&#x27;mean&#x27;</span>:
+            <span class="hljs-keyword">return</span> torch.mean(loss)
+
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&#x27;unrecognized option, expect reduction to be one of none, mean, sum&#x27;</span>)
+            
+loss = LSR2(<span class="hljs-number">0.1</span>)</code></pre></div>
+<p>Pretrained ResNet50 is in use</p>
+<div class="code-wrapper"><pre><code class="hljs shell">lr, num_epochs, batch_size = 0.01, 10, 256</code></pre></div>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20compare%20label%20smoothing%20with%20hard%20label.png" srcset="/img/loading.gif" lazyload alt="accuracy curve compare label smoothing with hard label" style="zoom:67%;"></p>
+<p>It can bee seen that the under same <code>random seed</code>, <code>batch_size</code>, <code>lr</code>, and <code>num_epochs</code>, the overall accuracy has a fascinating rise of 0.5.</p>
+<p>Then apply the LSR and run 50 epochs, with learning rate 0.005 and batch size 256, the result turns to be:</p>
+<p><img src="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/accuracy%20curve%20applying%20label%20smoothing.png" srcset="/img/loading.gif" lazyload alt="accuracy curve applying label smoothing" style="zoom:67%;"></p>
+<p>It is a exciting improvement, but more tricks still in need.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>3 disadvantaged of the hard label:</p>
+<ul>
+<li>the relationship between the true label and the others is neglected, tend to be overfitting</li>
+<li>the model is tend to be over confident i.e. less generalizable</li>
+<li>more sensitive to label with noise, wrong labeled for example.</li>
+</ul>
+<p>Several good things about label smoothing:</p>
+<ul>
+<li>data augmentation by add more information, compensates for the lack of supervisory signals</li>
+<li>Improves generalizability</li>
+<li>Improves noise robust</li>
+<li>lower the feature norm</li>
+<li>Improves model calibration</li>
+</ul>
+<p>Bad things about label smoothing:</p>
+<ul>
+<li>label smoothing can't give real relationship between labels. It simply adds random noise, under fitting might happen under certain scenarios.</li>
+<li>If distill in use, the teach network preforms worse when apply label smoothing, more explanation in <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1906.02629.pdf">When does label smoothing help?</a></li>
+</ul>
+<h3 id="reference">Reference</h3>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1815786">标签平滑 - Label Smoothing概述 - 云+社区 - 腾讯云 (tencent.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg4MzU1NjQ2Mw==&amp;mid=2247495228&amp;idx=1&amp;sn=ec685adcf8a274e8235c177718868a34&amp;scene=21#wechat_redirect">大道至简：算法工程师炼丹Trick手册 (qq.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1684298?from=article.detail.1815786">深度学习trick--labelsmooth</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hxxjxw/article/details/115298103">Label Smoothing 标签平滑 (Label smooth regularization, LSR)_hxxjxw的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@nainaakash012/when-does-label-smoothing-help-89654ec75326">When Does Label Smoothing Help?</a></p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/suvojit-0x55aa">suvojit-0x55aa</a>/<a target="_blank" rel="noopener" href="https://gist.github.com/suvojit-0x55aa/0afb3eefbb26d33f54e1fb9f94d6b609">label_smoothing.py</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/deep-learning-tricks/">#deep learning tricks</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)</div>
+      <div>https://daydreamatnight.github.io/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 4, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/08/learning-rate-schedule/" title="learning rate schedule">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">learning rate schedule</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/" title="install d2l module on apple m1 chip for deep learning">
+                        <span class="hidden-mobile">install d2l module on apple m1 chip for deep learning</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1267 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="It&#39;s a brief note of the review paper: Physics-informed machine learning[1] by the same group proposing the PINN[2], including Prof. George Em Karniadakis and Dr. Lu Lu. Basic concepts an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Review of Physical Informed Neural Network">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="It&#39;s a brief note of the review paper: Physics-informed machine learning[1] by the same group proposing the PINN[2], including Prof. George Em Karniadakis and Dr. Lu Lu. Basic concepts an">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/PINN.png">
+<meta property="article:published_time" content="2022-06-08T18:20:20.000Z">
+<meta property="article:modified_time" content="2022-09-18T10:20:36.509Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/PINN.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Review of Physical Informed Neural Network - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Review of Physical Informed Neural Network"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-09 02:20" pubdate>
+          June 9, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          22k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          75 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Review of Physical Informed Neural Network</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>It's a brief note of the review paper: Physics-informed machine learning<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L. (2021). Physics-informed machine learning. *Nature Reviews Physics*, *3*(6), 422-440.](https://scholar.google.com/scholar_url?url=https://www.nature.com/articles/s42254-021-00314-5&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=12413463696550326945&amp;ei=ku-gYuLyIuOEywThnbSYCQ&amp;scisig=AAGBfm2hbAYVf-NUg8tveih4kCyCAE_8rA)">[1]</span></a></sup> by the same group proposing the PINN<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. *Journal of Computational physics*, *378*, 686-707.](https://www.sciencedirect.com/science/article/pii/S0021999118307125)">[2]</span></a></sup>, including <a target="_blank" rel="noopener" href="https://www.brown.edu/research/projects/crunch/george-karniadakis">Prof. George Em Karniadakis</a> and <a target="_blank" rel="noopener" href="https://lu.seas.upenn.edu/people/">Dr. Lu Lu</a>. Basic concepts and typical applications are introduced, as well as limitations and future directions.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>Additional resources:</p><p>Papers:</p><ul><li><p><a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0021999118307125">Physics-informed machine learning. Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L. (2021).</a></p></li><li><p><a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0021999118307125">Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019)</a></p></li><li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.10561">Physics Informed Deep Learning (Part I): Data-driven Solutions of Nonlinear Partial Differential Equations, M.Raissi, P.Perdikaris, G.E.Karniadakis</a></p></li><li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.10566">Physics Informed Deep Learning (Part II): Data-driven Discovery of Nonlinear Partial Differential Equations, M.Raissi, P.Perdikaris, G.E.Karniadakis</a></p></li></ul><p>Course and slides:</p><ul><li><a target="_blank" rel="noopener" href="https://arindam.cs.illinois.edu/courses/f21cs598/">CS 598: Deep Generative and Dynamical Models</a></li><li><a target="_blank" rel="noopener" href="https://arindam.cs.illinois.edu/courses/f21cs598/slides/pml11_598f21.pdf">CS598: Physics-Informed Neural Networks: A deep learning framework for solving forward and inverse problems involving nonlinear PDEs</a></li><li><a target="_blank" rel="noopener" href="https://github.com/lululxvi/tutorials/blob/master/20211210_pinn/pinn.pdf">20211210_pinn/pinn.pdf</a></li><li><a target="_blank" rel="noopener" href="https://mltp2020.com/Presentations/Karniadakis_NSF_MLTP2020.pdf">Physics-Informed Neural Networks (PINNs)</a></li></ul><p>Blog and talk:</p><ul><li><a target="_blank" rel="noopener" href="https://maziarraissi.github.io/PINNs/">Physics Informed Deep Learning</a></li><li><a target="_blank" rel="noopener" href="https://cs598ban.github.io/Fall2021/ds/physics+ml/2021/11/18/DS1_blog2.html">DS1 Physics Informed Neural Networks</a></li><li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV19a41167RU">Physics-Informed Deep learning(物理信息深度学习）</a></li><li><a target="_blank" rel="noopener" href="https://maziarraissi.github.io/research/09_hidden_fluid_mechanics/">Hidden Fluid Mechanics</a></li><li><a target="_blank" rel="noopener" href="https://youtu.be/GdbOBqfkJPk">Hidden Physics Models AFMS Webinar 2021 #9 - Dr Maziar Raissi (University of Colorado)</a></li></ul>
+          </div>
+<h2 id="notes-by-sections">Notes by sections</h2>
+<h3 id="abstract">0. Abstract</h3>
+<p>Despite the strength of traditional simulation methods, (FVM and FEM ...), the weakness still exist such as:</p>
+<ul>
+<li>Troublesome to deal with complex problems:
+<ul>
+<li>mesh generation on complex boundary</li>
+<li>curse of dimensionality, high-dimensional problem</li>
+</ul></li>
+<li>Nearly impossible to exploit observations:
+<ul>
+<li>incorporate available data (always noisy) <em>seamlessly</em></li>
+<li>solve inverse problem*</li>
+</ul></li>
+</ul>
+<p>Obviously machine learning is designed to solve inverse problems with high dimensional data. Only problems are</p>
+<ul>
+<li>the requirement of big input data</li>
+<li>low interpretation</li>
+</ul>
+<p>Physics informed learning integrating these methods.</p>
+<p>The most attractive advantage is the ability to impose <em>seamlessly</em> physical law(constrains) on general machine learning model. With these constrains, the <em>physical informed neural network</em> will converge with much less data. And the interpretation can be improved as well.</p>
+<div class="note note-info">
+            <p>*Inverse problem: solving a problem from observations with part of knowledge of the mathematical model i.e. PDE.</p>
+          </div>
+<div class="note note-info">
+            <p>PINN still not belongs to fully <a target="_blank" rel="noopener" href="https://towardsdatascience.com/interpretable-neural-networks-with-pytorch-76f1c31260fe">Interpretable Neural Networks</a>. Yet there is always a trade-off between interpretation and good performance.</p>
+          </div>
+<div class="note note-info">
+            <table><thead><tr class="header"><th></th><th>FEM/FVM/FDM</th><th>PINNS</th><th>ROMs*</th></tr></thead><tbody><tr class="odd"><td>Solution Space</td><td>Basis Functions</td><td>Neural Networks</td><td>Smart Basis Functions</td></tr><tr class="even"><td>Differential Operators</td><td>Discretization/Weak-form</td><td>Automatic Differentiation</td><td>Discretization/Weak-form</td></tr><tr class="odd"><td>Solver</td><td>Linear/non-linear/Iterative</td><td>Gradient Descent (Training)</td><td>Linear/non-linear/Iterative</td></tr><tr class="even"><td>Evaluate</td><td>Interpolation</td><td>Inference</td><td>Interpolation</td></tr></tbody></table><p>ROMs: reduce order models, a generalisation of FEM/FVM/FDM the basis functions are carefully chosen based on previous timeSteps, similar geometries, or experience.</p><p>Same thing can be done on NNs, and it is the method of transfer learning. Pre-train models on carefully chosen problems. Then use the parameters to warm-start the training of NNs on another type of physics or geometries.</p>
+          </div>
+<h3 id="introduction">1. Introduction</h3>
+<h5 id="key-idea">Key idea</h5>
+<p>The key points are learning from</p>
+<ul>
+<li>Dinky, Dirty, Dynamic, Deceptive data and</li>
+<li>Scientific domain knowledge
+<ul>
+<li>e.g. physical principles, constrains, symmetries, computational simulations</li>
+</ul></li>
+</ul>
+<p>to develop a model that is:</p>
+<ul>
+<li>Accurate, Robust, Reliable, Interpretable, Explainable</li>
+</ul>
+<p>Instead of learning from the scratch, the developed valuable knowledge should also be exploited.</p>
+<blockquote>
+<p>prior knowledge stemming from our observational, empirical, physical or mathematical understanding of the world can be leveraged to improve the performance of a learning algorithm</p>
+</blockquote>
+<h5 id="data-and-physics">Data and Physics</h5>
+<p>There are 3 scenarios when solving physical problems shown below:</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/Data and physics scenarios.png" srcset="/img/loading.gif" lazyload alt="Data and physics scenarios" style="zoom:30%;"></p>
+<table>
+
+<thead>
+<tr class="header">
+<th>Forward problem</th>
+<th>Inverse problem</th>
+<th>System identification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Physics based <br>(complete PDE)</td>
+<td>Some physics<br>(PDE, apart from BC, <br>Initial, constants, params...)</td>
+<td>Physics free</td>
+</tr>
+<tr class="even">
+<td>Data free</td>
+<td>Small/noisy data</td>
+<td>Data based</td>
+</tr>
+<tr class="odd">
+<td>FDM, FEM, FVM</td>
+<td>Multi-fidelity learning <br>PINN<br>DeepM&amp;Mnet</td>
+<td>NN <br>Operator learning (DeepONet)</td>
+</tr>
+</tbody>
+</table>
+<div class="note note-secondary">
+            <p>Inverse problem is also called data assimilation problem</p><p>System identification is also called model discovery</p>
+          </div>
+<p>The paper focus mostly on the last 2 scenarios and a lot of prior works are listed:</p>
+<h5 id="prior-works">Prior works</h5>
+
+<div class="markmap-container" style="height:200px">
+  <svg data="{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;prior work&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;pure data-driven&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;preliminary success&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;examples&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;Neural network aided discovering physical concepts &lt;sup id=\&quot;fnref:12\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:12\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Iten, R., Metger, T ., Wilming, H., Del Rio, L. &amp;  Renner, R. Discovering physical concepts with neural networks. Phys. Rev. Lett. 124, 010508 (2020).\&quot;&gt;[12]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;Neural network aided math intuition&lt;sup id=\&quot;fnref:13\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:13\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Stump, C. (2021). Artificial intelligence aids intuition in mathematical discovery.\&quot;&gt;[13]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;cons&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;not interpretable&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;physically inconsistent or implausible&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;poor generalisation&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;physical informed&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;strong theoretical constraints and inductive biases&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;examples&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;PINN&lt;sup id=\&quot;fnref:2\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:2\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;[Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. *Journal of Computational physics*, *378*, 686-707.](https://www.sciencedirect.com/science/article/pii/S0021999118307125)\&quot;&gt;[2]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[17,18]},&quot;v&quot;:&quot;Distilling free-form natural laws from experimental data&lt;sup id=\&quot;fnref:14\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:14\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Schmidt, M. &amp; Lipson, H. Distilling free-form natural laws from experimental data. Science 324, 81–85 (2009).\&quot;&gt;[14]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;SINDY&lt;sup id=\&quot;fnref:15\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:15\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Brunton, S. L., Proctor, J. L. &amp; Kutz, J. N. Discovering governing equations from data by sparse identification of nonlinear dynamical systems. Proc. Natl Acad. Sci. USA 113, 3932–3937 (2016).\&quot;&gt;[15]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;Hidden Physics Models&lt;sup id=\&quot;fnref:27\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:27\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Raissi, M., Perdikaris, P . &amp; Karniadakis, G. E. Numerical Gaussian processes for time- dependent  and nonlinear partial differential equations. SIAM J. Sci. Comput. 40, A172–A198 (2018).\&quot;&gt;[27]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&lt;sup id=\&quot;fnref:28\&quot; class=\&quot;footnote-ref\&quot;&gt;&lt;a href=\&quot;#fn:28\&quot; rel=\&quot;footnote\&quot;&gt;&lt;span class=\&quot;hint--top hint--rounded\&quot; aria-label=\&quot;Raissi, M., Yazdani, A., &amp; Karniadakis, G. E. (2020). Hidden fluid mechanics: Learning velocity and pressure fields from flow visualizations. *Science*, *367*(6481), 1026-1030.\&quot;&gt;[28]&lt;/span&gt;&lt;/a&gt;&lt;/sup&gt;&quot;}]}]}]}"/>
+</div>
+
+<h3 id="method">2. Method</h3>
+<h4 id="how-to-embed-physics-in-ml">How to embed physics in ML</h4>
+<p>There are 3 methods of imposing constrains into Neural Networks</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/Principles of physics-informed learning.png" srcset="/img/loading.gif" lazyload alt="Principles of physics-informed learning" style="zoom:30%;"></p>
+<h5 id="observational-biases">Observational biases</h5>
+<p>Directly from data, same as general NN methods, there are examples such as refs<sup id="fnref:16" class="footnote-ref"><a href="#fn:16" rel="footnote"><span class="hint--top hint--rounded" aria-label="Lu, L., Jin, P ., Pang, G., Zhang, Z. &amp; Karniadakis, G. E. Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators. Nat. Mach. Intell. 3, 218–229 (2021)">[16]</span></a></sup><sup id="fnref:17" class="footnote-ref"><a href="#fn:17" rel="footnote"><span class="hint--top hint--rounded" aria-label="A point- cloud deep learning framework for prediction of fluid flow fields on irregular geometries. Phys. Fluids 33, 027104 (2021).">[17]</span></a></sup><sup id="fnref:18" class="footnote-ref"><a href="#fn:18" rel="footnote"><span class="hint--top hint--rounded" aria-label="Li, Z. et al. Fourier neural operator for parametric partial differential equations. in Int. Conf. Learn. Represent. (2021).">[18]</span></a></sup> <sup id="fnref:19" class="footnote-ref"><a href="#fn:19" rel="footnote"><span class="hint--top hint--rounded" aria-label="Yang, Y. &amp; Perdikaris, P . Conditional deep surrogate models for stochastic, high- dimensional, and multi- fidelity systems. Comput. Mech. 64, 417–434 (2019).">[19]</span></a></sup>.</p>
+<p>Techniques such as data augmentation can be useful. e.g., if some bias such as symmetry is known, symmetric data augmentation a good choice.</p>
+<p>Yet</p>
+<ul>
+<li>Difficult to find the symmetry and invariances.</li>
+<li>need big amount of data, which will cost a lot in most of the industrial areas.</li>
+</ul>
+<h5 id="inductive-biases">Inductive biases</h5>
+<p>Embed the prior knowledge into architectures.</p>
+<p>e.g.</p>
+<ul>
+<li><p>CNNs possess translation invariance because of the "convolution" algorithm.</p></li>
+<li><p>Dirichlet BC below can be embedded such as:</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/Impose inductive bias via modifying output .png" srcset="/img/loading.gif" lazyload alt="Impose inductive bias via modifying output, from B1105-B1132 [20]" style="zoom:20%;"> <span class="math display">\[
+\text{BC:} \qquad u(0)=0, u(1)=1
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+g(x)=x, \ell(x)=x(1-x) \\
+\mathcal{N}(x)=g(x), \quad x \in \Gamma_D \subset \Omega \\
+\hat{u}(x)=g(x)+\ell(x) \mathcal{N}(x) \\
+\begin{cases}\ell(\mathbf{x})=0, &amp; \mathbf{x} \in \Gamma_D \\
+\ell(\mathbf{x})&gt;0, &amp; \mathbf{x} \in \Omega-\Gamma_D\end{cases}
+\end{aligned}
+\]</span></p>
+<p>a carefully designed activation function is added after the last layer so that the output satisfies such conditions.</p></li>
+<li><p>For periodic boundary conditions, take the idea of Fourier series, add a Fourier layer after the input as shown:</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/Impose inductive bias via modifying input .png" srcset="/img/loading.gif" lazyload alt="Impose inductive bias via modifying input, from B1105-B1132 [20]" style="zoom:20%;"></p></li>
+<li><p>For divergence-free system, <span class="math display">\[
+\nabla\cdot\mathbf{f} = 0
+\]</span> With the knowledge of <span class="math display">\[
+\text{divergence of the curl is 0: } \quad \nabla\cdot (\nabla\times g) \equiv 0
+\]</span> choose: <span class="math display">\[
+\mathbf{f} = \nabla \times g
+\]</span> <img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/linearly constrained nn.png" srcset="/img/loading.gif" lazyload alt="linearly constrained nn, from arXiv:2002.01600 [21]" style="zoom:48%;"></p>
+<p>a <span class="math inline">\(curl\)</span> function is added after the last layer so that the result is unconditionally divergence-free.</p></li>
+</ul>
+<p>It is nearly free, automatically and exactly.</p>
+<ul>
+<li>do it if possible</li>
+<li>designed case by case</li>
+<li>limited to relatively simple and well-posed physics
+<ul>
+<li>require craftsmanship and elaborate implementations</li>
+<li>extension to more complex tasks is challenging</li>
+</ul></li>
+</ul>
+<h5 id="learning-biases">Learning biases</h5>
+<p>This is the most general method, the idea is</p>
+<ul>
+<li>tinkering/penalising the loss function</li>
+<li>modulate the training process</li>
+</ul>
+<p>Several examples include <em>deep galerkin method</em><sup id="fnref:22" class="footnote-ref"><a href="#fn:22" rel="footnote"><span class="hint--top hint--rounded" aria-label="Sirignano, J. &amp; Spiliopoulos, K. DGM: a deep learning algorithm for solving partial differential equations. J. Comput. Phys. 375, 1339–1364 (2018).">[22]</span></a></sup>, PINN and its extensions<sup id="fnref:23" class="footnote-ref"><a href="#fn:23" rel="footnote"><span class="hint--top hint--rounded" aria-label="Kissas, G. et al. Machine learning in cardiovascular flows modeling: predicting arterial blood pressure from non- invasive 4D flow MRI data using physicsinformed neural networks. Comput. Methods Appl. Mech. Eng. 358, 112623 (2020).">[23]</span></a></sup><sup id="fnref:24" class="footnote-ref"><a href="#fn:24" rel="footnote"><span class="hint--top hint--rounded" aria-label="Zhu, Y., Zabaras, N., Koutsourelakis, P . S. &amp;  Perdikaris, P . Physics- constrained deep learning for high- dimensional surrogate modeling and uncertainty quantification without labeled data. J. Comput. Phys. 394, 56–81 (2019).">[24]</span></a></sup><sup id="fnref:25" class="footnote-ref"><a href="#fn:25" rel="footnote"><span class="hint--top hint--rounded" aria-label="Geneva, N. &amp; Zabaras, N. Modeling the dynamics  of PDE systems with physics-constrained deep  auto- regressive networks. J. Comput. Phys. 403, 109056 (2020).">[25]</span></a></sup>. And PINN is mainly discussed.</p>
+<p>PINN is a highly flexible framework that allows one to incorporate more general instantiations of domain-specific knowledge into ML models. Besides, the backend NN can be changed into CNN and RNN.</p>
+<h4 id="pinn-method">PINN method</h4>
+<h4 id="example">Example</h4>
+<p>The method and paradigm of PINN can be illustrated via a typical example of solving a inverse problem: <em>invisible cloaking design<sup id="fnref:26" class="footnote-ref"><a href="#fn:26" rel="footnote"><span class="hint--top hint--rounded" aria-label="Chen, Y., Lu, L., Karniadakis, G. E., &amp; Dal Negro, L. (2020). Physics-informed neural networks for inverse problems in nano-optics and metamaterials. *Optics express*, *28*(8), 11618-11633.">[26]</span></a></sup>.</em></p>
+<div class="note note-secondary">
+            <p>PINN is compatible with not only inverse problems, forward problems, operator learning are also in its scope. See <a target="_blank" rel="noopener" href="https://deepxde.readthedocs.io/en/latest/">DeepXDE demos</a>.</p>
+          </div>
+<p>The title looks daunting but the problem is simple, relatively.</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/invisible cloaking illustration.png" srcset="/img/loading.gif" lazyload alt="invisible cloaking illustration, (A) scattering electrical field of a nanocylinder, (B) nanocylinder with constant permittivity coated layer zeroing out scattering, from Optics express, 28(8), 11618-11633 [26]." style="zoom:28%;"></p>
+<p>As shown above, a constant electrical field <span class="math inline">\(E_1\)</span> will be perturbed by a metal cylinder inside with a permittivity <span class="math inline">\(\epsilon_3\)</span>. But this perturbation can be zero out by warping the cylinder with an extra "coat" with permittivity <span class="math inline">\(\epsilon_2\)</span>.</p>
+<p><strong>Goal:</strong></p>
+<p>Given <span class="math inline">\(\epsilon_1, \epsilon_3\)</span>, solve <span class="math inline">\(\epsilon_2(x,y)\)</span> s.t. <span class="math inline">\(E_1 = {E_{1}}_{org}\)</span></p>
+<p><strong>Physical system:</strong></p>
+<p>Helmholtz equation <span class="math inline">\(\left(k_0=\frac{2 \pi}{\lambda_0}\right)\)</span> <span class="math display">\[
+\nabla^2 E_i+\epsilon_i k_0^2 E_i=0, \quad i=1,2,3
+\]</span> Boundary conditions:</p>
+<ul>
+<li>Outer circle: <span class="math inline">\(E_1=E_2, \frac{1}{\mu_1} \frac{\partial E_1}{\partial \mathbf{n}}=\frac{1}{\mu_2} \frac{\partial E_2}{\partial \mathbf{n}}\)</span></li>
+<li>Inner circle: <span class="math inline">\(E_2=E_3, \frac{1}{\mu_2} \frac{\partial E_2}{\partial \mathrm{n}}=\frac{1}{\mu_3} \frac{\partial E_3}{\partial \mathrm{n}}\)</span></li>
+</ul>
+<p><strong>PINN architecture:</strong></p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/PINN for solving invisible cloaking problem.png" srcset="/img/loading.gif" lazyload alt="PINN for solving invisible cloaking problem, from https://github.com/lululxvi/tutorials/blob/master/20211210_pinn/pinn.pdf" style="zoom:50%;"></p>
+<p>We can design a PDE embedded MLP as</p>
+<ul>
+<li>input: <span class="math inline">\(x, y\)</span></li>
+<li>output: <span class="math inline">\(E1,E2,E3,\epsilon_2\)</span></li>
+<li>loss function: blended function with observation loss and physical loss</li>
+</ul>
+<div class="note note-info">
+            <p>note that in PINN, the derivatives (e.g. <span class="math inline">\(\nabla\)</span> here) is calculated analytically by auto differentiation, no discretisation is needed, i.e. mesh-free &amp; particle free.</p><p>In PINN, higher order auto differentiation could be needed in forward and back propagation (1 higher order than forward). In general NN, only 1<sup>st</sup> order derivative is calculated in the process of back propagation.</p>
+          </div>
+<h4 id="theory">Theory</h4>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/schematic of PINN for solving PDE-based inverse problems.png" srcset="/img/loading.gif" lazyload alt="schematic of PINN for solving PDE-based inverse problems, from Optics express, 28(8), 11618-11633 [26]. " style="zoom:30%;"></p>
+<p>PINN: <span class="math display">\[
+f\left(\mathbf{x} ; \frac{\partial u}{\partial x_1}, \ldots, \frac{\partial u}{\partial x_d} ; \frac{\partial^2 u}{\partial x_1 \partial x_1}, \ldots, \frac{\partial^2 u}{\partial x_1 \partial x_d} ; \ldots ; \boldsymbol{\lambda}\right)=0, \quad \mathbf{x} \in \Omega
+\]</span></p>
+<ul>
+<li><p>Initial/boundary conditions <span class="math inline">\(\mathcal{B}(u, \mathbf{x})=0\)</span> on <span class="math inline">\(\partial \Omega\)</span></p></li>
+<li><p>Extra information <span class="math inline">\(\mathcal{I}(u, \mathbf{x})=0\)</span> for <span class="math inline">\(\mathbf{x} \in \mathcal{T}_i\)</span></p></li>
+</ul>
+<p><span class="math display">\[
+\min _{\boldsymbol{\theta}, \boldsymbol{\lambda}} \mathcal{L}(\boldsymbol{\theta}, \boldsymbol{\lambda} ; \mathcal{T})=w_f \mathcal{L}_f\left(\boldsymbol{\theta}, \boldsymbol{\lambda} ; \mathcal{T}_f\right)+w_b \mathcal{L}_b\left(\boldsymbol{\theta}, \boldsymbol{\lambda} ; \mathcal{T}_b\right)+w_i \mathcal{L}_i\left(\boldsymbol{\theta}, \boldsymbol{\lambda} ; \mathcal{T}_i\right)
+\]</span> where <span class="math display">\[
+\begin{aligned}
+\mathcal{L}_f &amp;=\frac{1}{\left|\mathcal{T}_f\right|} \sum_{\mathbf{x} \in \mathcal{T}_f}\left\|f\left(\mathbf{x} ; \frac{\partial \hat{u}}{\partial x_1}, \ldots ; \frac{\partial^2 \hat{u}}{\partial x_1 \partial x_1}, \ldots ; \boldsymbol{\lambda}\right)\right\|_2^2 \\
+\mathcal{L}_b &amp;=\frac{1}{\left|\mathcal{T}_b\right|} \sum_{\mathbf{x} \in \mathcal{T}_b}\|\mathcal{B}(\hat{u}, \mathbf{x})\|_2^2 \\
+\mathcal{L}_i &amp;=\frac{1}{\left|\mathcal{T}_i\right|} \sum_{\mathbf{x} \in \mathcal{T}_i}\|\mathcal{I}(\hat{u}, \mathbf{x})\|_2^2
+\end{aligned}
+\]</span></p>
+<div class="note note-secondary">
+            <p>Not surprisingly, the blending factors <span class="math inline">\(w_f, w_b, w_i\)</span> needed to be tuned.</p>
+          </div>
+<h4 id="error-analysis">Error analysis</h4>
+<p><span class="label label-danger">This section needs extra care. In my understanding, it says the classic theory says NN is dense only in first order, which is sufficient for general NN, not for PINN. </span></p>
+<div class="note note-info">
+            <p>Theorem (Universal approximation theorem; Cybenko, 1989)<sup id="fnref:31" class="footnote-ref"><a href="#fn:31" rel="footnote"><span class="hint--top hint--rounded" aria-label="Cybenko, G. (1989). Approximation by superpositions of a sigmoidal function. *Mathematics of control, signals and systems*, *2*(4), 303-314.">[31]</span></a></sup> Let <span class="math inline">\(\sigma\)</span> be any continuous sigmoidal function. Then finite sums of the form <span class="math inline">\(G(x)=\sum_{j=1}^N \alpha_j \sigma\left(w_j \cdot x+b_j\right)\)</span> are dense in <span class="math inline">\(C\left(I_d\right)\)</span>.</p><blockquote><p>universal approximators: standard multilayer feedforward networks are capable of approximating any measurable function to any desired degree of accuracy</p></blockquote>
+          </div>
+<p>Yet this theory has been extended to any higher order, which supports PINN well.</p>
+<div class="note note-info">
+            <p>Theorem (Pinkus, 1999)<sup id="fnref:32" class="footnote-ref"><a href="#fn:32" rel="footnote"><span class="hint--top hint--rounded" aria-label="Pinkus, A. (1999). Approximation theory of the MLP model in neural networks. *Acta numerica*, *8*, 143-195.">[32]</span></a></sup> Let <span class="math inline">\(\mathbf{m}^i \in \mathbb{Z}_{+}^d, i=1, \ldots, s\)</span>, and set <span class="math inline">\(m=\max _{i=1, \ldots, s}\left(m_1^i+\cdots+m_d^i\right)\)</span>. Assume <span class="math inline">\(\sigma \in C^m(\mathbb{R})\)</span> and <span class="math inline">\(\sigma\)</span> is not a polynomial. Then the space of single hidden layer neural nets <span class="math display">\[\mathcal{M}(\sigma):=\operatorname{span}\left\{\sigma(\mathbf{w} \cdot \mathbf{x}+b): \mathbf{w} \in \mathbb{R}^d, b \in \mathbb{R}\right\}\]</span> is dense in <span class="math display">\[C^{\mathbf{m}^1, \ldots, \mathbf{m}^s}\left(\mathbb{R}^d\right):=\cap_{i=1}^s C^{\mathbf{m}^i}\left(\mathbb{R}^d\right)\]</span></p>
+          </div>
+<p>Optimisation &amp; Generalisation analysis can read Shin et al., 2020; Mishra &amp; Molinaro, 2020; Luo &amp; Yang, 2020</p>
+<h3 id="merits-of-pinn">3. Merits of PINN</h3>
+<p>Problem related merits:</p>
+<h5 id="flexible">Flexible:</h5>
+<ul>
+<li><p>Support different NN backends: MLP, CNN, RNN, GNN, GAN, Transformer etc...</p></li>
+<li><p>Support different disciplines: conservation laws, stochastic and fractional PDEs.</p></li>
+</ul>
+<h5 id="different-problems">Different problems</h5>
+<ul>
+<li>effective on ill-posed inverse problem</li>
+<li>not effective on well-posed, no data needed forward problem</li>
+</ul>
+<h5 id="tackling-high-dimensionality">Tackling high dimensionality</h5>
+<ul>
+<li>unlike FVM/FDM or particles method, PINN is mesh free. So high dimensionality is not a problem.</li>
+<li>used to solve high-dimensional Black–Scholes, Hamilton–Jacobi–Bellman and Allen–Cahn equations<sup id="fnref:30" class="footnote-ref"><a href="#fn:30" rel="footnote"><span class="hint--top hint--rounded" aria-label="Grohs, P ., Hornung, F., Jentzen, A. &amp;  Von Wurstemberger, P . A proof that artificial neural networks overcome the curse of dimensionality in the numerical approximation of Black–Scholes partial differential equations. Preprint at arXiv https://arxiv.org/abs/1809.02362 (2018).">[30]</span></a></sup></li>
+</ul>
+<h5 id="strong-generalisation-in-small-data-regime">Strong generalisation in small data regime</h5>
+<h5 id="simple-to-implement-in-parallel">Simple to implement in parallel</h5>
+<h5 id="additional-merits">Additional merits:</h5>
+<ul>
+<li>Help understand deep learning
+<ul>
+<li>provide theoretical insight and elucidate the inner mechanisms behind the surprising effectiveness of deep learning.</li>
+</ul></li>
+<li>Uncertainty quantification
+<ul>
+<li>uncertainties include the physics, data, and learning models
+<ul>
+<li>stochastic physical systems
+<ul>
+<li>described by stochastic PDEs/ODEs</li>
+<li>GANs performs well on solving stochastic PDEs in high dimensions</li>
+</ul></li>
+<li>data: aleatoric uncertainty arising from the noise in data and epistemic uncertainty arising from the gaps in data
+<ul>
+<li>Gaussian process regression (GPR) based PINN quantify uncertainty naturally, see ref<sup id="fnref:27" class="footnote-ref"><a href="#fn:27" rel="footnote"><span class="hint--top hint--rounded" aria-label="Raissi, M., Perdikaris, P . &amp; Karniadakis, G. E. Numerical Gaussian processes for time- dependent  and nonlinear partial differential equations. SIAM J. Sci. Comput. 40, A172–A198 (2018).">[27]</span></a></sup> and its <a target="_blank" rel="noopener" href="https://youtu.be/GdbOBqfkJPk">talk</a>. Yet the scalability is low. (For NN, mini batch SGD can deal with big data.)</li>
+<li>An extension B-PINNs<sup id="fnref:29" class="footnote-ref"><a href="#fn:29" rel="footnote"><span class="hint--top hint--rounded" aria-label="Yang, L., Meng, X. &amp; Karniadakis, G. E. B- PINNs: Bayesian physics- informed neural networks for forward and inverse PDE problems with noisy data. J. Comput. Phys. 415, 109913 (2021).">[29]</span></a></sup> can provide reasonable uncertainty bounds</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="note note-danger">
+            <p>!Not fully understand, need knowledge of stochastic systems.</p><p>So far I see data uncertainty quantification as a way of controlling overfitting and underfitting, i.e. bias and variance. (Recall underfitting - low bias and high variance, overfitting - high bias and low variance)</p><p>Uncertainty in NNs can be partly quantified by techniques such as dropout, regularisation.</p>
+          </div>
+<h3 id="applications">4. Applications</h3>
+<p>Only fluid related works is presented here, more in the paper.</p>
+<h4 id="field-inferring33">Field inferring<sup id="fnref:33" class="footnote-ref"><a href="#fn:33" rel="footnote"><span class="hint--top hint--rounded" aria-label="Cai, S., Wang, Z., Fuest, F., Jeon, Y. J., Gray, C., &amp; Karniadakis, G. E. (2021). Flow over an espresso cup: inferring 3-D velocity and pressure fields from tomographic background oriented Schlieren via physics-informed neural networks. *Journal of Fluid Mechanics*, *915*.">[33]</span></a></sup></h4>
+<p>The pressure and velocity can be inferred based on the temperature field. We know the N-S function, but the viscosity, boundary are not known.</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/inferring 3D velocity and pressure fields based on temperature field.png" srcset="/img/loading.gif" lazyload alt="inferring 3D velocity and pressure fields based on temperature field, (a)(b)3D temperature field derived from the 2D density field images from all six cameras. (c)PINN inference of the 3D velocity field (left) and pressure field (right) from the temperature data" style="zoom:40%;"></p>
+<h4 id="field-denoising34">Field denoising<sup id="fnref:34" class="footnote-ref"><a href="#fn:34" rel="footnote"><span class="hint--top hint--rounded" aria-label="Kissas, G., Yang, Y., Hwuang, E., Witschey, W. R., Detre, J. A., &amp; Perdikaris, P. (2020). Machine learning in cardiovascular flows modeling: Predicting arterial blood pressure from non-invasive 4D flow MRI data using physics-informed neural networks. *Computer Methods in Applied Mechanics and Engineering*, *358*, 112623.">[34]</span></a></sup></h4>
+<p>Similarly, if the input data is scattered and noisy, PINN is a method to construct the fluid field with a smooth and boundary-clear result. Other important fields (biomarkers) can be inferred seamlessly.</p>
+<p><img src="/2022/06/09/Review-of-Physical-Informed-Neural-Network/Reconstruction of MRI result.png" srcset="/img/loading.gif" lazyload alt="De-noising and reconstructing clinical magnetic resonance imaging (MRI) data of blood velocit, (a) Snapshot of in-vivo 4D-flow MRI measurements. (b–d) PINN reconstruction of the velocity field (b), pressure (c), arterial wall surface geometry and wall shear stresses (d)" style="zoom:48%;"></p>
+<h3 id="limitations">5. Limitations</h3>
+<p>These limitations are also the treading research areas:</p>
+<p>Complex systems</p>
+<ul>
+<li>High-frequency components of multiscale systems
+<ul>
+<li>high frequency is too much for MLP, the most common base of PINN
+<ul>
+<li>extra tricks is needed</li>
+</ul></li>
+</ul></li>
+<li>computational complex on multiphysics system
+<ul>
+<li>ref<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Cai, S., Wang, Z., Lu, L., Zaki, T . A. &amp; Karniadakis, G. E. DeepM&amp;Mnet: inferring the electroconvection multiphysics fields based on operator approximation by neural networks. J. Comput. Phys. 436, 110296 (2020).">[3]</span></a></sup> based on DeepM&amp;M is a good example to deal with it</li>
+</ul></li>
+<li>loss function fail on specific problems
+<ul>
+<li>traditional point-wise will fail on
+<ul>
+<li>high-dimensional problems</li>
+<li>some special low-dimensional cases</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>New algorithms and computational frameworks</p>
+<ul>
+<li><p>non-convex optimisation problems</p>
+<ul>
+<li>inherited from the Neural Networks</li>
+<li>global minim cannot be guaranteed</li>
+<li>refs<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wang, S., Yu, X. &amp; Perdikaris, P . When and why PINNs fail to train: a neural tangent kernel perspective. Preprint at arXiv https://arxiv.org/abs/2007.14527 (2020).">[4]</span></a></sup><sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wang, S., Wang, H. &amp; Perdikaris, P . On the eigenvector bias of Fourier feature networks: from regression to solving multi-scale PDEs with physics-informed neural networks. Preprint at arXiv https://arxiv.org/abs/ 2012.10047 (2020).">[5]</span></a></sup><sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wang, S., T eng, Y. &amp; Perdikaris, P . Understanding and mitigating gradient pathologies in physics- informed neural networks. Preprint at arXiv https://arxiv.org/ abs/2001.04536 (2020)">[6]</span></a></sup> discuss more of it</li>
+</ul></li>
+<li><p>time consuming on tuning</p>
+<ul>
+<li>inherited from the Neural Networks</li>
+<li>autoML<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="He, X., Zhao, K. &amp; Chu, X. AutoML: a survey of the state- of-the- art. Knowl. Based Syst. 212, 106622 (2021).">[7]</span></a></sup> techniques are emerging to solve this problem</li>
+<li>architecture teaching<sup id="fnref:8" class="footnote-ref"><a href="#fn:8" rel="footnote"><span class="hint--top hint--rounded" aria-label="Elsken, T ., Metzen, J. H. &amp; Hutter, F. Neural architecture search: a survey. J. Mach. Learn. Res. 20, 1–21 (2019).">[8]</span></a></sup>, meta-learning<sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="Hospedales, T ., Antoniou, A., Micaelli, P . &amp; Storkey, A. Meta-learning in neural networks: a survey. Preprint at arXiv https://arxiv.org/abs/2004.05439 (2020).">[9]</span></a></sup> etc</li>
+</ul></li>
+<li><p>transfer leaning</p>
+<ul>
+<li>popular idea in ML world</li>
+<li>ref<sup id="fnref:10" class="footnote-ref"><a href="#fn:10" rel="footnote"><span class="hint--top hint--rounded" aria-label="Goswami, S., Anitescu, C., Chakraborty, S. &amp;  Rabczuk, T . Transfer learning enhanced physics informed neural network for phase-field modeling  of fracture. Theor. Appl. Fract. Mech. 106, 102447 (2020).">[10]</span></a></sup> is a good attempting</li>
+</ul></li>
+<li><p>efficient higher order derivatives algorithms</p>
+<ul>
+<li><p>specific need for PINN, in general NN, only 1st order derivative is needed</p></li>
+<li><p>not well supported by mainstream ML frameworks (tf and torch)</p></li>
+<li><p>Taylor-mode automatic differentiation provides better support</p></li>
+</ul></li>
+</ul>
+<p>Database and benchmark supports</p>
+<ul>
+<li>UCI Machine Learning Repository<sup id="fnref:11" class="footnote-ref"><a href="#fn:11" rel="footnote"><span class="hint--top hint--rounded" aria-label="Newman, D, Hettich, S., Blake, C. &amp; Merz, C. UCI repository of machine learning databases. ICS  http://www.ics.uci.edu/~mlearn/MLRepository.html (1998).">[11]</span></a></sup>
+<ul>
+<li>noise generated by an aerofoil</li>
+<li>ocean temperature and current measurements related to El Niño</li>
+<li>hydrodynamic resistance related to different yacht designs</li>
+</ul></li>
+<li>data is not available in many different applications</li>
+<li>standard benchmarks needed</li>
+</ul>
+<p>More mathematical understanding</p>
+<ul>
+<li>improve the understanding on NN and PINN</li>
+<li>improve the interpretation</li>
+<li>potential to
+<ul>
+<li>more robust and effective training algorithms,</li>
+<li>build a solid foundation for NN and PINN</li>
+</ul></li>
+</ul>
+<h3 id="outlooks">6. Outlooks</h3>
+<p>Visualisation tool, need more of general <a target="_blank" rel="noopener" href="https://www.tensorflow.org/tensorboard">TensorBoard</a>, requirement to visualise the field solution on the fly, just like OpenFOAM.</p>
+<p>Potential of digital twins, several problems are pointed out:</p>
+<ul>
+<li>complexity of observations data: noisy, scarce, multi-modility</li>
+<li>need time consuming pre-processing and calibrations</li>
+<li>the control function always need extra constitutive laws to close</li>
+</ul>
+<p>Importance of building ML-based transformations between predictive models</p>
+<p>The normal paradigm need choose humanly interpretable observables/variables and a ‘reasonable’ dictionary of operators based on the chosen observables. Possibility to automatically determine variables physical model formulations.</p>
+<p>Active learning - data collection while training, determine what data to collect and what formulation to choose actively.</p>
+<p>Ultimately change the way of thinking.</p>
+<h1 id="pinn-family">PINN family</h1>
+<p>PINN has been a hit in science and math fields since its publish. Several following works are also published afterwards. Here are some of them:</p>
+<h2 id="b-pinn35">B-PINN<sup id="fnref:35" class="footnote-ref"><a href="#fn:35" rel="footnote"><span class="hint--top hint--rounded" aria-label="Yang, L., Meng, X., &amp; Karniadakis, G. E. (2021). B-PINNs: Bayesian physics-informed neural networks for forward and inverse PDE problems with noisy data. *Journal of Computational Physics*, *425*, 109913.">[35]</span></a></sup></h2>
+<p>As mentioned before, unlike the Bayesian framework (e.g. GP), NN cannot provide uncertainty bounds. B-PINN integrate the Bayesian approach with PINN. When it comes to ill-posed problems and imperfect data, B-PINN is suitable. Yet prior for B-PINNs in a systematic way is still an open question.</p>
+<h2 id="hpinn36">HPINN<sup id="fnref:36" class="footnote-ref"><a href="#fn:36" rel="footnote"><span class="hint--top hint--rounded" aria-label="Lu, L., Pestourie, R., Yao, W., Wang, Z., Verdugo, F., &amp; Johnson, S. G. (2021). Physics-informed neural networks with hard constraints for inverse design. *SIAM Journal on Scientific Computing*, *43*(6), B1105-B1132.">[36]</span></a></sup></h2>
+<p>Physics-informed neural networks with hard constraints (hPINNs). Recall the loss function of PINN, it is a blended function and each term cannot be perfectly satisfied (soft constraints). The <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Augmented_Lagrangian_method">Augmented Lagrangian method</a> is used together with the loss function to make sure a hard constraints on the control function.</p>
+<h2 id="fpinn37">FPINN<sup id="fnref:37" class="footnote-ref"><a href="#fn:37" rel="footnote"><span class="hint--top hint--rounded" aria-label="Pang, G., Lu, L., &amp; Karniadakis, G. E. (2019). fPINNs: Fractional physics-informed neural networks. *SIAM Journal on Scientific Computing*, *41*(4), A2603-A2626.">[37]</span></a></sup></h2>
+<p>Origin PINN are suitable for integer-order partial differential equations (PDEs). FPINN extend the functions to Fractional Differential Equations.</p>
+<h2 id="gpinn-with-rar38">gPINN with RAR<sup id="fnref:38" class="footnote-ref"><a href="#fn:38" rel="footnote"><span class="hint--top hint--rounded" aria-label="Yu, J., Lu, L., Meng, X., &amp; Karniadakis, G. E. (2022). Gradient-enhanced physics-informed neural networks for forward and inverse PDE problems. *Computer Methods in Applied Mechanics and Engineering*, *393*, 114823.">[38]</span></a></sup></h2>
+<p>Residual-based adaptive refinement (RAR<sup id="fnref:39" class="footnote-ref"><a href="#fn:39" rel="footnote"><span class="hint--top hint--rounded" aria-label="Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E. (2021). DeepXDE: A deep learning library for solving differential equations. *SIAM Review*, *63*(1), 208-228.">[39]</span></a></sup>). Uniform residual points are not efficient for PDEs with steep solutions. RAR adaptively add more points in locations with large PDE residual.</p>
+<p>Gradient-enhanced PINN. Taking the idea that the derivatives of the PDE residual are also zero. gPINN embeds the gradient of the PDE residual into the loss.</p>
+<h2 id="cpinn40-and-xpinn41">CPINN<sup id="fnref:40" class="footnote-ref"><a href="#fn:40" rel="footnote"><span class="hint--top hint--rounded" aria-label="Jagtap, A. D., Kharazmi, E., &amp; Karniadakis, G. E. (2020). Conservative physics-informed neural networks on discrete domains for conservation laws: Applications to forward and inverse problems. *Computer Methods in Applied Mechanics and Engineering*, *365*, 113028.">[40]</span></a></sup> and XPINN<sup id="fnref:41" class="footnote-ref"><a href="#fn:41" rel="footnote"><span class="hint--top hint--rounded" aria-label="Jagtap, A. D., &amp; Karniadakis, G. E. (2021). Extended Physics-informed Neural Networks (XPINNs): A Generalized Space-Time Domain Decomposition based Deep Learning Framework for Nonlinear Partial Differential Equations. In *AAAI Spring Symposium: MLPS*.">[41]</span></a></sup></h2>
+<p>Conservative physics-informed neural networks on discrete domains for conservation laws. The computational domain is decomposed and flux continuity is imposed in the strong form along the sub-domain interfaces. Enable PINN of parallelisation.</p>
+<p>eXtended PINNs: A generalised space-time domain decomposition based deep learning framework. Extend the conservation laws of CPINN to any type of PDEs. And the domain can be decomposed in any arbitrary way (in space and time, space and time parallelisation). Larger representation and parallelisation capacity, effective for multi-scale and multi-physics problems.</p>
+<h1 id="references">References</h1>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar_url?url=https://www.nature.com/articles/s42254-021-00314-5&amp;hl=en&amp;sa=T&amp;oi=gsb&amp;ct=res&amp;cd=0&amp;d=12413463696550326945&amp;ei=ku-gYuLyIuOEywThnbSYCQ&amp;scisig=AAGBfm2hbAYVf-NUg8tveih4kCyCAE_8rA">Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L. (2021). Physics-informed machine learning. <em>Nature Reviews Physics</em>, <em>3</em>(6), 422-440.</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0021999118307125">Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational physics</em>, <em>378</em>, 686-707.</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Cai, S., Wang, Z., Lu, L., Zaki, T . A. &amp; Karniadakis, G. E. DeepM&amp;Mnet: inferring the electroconvection multiphysics fields based on operator approximation by neural networks. J. Comput. Phys. 436, 110296 (2020). <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Wang, S., Yu, X. &amp; Perdikaris, P . When and why PINNs fail to train: a neural tangent kernel perspective. Preprint at arXiv https://arxiv.org/abs/2007.14527 (2020). <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span>Wang, S., Wang, H. &amp; Perdikaris, P . On the eigenvector bias of Fourier feature networks: from regression to solving multi-scale PDEs with physics-informed neural networks. Preprint at arXiv https://arxiv.org/abs/ 2012.10047 (2020). <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:6" class="footnote-text"><span>Wang, S., T eng, Y. &amp; Perdikaris, P . Understanding and mitigating gradient pathologies in physics- informed neural networks. Preprint at arXiv https://arxiv.org/ abs/2001.04536 (2020) <a href="#fnref:6" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:7" class="footnote-text"><span>He, X., Zhao, K. &amp; Chu, X. AutoML: a survey of the state- of-the- art. Knowl. Based Syst. 212, 106622 (2021). <a href="#fnref:7" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:8" class="footnote-text"><span>Elsken, T ., Metzen, J. H. &amp; Hutter, F. Neural architecture search: a survey. J. Mach. Learn. Res. 20, 1–21 (2019). <a href="#fnref:8" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:9" class="footnote-text"><span>Hospedales, T ., Antoniou, A., Micaelli, P . &amp; Storkey, A. Meta-learning in neural networks: a survey. Preprint at arXiv https://arxiv.org/abs/2004.05439 (2020). <a href="#fnref:9" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:10" class="footnote-text"><span>Goswami, S., Anitescu, C., Chakraborty, S. &amp; Rabczuk, T . Transfer learning enhanced physics informed neural network for phase-field modeling of fracture. Theor. Appl. Fract. Mech. 106, 102447 (2020). <a href="#fnref:10" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:11" class="footnote-text"><span>Newman, D, Hettich, S., Blake, C. &amp; Merz, C. UCI repository of machine learning databases. ICS http://www.ics.uci.edu/~mlearn/MLRepository.html (1998). <a href="#fnref:11" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:12" class="footnote-text"><span>Iten, R., Metger, T ., Wilming, H., Del Rio, L. &amp; Renner, R. Discovering physical concepts with neural networks. Phys. Rev. Lett. 124, 010508 (2020). <a href="#fnref:12" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:13" class="footnote-text"><span>Stump, C. (2021). Artificial intelligence aids intuition in mathematical discovery. <a href="#fnref:13" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:14" class="footnote-text"><span>Schmidt, M. &amp; Lipson, H. Distilling free-form natural laws from experimental data. Science 324, 81–85 (2009). <a href="#fnref:14" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:15" class="footnote-text"><span>Brunton, S. L., Proctor, J. L. &amp; Kutz, J. N. Discovering governing equations from data by sparse identification of nonlinear dynamical systems. Proc. Natl Acad. Sci. USA 113, 3932–3937 (2016). <a href="#fnref:15" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:16" class="footnote-text"><span>Lu, L., Jin, P ., Pang, G., Zhang, Z. &amp; Karniadakis, G. E. Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators. Nat. Mach. Intell. 3, 218–229 (2021) <a href="#fnref:16" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:17" class="footnote-text"><span>A point- cloud deep learning framework for prediction of fluid flow fields on irregular geometries. Phys. Fluids 33, 027104 (2021). <a href="#fnref:17" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:18" class="footnote-text"><span>Li, Z. et al. Fourier neural operator for parametric partial differential equations. in Int. Conf. Learn. Represent. (2021). <a href="#fnref:18" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:19" class="footnote-text"><span>Yang, Y. &amp; Perdikaris, P . Conditional deep surrogate models for stochastic, high- dimensional, and multi- fidelity systems. Comput. Mech. 64, 417–434 (2019). <a href="#fnref:19" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:20" class="footnote-text"><span>Lu, L., Pestourie, R., Yao, W., Wang, Z., Verdugo, F., &amp; Johnson, S. G. (2021). Physics-informed neural networks with hard constraints for inverse design. <em>SIAM Journal on Scientific Computing</em>, <em>43</em>(6), B1105-B1132. <a href="#fnref:20" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:21" class="footnote-text"><span>Hendriks, J., Jidling, C., Wills, A., &amp; Schön, T. (2020). Linearly constrained neural networks. <em>arXiv preprint arXiv:2002.01600</em>. <a href="#fnref:21" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:22" class="footnote-text"><span>Sirignano, J. &amp; Spiliopoulos, K. DGM: a deep learning algorithm for solving partial differential equations. J. Comput. Phys. 375, 1339–1364 (2018). <a href="#fnref:22" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:23" class="footnote-text"><span>Kissas, G. et al. Machine learning in cardiovascular flows modeling: predicting arterial blood pressure from non- invasive 4D flow MRI data using physicsinformed neural networks. Comput. Methods Appl. Mech. Eng. 358, 112623 (2020). <a href="#fnref:23" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:24" class="footnote-text"><span>Zhu, Y., Zabaras, N., Koutsourelakis, P . S. &amp; Perdikaris, P . Physics- constrained deep learning for high- dimensional surrogate modeling and uncertainty quantification without labeled data. J. Comput. Phys. 394, 56–81 (2019). <a href="#fnref:24" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:25" class="footnote-text"><span>Geneva, N. &amp; Zabaras, N. Modeling the dynamics of PDE systems with physics-constrained deep auto- regressive networks. J. Comput. Phys. 403, 109056 (2020). <a href="#fnref:25" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:26" class="footnote-text"><span>Chen, Y., Lu, L., Karniadakis, G. E., &amp; Dal Negro, L. (2020). Physics-informed neural networks for inverse problems in nano-optics and metamaterials. <em>Optics express</em>, <em>28</em>(8), 11618-11633. <a href="#fnref:26" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:27" class="footnote-text"><span>Raissi, M., Perdikaris, P . &amp; Karniadakis, G. E. Numerical Gaussian processes for time- dependent and nonlinear partial differential equations. SIAM J. Sci. Comput. 40, A172–A198 (2018). <a href="#fnref:27" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:28" class="footnote-text"><span>Raissi, M., Yazdani, A., &amp; Karniadakis, G. E. (2020). Hidden fluid mechanics: Learning velocity and pressure fields from flow visualizations. <em>Science</em>, <em>367</em>(6481), 1026-1030. <a href="#fnref:28" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:29" class="footnote-text"><span>Yang, L., Meng, X. &amp; Karniadakis, G. E. B- PINNs: Bayesian physics- informed neural networks for forward and inverse PDE problems with noisy data. J. Comput. Phys. 415, 109913 (2021). <a href="#fnref:29" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:30" class="footnote-text"><span>Grohs, P ., Hornung, F., Jentzen, A. &amp; Von Wurstemberger, P . A proof that artificial neural networks overcome the curse of dimensionality in the numerical approximation of Black–Scholes partial differential equations. Preprint at arXiv https://arxiv.org/abs/1809.02362 (2018). <a href="#fnref:30" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:31" class="footnote-text"><span>Cybenko, G. (1989). Approximation by superpositions of a sigmoidal function. <em>Mathematics of control, signals and systems</em>, <em>2</em>(4), 303-314. <a href="#fnref:31" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:32" class="footnote-text"><span>Pinkus, A. (1999). Approximation theory of the MLP model in neural networks. <em>Acta numerica</em>, <em>8</em>, 143-195. <a href="#fnref:32" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:33" class="footnote-text"><span>Cai, S., Wang, Z., Fuest, F., Jeon, Y. J., Gray, C., &amp; Karniadakis, G. E. (2021). Flow over an espresso cup: inferring 3-D velocity and pressure fields from tomographic background oriented Schlieren via physics-informed neural networks. <em>Journal of Fluid Mechanics</em>, <em>915</em>. <a href="#fnref:33" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:34" class="footnote-text"><span>Kissas, G., Yang, Y., Hwuang, E., Witschey, W. R., Detre, J. A., &amp; Perdikaris, P. (2020). Machine learning in cardiovascular flows modeling: Predicting arterial blood pressure from non-invasive 4D flow MRI data using physics-informed neural networks. <em>Computer Methods in Applied Mechanics and Engineering</em>, <em>358</em>, 112623. <a href="#fnref:34" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:35" class="footnote-text"><span>Yang, L., Meng, X., &amp; Karniadakis, G. E. (2021). B-PINNs: Bayesian physics-informed neural networks for forward and inverse PDE problems with noisy data. <em>Journal of Computational Physics</em>, <em>425</em>, 109913. <a href="#fnref:35" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:36" class="footnote-text"><span>Lu, L., Pestourie, R., Yao, W., Wang, Z., Verdugo, F., &amp; Johnson, S. G. (2021). Physics-informed neural networks with hard constraints for inverse design. <em>SIAM Journal on Scientific Computing</em>, <em>43</em>(6), B1105-B1132. <a href="#fnref:36" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:37" class="footnote-text"><span>Pang, G., Lu, L., &amp; Karniadakis, G. E. (2019). fPINNs: Fractional physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, <em>41</em>(4), A2603-A2626. <a href="#fnref:37" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:38" class="footnote-text"><span>Yu, J., Lu, L., Meng, X., &amp; Karniadakis, G. E. (2022). Gradient-enhanced physics-informed neural networks for forward and inverse PDE problems. <em>Computer Methods in Applied Mechanics and Engineering</em>, <em>393</em>, 114823. <a href="#fnref:38" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:39" class="footnote-text"><span>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E. (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review</em>, <em>63</em>(1), 208-228. <a href="#fnref:39" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:40" class="footnote-text"><span>Jagtap, A. D., Kharazmi, E., &amp; Karniadakis, G. E. (2020). Conservative physics-informed neural networks on discrete domains for conservation laws: Applications to forward and inverse problems. <em>Computer Methods in Applied Mechanics and Engineering</em>, <em>365</em>, 113028. <a href="#fnref:40" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:41" class="footnote-text"><span>Jagtap, A. D., &amp; Karniadakis, G. E. (2021). Extended Physics-informed Neural Networks (XPINNs): A Generalized Space-Time Domain Decomposition based Deep Learning Framework for Nonlinear Partial Differential Equations. In <em>AAAI Spring Symposium: MLPS</em>. <a href="#fnref:41" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:42" class="footnote-text"><span>Meng, X., Li, Z., Zhang, D., &amp; Karniadakis, G. E. (2020). PPINN: Parareal physics-informed neural network for time-dependent PDEs. <em>Computer Methods in Applied Mechanics and Engineering</em>, <em>370</em>, 113250. <a href="#fnref:42" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/paper-reading/">#paper reading</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Review of Physical Informed Neural Network</div>
+      <div>https://daydreamatnight.github.io/2022/06/09/Review-of-Physical-Informed-Neural-Network/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 9, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/09/Build-OpenFOAM-from-source-on-M1-Mac/" title="Compile OpenFOAM from source on M1 Mac">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Compile OpenFOAM from source on M1 Mac</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/05/Lesson-note-Patterns-Machine-learning-for-fluids-dynamics/" title="Patterns, Machine learning for fluids dynamics">
+                        <span class="hidden-mobile">Patterns, Machine learning for fluids dynamics</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+
+<script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
+<script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
+
+
+<style>
+.markmap-container{
+  display:flex;
+  justify-content:center;
+  margin:0 auto;
+  width:90%;
+  height:500px
+}
+.markmap-container svg{
+  width:100%;height:100%
+}
+@media(max-width:768px){
+  .markmap-container{
+    height:400px
+  }
+}</style>
+<script>
+function initMarkMap(){
+  document.querySelectorAll('.markmap-container>svg').forEach(el =>{
+    markmap.Markmap.create(el, null, JSON.parse(el.getAttribute('data')))
+  })
+};
+initMarkMap();
+
+</script></body>
+</html>

@@ -1,0 +1,856 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Try to straight up the cell division part of DuaSPHysics&#39;s tricky code. A structure map is shown.            Class inheriting        JSphGpuSingle::Run        ConfigCellDivision(); void J">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DuaSPHysics Cell Division Code Structure">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Try to straight up the cell division part of DuaSPHysics&#39;s tricky code. A structure map is shown.            Class inheriting        JSphGpuSingle::Run        ConfigCellDivision(); void J">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/DS_structure.png">
+<meta property="article:published_time" content="2023-08-16T17:03:42.000Z">
+<meta property="article:modified_time" content="2023-09-16T21:00:23.890Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/DS_structure.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>DuaSPHysics Cell Division Code Structure - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="DuaSPHysics Cell Division Code Structure"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-17 01:03" pubdate>
+          August 17, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          14 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">DuaSPHysics Cell Division Code Structure</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Try to straight up the cell division part of DuaSPHysics's tricky code. A structure map is shown.</p>
+          </div>
+<h4 id="class-inheriting">Class inheriting</h4>
+
+<div class="markmap-container" style="height:100px">
+  <svg data="{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;strong&gt;JObject&lt;/strong&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;strong&gt;JSph&lt;/strong&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;strong&gt;JSphGpu&lt;/strong&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;strong&gt;JSphGpuSingle&lt;/strong&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;strong&gt;JObjectGpu&lt;/strong&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;strong&gt;JCellDivGpu&lt;/strong&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;strong&gt;JCellDivGpuSingle&lt;/strong&gt;&quot;}]}]}]}"/>
+</div>
+
+<h4 id="jsphgpusinglerun">JSphGpuSingle::Run</h4>
+
+<div class="markmap-container" style="height:900px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;ConfigDomain&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;&lt;em&gt;// Alloc Gpu Cpu Memories&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;AllocGpuMemoryFixed&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;AllocGpuMemoryParticles&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;AllocCpuMemoryFixed&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;AllocCpuMemoryParticles&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;&lt;em&gt;// particle data up to GPU: AuxPos, Idp, Velrhop&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;&lt;em&gt;// 3 memcpy functions&lt;/em&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;Code = LoadCodeParticles &lt;em&gt;// Load particles&#39; codes&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;for all particles, GetCodeById&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;GetMkBlockById&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;&lt;u&gt;MkList&lt;/u&gt;&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;&lt;em&gt;// other initializations&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;&lt;em&gt;// cell domain calculation&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;&lt;a href=\&quot;#configcelldivision\&quot;&gt;ConfigCellDivision&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;Map_Size&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[17,18]},&quot;v&quot;:&quot;Map_Cells&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;&lt;a href=\&quot;#selecdomaintuint3000map_cells\&quot;&gt;SelecDomain&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;DomCells&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[20,21]},&quot;v&quot;:&quot;DomPosMin/DomPosMax&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[21,22]},&quot;v&quot;:&quot;DomRealPosMin/DomRealPosMax&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[22,23]},&quot;v&quot;:&quot;DomCellCode&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[23,24]},&quot;v&quot;:&quot;&lt;a href=\&quot;#loaddcellparticlesnpcodeauxposdcell\&quot;&gt;Dcell = LoadDcellParticles();&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[24,25]},&quot;v&quot;:&quot;for(unsigned p=0;p&amp;lt;n;p++){&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[25,26]},&quot;v&quot;:&quot; unsigned cx/y/z=dx/y/z &lt;em&gt;// temp var cell index, not the same as Ncx/y/z below&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[26,27]},&quot;v&quot;:&quot; &lt;a href=\&quot;#dcellppc__celldomcellcodecxcycz\&quot;&gt;dcell[p]=PC__Cell(DomCellCode,cx,cy,cz);&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[27,28]},&quot;v&quot;:&quot;}&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[28,29]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;ReserveBasicArraysGpu&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[29,30]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;ParticlesDataUp&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[30,31]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;ConstantDataUp&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[31,32]},&quot;v&quot;:&quot;&lt;em&gt;// cp domain config&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[32,33]},&quot;v&quot;:&quot;&lt;em&gt;// cp domain config from &lt;u&gt;class JSph&lt;/u&gt; to &lt;u&gt;JCellDivGpuSingle CellDivSingle&lt;/u&gt; (member of &lt;u&gt;class JSphGpu&lt;/u&gt; )&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[33,34]},&quot;v&quot;:&quot;&lt;a href=\&quot;#celldivsingle-new-jcelldivgpusingle\&quot;&gt;CellDivSingle = new JCellDivGpuSingle&lt;/a&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[34,35]},&quot;v&quot;:&quot;CellDivSingle-&amp;gt;DefineDomain  &lt;em&gt;// cp config&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[35,36]},&quot;v&quot;:&quot;ConfigCellDiv &lt;em&gt;// cp CellDivSingle to &lt;u&gt;JCellDivGpu *CellDiv&lt;/u&gt; (member of &lt;u&gt;class JSphGpu&lt;/u&gt; )&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[36,37]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;ConfigBlockSizes&lt;/font&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[37,38]},&quot;v&quot;:&quot;ConfigSaveData &lt;em&gt;// save data file&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[38,39]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;RunCellDivide&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[39,40]},&quot;v&quot;:&quot;DivData=DivDataGpuNull(); &lt;em&gt;// set &lt;u&gt;StDivDataGpu DivData&lt;/u&gt; (member of &lt;u&gt;class JSphGpu&lt;/u&gt;) as null&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[40,41]},&quot;v&quot;:&quot;RunPeriodic (if true)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[41,42]},&quot;v&quot;:&quot;&lt;a href=\&quot;#celldivsingle-dividenpbnp-npb-npbper-npfpernpbpernpfperboundchangeddcellgcodegtimersposxygposzgidpg\&quot;&gt;CellDivSingle-&amp;gt;Divide &lt;em&gt;// init  divide&lt;/em&gt;&lt;/a&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[42,43]},&quot;v&quot;:&quot;CheckMemoryNp&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[43,44]},&quot;v&quot;:&quot;AllocMemoryNp &lt;em&gt;//check &amp;amp; allocate particle memory (CellPart, SortPart, AuxMem)&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[44,45]},&quot;v&quot;:&quot;CalcCellDomain &lt;em&gt;//Calculate domain limits&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[45,46]},&quot;v&quot;:&quot;if(CellDomFixed)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[46,47]},&quot;v&quot;:&quot;CellDomainMin=(0,0,0)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[47,48]},&quot;v&quot;:&quot;CellDomainMax=(DomCells.x-1,DomCells.y-1,DomCells.z-1)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[48,49]},&quot;v&quot;:&quot;if(BoundLimitOk)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[49,50]},&quot;v&quot;:&quot;...&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[50,51]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[51,52]},&quot;v&quot;:&quot;...&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[52,53]},&quot;v&quot;:&quot;PrepareNct&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[53,54]},&quot;v&quot;:&quot;Ncx,Ncy,Ncz &lt;em&gt;// number of cells in x y z dir&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[54,55]},&quot;v&quot;:&quot;Nct &lt;em&gt;// number of cells in total&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[55,56]},&quot;v&quot;:&quot;Nctt &lt;em&gt;// Total number of special cells&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[56,57]},&quot;v&quot;:&quot;check reservation of cells (if Nct == Nctt)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[57,58]},&quot;v&quot;:&quot;&lt;em&gt;// etc.&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[58,59]},&quot;v&quot;:&quot;CheckMemoryNct &lt;em&gt;//check &amp;amp; allocate cell memory (BeginEndCell)&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[59,60]},&quot;v&quot;:&quot;PreSort&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[60,61]},&quot;v&quot;:&quot;if(DivideFull)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[61,62]},&quot;v&quot;:&quot;cudiv::PreSortFull&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[62,63]},&quot;v&quot;:&quot;&lt;font color=\&quot;DarkRed\&quot;&gt;KerPreSortFull&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[63,64]},&quot;v&quot;:&quot;sortpart[p]=p;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[64,65]},&quot;v&quot;:&quot;&lt;em&gt;//-Computes cell according position.&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[65,66]},&quot;v&quot;:&quot;cx=PC__Cellx(cellcode,dcell[p])-cellzero.x;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[66,67]},&quot;v&quot;:&quot;cy=PC__Celly(cellcode,dcell[p])-cellzero.y;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[67,68]},&quot;v&quot;:&quot;cz=PC__Cellz(cellcode,dcell[p])-cellzero.z;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[68,69]},&quot;v&quot;:&quot;cellsort=cx+cy*ncells.x+cz*nsheet;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[69,70]},&quot;v&quot;:&quot;&lt;em&gt;//-Checks particle code. (more complicated)&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[70,71]},&quot;v&quot;:&quot;&lt;em&gt;Assigns box according code.&lt;/em&gt;&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[71,72]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[72,73]},&quot;v&quot;:&quot;cudiv::PreSortFluid&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[73,74]},&quot;v&quot;:&quot;&lt;font color=\&quot;DarkRed\&quot;&gt;KerPreSortFluid&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[74,75]},&quot;v&quot;:&quot;&lt;em&gt;//-Computes cell according position.&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[75,76]},&quot;v&quot;:&quot;cx=PC__Cellx(cellcode,dcell[p])-cellzero.x;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[76,77]},&quot;v&quot;:&quot;cy=PC__Celly(cellcode,dcell[p])-cellzero.y;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[77,78]},&quot;v&quot;:&quot;cz=PC__Cellz(cellcode,dcell[p])-cellzero.z;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[78,79]},&quot;v&quot;:&quot;cellsortfluid=cellfluid+cx+cy&lt;em&gt;ncells.x+cz&lt;/em&gt;nsheet;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[79,80]},&quot;v&quot;:&quot;&lt;em&gt;// Checks particle code.&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[80,81]},&quot;v&quot;:&quot;&lt;em&gt;//-Assigns box according code.&lt;/em&gt;&quot;}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[81,82]},&quot;v&quot;:&quot;&lt;em&gt;// Sort&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[82,83]},&quot;v&quot;:&quot;if(DivideFull)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[83,84]},&quot;v&quot;:&quot;&lt;a href=\&quot;#cudivsort\&quot;&gt;cudiv::Sort&lt;/a&gt;(CellPart,SortPart,Nptot,Stable);&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[84,85]},&quot;v&quot;:&quot;thrust::stable_sort_by_key&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[85,86]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[86,87]},&quot;v&quot;:&quot;&lt;a href=\&quot;#cudivsort\&quot;&gt;cudiv::Sort&lt;/a&gt;(CellPart+Npb1,SortPart+Npb1,Nptot-Npb1,Stable);&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[87,88]},&quot;v&quot;:&quot;thrust::stable_sort_by_key&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[88,89]},&quot;v&quot;:&quot;cudiv::CalcBeginEndCell&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[89,90]},&quot;v&quot;:&quot;if(DivideFull)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[90,91]},&quot;v&quot;:&quot;begcell = 0&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[91,92]},&quot;v&quot;:&quot;&lt;font color=\&quot;DarkRed\&quot;&gt;KerCalcBeginEndCell&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[92,93]},&quot;v&quot;:&quot;&lt;em&gt;// put neighbor(index -1) in share mem scell[]&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[93,94]},&quot;v&quot;:&quot;&lt;em&gt;// handle first index per block&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[94,95]},&quot;v&quot;:&quot;__syncthreads&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[95,96]},&quot;v&quot;:&quot;&lt;em&gt;cal start if same as before&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[96,97]},&quot;v&quot;:&quot;&lt;em&gt;scatter write to begcell&lt;/em&gt;&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[97,98]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[98,99]},&quot;v&quot;:&quot;begcell+cellfluid,0&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[99,100]},&quot;v&quot;:&quot;&lt;font color=\&quot;DarkRed\&quot;&gt;KerCalcBeginEndCell&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[100,101]},&quot;v&quot;:&quot;...&quot;}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[101,102]},&quot;v&quot;:&quot;&lt;em&gt;// Calculate number of particles.&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[102,103]},&quot;v&quot;:&quot;DivData&lt;strong&gt;=&lt;/strong&gt;CellDivSingle-&amp;gt;GetCellDivData();&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[103,104]},&quot;v&quot;:&quot;&lt;em&gt;// Sorts particle &lt;u&gt;data&lt;/u&gt;&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[104,105]},&quot;v&quot;:&quot;CellDivSingle-&amp;gt;SortBasicArrays&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[105,106]},&quot;v&quot;:&quot;Idpg, Codeg, Dcellg, Posxyg, Poszg, Velrhopg &lt;em&gt;// (member of &lt;u&gt;class JSphGpu&lt;/u&gt;)&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[106,107]},&quot;v&quot;:&quot;CellDivSingle-&amp;gt;SortDataArrays&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[107,108]},&quot;v&quot;:&quot;VelrhopM1g (if STEP_Verlet) &lt;em&gt;// (member of &lt;u&gt;class JSphGpu&lt;/u&gt;)&lt;/em&gt;&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[108,109]},&quot;v&quot;:&quot;&lt;em&gt;// Collect divide data&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[109,110]},&quot;v&quot;:&quot;Np, Npb, NpbOk &lt;em&gt;// (member of &lt;u&gt;class JSphGpu&lt;/u&gt;)&lt;/em&gt;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[110,111]},&quot;v&quot;:&quot;cusphs::UpdatePosCell &lt;em&gt;// Update PosCellg[] according to current position of particles.&lt;/em&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[111,112]},&quot;v&quot;:&quot;&lt;font color=\&quot;DarkRed\&quot;&gt;KerUpdatePosCell&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[112,113]},&quot;v&quot;:&quot;&lt;em&gt;PosCellg: ///&amp;lt; Relative position and cell coordiantes for particle interaction {posx,posy,posz,cellxyz}&lt;/em&gt;&quot;}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[113,114]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;MAIN LOOP&lt;/font&gt;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[114,115]},&quot;v&quot;:&quot;&lt;em&gt;// updating&lt;/em&gt;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[115,116]},&quot;v&quot;:&quot;&lt;font color=\&quot;Green\&quot;&gt;RunCellDivide&lt;/font&gt; &lt;em&gt;// same as before&lt;/em&gt;&quot;}]}],&quot;p&quot;:{}}"/>
+</div>
+
+<h5 id="configcelldivision">ConfigCellDivision();</h5>
+<p><code>void JSph::ConfigCellDivision()</code></p>
+<p><strong><code>Map_Size</code></strong>: Maximum number of cells within case limits, <code>=KernelSize/ScellDiv (KernelSize or KernelSize/2).</code></p>
+<p><strong><code>Map_Cells</code></strong>: Maximum number of cells within case limits. <code>=TUint3(unsigned(ceil(Map_Size.xyz/Scell)</code></p>
+<p>Output <code>CfgInit_MapCells.vtk</code> looks like blow:</p>
+<p><img src="/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/image-20230603181359017.png" srcset="/img/loading.gif" lazyload alt="JSph::ConfigCellDivision() saved MapCells" style="zoom:67%;"></p>
+<h5 id="selecdomaintuint3000map_cells">SelecDomain(TUint3(0,0,0),Map_Cells);</h5>
+<p><code>void JSph::SelecDomain(tuint3 celini,tuint3 celfin)</code></p>
+<p>sets local domain of simulation within <code>Map_Cells</code></p>
+<p>Cal these parms below (defined in class JSph):</p>
+<p><strong><code>DomCells</code></strong>: actual Number of cells in each direction</p>
+<p><strong><code>DomPosMin</code></strong>: Lower limit of simulation + edge (KernelSize) if periodic conditions. DomPosMin=Map_PosMin+(DomCelIni*Scell);</p>
+<p><strong><code>DomPosMax</code></strong>: Upper limit of simulation + edge (KernelSize) if periodic conditions.</p>
+<p>DomPosMax=min(Map_PosMax,Map_PosMin+(DomCelFin*Scell));</p>
+<p><strong><code>DomRealPosMin/DomRealPosMax</code></strong>: actual limits of local simulation according to DomCelIni/Fin (without periodic condition borders)</p>
+<p>DomRealPosMin=max(DomPosMin,MapRealPosMin)</p>
+<p>DomRealPosMax=min(DomPosMax,MapRealPosMax)</p>
+<p><strong><code>DomCellCode</code></strong>: Indicator of group of particles &amp; other special markers.</p>
+<h5 id="loaddcellparticlesnpcodeauxposdcell">LoadDcellParticles(Np,Code,AuxPos,Dcell);</h5>
+<p><code>void JSph::LoadDcellParticles(unsigned n,const typecode *code,const tdouble3 *pos,unsigned *dcell)const&#123;</code></p>
+<p>traverse all the particles, computes the initial cell, store in dcell</p>
+<p>checks if there are unexpected excluded particles</p>
+<p><strong><code>cx,cy,cz</code></strong>: the cell index of the particle belongs to,</p>
+<p>dx=pos[p].x-DomPosMin.x, dy=pos[p].y-DomPosMin.y, double dz=pos[p].z-DomPosMin.</p>
+<p>cx=dx/Scell, cy=dy/Scell, cz=dz/Scell;</p>
+<h5 id="dcellppc__celldomcellcodecxcycz">dcell[p]=PC__Cell(DomCellCode,cx,cy,cz);</h5>
+<p><strong><code>PC__Cell</code></strong> packs all three indexes into a single integer in different method according to different <code>DomCellCode</code></p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> PC__Cell(cc,cx,cy,cz) ((cx<span class="hljs-string">&lt;&lt;((cc&gt;</span>&gt;10)&amp;31))|(cy<span class="hljs-string">&lt;&lt;((cc&gt;</span>&gt;15)&amp;31))|cz)  <span class="hljs-comment">//-Cell value for cx,cy and cz.</span></span></code></pre></div>
+<h5 id="celldivsingle-new-jcelldivgpusingle">CellDivSingle = new JCellDivGpuSingle</h5>
+<p>Note that CellDivSingle is a member variable of class JSphGpuSingle. Initilized in the constructor. Deleted in the destructor.</p>
+<p>It news at the above line.</p>
+<p>And all the configs should be passed in because of the <a href="#class-inheriting">class inheriting</a></p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">JSphGpuSingle</span> : <span class="hljs-keyword">public</span> JSphGpu
+&#123;
+<span class="hljs-keyword">protected</span>:
+  JCellDivGpuSingle* CellDivSingle;
+  <span class="hljs-comment">// ...</span>
+    
+<span class="hljs-keyword">public</span>:
+  <span class="hljs-built_in">JSphGpuSingle</span>();
+  ~<span class="hljs-built_in">JSphGpuSingle</span>();
+  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Run</span><span class="hljs-params">(std::string appname,<span class="hljs-type">const</span> JSphCfgRun *cfg,JLog2 *log)</span></span>;
+
+  <span class="hljs-comment">// ...</span>
+&#125;
+
+JSphGpuSingle::<span class="hljs-built_in">JSphGpuSingle</span>():<span class="hljs-built_in">JSphGpu</span>(<span class="hljs-literal">false</span>)&#123;
+  ClassName=<span class="hljs-string">&quot;JSphGpuSingle&quot;</span>;
+  CellDivSingle=<span class="hljs-literal">NULL</span>;
+&#125;
+
+JSphGpuSingle::~<span class="hljs-built_in">JSphGpuSingle</span>()&#123;
+  DestructorActive=<span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">delete</span> CellDivSingle; CellDivSingle=<span class="hljs-literal">NULL</span>;
+&#125;</code></pre></div>
+<h5 id="celldivsingle-dividenpbnp-npb-npbper-npfpernpbpernpfperboundchangeddcellgcodegtimersposxygposzgidpg">CellDivSingle-&gt;<strong>Divide</strong>(Npb,Np-Npb-NpbPer-NpfPer,NpbPer,NpfPer,BoundChanged,Dcellg,Codeg,Timers,Posxyg,Poszg,Idpg);</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">JCellDivGpuSingle::Divide</span><span class="hljs-params">(</span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npb1  		<span class="hljs-comment">// Npb;   *///&lt; Number of boundary particles*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npf1 		<span class="hljs-comment">// Np-Npb-NpbPer-NpfPer</span></span></span>
+<span class="hljs-params"><span class="hljs-function">                        <span class="hljs-comment">// unsigned Np;    *///&lt; Total number of particles*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">                        <span class="hljs-comment">// unsigned NpbPer;   *///&lt; Number of periodic boundary particles.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">                        <span class="hljs-comment">// unsigned NpfPer;   *///&lt; Number of periodic particles (fluid-floating).* </span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npb2 		<span class="hljs-comment">// unsigned NpbPer;   *///&lt; Number of periodic boundary particles.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npf2 		<span class="hljs-comment">// unsigned NpfPer;   *///&lt; Number of periodic particles (fluid-floating).* </span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">bool</span> boundchanged; 	<span class="hljs-comment">// bool BoundChanged   *///&lt; Indicates if a selected boundary particle has changed since the last time step.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span>*dcellg 	<span class="hljs-comment">// unsigned *Dcellg; *///&lt; Cells inside DomCells coded with DomCellCode.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> typecode*codeg 	<span class="hljs-comment">// typecode *Codeg;  *///&lt; Indicator of group of particles &amp; other special markers.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    TimersGpu timers</span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> double2 *posxy  	<span class="hljs-comment">// double2 *Posxyg;</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> <span class="hljs-type">double</span> *posz   	<span class="hljs-comment">// double *Poszg;</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> *idp 	<span class="hljs-comment">// unsigned *Idpg;   *///&lt; Identifier of particle*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">)</span></span></code></pre></div>
+<p>Initial processing of Divide: Calculate the limits of the domain and compute the new position of each particle (SortPart).</p>
+<p>The <em>value</em> for np includes periodic boundary and fluid particles (npbper and npfper).</p>
+<p>The floating bodies are treated as fluids (both to be ignored as excluded).</p>
+<h5 id="cudivsort">cudiv::Sort</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Sort</span><span class="hljs-params">(<span class="hljs-type">unsigned</span>* keys,<span class="hljs-type">unsigned</span>* values,<span class="hljs-type">unsigned</span> size,<span class="hljs-type">bool</span> stable)</span></span>&#123;
+  <span class="hljs-keyword">if</span>(size)&#123;
+    <span class="hljs-function">thrust::device_ptr&lt;<span class="hljs-type">unsigned</span>&gt; <span class="hljs-title">dev_keysg</span><span class="hljs-params">(keys)</span></span>;
+    <span class="hljs-function">thrust::device_ptr&lt;<span class="hljs-type">unsigned</span>&gt; <span class="hljs-title">dev_valuesg</span><span class="hljs-params">(values)</span></span>;
+    <span class="hljs-keyword">if</span>(stable)thrust::<span class="hljs-built_in">stable_sort_by_key</span>(dev_keysg,dev_keysg+size,dev_valuesg);
+    <span class="hljs-keyword">else</span> thrust::<span class="hljs-built_in">sort_by_key</span>(dev_keysg,dev_keysg+size,dev_valuesg);
+  &#125;
+&#125;</code></pre></div>
+<p>Last arg always stable</p>
+<p>Different key, values, list length for <code>if(DivideFull)</code></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DuaSPHysics Cell Division Code Structure</div>
+      <div>https://daydreamatnight.github.io/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 17, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/" title="Build and train an opensource chatGPT locally">
+                        <span class="hidden-mobile">Build and train an opensource chatGPT locally</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+
+<script src="https://fastly.jsdelivr.net/npm/d3@6"></script>
+<script src="https://fastly.jsdelivr.net/npm/markmap-view@0.2.7"></script>
+
+
+<style>
+.markmap-container{
+  display:flex;
+  justify-content:center;
+  margin:0 auto;
+  width:90%;
+  height:500px
+}
+.markmap-container svg{
+  width:100%;height:100%
+}
+@media(max-width:768px){
+  .markmap-container{
+    height:400px
+  }
+}</style>
+<script>
+function initMarkMap(){
+  document.querySelectorAll('.markmap-container>svg').forEach(el =>{
+    markmap.Markmap.create(el, null, JSON.parse(el.getAttribute('data')))
+  })
+};
+initMarkMap();
+
+</script></body>
+</html>

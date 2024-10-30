@@ -1,0 +1,1603 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="The limits of performance and way of optimisation are introduced with examples, mostly memory optimisation and warp divergence.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA Performance">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/09/09/CUDA-fundamental-7/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="The limits of performance and way of optimisation are introduced with examples, mostly memory optimisation and warp divergence.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_7.png">
+<meta property="article:published_time" content="2022-09-09T15:04:38.000Z">
+<meta property="article:modified_time" content="2022-09-09T18:13:18.359Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_7.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CUDA Performance - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CUDA Performance"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-09 23:04" pubdate>
+          September 9, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          18k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          59 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CUDA Performance</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><div class="note note-primary">
+            <p>The limits of performance and way of optimisation are introduced with examples, mostly memory optimisation and warp divergence.</p>
+          </div></p>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>All the contents are not original, all collected from</p><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1kx411m7Fk">NVIDIA CUDA初级教程视频</a></p><p><a target="_blank" rel="noopener" href="https://cis565-fall-2019.github.io/">CIS 565 2019</a></p>
+          </div>
+<h2 id="one-rule">One rule</h2>
+<p><strong><em>Efficient data-parallel algorithms + Optimizations based on GPU Architecture = Maximum Performance</em></strong></p>
+<h2 id="memory-optimisation">Memory Optimisation</h2>
+<h3 id="minimise-cpu-gpu-data-transfer">Minimise CPU-GPU data transfer</h3>
+<ul>
+<li><p>The data transfer between CPU and GPU depends on PCIe bus. The <code>host &lt;-&gt; device</code> bandwidth are far lower than that of <code>global memory</code>.</p></li>
+<li><p>8GB/s (PCIe x16 Gen2) vs 156GB/s &amp; 515Ginst/s (C2050 (Fermi))</p></li>
+<li><p>Minimise data transfer</p>
+<ul>
+<li><p>Allocate, operating, free the intermediate variables directly on <code>device</code></p></li>
+<li><p>Sometimes it isfaster to compute multiple times on GPU than compute one time on CPU with two data transfers.</p>
+<ul>
+<li>The cost by data transfer might be bigger than the multiple computational cost on GPU.</li>
+</ul></li>
+<li><p>Directly transfer CPU code to GPU might not get a higher performance, if the data transfer is not optimised.</p></li>
+<li><p>Transfering bigger data is better than smaller data. If the data &lt; 80KB, the latency dominants the performance.</p></li>
+<li><p>data transfer at the same time with the computation</p>
+<ul>
+<li><p>double buffering, one for the data transfer and the other for the computation</p>
+<blockquote>
+<p>The term double buffering is used for <strong>copying data between two buffers for direct memory access (DMA) transfers</strong>, not for enhancing performance, but to meet specific addressing requirements of a device.</p>
+</blockquote></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="memory-coalescing-most-important">Memory Coalescing (most important)</h3>
+<h4 id="global-memory">global memory</h4>
+<p>Although the bandwidth of the global memory is big, the latency is as high as 400-800 cycles. Load and store multiple times can be very time consuming and inefficient.</p>
+<h5 id="l1-and-l2-cache">L1 and L2 Cache</h5>
+<ul>
+<li>L1 cache is 128-bytes aligned
+<ul>
+<li>Multiples of 128B are read</li>
+</ul></li>
+<li>L2 cache is 32-bytes aligned
+<ul>
+<li>Multiples of 32-bytes are read</li>
+</ul></li>
+</ul>
+<p><img src="/2022/09/09/CUDA-fundamental-7/L1 L2 cache memory access.PNG" srcset="/img/loading.gif" lazyload alt="L1 L2 cache memory access" style="zoom:75%;"></p>
+<h5 id="memory-coalescing-caching-or-non-caching">Memory Coalescing (caching or non-caching)</h5>
+<p>Global Memory -&gt; caching</p>
+<ul>
+<li>For Fermi, Global Memory -&gt; L1 cache allowed (default)
+<ul>
+<li>It can be changed into Global Memory -&gt; L2 cache</li>
+<li>by adding flags wen compiling, as <code>nvcc -Xptxas -dlem=cg</code></li>
+</ul></li>
+<li>For Kepler and newer, L1 is reserved for Local Memory
+<ul>
+<li>Only Global Memory -&gt; L2 caching</li>
+</ul></li>
+</ul>
+<h5 id="conditions">conditions</h5>
+<p>When a warp requests 32 aligned, 4-byte words, there are several conditions:</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>warp word requested</th>
+<th>threads word requested</th>
+<th>caching</th>
+<th>cache-lines</th>
+<th>data move across the bus</th>
+<th>Bus utilization</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>32 aligned, 4-byte</td>
+<td>32 threads requesting 1 float each (continuous in memory)</td>
+<td>L1</td>
+<td>1</td>
+<td>128 bytes</td>
+<td>100%</td>
+</tr>
+<tr class="even">
+<td>32 aligned, 4-byte</td>
+<td>32 threads requesting 1 float each (not sequentially indexed)</td>
+<td>L1</td>
+<td>1</td>
+<td>128 bytes</td>
+<td>100%</td>
+</tr>
+<tr class="odd">
+<td>32 aligned, 4-byte</td>
+<td>32 threads requesting 1 float each (not all continuous in memory)</td>
+<td>L1</td>
+<td>2</td>
+<td>256 bytes</td>
+<td>50%</td>
+</tr>
+<tr class="even">
+<td>32 aligned, 4-byte</td>
+<td>32 threads requesting 1 float each (not all continuous in memory)</td>
+<td>L2</td>
+<td>5</td>
+<td>160 bytes</td>
+<td>80%</td>
+</tr>
+<tr class="odd">
+<td>1 4-byte</td>
+<td>ALL 32 threads requesting 1 float value</td>
+<td>L1</td>
+<td>1</td>
+<td>128 bytes</td>
+<td>3.125%</td>
+</tr>
+<tr class="even">
+<td>1 4-byte</td>
+<td>ALL 32 threads requesting 1 float value</td>
+<td>L2</td>
+<td>1</td>
+<td>32 bytes</td>
+<td>12.5%</td>
+</tr>
+<tr class="odd">
+<td>32 scattered 4-byte</td>
+<td>32 threads requesting 1 float each (randomly)</td>
+<td>L1</td>
+<td>N</td>
+<td>N * 128 bytes</td>
+<td>128 / (N * 128)</td>
+</tr>
+<tr class="even">
+<td>32 scattered 4-byte</td>
+<td>32 threads requesting 1 float each (randomly)</td>
+<td>L2</td>
+<td>N</td>
+<td>N * 32 bytes</td>
+<td>128 / (N * 32)</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(continuous%20in%20memory).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (continuous in memory).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(not%20sequentially%20indexed).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not sequentially indexed).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(not%20all%20continuous%20in%20memory).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not all continuous in memory).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(not%20all%20continuous%20in%20memory)%20on%20L2.png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (not all continuous in memory) on L2.png) on L2" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(randomly).png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (randomly).png)" style="zoom:22%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/32%20threads%20requesting%201%20float%20each%20(randomly)%20L2.png" srcset="/img/loading.gif" lazyload alt="32 threads requesting 1 float each (32 threads requesting 1 float each (randomly) L2.png) L2" style="zoom:75%;"></p>
+<h5 id="principle">principle</h5>
+<p><strong><em>requesting large, consecutive locations instead of random locations</em></strong></p>
+<p>Memory coalescing – rearrange access patterns to improve performance</p>
+<ul>
+<li>Useful today but will be less useful with large on-chip caches</li>
+</ul>
+<p>The GPU coalesces consecutive reads in a full-warp into a single read</p>
+<h5 id="example">example</h5>
+<p>When accessing matrix data, avoid single thread requesting consecutive locations.</p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/suitable memory requesting model for row-major matrix.PNG" srcset="/img/loading.gif" lazyload alt="suitable memory requesting model for row-major matrix" style="zoom:75%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/suitable memory requesting model for column-major matrix.PNG" srcset="/img/loading.gif" lazyload alt="suitable memory requesting model for column-major matrix" style="zoom:75%;"></p>
+<h4 id="share-memory">Share memory</h4>
+<p>What if it is impossible to request memory concecutively? It happens especially for the high dimensional conditions.</p>
+<p>Strategy:</p>
+<ul>
+<li><p>load global memory in a coalesce-able fashion into shared memory</p></li>
+<li><p>Then access shared memory randomly at maximum bandwidth</p></li>
+</ul>
+<p>Much lower latency then global memory.</p>
+<p>Reduce the access of global memory</p>
+<p>Inter-thread communication within a block</p>
+<h3 id="bank-conflicts">Bank Conflicts</h3>
+<p>When called a parallel data cache, multiple threads can access shared memory at the same time.</p>
+<p>Share memory is divided into 32 32-bit banks banks</p>
+<ul>
+<li>Can be accessed simultaneously</li>
+<li>Requests to the same bank are <strong>serialized</strong></li>
+</ul>
+<h4 id="banks">Banks</h4>
+<ul>
+<li>Each bank can service one address per two cycles</li>
+<li>Per-bank bandwidth: 32-bits per two cycles</li>
+<li>Successive 32-bit words are assigned to successive banks</li>
+</ul>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank illustration.png" srcset="/img/loading.gif" lazyload alt="share memory bank illustration" style="zoom: 50%;"></p>
+<h5 id="example-1">example</h5>
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank storage example.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage example, note the bank illustration is transposed as the upper one" style="zoom:25%;"></p>
+<h4 id="bank-conflict">Bank Conflict</h4>
+<p>Two simultaneous accesses to the same bank, but not the same address,</p>
+<ul>
+<li>The memory accessing will be run <strong>serialized</strong>
+<ul>
+<li>G80-GT200: 16 banks, with 8 SPs concurrently executing</li>
+<li>Fermi &amp; Newer: 32 banks, with 16 SPs concurrently executing</li>
+</ul></li>
+</ul>
+<h5 id="conditions-1">conditions</h5>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Bank no conflicts illustration.png" srcset="/img/loading.gif" lazyload alt="Bank no conflicts illustration" style="zoom:40%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Bank conflicts illustration.png" srcset="/img/loading.gif" lazyload alt="Bank conflicts illustration" style="zoom:40.3%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Bank broadcasting illustration.png" srcset="/img/loading.gif" lazyload alt="Bank broadcasting illustration" style="zoom:40%;"></p>
+<p>The latency of share memory is comparable with the registers, when no bank conflicts.</p>
+<p>The conflicts can be detected by <code>warp_serialize</code> profiler.</p>
+<h5 id="examples">examples</h5>
+<ol type="1">
+<li>Access to different banks by a warp executes in parallel.</li>
+</ol>
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
+<span class="hljs-type">int</span> tidx = threadidx.x;
+<span class="hljs-type">float</span> foo = tile[tidx] - <span class="hljs-number">3</span>;</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank storage requested concecutively.png" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested concecutively" style="zoom:15%;"></p>
+<ol start="2" type="1">
+<li><p>Access to same element of bank by a warp executes in parallel.</p>
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
+<span class="hljs-type">int</span> tidx = threadidx.x;
+<span class="hljs-type">int</span> bar = tile[tidx - tidx % <span class="hljs-number">2</span>];</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/same element in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="same element in share memory bank storage requested" style="zoom:15%;"></p></li>
+<li><p>Access to defferent element of bank by a warp executes in serial</p>
+<ul>
+<li>2-way conflict</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs c++">__shared__ <span class="hljs-type">float</span> tile[<span class="hljs-number">64</span>];
+<span class="hljs-type">int</span> tidx = threadidx.x;
+<span class="hljs-type">int</span> bar = tile[tidx + tidx % <span class="hljs-number">2</span> * <span class="hljs-number">31</span>];</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/different elements in share memory bank storage requested.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested, 2-way conflict" style="zoom:15%;"></p></li>
+</ol>
+<h4 id="fermi-vs-kepler-newer">Fermi vs Kepler &amp; Newer</h4>
+<p>Fermi (Compute 2.x)</p>
+<ul>
+<li>Bank width: 32-bits for 2 clock cycles</li>
+</ul>
+<p>Kepler (Compute &gt;= 3.x)and newer</p>
+<ul>
+<li>Bank width: 64-bits per 1 clock cycle</li>
+<li>Also 2 modes - either successive 32-bit words (in 32-bit mode) or successive 64-bit words (64-bit mode) are assigned to successive banks. So bank conflicts can still occur.</li>
+</ul>
+<p>Note: (*) However, devices of compute capability 3.x typically have lower clock frequencies than devices of compute capability 2.x for improved power efficiency</p>
+<h3 id="example-matrix-transpose">Example Matrix Transpose</h3>
+<p>Inherently parallel - Each element independent of another</p>
+<p>Simple to implement</p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Matrix transpose illustration.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose illustration" style="zoom:67%;"></p>
+<h4 id="cpu">CPU</h4>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; rows; i++)
+&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; cols; j++)
+    &#123;
+		transpose[i][j] = matrix[j][i]       
+    &#125;
+&#125;</code></pre></div>
+<ul>
+<li>O(n2 ) slow</li>
+</ul>
+<h4 id="gpu-v1">GPU V1</h4>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTranspose</span><span class="hljs-params">(<span class="hljs-type">float</span> *_A, <span class="hljs-type">float</span> *_A_t)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-type">int</span> row = blockDim.y*blockIdx.y+threadIdx.y;
+	<span class="hljs-type">int</span> col = blockDim.x*blockIdx.x+threadIdx.x;
+
+    _A_t[row*sizeX+col] = _A[col*sizeY+row];
+&#125;</code></pre></div>
+<ul>
+<li><p>O(1) - Launch 1 thread per element</p></li>
+<li><p>Essentially one <code>memcpy</code> from global-to-global</p></li>
+</ul>
+<p>should be fast YET:</p>
+<h5 id="problem">Problem</h5>
+<p>Memory coalescing, recall the matrix accessing example,</p>
+<ul>
+<li>when row-major: consecutive locations when loading yet scattered locations on writing</li>
+<li>when col-major: consecutive locations when writing yet scattered locations on loading</li>
+</ul>
+<p><img src="/2022/09/09/CUDA-fundamental-7/memory access modes on READ and WRITE with row major matrix.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE with row major matrix" style="zoom:67%;"></p>
+<h5 id="improvement">Improvement</h5>
+<p>Recall the <a href="#Share-memory">share memory</a>, we can make both the <code>global memory &lt;--&gt; share memory</code> coalesced in both directions.</p>
+<h4 id="gpu-v2">GPU V2</h4>
+<ol type="1">
+<li><p>Compute input index (same as in naive transpose)</p></li>
+<li><p>Copy data to shared memory</p></li>
+<li><p>Compute output index</p>
+<ul>
+<li><p>Remember, coalesced memory access</p></li>
+<li><p>Hint, transpose only in shared memory</p></li>
+</ul></li>
+<li><p>Copy data from shared memory to output</p></li>
+</ol>
+<p><img src="/2022/09/09/CUDA-fundamental-7/memory access modes on READ and WRITE via share memory.PNG" srcset="/img/loading.gif" lazyload alt="memory access modes on READ and WRITE via share memory" style="zoom:60%;"></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Matrix transpose via share memory.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose via share memory" style="zoom:60%;"></p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTransposeShared</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span> *_a, <span class="hljs-type">float</span> *_b)</span></span>
+<span class="hljs-function"></span>&#123;
+    __shared__ <span class="hljs-type">float</span> mat[BLOCK_SIZE_Y][BLOCK_SIZE_X];
+    <span class="hljs-type">int</span> bx = blockIdx.x * BLOCK_SIZE_X;
+    <span class="hljs-type">int</span> by = blockIdx.y * BLOCK_SIZE_Y;
+    <span class="hljs-type">int</span> i = bx + threadIdx.x; <span class="hljs-comment">//input</span>
+    <span class="hljs-type">int</span> j = by + threadIdx.y; <span class="hljs-comment">//input</span>
+    <span class="hljs-type">int</span> ti = by + threadIdx.x; <span class="hljs-comment">//output</span>
+    <span class="hljs-type">int</span> tj = bx + threadIdx.y; <span class="hljs-comment">//output</span>
+    
+    <span class="hljs-keyword">if</span>(i &lt; sizeX &amp;&amp; j &lt; sizeY)
+    &#123;
+    	mat[threadIdx.y][threadIdx.x] = a[j * sizeX + i]; <span class="hljs-comment">// read</span>
+    &#125;
+    
+    __syncthreads(); <span class="hljs-comment">//Wait for all data to be copied</span>
+    
+    <span class="hljs-keyword">if</span>(tj &lt; sizeY &amp;&amp; ti &lt; sizeX)
+    &#123;
+    	b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]; <span class="hljs-comment">// write</span>
+    &#125;
+&#125;</code></pre></div>
+<h5 id="problem-1">Problem</h5>
+<p>Recall <a href="#Bank-Conflict">bank conflict</a>,</p>
+<p>Access to defferent element of bank by a warp executes in serial, as a result ,when writing, there is a</p>
+<ul>
+<li>32-way conflict</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs c++">b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y];</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/different elements in share memory bank storage requested 32 way conflict.png" srcset="/img/loading.gif" lazyload alt="different elements in share memory bank storage requested 32 way conflict" style="zoom:15%;"></p>
+<h5 id="improvement-1">Improvement</h5>
+<p>Resolving bank conflict by stuffing blank element at the end of each bank.</p>
+<h4 id="gpu-v3">GPU V3</h4>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// __shared__ float mat[BLOCK_SIZE_Y][BLOCK_SIZE_X];</span>
+__shared__ <span class="hljs-type">float</span> mat[BLOCK_SIZE_Y][BLOCK_SIZE_X + <span class="hljs-number">1</span>];
+<span class="hljs-comment">// ...</span>
+b[tj * sizeY + ti] = mat[threadIdx.x][threadIdx.y]</code></pre></div>
+<p>Elements per row = 32</p>
+<p>Shared Mem per row = 33</p>
+<p>1 empty element per row</p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/share memory bank storage requested with no conflicts.PNG" srcset="/img/loading.gif" lazyload alt="share memory bank storage requested with no conflicts" style="zoom:60%;"></p>
+<p>Now it is very very close to production ready!</p>
+<h5 id="furthere-improvements">Furthere improvements</h5>
+<p>More work per thread - Do more than one element</p>
+<p>Loop unrolling</p>
+<h4 id="gpu-v4">GPU V4</h4>
+<p>More work per thread:</p>
+<ul>
+<li>Threads should be kept light</li>
+<li>But they should also be saturated</li>
+<li>Give them more operations</li>
+</ul>
+<p>Loop unrolling</p>
+<ul>
+<li><p>Allocate operation in a way that loops can be unrolled by the compiler for faster execution</p></li>
+<li><p>Warp scheduling</p></li>
+<li><p>Kernels can execute 2 instructions simultaneously as long as they are independent</p></li>
+<li><p>Use same number of blocks, shared memory</p>
+<ul>
+<li>Reduce threads per block by factor (<code>SIDE</code>)</li>
+</ul>
+<p><img src="/2022/09/09/CUDA-fundamental-7/loop unrolled illustration.PNG" srcset="/img/loading.gif" lazyload alt="loop unrolled illustration" style="zoom:80%;"></p></li>
+</ul>
+<table>
+
+<thead>
+<tr class="header">
+<th>HOST</th>
+<th>DEVICE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Same number of blocks</td>
+<td>Allocate same shared memory</td>
+</tr>
+<tr class="even">
+<td>Compute new threads per block</td>
+<td>Compute input indices similar to before</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Copy data to shared mem using loop (k)<br>- Unrolled index: add k to y</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Compute output indices similar to before</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Copy data from shared memory into global memory <br>- Unrolled index: add k to y</td>
+</tr>
+</tbody>
+</table>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">int</span> TILE, <span class="hljs-type">int</span> SIDE&gt; <span class="hljs-comment">//TILE = 32, SIDE = 8</span>
+<span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">matrixTransposeUnrolled</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* a, <span class="hljs-type">float</span>* b)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//Allocate appropriate shared memory (avoid bank conflict)</span>
+    __shared__ <span class="hljs-type">float</span> mat[TILE][TILE + <span class="hljs-number">1</span>];
+    
+    <span class="hljs-comment">//Compute input index</span>
+    <span class="hljs-type">int</span> x = blockIdx.x * TILE + threadIdx.x;
+    <span class="hljs-type">int</span> y = blockIdx.y * TILE + threadIdx.y;
+    <span class="hljs-comment">//Copy data from input to shared memory. Multiple copies per thread.</span>
+    <span class="hljs-meta">#<span class="hljs-keyword">pragma</span> unroll</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; TILE; k += SIDE)
+    &#123;
+        <span class="hljs-keyword">if</span> (x &lt; sizeX &amp;&amp; y + k &lt; sizeY)
+        &#123;
+        	mat[threadIdx.y + k][threadIdx.x] = a[((y + k) * sizeX) + x];
+        &#125;
+    &#125;
+    
+    __syncthreads();
+    
+    <span class="hljs-comment">//Compute output index</span>
+    x = blockIdx.y * TILE + threadIdx.x;
+    y = blockIdx.x * TILE + threadIdx.y;
+    <span class="hljs-comment">//Copy data from shared memory to global memory. Multiple copies per thread.</span>
+    <span class="hljs-meta">#<span class="hljs-keyword">pragma</span> unroll</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; TILE; k += SIDE)
+    &#123;
+        <span class="hljs-keyword">if</span> (x &lt; sizeY &amp;&amp; y + k &lt; sizeX)
+        &#123;
+        	b[(y + k) * sizeY + x] = mat[threadIdx.x][threadIdx.y + k];
+        &#125;
+    &#125;
+&#125;</code></pre></div>
+<h4 id="benchmark-result">Benchmark result</h4>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Matrix transpose benchmark.PNG" srcset="/img/loading.gif" lazyload alt="Matrix transpose benchmark" style="zoom:80%;"></p>
+<h2 id="divergent-optimisation">Divergent Optimisation</h2>
+<h3 id="example-parallel-reduction">Example Parallel Reduction</h3>
+<p>Example first this time</p>
+<p><strong>Reduction</strong>: An operation that computes a single result from a set of data. For example the <code>sum</code> and <code>max</code></p>
+<h5 id="sum">sum</h5>
+<p>With data $[a] = $: <span class="math display">\[
+\left[0\right] \qquad 
+\left[1\right] \qquad 
+\left[2\right] \qquad 
+\left[3\right] \qquad 
+\left[4\right] \qquad 
+\left[5\right] \qquad 
+\left[6\right] \qquad 
+\left[7\right] \qquad
+\]</span></p>
+<p>Need to calculate the in parallel <span class="math display">\[
+s = \sum_ {i=0}^N a_i
+\]</span></p>
+<h4 id="serial-vs-parallel">Serial vs Parallel</h4>
+<p><img src="/2022/09/09/CUDA-fundamental-7/serial and parallel reduction illustration.png" srcset="/img/loading.gif" lazyload alt="serial and parallel reduction comparison, the serial (left) and parallel codes (right) have complicity n and O(log2n) respectively" style="zoom:20%;"></p>
+<p>It is obvious, the merits of parallel reduce are:</p>
+<ul>
+<li>Binary
+<ul>
+<li>example: <code>a * b</code>, <code>a + b</code>, <code>a &amp; b</code>, <code>a | b</code></li>
+<li>not binary: <code>!(a)</code>, <code>(a)!</code></li>
+</ul></li>
+<li>Associative
+<ul>
+<li>example: <code>a * b</code>, <code>a + b</code>, <code>a &amp; b</code>, <code>a | b</code></li>
+<li>non associative: <code>a / b</code>, <code>a - b</code></li>
+</ul></li>
+</ul>
+<h4 id="gpu-v1-interleaved-addressing">GPU V1: Interleaved Addressing</h4>
+<p>Parallel binary reduce is applied to a part of the whole array in each block.</p>
+<p>Multiple blocks help in:</p>
+<ul>
+<li>Maximizing Occupancy by keeping SMs busy</li>
+<li>Processing very large arrays.</li>
+</ul>
+<p>Parallel reduce is not arithmetic intensive, it takes only 1 Flop per thread(1 add) so it is completely memory bandwidth bounded.</p>
+<p>Need a way to communicate partial results between blocks</p>
+<ul>
+<li>Global sync is not practical due to the overhead of sync across so many cores</li>
+<li>Solution: Call the reduce kernel recursively to reduce the results from previous reduce</li>
+</ul>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Parallel reduction example.PNG" srcset="/img/loading.gif" lazyload alt="Parallel reduction example" style="zoom:75%;"></p>
+<p><span class="math inline">\(\log_2(n)\)</span> passes for n elements</p>
+<p><span class="math inline">\(O(\log_2n)\)</span> complexity</p>
+<h5 id="code">code</h5>
+<ol type="1">
+<li>Declare dynamic shared memory and compute index</li>
+<li>Load input into shared memory</li>
+<li>Reduce in shared memory</li>
+<li>Copy result of each block into global memory</li>
+</ol>
+<div class="note note-secondary">
+            <p>We only modify Parts 2 and 3 for optimization</p>
+          </div>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// step 1</span>
+    <span class="hljs-comment">// Dynamic allocation of shared memory - See kernel call in host code</span>
+    <span class="hljs-keyword">extern</span> __shared__ <span class="hljs-type">float</span> smem[];
+    <span class="hljs-type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x; <span class="hljs-comment">// Calculate 1D Index</span>
+    
+    <span class="hljs-comment">// step 2</span>
+    <span class="hljs-keyword">if</span>(idx &lt; n)
+    &#123;
+	    smem[threadIdx.x] = d_idata[idx]; <span class="hljs-comment">// Copy input data to shared memory</span>
+    &#125;
+    __syncthreads();
+    
+    <span class="hljs-comment">// step 3</span>
+    <span class="hljs-comment">// Reduce within block</span>
+    <span class="hljs-comment">// Start from c = 1, up to block size, each time doubling the offset</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> c = <span class="hljs-number">1</span>; c &lt; blockDim.x; c *= <span class="hljs-number">2</span>)
+    &#123;
+        <span class="hljs-keyword">if</span> (threadIdx.x % (<span class="hljs-number">2</span> * c) == <span class="hljs-number">0</span>)<span class="hljs-comment">// Add only on left index of each level</span>
+        &#123;
+        	smem[threadIdx.x] += smem[threadIdx.x + c];
+        &#125;
+        __syncthreads();
+    &#125;
+    
+    <span class="hljs-comment">// step 4</span>
+    <span class="hljs-comment">// Copy result of reduction to global memory</span>
+    <span class="hljs-keyword">if</span>(threadIdx.x == <span class="hljs-number">0</span>)
+    &#123;
+	    d_odata[blockIdx.x] = smem[<span class="hljs-number">0</span>];
+    &#125;
+&#125;</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction with interleaved addressing.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with interleaved addressing" style="zoom:80%;"></p>
+<p><code>1st</code> pass: <code>threadid.x = 0, 2, 4, 6 ...</code> are working while the others keep idle.</p>
+<p><code>2st</code> pass: <code>threadid.x = 0, 4 ...</code> are working while the others keep idle.</p>
+<p><code>3st</code> pass: <code>threadid.x = 0 ...</code> are working while the others keep idal.</p>
+<p>At each pass, number of threads required is halved. The idle threads doubled.</p>
+<div class="note note-info">
+            <p>note that the as stride increases, the not-working threads do the same work with the working threads. Because threads in the same warp need to run exact the same computations. Yet no registered are allocated to them.</p>
+          </div>
+<h5 id="problems">problems:</h5>
+<ul>
+<li><p>Interleaved addressing</p></li>
+<li><p>Too many divergent branches</p></li>
+</ul>
+<h5 id="improvement-2">Improvement</h5>
+<ul>
+<li><p>Avoiding using modulo operator <code>%</code></p></li>
+<li><p>Non-divergent branches</p></li>
+</ul>
+<h3 id="warp-revision">Warp revision</h3>
+<p>A thread block is broken down to 32-thread warps, warps are executed physically in a SM(X)</p>
+<p>Total number of warps in a block: <code>ceil(T/Wsize)</code></p>
+<ul>
+<li><p>Each thread in a warp execute one common instruction at a time</p></li>
+<li><p>Warps with diverging threads execute each branch serially</p></li>
+</ul>
+<h3 id="warp-partitioning">Warp Partitioning</h3>
+<h5 id="definitions">Definitions</h5>
+<p><strong>Warp Partitioning</strong>: how threads from a block are divided into warps - based on consecutive increasing <code>threadIdx</code>.</p>
+<p>Knowledge of warp partitioning can be used to:</p>
+<ul>
+<li>Minimize divergent branches</li>
+<li>Retire warps early</li>
+</ul>
+<p>Recall the divergent branches inside one warp: the performance can be largely deterited.</p>
+<h5 id="examples-1">examples</h5>
+<p>For <code>warpSize = 32</code>,</p>
+<ul>
+<li><p>the code below will cause divergence inside a warp.</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (threadIdx.x &gt; <span class="hljs-number">15</span>)
+&#123;
+	<span class="hljs-comment">// ...</span>
+&#125;</code></pre></div></li>
+<li><p>the code below suffers no from the branch divergence</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (threadIdx.x &gt; warpSize - <span class="hljs-number">1</span>)
+&#123;
+	<span class="hljs-comment">// ...</span>
+&#125;</code></pre></div>
+<p>because the divergence happens across the warps.</p></li>
+</ul>
+<h5 id="rule">Rule</h5>
+<p>Make threads per blocks to be a multiple of a warp (32)</p>
+<ul>
+<li>Incomplete warps waste unused cores</li>
+<li>256 threads per blocks is a good starting point</li>
+</ul>
+<p>Try to have all threads in warp execute in lock step</p>
+<ul>
+<li>Divergent warps will use time to compute all paths as if they were in serial order</li>
+</ul>
+<h4 id="gpu-v2-removing-divergence-branching">GPU V2: Removing divergence branching</h4>
+<p>Revise the problems existing</p>
+<ul>
+<li><p>Interleaved addressing</p></li>
+<li><p>Too many divergent branches</p></li>
+</ul>
+<p>Now we are dealing with the second one.</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// step 1 and 2 ...</span>
+    <span class="hljs-comment">// step 3</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> c = <span class="hljs-number">1</span>; c &lt; blockDim.x; c *= <span class="hljs-number">2</span>)
+    &#123;
+        <span class="hljs-type">int</span> index = threadIdx.x * <span class="hljs-number">2</span> * c;
+        <span class="hljs-keyword">if</span> (index &lt; blockDim.x)		<span class="hljs-comment">// No divergence except last warp</span>
+        &#123;
+        	smem[index] += smem[index + c];
+        &#125;
+        __syncthreads();
+    &#125;
+    <span class="hljs-comment">// step 4 ...</span>
+&#125;</code></pre></div>
+<p>Simple modification but</p>
+<ul>
+<li><p>Need to change the for-loop structure</p></li>
+<li><p>Need the same values, just not the modulo etc</p></li>
+<li><p>Restructure</p></li>
+</ul>
+<h4 id="gpu-v3-sequential-addressing">GPU V3: Sequential Addressing</h4>
+<p>Now we are dealing with the first problem.</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// step 1 and 2 ...</span>
+    <span class="hljs-comment">// step 3</span>
+    <span class="hljs-comment">// Reduce within block</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> c = blockDim.x / <span class="hljs-number">2</span>; c &gt; <span class="hljs-number">0</span>; c &gt;&gt;= <span class="hljs-number">1</span>)
+    &#123;
+        <span class="hljs-comment">// No need for index or modulo. It is replaced by c – similar to stage 0</span>
+        <span class="hljs-keyword">if</span> (threadIdx.x &lt; c)
+        &#123;
+        	smem[threadIdx.x] += smem[threadIdx.x + c];
+        &#125;
+        __syncthreads();
+    &#125;
+    <span class="hljs-comment">// step 4 ...</span>
+&#125;</code></pre></div>
+<blockquote>
+<p>note that bitwise shifting <code>&gt;&gt;</code> substitutes the <code>/</code> operation.</p>
+</blockquote>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction with sequential addressing.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with sequential addressing" style="zoom:30%;"></p>
+<p><code>1st</code> pass: <code>threadid.x = 0, 1, 2, 3 ...</code> are working while ( <code>1/2</code>) keep idle.</p>
+<p><code>2st</code> pass: <code>threadid.x = 0, 1 ...</code> are working while ( <code>3/4</code>) keep idle.</p>
+<p><code>3st</code> pass: <code>threadid.x = 0 ...</code> are working while ( <code>7/8</code>) keep idal.</p>
+<p><code>...</code></p>
+<p>At each pass, number of threads required is halved.</p>
+<p>The idle threads are able to release because the indexes of the working threads are changed.</p>
+<h5 id="compared-with-v12">Compared with V1/2:</h5>
+<p>Suppose the <code>warpSize = 2</code></p>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Algorithms comparison.PNG" srcset="/img/loading.gif" lazyload alt="Algorithms comparison" style="zoom:80%;"></p>
+<p>Given the knowledge of warp partitioning</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>Pass number</th>
+<th>Original</th>
+<th>Optimised</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>1st</code> pass</td>
+<td>4 divergences, 0 warp can be retired</td>
+<td>0 divergence, 2 warps can be retired</td>
+</tr>
+<tr class="even">
+<td><code>2st</code> pass</td>
+<td>2 divergences, 2 warp can be retired</td>
+<td>0 divergences, 3 warps can be retired</td>
+</tr>
+<tr class="odd">
+<td><code>3st</code> pass</td>
+<td>1 divergence, 3 warps can be retired</td>
+<td>1 divergence, 3 warps can be retired</td>
+</tr>
+</tbody>
+</table>
+<h5 id="problem-2">Problem</h5>
+<p>Always think of:</p>
+<ul>
+<li>Last warp divergence?</li>
+<li>Memory Coalescing?</li>
+<li>Bank conflicts?</li>
+<li>How is thread usage?</li>
+</ul>
+<h5 id="imporvements">Imporvements</h5>
+<p>How to reduce the idel warps?</p>
+<ul>
+<li>Launch only half the threads per block
+<ul>
+<li>reduce the threads load in <strong>step 2</strong></li>
+<li>Get’s rid of maximum wastage</li>
+</ul></li>
+<li>How to load data into shared memory?
+<ul>
+<li>adding on Load</li>
+</ul></li>
+</ul>
+<h4 id="gpu-v4.1-single-add-on-load">GPU V4.1: Single add on load</h4>
+<p>Each thread reads multiple values into shared memory. So why not add on load too?</p>
+<ul>
+<li>Doesn’t increase our global memory usage</li>
+<li>Also reduces the amount of shared memory we need
+<ul>
+<li>Or keep shared memory same and do more work per block</li>
+</ul></li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// step 1  </span>
+    <span class="hljs-comment">// step 2</span>
+    <span class="hljs-keyword">if</span>(idx &lt; n)
+    &#123;
+        smem[threadIdx.x] = d_idata[idx];
+        <span class="hljs-comment">//Copy and add block data into shared memory</span>
+        <span class="hljs-keyword">if</span>(idx + blockDim.x &lt; n)
+        &#123;
+	        smem[threadIdx.x] += d_idata[idx + blockDim.x];
+        &#125;
+	&#125; 
+    __syncthreads();
+    
+    <span class="hljs-comment">// step 3</span>
+    <span class="hljs-comment">// step 4</span>
+&#125;</code></pre></div>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction with interleaved addressing add on load.PNG" srcset="/img/loading.gif" lazyload alt="Reduction with interleaved addressing add on load" style="zoom:80%;"></p>
+<h5 id="problem-3">Problem</h5>
+<p>Single - the threads needed is halved only in the first pass</p>
+<h5 id="improvement-3">Improvement</h5>
+<p>Multiple adds per thread on load</p>
+<ul>
+<li>Replace single add with a loop.</li>
+<li>Use a counter TILE to define the number to adds per thread
+<ul>
+<li>defining TILE as global constant will allow loop unrolling</li>
+<li>preferable set TILE as power of 2</li>
+</ul></li>
+</ul>
+<h4 id="gpu-v4.2-multiple-adds-on-load">GPU V4.2: Multiple adds on load</h4>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v1</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// step 1  </span>
+    <span class="hljs-comment">// step 2</span>
+    <span class="hljs-keyword">if</span>(idx &lt; n)
+    &#123;
+        smem[threadIdx.x] = <span class="hljs-number">0</span>; <span class="hljs-comment">// Start with identity</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> c = <span class="hljs-number">0</span>; c &lt; TILE; c++)
+        &#123;
+            <span class="hljs-comment">// Copy and add block data with block offset into shared memory</span>
+            <span class="hljs-keyword">if</span>(idx + c * blockDim.x &lt; n)
+            &#123;
+            	smem[threadIdx.x] += d_idata[idx + c * blockDim.x];
+            &#125;
+        &#125;
+	&#125; 
+    __syncthreads();
+    
+    <span class="hljs-comment">// step 3</span>
+    <span class="hljs-comment">// step 4</span>
+&#125;</code></pre></div>
+<h5 id="problem-4">problem</h5>
+<p>Last warp is still divergent</p>
+<h5 id="solution">solution</h5>
+<p>Unroll the last warp</p>
+<h4 id="gpu-v5.1-last-warp-unroll">GPU V5.1: Last warp unroll</h4>
+<p>Split the step 3 into 2 steps:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">reduce_v2</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* d_idata, <span class="hljs-type">float</span>* d_odata, <span class="hljs-type">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// step 1 and 2 ...</span>
+    <span class="hljs-comment">// step 3</span>
+    <span class="hljs-comment">// step 3A</span>
+	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> c = blockDim.x / <span class="hljs-number">2</span>; c &gt; <span class="hljs-number">32</span>; c &gt;&gt;= <span class="hljs-number">1</span>)
+    &#123;
+        <span class="hljs-comment">// No need for index or modulo. It is replaced by c – similar to stage 0</span>
+        <span class="hljs-keyword">if</span> (threadIdx.x &lt; c)
+        &#123;
+        	smem[threadIdx.x] += smem[threadIdx.x + c];
+        &#125;
+        __syncthreads();
+    &#125;
+    
+    <span class="hljs-comment">// step 3B</span>
+    <span class="hljs-keyword">if</span>(threadIdx.x &lt; <span class="hljs-number">32</span>)
+    &#123;
+	    <span class="hljs-built_in">warpReduce</span>(smem, threadIdx.x);
+    &#125;
+    <span class="hljs-comment">// step 4 ...</span>
+&#125;</code></pre></div>
+<p>with</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__device__ <span class="hljs-type">void</span> <span class="hljs-title">warpReduce</span><span class="hljs-params">(<span class="hljs-keyword">volatile</span> <span class="hljs-type">float</span>* smem, <span class="hljs-type">int</span> tid)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//Write code for warp reduce here</span>
+    smem[tid] += smem[tid + <span class="hljs-number">32</span>];
+    smem[tid] += smem[tid + <span class="hljs-number">16</span>];
+    smem[tid] += smem[tid + <span class="hljs-number">8</span> ];
+    smem[tid] += smem[tid + <span class="hljs-number">4</span> ];
+    smem[tid] += smem[tid + <span class="hljs-number">2</span> ];
+    smem[tid] += smem[tid + <span class="hljs-number">1</span> ];
+&#125;</code></pre></div>
+<div class="note note-info">
+            <p>note that volatile is used to declare <code>smem</code></p><p>The compiler doesn't reorder stores to it and induce incorrect behavior.</p><p>Basically – Tell compiler we know what we are doing</p>
+          </div>
+<p>There is no need for <code>if(threadIdx.x &lt; c)</code>, Essentially, when we write to the Nth part of the warp/block shared memory, we don’t really care about that data anymore.</p>
+<p>The cost is nothing – We are executing threads that were sitting idle before.</p>
+<h5 id="improvement-4">Improvement</h5>
+<p>Able to unroll compeletely?</p>
+<h4 id="gpu-v5.2-complete-unroll">GPU V5.2: Complete unroll</h4>
+<p>Taking inspiration from Stage 4, unroll the for loop entirely in step 3A</p>
+<p><code>#pragma unroll</code> requires sizes to be known at compile time</p>
+<ul>
+<li><p>Use Templates</p></li>
+<li><p>CUDA supports C++ template parameters on device and host functions</p></li>
+<li><p>Specify block size as a function template parameter:</p>
+<div class="code-wrapper"><pre><code class="hljs c++">reduce_v5&lt;threads&gt;&lt;&lt;&lt;dims.dimBlocks,
+					 dims.dimThreads,
+					 <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>) * dims.dimThreads
+                   &gt;&gt;&gt;
+                     (d_idata, d_odata, n_elements);</code></pre></div></li>
+</ul>
+<p>Block size in GPU limited to 512 or 1024 threads.</p>
+<ul>
+<li>Only a limited number of <code>if</code> conditions we have to write</li>
+</ul>
+<p>Also make block sizes power of 2 (preferably multiples of 32).</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span>(blockSize &gt;= <span class="hljs-number">1024</span>)
+&#123;
+	<span class="hljs-keyword">if</span>(threadIdx.x &lt; <span class="hljs-number">512</span>) &#123; smem[tid] += smem[tid + <span class="hljs-number">512</span>]; &#125; __syncthreads();
+&#125;
+<span class="hljs-keyword">if</span>(blockSize &gt;= <span class="hljs-number">512</span>)
+&#123;
+	<span class="hljs-keyword">if</span>(threadIdx.x &lt; <span class="hljs-number">256</span>) &#123; smem[tid] += smem[tid + <span class="hljs-number">256</span>]; &#125; __syncthreads();
+&#125;
+<span class="hljs-keyword">if</span>(blockSize &gt;= <span class="hljs-number">256</span>)
+&#123;
+	<span class="hljs-keyword">if</span>(threadIdx.x &lt; <span class="hljs-number">128</span>) &#123; smem[tid] += smem[tid + <span class="hljs-number">128</span>]; &#125; __syncthreads();
+&#125;
+<span class="hljs-keyword">if</span>(blockSize &gt;= <span class="hljs-number">128</span>)
+&#123;
+	<span class="hljs-keyword">if</span>(threadIdx.x &lt; <span class="hljs-number">64</span>) &#123; smem[tid] += smem[tid + <span class="hljs-number">64</span>]; &#125; __syncthreads();
+&#125;</code></pre></div>
+<div class="note note-info">
+            <p>Note that the blockSize is known at compile time</p><ul><li>All the if conditions related to <code>blockSize</code> are evaluated at compile time.</li><li>No problem with other if conditions either</li><li>All guarantee no warp divergence</li></ul>
+          </div>
+<h4 id="benchmark">Benchmark</h4>
+<p><img src="/2022/09/09/CUDA-fundamental-7/Reduction benchmark.png" srcset="/img/loading.gif" lazyload alt="Reduction benchmark" style="zoom:80%;"></p>
+<h4 id="further-improvements">Further improvements</h4>
+<ol type="1">
+<li>RECURSIVE REDUCTION - Call recursion on result of block reduction – instead of CPU</li>
+<li>CONSTANT POINTER - use <code>const float* x;</code>, <code>float* const x;</code>, <code>const float* const x;</code></li>
+<li><code>__restrict__</code> FLAG
+<ul>
+<li>assure the compiler that the pointer marked by it do not overlap</li>
+<li>Basically, a and b are exclusive memory</li>
+<li>And that you will not do indexing that will overflow into the other</li>
+<li>Compiler can make optimizations based on this
+<ul>
+<li>Removes checks</li>
+</ul></li>
+</ul></li>
+</ol>
+<p>Bank conflict</p>
+<h3 id="conclusion">Conclusion</h3>
+<ol type="1">
+<li>Understand CUDA performance characteristics
+<ul>
+<li>Memory coalescing</li>
+<li>Divergent branching</li>
+<li>Bank conflicts</li>
+<li>Latency hiding</li>
+</ul></li>
+<li>Use peak performance metrics to guide optimization
+<ul>
+<li>Know peak GFLOPs and Memory Bandwidth of GPU</li>
+</ul></li>
+<li>Know how to identify type of bottleneck
+<ul>
+<li>e.g. memory, core computation, or instruction overhead</li>
+</ul></li>
+<li>Optimise your algorithm, then unroll loops</li>
+<li>Use template gracefully</li>
+</ol>
+<h4 id="final-guide">Final guide</h4>
+<ol type="1">
+<li>parallelisation</li>
+<li>memory coalsecing</li>
+<li>share memory</li>
+<li>other memory
+<ul>
+<li>texture</li>
+<li>constant</li>
+</ul></li>
+<li>reduce bank conflicts</li>
+</ol>
+<h5 id="further-reading">Further reading</h5>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf">CUDA C++ Programming Guide - NVIDIA Developer</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/pdf/CUDA_C_Best_Practices_Guide.pdf">CUDA C++ Best Practices Guide - NVIDIA Developer</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CUDA Performance</div>
+      <div>https://daydreamatnight.github.io/2022/09/09/CUDA-fundamental-7/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 9, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/09/15/CUDA-example-particles/" title="CUDA example particles">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CUDA example particles</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/02/CUDA-fundamental-6/" title="CUDA programming 2">
+                        <span class="hidden-mobile">CUDA programming 2</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

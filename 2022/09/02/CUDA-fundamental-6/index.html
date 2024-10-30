@@ -1,0 +1,1269 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="More details of the basics, the matrix multiply example is carefully analysed and a optimised version is coded.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA programming 2">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/09/02/CUDA-fundamental-6/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="More details of the basics, the matrix multiply example is carefully analysed and a optimised version is coded.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_6.png">
+<meta property="article:published_time" content="2022-09-02T13:47:39.000Z">
+<meta property="article:modified_time" content="2022-09-02T14:03:04.080Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_6.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CUDA programming 2 - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CUDA programming 2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-02 21:47" pubdate>
+          September 2, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          36 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CUDA programming 2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>More details of the basics, the matrix multiply example is carefully analysed and a optimised version is coded.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>All the pics and contents are not original. The contents of the whole series are mainly collected from:</p><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1kx411m7Fk">NVIDIA CUDA初级教程视频</a></p><p><a target="_blank" rel="noopener" href="https://cis565-fall-2019.github.io/">CIS 565 2019</a></p><p><a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15418-s21/www/index.html">CMU 15-418/618 (2018)</a></p>
+          </div>
+<h2 id="build-ins-and-functions">Build-ins and functions</h2>
+<h3 id="declarations">Declarations</h3>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Executed on the:</th>
+<th>Only callable from the</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>__global__</code></td>
+<td>device</td>
+<td>host</td>
+</tr>
+<tr class="even">
+<td><code>__device__</code></td>
+<td>device</td>
+<td>device</td>
+</tr>
+<tr class="odd">
+<td><code>__host__</code></td>
+<td>host</td>
+<td>host</td>
+</tr>
+</tbody>
+</table>
+<p>note:</p>
+<ul>
+<li><p><code>__global__</code> and <code>__device__</code> can declare one function</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__host__ __device__ <span class="hljs-title">func</span> <span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+<span class="hljs-comment">// …………</span>
+&#125;</code></pre></div></li>
+<li><p><code>__global__</code> function must return <code>void</code></p></li>
+<li><p><code>__device__</code> inline function by default, might have been changed recently</p></li>
+<li><p>Recursion allowed for some device function, be carefull</p></li>
+<li><p>No static parameters</p></li>
+<li><p>No <code>malloc()</code>, memory will run out soon if all the threads use <code>malloc</code></p></li>
+<li><p>careful using pointers</p></li>
+</ul>
+<h3 id="vector-datatypes">Vector datatypes</h3>
+<p>Including:</p>
+<p><code>char[1-4]</code>, <code>uchar[1-4]</code>, <code>short[1-4]</code>, <code>ushort[1-4]</code>, <code>int[1-4]</code>, <code>uint[1-4]</code>, <code>longlong[1-4]</code>, <code>ulonglong[1-4]</code>, <code>float[1-4]</code>, <code>double1</code>, <code>double2</code>.</p>
+<p>Instantantiate with function <code>make_&lt;type name&gt;</code>:</p>
+<div class="code-wrapper"><pre><code class="hljs c++">int2 i2 = <span class="hljs-built_in">ake_int2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
+float4 f4 = <span class="hljs-built_in">make_floate4</span>(<span class="hljs-number">1.0f</span>, <span class="hljs-number">2.0f</span>, <span class="hljs-number">3.0f</span>, <span class="hljs-number">4.0f</span>);</code></pre></div>
+<p>Reference with <code>.x</code>, <code>.y</code>, <code>.z</code>, <code>.w</code> :</p>
+<div class="code-wrapper"><pre><code class="hljs c++">int2 i2 = <span class="hljs-built_in">ake_int2</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
+<span class="hljs-type">int</span> x = i2.x;
+<span class="hljs-type">int</span> y = i2.y;</code></pre></div>
+<h3 id="math">Math</h3>
+<p>Including basic build-in math functions such as:</p>
+<p><code>sqrt</code>, <code>rsqrt</code>, <code>exp</code>, <code>log</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sincos</code>, <code>asin</code>, <code>acos</code>, <code>atan2</code>, <code>asin</code>, <code>acos</code>, <code>atan2</code>, <code>trunc</code>, <code>ceil</code>, <code>floor</code>...</p>
+<p>Besides, there is another type of math functions: <strong><em>Intrinsic</em></strong> functions:</p>
+<ul>
+<li>Device only</li>
+<li>10x faster but lower precision</li>
+<li>Prefixed with <code>__</code><br>
+</li>
+<li>names as: <code>__exp</code>, <code>__log</code>, <code>__sin</code>, <code>__pow</code>...</li>
+</ul>
+<h2 id="threads-synchronizition">Threads Synchronizition</h2>
+<h3 id="recall-thread-hierarchy">Recall Thread hierarchy</h3>
+<p>Recall <a href="#CUDA%20memory%20hierarchy%20in%20GPU">CUDA memory hierarchy in GPU</a>, the thread can be index with <code>blockId</code> and <code>threadId</code>: (1D indexing for example)</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-type">int</span> threadID = blockIdx.x * blockDim.x + threadIdx.x;
+<span class="hljs-type">float</span> x = input[threadID];
+<span class="hljs-type">float</span> y = <span class="hljs-built_in">func</span>(x);
+output[threadID] = y;</code></pre></div>
+<h3 id="synchronizing-threads">Synchronizing threads</h3>
+<p>Threads in the same <strong><em>block (not gird)</em></strong> can be synchronized with function <code>__syncthreads()</code>, this function create a barrier:</p>
+<div class="code-wrapper"><pre><code class="hljs c++">Mds[i] = Md[j];
+__syncthreads();
+<span class="hljs-built_in">func</span>(Mds[i], Mds[i+<span class="hljs-number">1</span>]);</code></pre></div>
+<ul>
+<li>need similar execution time for each thread</li>
+<li>block synchronize is a compromise because global synchronization costs too much.</li>
+</ul>
+<h4 id="problem-of-synchronizing">Problem of synchronizing</h4>
+<p>synchronizing actually breaks the parallelization, and more severely, it can leads to <strong><em>thread deadlock</em></strong>, such as below:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">someFunc</span>())
+&#123;
+    __syncthreads();
+&#125;
+<span class="hljs-keyword">else</span>:
+&#123;
+    __syncthreads();
+&#125;</code></pre></div>
+<p>no <code>syncthreads</code> in branches !</p>
+<h2 id="scheduling-model">Scheduling model</h2>
+<h5 id="example">Example</h5>
+<p>Take a old G80 as an example:</p>
+<ul>
+<li>16 SMs, 8 SPs per SM
+<ul>
+<li>128 SPs in total</li>
+</ul></li>
+<li>up to768 treads on a SM, not all been executed
+<ul>
+<li>12288 threads in total, (on 16 SMs)</li>
+</ul></li>
+</ul>
+<h3 id="warp">Warp</h3>
+<p>Warp is a logical concept, it represents a goup of threads in a block.</p>
+<ul>
+<li><code>threadIndx</code>s are concecutive.
+<ul>
+<li>if there are 64 threads run on the same block, a warp has 32 threads. So it has 2 warps, the <code>threadIndx</code> are <code>[0-31],[32-63]</code>.</li>
+</ul></li>
+<li>Basic unit of thread scheduling</li>
+<li>Run on the same SM (block)</li>
+</ul>
+<p><img src="/2022/09/02/CUDA-fundamental-6/warp on the same SM.PNG" srcset="/img/loading.gif" lazyload alt="warp on the same SM" style="zoom:67%;"></p>
+<ul>
+<li>Ant any time, only one of the warps is executed by SM.
+<ul>
+<li>The threads in the same warp are sychronized in nuture, the instruction is the same as well.</li>
+</ul></li>
+<li>The not-running warps are saved in the context memory
+<ul>
+<li>The warps whose next instruction hasits operands ready for consumptiona are sligible for execution.</li>
+<li>They can be switched (<strong>schedualed</strong>) as a click, with no overhead in order to <strong>hide latency</strong>.</li>
+</ul></li>
+</ul>
+<h3 id="branches">Branches</h3>
+<p>Recall the branch divergence, it is also called <strong>warp divergence</strong></p>
+<p><img src="/2022/09/02/CUDA-fundamental-6/warp on branch.PNG" srcset="/img/loading.gif" lazyload alt="warp on branch" style="zoom:50%;"></p>
+<p>In extreme, the performance will drop drastically, yet is has been highly optimised. And it is unessasary to worry about, except massive complicated branches exist, which is very rare.</p>
+<h3 id="cycles">Cycles</h3>
+<h5 id="if-more-threads-than-sps">If More threads than SPs</h5>
+<p>In G80, there are 32 threads per warp but 8 SPs per SM. The num of thead in one warp is more than the number of SPs (ALUs). So the serial in warp is needed.</p>
+<p>When an SM schedules a warp:</p>
+<ul>
+<li>Its instruction is ready</li>
+<li>8 threads enter the SPs on the 1st cycle</li>
+<li>8 more on the 2nd, 3rd, and 4th cycles</li>
+<li>Therefore, <strong>4 cycles</strong> are required to dispatch a warp</li>
+</ul>
+<p>In new archtecture, the number of SPs are way more than that of threads per warp.</p>
+<h3 id="number-of-warps-to-hide-latency">Number of warps to hide latency</h3>
+<p>Example, a kernel has 1 global memory read (200 cycles) and 4 independent multiples/adds. How many warps are required to hide the memory latency in G80?</p>
+<ol type="1">
+<li>Each warp has 4 MUL/ADDs, there are 16 cycles. Because <strong>4 cycle</strong>s in one wrap</li>
+<li>To conduct a global memory read, it has 200 cycles stall. We need to cover it by MUL/ADD cyckes.
+<ul>
+<li>Cycles needed <span class="math inline">\(ceil(200/16) = 13\)</span>;</li>
+</ul></li>
+<li>13 warps are needed for one block.</li>
+</ol>
+<h2 id="memory-model">Memory model</h2>
+<h3 id="table">Table</h3>
+<table>
+
+<thead>
+<tr class="header">
+<th>Memory</th>
+<th>Device</th>
+<th>Host</th>
+<th>Scope</th>
+<th>Locality</th>
+<th>Latency</th>
+<th>Bandwidth</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>registers</td>
+<td>R/W</td>
+<td>×</td>
+<td>thread</td>
+<td>On-chip</td>
+<td>Short</td>
+<td></td>
+<td>*More register per thread, less thread per grid</td>
+</tr>
+<tr class="even">
+<td>local</td>
+<td>R/W</td>
+<td>×</td>
+<td>thread</td>
+<td>global memory</td>
+<td>Long</td>
+<td></td>
+<td>Automatic arrays</td>
+</tr>
+<tr class="odd">
+<td>shared</td>
+<td>R/W</td>
+<td>×</td>
+<td>bock</td>
+<td>on-chip</td>
+<td>Short</td>
+<td></td>
+<td>*More memory per block, less block per grid. <br>Full speed random access</td>
+</tr>
+<tr class="even">
+<td>global</td>
+<td>R/W</td>
+<td>R/W</td>
+<td>grid</td>
+<td>off-chip</td>
+<td>Long 100 cycles</td>
+<td>GT200 -150 GB/s, G80 – 86.4 GB/s</td>
+<td>Up to 4 GB <br>Random access causes performance hit</td>
+</tr>
+<tr class="odd">
+<td>constant</td>
+<td>R</td>
+<td>R/W</td>
+<td>grid</td>
+<td>global memory (cached)</td>
+<td>Short</td>
+<td>High</td>
+<td>Up to 64 KB<br>When all threads access the same location</td>
+</tr>
+</tbody>
+</table>
+<p>* Increasing the number of registers used by a kernel , exceeding limit reduces threads by the block.</p>
+<p>For example, there are 8K registers, up to <span class="math inline">\(768\)</span> threads per SM. <span class="math inline">\(256\)</span> threads per block so <span class="math inline">\(768/256\)</span> 3 blocks on SM.</p>
+<ul>
+<li><p><span class="math inline">\(8K/768 = 10\)</span> registers per thread.</p></li>
+<li><p>If each thread uses 11 registers.</p>
+<ul>
+<li>only 2 blocks can fit the register number. So only <span class="math inline">\(2*256 = 512\)</span> threads on SM. <span class="math inline">\(512*11 = 5.6K\)</span> registers are used.</li>
+</ul></li>
+</ul>
+<p>* For Shared Memory, the shared memory is <span class="math inline">\(16\)</span>KB. <span class="math inline">\(8\)</span> blocks per SM, then that's <span class="math inline">\(16/8=2\)</span>KB per block.</p>
+<p>If each block uses 5 KB, obly 3 blocks a SM can host.</p>
+<p>* there is another <strong>Special Register</strong> used for build-in varibles, such as:</p>
+<ul>
+<li><code>threadIdx</code></li>
+<li><code>blockIdx</code></li>
+<li><code>blockDim</code></li>
+<li><code>gridDim</code></li>
+</ul>
+<h3 id="declaration">Declaration</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Variable Declaration</th>
+<th>Memory</th>
+<th>Scope</th>
+<th>Lifetime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Automatic variables other than arrays</td>
+<td>register</td>
+<td>thread</td>
+<td>kernel</td>
+</tr>
+<tr class="even">
+<td>Automatic array variables</td>
+<td>local</td>
+<td>thread</td>
+<td>kernel</td>
+</tr>
+<tr class="odd">
+<td><code>__shared__ int sharedVar;</code></td>
+<td>shared</td>
+<td>block</td>
+<td>kernel</td>
+</tr>
+<tr class="even">
+<td><code>__device__ int globalVar;</code></td>
+<td>global</td>
+<td>grid</td>
+<td>application</td>
+</tr>
+<tr class="odd">
+<td><code>__constant__ int constantVar;</code></td>
+<td>constant</td>
+<td>grid</td>
+<td>application</td>
+</tr>
+</tbody>
+</table>
+<h5 id="global-and-constant-variables">Global and constant variables:</h5>
+<p>Host can access with</p>
+<ul>
+<li><code>cudaGetSymbolAddress()</code></li>
+<li><code>cudaGetSymbolSize()</code></li>
+<li><code>cudaMemcpyToSymbol()</code></li>
+<li><code>cudaMemcpyFromSymbol()</code></li>
+</ul>
+<p>Constants is better (previously a must) be declared outside of a function body</p>
+<div class="code-wrapper"><pre><code class="hljs c++">__constant__ <span class="hljs-type">float</span> constData[<span class="hljs-number">256</span>]; <span class="hljs-comment">// global scope</span>
+<span class="hljs-type">float</span> data[<span class="hljs-number">256</span>];
+<span class="hljs-built_in">cudaMemcpyToSymbol</span>(constData, data, <span class="hljs-built_in">sizeof</span>(data));
+<span class="hljs-built_in">cudaMemcpyFromSymbol</span>(data, constData, <span class="hljs-built_in">sizeof</span>(data));</code></pre></div>
+<h2 id="matrix-multiply-again">Matrix multiply Again</h2>
+<h3 id="problems-that-still-exist">Problems that Still Exist</h3>
+<p><img src="/2022/09/02/CUDA-fundamental-6/Matrix Multiply V1.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply Version 1" style="zoom: 50%;"></p>
+<p>Recall the limitations of the code from last time:</p>
+<ul>
+<li>Limited matrix size
+<ul>
+<li>Only uses one block</li>
+<li>G80 and GT200 – up to 512 threads per block</li>
+</ul></li>
+<li>Lots of global memory access
+<ul>
+<li>two store-read and pre MUL-ADD</li>
+<li>with the data in the same column, the same colmn data of N matrix is readed again and again. Same for the data in the same row.</li>
+<li>Its better if the colume data can be calculated with only one-time read of the column N.</li>
+</ul></li>
+</ul>
+<h3 id="solve-problems">Solve problems</h3>
+<h4 id="remove-size-limitation">Remove size limitation</h4>
+<p><img src="/2022/09/02/CUDA-fundamental-6/Matrix Multiply V2 remove size lim.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply V2 remove size lim" style="zoom:60%;"></p>
+<ul>
+<li>Divide the matrix into tiles, assign each tile to a block.</li>
+<li>Use threadIdx and blockIdx for indexing.</li>
+<li>Able to use multiple blocks.</li>
+</ul>
+<h5 id="implement-the-kernel">Implement the kernel</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
+<span class="hljs-params"><span class="hljs-function"><span class="hljs-type">float</span>* devP, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// Calculate row and col index of P and M </span>
+    <span class="hljs-type">int</span> col = blockIdx.x * blockDim.x + threadIdx.x;
+    <span class="hljs-type">int</span> row = blockIdx.y * blockDim.y + threadIdx.y;
+    
+    <span class="hljs-comment">// Initialize accumulator to 0</span>
+    <span class="hljs-type">float</span> pValue = <span class="hljs-number">0</span>;
+    
+    <span class="hljs-comment">// Multiply and add</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; width; k++) 
+    &#123;
+        <span class="hljs-type">float</span> m = devM[row * width + k];
+        <span class="hljs-type">float</span> n = devN[k * width + col];
+        pValue += m * n;
+    &#125;
+    <span class="hljs-comment">// Write value to device memory - each thread has unique index to write to</span>
+    devP[row * width + col] = pValue;
+&#125;</code></pre></div>
+<h5 id="invoke-the-kernel">Invoke the kernel</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyOnDevice</span><span class="hljs-params">(<span class="hljs-type">float</span>* hostP,</span></span>
+<span class="hljs-params"><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">float</span>* hostM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* hostN, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-type">int</span> sizeInBytes = width * width * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>);
+    <span class="hljs-type">float</span> *devM, *devN, *devP;
+    
+    <span class="hljs-comment">// Allocate M and N on device</span>
+    <span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;devM, sizeInBytes);
+    <span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;devN, sizeInBytes);
+    
+    <span class="hljs-comment">// Allocate P</span>
+    <span class="hljs-built_in">cudaMalloc</span>((<span class="hljs-type">void</span>**)&amp;devP, sizeInBytes);
+    
+    <span class="hljs-comment">// Copy M and N from host to device</span>
+    <span class="hljs-built_in">cudaMemcpy</span>(devM, hostM, sizeInBytes, cudaMemcpyHostToDevice);
+    <span class="hljs-built_in">cudaMemcpy</span>(devN, hostN, sizeInBytes, cudaMemcpyHostToDevice);
+    
+    <span class="hljs-comment">// Call the kernel here</span>
+    <span class="hljs-comment">// Setup thread/block execution configuration</span>
+    <span class="hljs-function">dim3 <span class="hljs-title">dimBlocks</span><span class="hljs-params">(TILE_WIDTH, TILE_WIDTH)</span></span>;
+    <span class="hljs-function">dim3 <span class="hljs-title">dimGrid</span><span class="hljs-params">(WIDTH / TILE_WIDTH, WIDTH / TILE_WIDTH)</span></span>;
+    <span class="hljs-comment">// Launch the kernel</span>
+    MatrixMultiplyKernel&lt;&lt;&lt;dimGrid, dimBlocks&gt;&gt;&gt;(devM, devN, devP, width
+    
+    <span class="hljs-comment">// Copy P matrix from device to host</span>
+    <span class="hljs-built_in">cudaMemcpy</span>(hostP, devP, sizeInBytes, cudaMemcpyDeviceToHost);
+    
+    <span class="hljs-comment">// Free allocated memory</span>
+    <span class="hljs-built_in">cudaFree</span>(devM); <span class="hljs-built_in">cudaFree</span>(devN); <span class="hljs-built_in">cudaFree</span>(devP);
+&#125;</code></pre></div>
+<h4 id="global-memory-access">global memory access</h4>
+<h5 id="limitation">Limitation</h5>
+<p>Limited by global memory bandwidth</p>
+<ul>
+<li><p>G80 peak GFLOPS: 346.5</p></li>
+<li><p>Require 346.5*4 bytes = 1386 GB/s to achieve this</p>
+<blockquote>
+<p>4 bytes for each float datatype</p>
+</blockquote></li>
+<li><p>G80 memory bandwidth: 86.4 GB/s</p>
+<ul>
+<li>Limits code to 86.4/4 = 21.6 GFLOPS</li>
+<li>In practice, code runs at 15 GFLOPS, less than 1/2 of the peak performance!</li>
+</ul></li>
+<li><p>Must drastically reduce global memory access</p></li>
+</ul>
+<h5 id="solve">Solve</h5>
+<p><img src="/2022/09/02/CUDA-fundamental-6/Matrix Multiply V3 phases.PNG" srcset="/img/loading.gif" lazyload alt="Matrix Multiply V3 phases" style="zoom:60%;"></p>
+<p>Becuase for matrix multiply, each input element is read by Width threads</p>
+<p>We can use <strong>shared memory</strong> to reduce global memory bandwidth</p>
+<p>Break kernel into phases</p>
+<ul>
+<li>Each phase accumulates Pd using a subset of Md and Nd Each phase accumulates Pd using a subset of Md and Nd</li>
+<li>Each phase has good data locality</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">MatrixMultiplyKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span>* devM, <span class="hljs-type">const</span> <span class="hljs-type">float</span>* devN,</span></span>
+<span class="hljs-params"><span class="hljs-function"><span class="hljs-type">float</span>* devP, <span class="hljs-type">const</span> <span class="hljs-type">int</span> width)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">// Shared memory of M and N submatrices, size of tile width</span>
+    __shared__ <span class="hljs-type">float</span> sM[TILE_WIDTH][TILE_WIDTH];
+    __shared__ <span class="hljs-type">float</span> sN[TILE_WIDTH][TILE_WIDTH];
+    <span class="hljs-type">int</span> bx = blockIdx.x; 
+    <span class="hljs-type">int</span> by = blockIdx.y;
+    <span class="hljs-type">int</span> tx = threadIdx.x; 
+    <span class="hljs-type">int</span> ty = threadIdx.y;
+    <span class="hljs-type">int</span> col = bx * TILE_WIDTH + bx;
+    <span class="hljs-type">int</span> row = by * TILE_WIDTH + ty;
+    <span class="hljs-comment">// Initialize accumulator to 0</span>
+    <span class="hljs-type">float</span> pValue = <span class="hljs-number">0</span>;
+    <span class="hljs-comment">// Multiply and add</span>
+    <span class="hljs-comment">// m is index of current phase</span>
+    <span class="hljs-comment">// width / TILE_WIDTH is the number of phases</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> m = <span class="hljs-number">0</span>; m &lt; width / TILE_WIDTH; m++) 
+    &#123;
+        <span class="hljs-comment">// Bring one element from each devM and devN into shared memory</span>
+        sM[ty][tx] = devM[row * width + (m * TILE_WIDTH + tx)];
+        sN[ty][tx] = devN[col + (m * TILE_WIDTH + ty) * Width];
+        __syncthreads();
+        
+        <span class="hljs-comment">// Accumulate subset of dot product</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; TILE_WIDTH; ++k)
+        &#123;
+            Pvalue += sM[ty][k] * sN[k][tx]; 
+        &#125;
+        __synchthreads();
+        
+    &#125;
+    devP[row * width + col] = pValue;
+&#125;</code></pre></div>
+<h5 id="pick-tile_width">pick TILE_WIDTH</h5>
+<p>By exceeding the maximum number of threads/block</p>
+<ul>
+<li>G80 and GT200 – 512</li>
+<li>Fermi &amp; newer – 1024</li>
+</ul>
+<p>By exceeding the shared memory limitations</p>
+<ul>
+<li>G80: 16KB per SM and up to 8 blocks per SM
+<ul>
+<li>2KB per block</li>
+<li>1KB for Nds and 1KB for Mds (16*16*4)</li>
+<li>TILE_WIDTH = 16</li>
+<li>A larger TILE_WIDTH will result in less blocks</li>
+</ul></li>
+</ul>
+<h5 id="benefits">Benefits</h5>
+<p>Reduces global memory access by a factor of TILE_WIDTH</p>
+<ul>
+<li>16x16 tiles reduces by a factor of 16</li>
+</ul>
+<p>G80</p>
+<ul>
+<li>Now global memory supports 21.6 * 16 = 345.6 GFLOPS</li>
+<li>Close to maximum of 346.5 GFLOPS</li>
+</ul>
+<h5 id="first-order-size-considerations">First-order Size Considerations</h5>
+<div class="code-wrapper"><pre><code class="hljs pgsql"><span class="hljs-keyword">Each</span> thread block should have many threads
+TILE_WIDTH <span class="hljs-keyword">of</span> <span class="hljs-number">16</span> gives <span class="hljs-number">16</span>*<span class="hljs-number">16</span> = <span class="hljs-number">256</span> threads
+There should be many thread blocks
+A <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span> Pd gives <span class="hljs-number">64</span>*<span class="hljs-number">64</span> = <span class="hljs-number">4096</span> Thread Blocks
+<span class="hljs-keyword">Each</span> thread block <span class="hljs-keyword">perform</span> <span class="hljs-number">2</span>*<span class="hljs-number">256</span> = <span class="hljs-number">512</span> <span class="hljs-type">float</span> loads <span class="hljs-keyword">from</span> <span class="hljs-keyword">global</span> memory <span class="hljs-keyword">for</span> <span class="hljs-number">256</span> * (<span class="hljs-number">2</span>*<span class="hljs-number">16</span>) = <span class="hljs-number">8192</span> mul/<span class="hljs-keyword">add</span> operations.
+Memory bandwidth <span class="hljs-keyword">no</span> longer a limiting factor</code></pre></div>
+<ul>
+<li>Each thread block should have many threads
+<ul>
+<li>TILE_WIDTH of 16 gives 16*16 = 256 threads</li>
+</ul></li>
+<li>There should be many thread blocks
+<ul>
+<li>A 1024*1024 Pd gives 64*64 = 4096 Thread Blocks</li>
+</ul></li>
+<li>Each thread block perform 2*256 = 512 float loads from global memory for 256 * (2*16) = 8192 mul/add operations.
+<ul>
+<li>Memory bandwidth no longer a limiting factor</li>
+</ul></li>
+</ul>
+<h2 id="atomic-functions">Atomic functions</h2>
+<table>
+<thead>
+<tr class="header">
+<th>arithmic operations</th>
+<th>bit operations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>atomicAdd();</code></td>
+<td><code>atomicAnd();</code></td>
+</tr>
+<tr class="even">
+<td><code>atomicSub();</code></td>
+<td><code>atomicOr();</code></td>
+</tr>
+<tr class="odd">
+<td><code>atomicMin();</code></td>
+<td><code>atomicXor();</code></td>
+</tr>
+<tr class="even">
+<td><code>atomicExch();</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>atomicMin();</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>atomicMax();</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>atomicAdd();</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>atomicDec();</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>atomicCAS();</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Atomic operations are operations which are performed without interference from any other threads. Atomic operations are often used to prevent race conditions which are common problems in mulithreaded applications.</p>
+<p>For example, suppose you have two threads named A and B. Now suppose each thread wants to increase the value of memory location 0x1234 by one. Suppose the value at memory location 0x1234 is 5. If A and B both want to increase the value at location 0x1234 at the same time, each thread will first have to read the value. Depending on when the reads occur, it is possible that both A and B will read a value of 5. After adding a value of 1, both A and B will want to write 6 into the memory location, which is not correct! The value, 5, should have been increased twice (once by each thread), but instead, the value was only increased once! This is called a <strong>race condition</strong>, and can happen in any multi-threaded program if the programmer is not careful.</p>
+</blockquote>
+<blockquote>
+<p>Atomic operations in CUDA generally work for both shared memory and global memory. Atomic operations in shared memory are generally used to prevent race conditions between different threads within the same thread block. Atomic operations in global memory are used to prevent race conditions between two different threads across the blocks.</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CUDA programming 2</div>
+      <div>https://daydreamatnight.github.io/2022/09/02/CUDA-fundamental-6/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 2, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/09/09/CUDA-fundamental-7/" title="CUDA Performance">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CUDA Performance</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/01/CUDA-fundamental-5/" title="CUDA Programming 1">
+                        <span class="hidden-mobile">CUDA Programming 1</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1111 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="A castrated version of chatGPT is built backended by LLaMA, Meta&#39;s leaked large language model. Vue.js and flask is used for front-end and backend, and axios is used for HTTP requests.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="build a chatbot backended by Meta LLaMA">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="A castrated version of chatGPT is built backended by LLaMA, Meta&#39;s leaked large language model. Vue.js and flask is used for front-end and backend, and axios is used for HTTP requests.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/llama.png">
+<meta property="article:published_time" content="2023-03-22T08:35:16.000Z">
+<meta property="article:modified_time" content="2023-04-08T17:25:39.292Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/llama.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>build a chatbot backended by Meta LLaMA - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="build a chatbot backended by Meta LLaMA"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-22 16:35" pubdate>
+          March 22, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          13k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          45 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">build a chatbot backended by Meta LLaMA</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>A castrated version of chatGPT is built backended by LLaMA, Meta's leaked large language model. Vue.js and flask is used for front-end and backend, and axios is used for HTTP requests.</p>
+          </div>
+<span id="more"></span>
+<p>1 month later, Meta published their own large language model LLaMA<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[LLaMA: Open and Efficient Foundation Language Models](https://ai.facebook.com/blog/large-language-model-llama-meta-ai/)">[1]</span></a></sup>, ranging from 7B to 65B parameters. In the paper<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Unofficial Llama Discord 😁 · Issue #158 · facebookresearch/llama · GitHub](https://github.com/facebookresearch/llama/issues/158)">[2]</span></a></sup>, they claimed that LLaMA-13B outperforms GPT-3 (175B) on most benchmarks, and LLaMA-65B is competitive with the best models, Chinchilla-70B and PaLM-540B. While Meta claims that LLaMA is open source, it still requires researchers to apply and be reviewed. However, what I never expected was that the model file of LLaMA was LEAKED. Members of 4chan released a copy of the weight file for everyone to download within just a few days of its release.</p>
+<p>Although there are apps like discord bot<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M. A., Lacroix, T., ... &amp; Lample, G. (2023). Llama: Open and efficient foundation language models. *arXiv preprint arXiv:2302.13971*.">[3]</span></a></sup> out there, still, it's a good opportunity to build a own chatGPT from the scratch.</p>
+<h2 id="chatbot-structure">Chatbot structure</h2>
+<h3 id="front-end">front-end</h3>
+<p>The chat app front-end is modified from <a target="_blank" rel="noopener" href="https://github.com/run27017">run27017</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/run27017/vue-chat">vue-chat</a></strong>.</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/run27017/vue-chat.git</span>
+<span class="hljs-meta">$ </span><span class="language-bash">npm install</span>
+<span class="hljs-meta">$ </span><span class="language-bash">npm run serve</span></code></pre></div>
+<p>Modify the <code>app.vue</code> after importing avatar to <code>src/assets</code>. Chat history are modified.</p>
+<div class="code-wrapper"><pre><code class="hljs javascript">&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app&quot;</span>&gt;</span></span>
+<span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">router-view</span> <span class="hljs-attr">:sourceAvatar</span>=<span class="hljs-string">&quot;sourceAvatar&quot;</span> <span class="hljs-attr">:targetAvatar</span>=<span class="hljs-string">&quot;targetAvatar&quot;</span> <span class="hljs-attr">:loadHistory</span>=<span class="hljs-string">&quot;loadHistory&quot;</span> /&gt;</span></span>
+<span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span>
+<span class="language-javascript"><span class="language-xml"><span class="hljs-keyword">import</span> <span class="hljs-title class_">BotIcon</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./assets/bot.png&#x27;</span></span></span>
+<span class="language-javascript"><span class="language-xml"><span class="hljs-keyword">import</span> <span class="hljs-title class_">UsrIcon</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./assets/bear.jpg&#x27;</span></span></span>
+<span class="language-javascript"><span class="language-xml"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;</span></span>
+<span class="language-javascript"><span class="language-xml">  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;App&#x27;</span>,</span></span>
+<span class="language-javascript"><span class="language-xml">  <span class="hljs-attr">components</span>: &#123;</span></span>
+<span class="language-javascript"><span class="language-xml">    <span class="hljs-title class_">BotIcon</span>,</span></span>
+<span class="language-javascript"><span class="language-xml">    <span class="hljs-title class_">UsrIcon</span>,</span></span>
+<span class="language-javascript"><span class="language-xml">  &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">  data () &#123;</span></span>
+<span class="language-javascript"><span class="language-xml">    <span class="hljs-keyword">return</span> &#123;</span></span>
+<span class="language-javascript"><span class="language-xml">      <span class="hljs-attr">sourceAvatar</span>: <span class="hljs-title class_">UsrIcon</span>,</span></span>
+<span class="language-javascript"><span class="language-xml">      <span class="hljs-attr">targetAvatar</span>: <span class="hljs-title class_">BotIcon</span></span></span>
+<span class="language-javascript"><span class="language-xml">    &#125;</span></span>
+<span class="language-javascript"><span class="language-xml">  &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">  <span class="hljs-attr">methods</span>: &#123;</span></span>
+<span class="language-javascript"><span class="language-xml">    <span class="hljs-comment">// Define the way to load history messages, the function should either return an object (`&#123; messages, hasMore &#125;`) or a Promise (asynchronous) that returns that object.</span></span></span>
+<span class="language-javascript"><span class="language-xml">    loadHistory () &#123;</span></span>
+<span class="language-javascript"><span class="language-xml">      <span class="hljs-keyword">return</span> &#123; </span></span>
+<span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// The message data, with the following fields, should be given in reverse chronological order.</span></span></span>
+<span class="language-javascript"><span class="language-xml">        <span class="hljs-attr">messages</span>: [</span></span>
+<span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Ask me any questions like what you will do to ChatGPT, come on!&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;What can you do!&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;sent&#x27;</span> &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Hey, I&#x27;m a AI backended chatbot developed by Ryan LI&quot;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">          &#123; <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Hello, who are you?&#x27;</span>, <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;sent&#x27;</span> &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">        ], </span></span>
+<span class="language-javascript"><span class="language-xml">        <span class="hljs-comment">// Defines if there are still history messages, if false, it will stop loading. The reader can change it to true to demonstrate the effect of automatic scrolling updates.</span></span></span>
+<span class="language-javascript"><span class="language-xml">          <span class="hljs-attr">hasMore</span>: <span class="hljs-literal">false</span> </span></span>
+<span class="language-javascript"><span class="language-xml">      &#125;</span></span>
+<span class="language-javascript"><span class="language-xml">    &#125;,</span></span>
+<span class="language-javascript"><span class="language-xml">  &#125;</span></span>
+<span class="language-javascript"><span class="language-xml">&#125;;</span></span>
+<span class="language-javascript"><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;scss&quot;</span> <span class="hljs-attr">scoped</span>&gt;</span><span class="language-css"></span></span>
+<span class="language-css"><span class="language-xml"><span class="hljs-selector-id">#app</span> &#123;</span></span>
+<span class="language-css"><span class="language-xml">  <span class="hljs-attribute">height</span>: <span class="hljs-number">1000px</span>;</span></span>
+<span class="language-css"><span class="language-xml">  <span class="hljs-attribute">padding-left</span>: <span class="hljs-number">200px</span>;</span></span>
+<span class="language-css"><span class="language-xml">  <span class="hljs-attribute">padding-right</span>: <span class="hljs-number">200px</span>;</span></span>
+<span class="language-css"><span class="language-xml">&#125;</span></span>
+<span class="language-css"><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span>
+</code></pre></div>
+<p>Update the <code>main.js</code>, import <code>axios</code> for HTTP request.</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Vue</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App.vue&#x27;</span>
+<span class="hljs-keyword">import</span> router <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./router&#x27;</span>
+<span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">ElementUI</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;element-ui&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;element-ui/lib/theme-chalk/index.css&#x27;</span>
+
+<span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">axios</span> = axios
+<span class="hljs-title class_">Vue</span>.<span class="hljs-property">config</span>.<span class="hljs-property">productionTip</span> = <span class="hljs-literal">false</span>
+<span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">ElementUI</span>)
+
+
+<span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>(&#123;
+  <span class="hljs-attr">render</span>: <span class="hljs-function"><span class="hljs-params">h</span> =&gt;</span> <span class="hljs-title function_">h</span>(<span class="hljs-title class_">App</span>),
+  <span class="hljs-attr">el</span>: <span class="hljs-string">&#x27;#app&#x27;</span>,
+  router,
+  <span class="hljs-attr">components</span>: &#123;
+    <span class="hljs-title class_">App</span>
+  &#125;,
+  <span class="hljs-attr">template</span>: <span class="hljs-string">&#x27;&lt;App/&gt;&#x27;</span>
+&#125;)</code></pre></div>
+<p>Modify the <code>sendText</code> method in <code>chat.vue</code></p>
+<div class="code-wrapper"><pre><code class="hljs javascript">sendText () &#123;
+      <span class="hljs-keyword">var</span> param = &#123;
+        <span class="hljs-string">&quot;word&quot;</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">typingText</span>
+      &#125;
+      
+      <span class="hljs-keyword">const</span> message = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sendMessage</span>(&#123; <span class="hljs-attr">text</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">typingText</span> &#125;)
+      <span class="hljs-keyword">const</span> path = <span class="hljs-string">&#x27;http://localhost:5000/word/reply&#x27;</span>;
+
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">typingText</span> = <span class="hljs-string">&#x27;&#x27;</span>
+      <span class="hljs-keyword">if</span> (message <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Promise</span>) &#123;
+        message.<span class="hljs-title function_">then</span>(
+          <span class="hljs-function"><span class="hljs-params">message</span> =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">appendNew</span>(
+            <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(&#123; <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;sent&#x27;</span> &#125;, message)
+          )
+        ).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Error sending message&#x27;</span>, e))
+      &#125; <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">appendNew</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(&#123; <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;sent&#x27;</span> &#125;, message))
+      &#125;
+
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">axios</span>.<span class="hljs-title function_">post</span>(path, param).<span class="hljs-title function_">then</span>(
+        <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> &#123;
+          <span class="hljs-keyword">const</span> reply = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">replyMessage</span>(&#123; <span class="hljs-attr">text</span>: res.<span class="hljs-property">data</span> &#125;)
+          <span class="hljs-keyword">if</span> (reply <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Promise</span>) &#123;
+            reply.<span class="hljs-title function_">then</span>(
+              <span class="hljs-function"><span class="hljs-params">reply</span> =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">appendNew</span>(
+                <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(&#123; <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;, reply)
+              )
+            ).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Error sending message&#x27;</span>, e))
+          &#125; <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">appendNew</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(&#123; <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;received&#x27;</span> &#125;, reply))
+          &#125;
+          <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
+        &#125;
+      ).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> &#123;
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>.<span class="hljs-property">res</span>)
+      &#125;)
+    &#125;,</code></pre></div>
+<p>Define the router in a new <code>/router/index.js</code> file.</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Vue</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Router</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-router&#x27;</span>
+<span class="hljs-keyword">import</span> chat <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/components/chat&#x27;</span>
+
+<span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">Router</span>)
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Router</span>(&#123;
+  <span class="hljs-attr">routes</span>: [
+    &#123;
+      <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;index&#x27;</span>,
+      <span class="hljs-attr">component</span>: chat
+    &#125;
+  ]
+&#125;)
+</code></pre></div>
+<div class="note note-info">
+            <p>Lots of minor modifications are introduced, for example, for the input field, add <code>enter</code> key event listener so that the message is sent with the <code>enter</code> key in addition to the <code>send</code> button. And <code>autofocus</code> is added so that the user can input the message immediately after the page is loaded.</p><div class="code-wrapper"><pre><code class="hljs javascript">&lt;van-field v-model=<span class="hljs-string">&quot;typingText&quot;</span> placeholder=<span class="hljs-string">&quot;input contents&quot;</span> border @keyup.<span class="hljs-property">enter</span>.<span class="hljs-property">native</span>=<span class="hljs-string">&quot;sendText&quot;</span> autofocus&gt;
+      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">button</span>&gt;</span></span>
+<span class="language-xml">          <span class="hljs-tag">&lt;<span class="hljs-name">van-button</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;small&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;primary&quot;</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;sendText&quot;</span>&gt;</span>send<span class="hljs-tag">&lt;/<span class="hljs-name">van-button</span>&gt;</span></span>
+<span class="language-xml">      <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
+&lt;/van-field&gt;</code></pre></div><p>refer to the source code to see other modifications.</p>
+          </div>
+<h3 id="back-end">back-end</h3>
+<p>Python flask is used, for the debug version, in new file <code>app.py</code>:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, jsonify, request
+<span class="hljs-keyword">from</span> flask_cors <span class="hljs-keyword">import</span> CORS
+<span class="hljs-keyword">from</span> get_reply <span class="hljs-keyword">import</span> get_reply
+
+<span class="hljs-comment"># configuration</span>
+DEBUG = <span class="hljs-literal">True</span>
+
+<span class="hljs-comment"># instantiate the app</span>
+app = Flask(__name__)
+app.config.from_object(__name__)
+
+<span class="hljs-comment"># enable CORS</span>
+CORS(app)
+
+<span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/word/reply&#x27;</span>, methods=[<span class="hljs-string">&quot;POST&quot;</span>]</span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">cloud</span>():
+    text = request.json.get(<span class="hljs-string">&quot;word&quot;</span>)
+    res = get_reply(text)
+    <span class="hljs-keyword">return</span> jsonify(res)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    app.run()
+</code></pre></div>
+<p>So for the <code>get_reply.py</code> only contains a simple function that returns the input string, which makes the bot a replicator.</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_reply</span>(<span class="hljs-params">text</span>):
+    <span class="hljs-keyword">return</span> text</code></pre></div>
+<h3 id="chatbot-interface">Chatbot interface</h3>
+<p><img src="/2023/03/22/build-a-chatbot-backended-by-Meta-llama/Screenshot from 2023-03-30 16-06-51.png" srcset="/img/loading.gif" lazyload alt="Chatbot interface" style="zoom:80%;"></p>
+<h2 id="using-llama">Using LLaMA</h2>
+<h3 id="example-inferencing-script">Example inferencing script</h3>
+<p>Authors of LLaMA provided an example script (<a target="_blank" rel="noopener" href="https://github.com/facebookresearch">facebookresearch</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama">llama</a></strong>) to easily deployed the version locally. After mysteriously downloaded the weight file, first try the smallest 7B version:</p>
+<p>After creating a conda environment with PyTorch / CUDA available, run:</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash"><span class="hljs-built_in">set</span> TARGET_FOLDER=/tpvwork/tpvaero/tpvaero02/CFD/CFD_Methoden/PERSONAL/lsr/2_projects/19th_llam</span>
+<span class="hljs-meta">$ </span><span class="language-bash">pip install -r requirements.txt</span>
+<span class="hljs-meta">$ </span><span class="language-bash">pip install -e .</span>
+<span class="hljs-meta">$ </span><span class="language-bash">torchrun --nproc_per_node 1 example.py --ckpt_dir <span class="hljs-variable">$TARGET_FOLDER</span>/7B --tokenizer_path <span class="hljs-variable">$TARGET_FOLDER</span>/tokenizer.model</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">initializing model parallel with size 1</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">initializing ddp with size 1</span>
+<span class="hljs-meta">&gt; </span><span class="language-bash">initializing pipeline with size 1</span>
+Loading
+Loaded in 135.06 seconds
+I believe the meaning of life is to find happiness and be satisfied with what you have.
+People have different definitions of happiness. Some people feel that if they could only win the lottery, they would be happy. Some people feel that if they could only get that promotion, they would be happy. Some people feel that if they could only be the top scorer in a game, they would be happy.
+If you don&#x27;t have a job, don&#x27;t be upset. If you have been laid off from a job, don&#x27;t feel hopeless. If you don&#x27;t know how to make money, don&#x27;t feel overwhelmed. If you don&#x27;t have a job, don&#x27;t worry. If you have been laid off from a job, don&#x27;t give up hope. If you don&#x27;t know how to make money, don&#x27;t get discouraged.
+Because I believe that you don&#x27;t need money to be happy. If you can be satisfied with what you have, then you can be happy.
+I believe in God and I have faith.
+I believe in God and I have faith. I think that we should trust in God. I think that we should learn to be patient and tolerant,
+
+==================================
+
+Simply put, the theory of relativity states that 1) there is no absolute time or space and 2) the speed of light in a vacuum is the fastest speed possible. So we can no longer talk about absolute times or locations, and we can&#x27;t travel faster than the speed of light in a vacuum.
+The theory of relativity is a huge topic, one that can&#x27;t be covered in this article. There are many subtle details that go into relativity that aren&#x27;t covered here. This is meant to be a basic introduction, to give you an idea of what the theory of relativity is and how it is used.
+Einstein&#x27;s Theory of Relativity
+Let&#x27;s start by talking about the theory of special relativity. This is the part of relativity that deals with speeds approaching the speed of light.
+Special relativity states that the following are true:
+The speed of light is constant.
+The laws of physics are the same for all observers.
+Time is relative.
+The speed of light in a vacuum is the fastest possible speed.
+Let&#x27;s look at the first two of these.
+The speed of light is constant
+The speed of light is a constant, regardless of the
+
+==================================
+...</code></pre></div>
+<p>It works fine!</p>
+<p>Take a look at the <code>example.py</code> file, we can see it gives the model several prompts:</p>
+<div class="code-wrapper"><pre><code class="hljs python">prompts = [
+        <span class="hljs-comment"># For these prompts, the expected answer is the natural continuation of the prompt</span>
+        <span class="hljs-string">&quot;I believe the meaning of life is&quot;</span>,
+        <span class="hljs-string">&quot;Simply put, the theory of relativity states that &quot;</span>,
+        <span class="hljs-string">&quot;Building a website can be done in 10 simple steps:\n&quot;</span>,
+        <span class="hljs-comment"># Few shot prompts: https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api</span>
+        <span class="hljs-string">&quot;&quot;&quot;Tweet: &quot;I hate it when my phone battery dies.&quot;</span>
+<span class="hljs-string">Sentiment: Negative</span>
+<span class="hljs-string">###</span>
+<span class="hljs-string">Tweet: &quot;My day has been 👍&quot;</span>
+<span class="hljs-string">Sentiment: Positive</span>
+<span class="hljs-string">###</span>
+<span class="hljs-string">Tweet: &quot;This is the link to the article&quot;</span>
+<span class="hljs-string">Sentiment: Neutral</span>
+<span class="hljs-string">###</span>
+<span class="hljs-string">Tweet: &quot;This new music video was incredibile&quot;</span>
+<span class="hljs-string">Sentiment:&quot;&quot;&quot;</span>,
+        <span class="hljs-string">&quot;&quot;&quot;Translate English to French:</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">sea otter =&gt; loutre de mer</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">peppermint =&gt; menthe poivrée</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">plush girafe =&gt; girafe peluche</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">cheese =&gt;&quot;&quot;&quot;</span>,
+    ]</code></pre></div>
+<p>Basically what this model does is just continue the prompts. It can do different tasks by setting different few-shot prompts, for example the 4th prompt performs the sentiment detection, the 5th prompt let it translate English to French.</p>
+<h3 id="connect-to-flask">Connect to flask</h3>
+<p>We need to modify this script such that it works as a backend of our chatbot, at this stage, we add the flask related code directly to it:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># This software may be used and distributed according to the terms of the GNU General Public License version 3.</span>
+
+<span class="hljs-keyword">from</span> generateText <span class="hljs-keyword">import</span> generate_text, load_and_initialize_model
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> send_from_directory
+<span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, jsonify, request
+<span class="hljs-keyword">from</span> flask_cors <span class="hljs-keyword">import</span> CORS
+<span class="hljs-keyword">import</span> concurrent.futures
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=<span class="hljs-number">4</span>) <span class="hljs-comment"># adjust the number of workers as needed</span>
+<span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">import</span> random
+
+target_folder = <span class="hljs-string">&quot;../../19th_llam/&quot;</span>
+model_size=<span class="hljs-string">&quot;/7B&quot;</span>
+
+max_seq_len = <span class="hljs-number">512</span>*<span class="hljs-number">32</span>
+max_batch_size = <span class="hljs-number">1</span>
+
+max_gen_len = <span class="hljs-number">512</span>
+temperature = <span class="hljs-number">0.8</span>
+top_p = <span class="hljs-number">0.95</span>
+
+router_ip = <span class="hljs-literal">None</span>
+process_id = <span class="hljs-literal">None</span>
+
+<span class="hljs-comment"># get the log ready</span>
+conversation_log = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;./conversation_log.csv&quot;</span>,<span class="hljs-string">&#x27;w&#x27;</span>,encoding=<span class="hljs-string">&quot;utf-8&quot;</span>)
+
+<span class="hljs-comment"># instantiate the model</span>
+generator = load_and_initialize_model(target_folder, model_size, max_seq_len, max_batch_size)
+
+<span class="hljs-comment"># instantiate the app</span>
+app = Flask(__name__, static_folder=<span class="hljs-string">&quot;../2_chatbot_simple/frontend/dist/&quot;</span>)
+app.config.from_object(__name__)
+
+<span class="hljs-comment"># enable CORS</span>
+CORS(app)
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;------- start listening ------&quot;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;datetime %Y-%m-%d %H:%M:%S&quot;</span>, <span class="hljs-string">&quot;ip&quot;</span>, <span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;T_res&quot;</span>, <span class="hljs-string">&quot;temp&quot;</span>, <span class="hljs-string">&quot;top_p&quot;</span>, <span class="hljs-string">&quot;dir&quot;</span>, <span class="hljs-string">&quot;max_len&quot;</span>, <span class="hljs-string">&quot;len&quot;</span>, <span class="hljs-string">&quot;message&quot;</span>, sep=<span class="hljs-string">&#x27;\t&#x27;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;datetime %Y-%m-%d %H:%M:%S&quot;</span>, <span class="hljs-string">&quot;ip&quot;</span>, <span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;T_res&quot;</span>, <span class="hljs-string">&quot;temp&quot;</span>, <span class="hljs-string">&quot;top_p&quot;</span>, <span class="hljs-string">&quot;dir&quot;</span>, <span class="hljs-string">&quot;max_len&quot;</span>, <span class="hljs-string">&quot;len&quot;</span>, <span class="hljs-string">&quot;message&quot;</span>, sep=<span class="hljs-string">&#x27;\t&#x27;</span>,file=conversation_log)
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">logging</span>(<span class="hljs-params">message, direction, response_time = <span class="hljs-string">&quot;None&quot;</span></span>):
+    <span class="hljs-keyword">global</span> prompt
+    log_message = <span class="hljs-string">&#x27;\t&#x27;</span>.join([
+                        datetime.datetime.now().strftime(<span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>), 
+                        <span class="hljs-built_in">str</span>(router_ip), 
+                        <span class="hljs-built_in">str</span>(process_id), 
+                        response_time,
+                        <span class="hljs-string">&quot;%.2f&quot;</span> % temperature,
+                        <span class="hljs-string">&quot;%.2f&quot;</span> % top_p,
+                        direction, 
+                        <span class="hljs-built_in">str</span>(max_gen_len), 
+                        <span class="hljs-built_in">str</span>(<span class="hljs-built_in">len</span>(message)),
+                        message.replace(<span class="hljs-string">&#x27;\t&#x27;</span>,<span class="hljs-string">&quot;    &quot;</span>).replace(<span class="hljs-string">&#x27;\n&#x27;</span>, <span class="hljs-string">r&#x27;\n&#x27;</span>)
+                        ])
+    <span class="hljs-built_in">print</span>(log_message,file=conversation_log)
+    <span class="hljs-built_in">print</span>(log_message)
+    conversation_log.flush()
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">getReply</span>(<span class="hljs-params">prompts</span>):
+    logging(prompts, <span class="hljs-string">&quot;sent&quot;</span>)
+    result, response_time= generate_text(prompts, generator, max_gen_len, temperature, top_p)
+    logging(result, <span class="hljs-string">&quot;reply&quot;</span>, <span class="hljs-string">&quot;%.2f&quot;</span> % response_time)
+    <span class="hljs-keyword">return</span> result
+
+<span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/&#x27;</span>, defaults=&#123;<span class="hljs-string">&#x27;path&#x27;</span>: <span class="hljs-string">&#x27;&#x27;</span>&#125;</span>)</span>
+<span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/&lt;path:path&gt;&#x27;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">serve</span>(<span class="hljs-params">path</span>):
+    <span class="hljs-keyword">global</span> prompt, router_ip, process_id
+    router_ip = request.environ.get(<span class="hljs-string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>) <span class="hljs-keyword">or</span> request.environ.get(<span class="hljs-string">&#x27;REMOTE_ADDR&#x27;</span>)
+    process_id = random.randint(<span class="hljs-number">1000</span>, <span class="hljs-number">9999</span>)
+    prompt=context
+    <span class="hljs-keyword">if</span> path != <span class="hljs-string">&quot;&quot;</span> <span class="hljs-keyword">and</span> os.path.exists(app.static_folder + <span class="hljs-string">&#x27;/&#x27;</span> + path):
+        <span class="hljs-keyword">return</span> send_from_directory(app.static_folder, path)
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">return</span> send_from_directory(app.static_folder, <span class="hljs-string">&#x27;index.html&#x27;</span>)
+
+<span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/word/reply&#x27;</span>, methods=[<span class="hljs-string">&quot;POST&quot;</span>]</span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">reply</span>():
+    prompts = request.json.get(<span class="hljs-string">&quot;word&quot;</span>)
+    result = getReply(prompts)
+    <span class="hljs-keyword">return</span> jsonify(result)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    <span class="hljs-keyword">from</span> waitress <span class="hljs-keyword">import</span> serve
+    serve(app, host=<span class="hljs-string">&quot;0.0.0.0&quot;</span>, port=<span class="hljs-string">&quot;5000&quot;</span>)
+
+<span class="hljs-comment"># torchrun --nproc_per_node 1 chatbotBackend.py</span></code></pre></div>
+<h2 id="deploy-the-chatbot">Deploy the chatbot</h2>
+<p>After building the front-end interface (with the code being modified a little bit), run the script:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">torchrun --nproc_per_node 1 chatbotBackend.py</code></pre></div>
+<p>And we can open <a target="_blank" rel="noopener" href="http://localhost:5000/" class="uri">http://localhost:5000/</a> give it a try on the 7B model！</p>
+<p>Bigger models requires larger graphic memory and requires muti-GPU. A locally available multi-GPU server is needed to try one of the those.</p>
+<p>Some prompts that worth a try:</p>
+<div class="code-wrapper"><pre><code class="hljs txt">Here is a brief introduction of the software Catia:
+CATIA is</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">Simply put, the theory of  states that</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs txt">Here are 5 reasons why use Linux instead of Windows.
+1.</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs txt">Here are the primary new capabilities of OpenFOAM 2022 in bullet points.
+-</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs txt">Translate Chinese to English:
+-----------
+大海。 
+=&gt; sea.
+我是个好人。 
+=&gt; I am a good guy.
+上个星期五，林老师给我们布置了一个有趣的任务。 
+=&gt; Last Friday, Ms. Lin gave us an interesting assignment.
+请将本周五例会议题报给我，截止今天下午4点。题目包括 项目名称，项目节点、数据版本信息，题目内容描述，议题时长，相关人员。
+=&gt;</code></pre></div>
+<p><img src="/2023/03/22/build-a-chatbot-backended-by-Meta-llama/interface_version1.png" srcset="/img/loading.gif" lazyload alt="One Screenshot of the output" style="zoom:80%;"></p>
+<h2 id="on-next">ON NEXT</h2>
+<p>In <a href="/2023/03/30/Fine-tuning-chatbot/">next blog,</a> we'll talk about how to optimize the chat bot. First things is to make its answer more like human, avoiding the babbling words after each answer. And we'll talk about techniques of fine tuning the LLAMA model.</p>
+<h2 id="references">References</h2>
+<p>The icons and images from <a target="_blank" rel="noopener" href="https://www.flaticon.com/">FlatIcon</a></p>
+<p>Original front-end <a target="_blank" rel="noopener" href="https://github.com/run27017">run27017</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/run27017/vue-chat">vue-chat</a></strong>.</p>
+<p>LLaMA github (<a target="_blank" rel="noopener" href="https://github.com/facebookresearch">facebookresearch</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama">llama</a></strong>)</p>
+<p><del>The PR that you should never click on it <a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama/pull/73/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5R4">Save bandwidth by using a torrent to distribute more efficiently #73</a></del></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://ai.facebook.com/blog/large-language-model-llama-meta-ai/">LLaMA: Open and Efficient Foundation Language Models</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama/issues/158">Unofficial Llama Discord 😁 · Issue #158 · facebookresearch/llama · GitHub</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M. A., Lacroix, T., ... &amp; Lample, G. (2023). Llama: Open and efficient foundation language models. <em>arXiv preprint arXiv:2302.13971</em>. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>build a chatbot backended by Meta LLaMA</div>
+      <div>https://daydreamatnight.github.io/2023/03/22/build-a-chatbot-backended-by-Meta-llama/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 22, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/30/Fine-tuning-chatbot/" title="Fine tuning chatbot">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Fine tuning chatbot</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/24/ML-noise-prediction-app-user-s-guide/" title="WNPS user&#39;s guide">
+                        <span class="hidden-mobile">WNPS user&#39;s guide</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

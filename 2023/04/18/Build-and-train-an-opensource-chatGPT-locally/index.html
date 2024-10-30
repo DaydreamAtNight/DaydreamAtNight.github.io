@@ -1,0 +1,993 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is a conclusion of the last 5 blog, showing the key process of building and optimizing a chat bot backended by open source large language model.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build and train an opensource chatGPT locally">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a conclusion of the last 5 blog, showing the key process of building and optimizing a chat bot backended by open source large language model.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/llama_conclusion.png">
+<meta property="article:published_time" content="2023-04-18T09:01:55.000Z">
+<meta property="article:modified_time" content="2023-09-14T15:58:13.312Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="llama">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/llama_conclusion.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Build and train an opensource chatGPT locally - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Build and train an opensource chatGPT locally"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-18 17:01" pubdate>
+          April 18, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          23 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Build and train an opensource chatGPT locally</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>This is a conclusion of the last 5 blog, showing the key process of building and optimizing a chat bot backended by open source large language model.</p>
+          </div>
+<span id="more"></span>
+<p>2 months later, Meta published their own large language model LLaMA<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[LLaMA: Open and Efficient Foundation Language Models](https://ai.facebook.com/blog/large-language-model-llama-meta-ai/)">[1]</span></a></sup>, ranging from 7B to 65B parameters. In the paper<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Unofficial Llama Discord 😁 · Issue #158 · facebookresearch/llama · GitHub](https://github.com/facebookresearch/llama/issues/158)">[2]</span></a></sup>, they claimed that LLaMA-13B outperforms GPT-3 (175B) on most benchmarks, and LLaMA-65B is competitive with the best models, Chinchilla-70B and PaLM-540B. While Meta claims that LLaMA is open source, it still requires researchers to apply and be reviewed. However, what I never expected was that the model file of LLaMA was LEAKED. Members of 4chan released a copy of the weight file for everyone to download within just a few days of its release.</p>
+<p>Although there are apps like discord bot<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M. A., Lacroix, T., ... &amp; Lample, G. (2023). Llama: Open and efficient foundation language models. *arXiv preprint arXiv:2302.13971*.">[3]</span></a></sup> out there, still, it's a good opportunity to build a own chatGPT from the scratch.</p>
+<h2 id="interface">Interface</h2>
+<p>Vue.js and flask is used for front-end (modified from <a target="_blank" rel="noopener" href="https://github.com/run27017">run27017</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/run27017/vue-chat">vue-chat</a></strong>) and backend, and axios is used for HTTP requests. This is the interface at this stage. See <a target="_blank" rel="noopener" href="http://172.26.53.226:4000/2023/03/22/build-a-chatbot-backended-by-Meta-llama/">build a chatbot backended by Meta LLaMA language model</a> for the source code and more details.</p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/Screenshot from 2023-04-18 17-32-20.png" srcset="/img/loading.gif" lazyload alt="Fig 1. Interface" style="zoom:80%;"></p>
+<p>Current functions:</p>
+<ul>
+<li>select different models</li>
+<li>multiple lines input and output</li>
+<li>save chat histories for each ip address</li>
+</ul>
+<p>TO DO</p>
+<ul>
+<li>remove the session limitation for each ip address</li>
+<li>render message box in markdown format</li>
+<li>add configuration panel allowing users to change model parameters</li>
+</ul>
+<h2 id="language-model">Language model</h2>
+<p>For the backend large language model, we've tained and tried 3 stages and 5 versions of optimizations.</p>
+<ol type="1">
+<li>Open-source basic model
+<ul>
+<li><a href="#original-llama">original llama model</a></li>
+<li><a href="#optimized-llama">optimized llama model</a>, improved for chatting, using prompt engineering</li>
+</ul></li>
+<li><a href="#stanford-alpaca">Stanford alpaca</a>, follow their work to build a second developing process</li>
+<li>Personal trained alpaca using collected data
+<ul>
+<li><a href="#trained-with-more-data">trained with more data</a></li>
+<li><a href="#scale-up-model">scale up model</a></li>
+</ul></li>
+</ol>
+<p>The sections below will follow this outline and illustrate the step-by-step optimization results.</p>
+<h3 id="basic-llama">basic llama</h3>
+<h4 id="original-llama">original llama</h4>
+<p>The original llama model (<a target="_blank" rel="noopener" href="https://github.com/facebookresearch">facebookresearch</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama">llama</a></strong>) only performs next-word prediction, meaning</p>
+<ul>
+<li>it only generates the natural continue of the prompt</li>
+<li>it does not know where to stop</li>
+<li>it is not designed to answer questions.</li>
+<li>it does not support in-context chatting (no chat histories).</li>
+</ul>
+<p>Here are 3 typical answers of the original 7B version:</p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/Screenshot from 2023-03-30 16-44-21.png" srcset="/img/loading.gif" lazyload alt="Fig 2. typical answer of version 1 1" style="zoom: 80%;"></p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/Screenshot from 2023-03-30 16-51-15.png" srcset="/img/loading.gif" lazyload alt="Fig 3. typical answer of version 1 2" style="zoom:80%;"></p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/Screenshot from 2023-03-30 16-51-15-2.png" srcset="/img/loading.gif" lazyload alt="Fig 4. typical answer of version 1 3" style="zoom:80%;"></p>
+<ul>
+<li><p>In Fig 2, we can see the reasonable result (first line) is always followed by a nonsense babbling that goes further and further away from the topic.</p></li>
+<li><p>In next two conversations, we use few short learning <sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[LLaMA: Open and Efficient Foundation Language Models](https://ai.facebook.com/blog/large-language-model-llama-meta-ai/)">[1]</span></a></sup><sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Unofficial Llama Discord 😁 · Issue #158 · facebookresearch/llama · GitHub](https://github.com/facebookresearch/llama/issues/158)">[2]</span></a></sup> to give it a longer prompt with examples.</p>
+<ul>
+<li><p>In Fig 3, after the correct answer (first line), it tends to prolong the given pattern (second line), then keeps babbling.</p></li>
+<li><p>In Fig 4, where we provide a relatively longer example, it continues the pattern until the answer reach the <code>max_gen_len</code>.</p></li>
+</ul></li>
+</ul>
+<h4 id="optimized-llama">optimized llama</h4>
+<p>To address the problems, we designed a prompting strategy and a corresponding truncation method.</p>
+<p>The typical results of the optimized 7B llama model are shown below:</p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/interface_version2_1.png" srcset="/img/loading.gif" lazyload alt="Fig 5. typical answer of version 2 1: conversation about the python sorting method" style="zoom:80%;"></p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/interface_version2_2.png" srcset="/img/loading.gif" lazyload alt="Fig 6. typical answer of version 2 2: conversation about vehicle sealing strip design" style="zoom:80%;"></p>
+<p>From the example, we can see it performs more like a consultant chatbot by:</p>
+<ul>
+<li>it stops generating garbage messages</li>
+<li>it knows where to stop</li>
+<li>it acknowledges of chat history</li>
+</ul>
+<p>For the quality of its answers:</p>
+<ul>
+<li>In Fig 5, both the bubble sorting script and the python build-in sorting methods work.</li>
+<li>In Fig 6, for another longer conversation, it tries to give me some interesting information, but still <strong>not smart</strong>. <del><em>Although at the end of the conversation, I know actually PTFE is the same thing as Either...</em></del></li>
+</ul>
+<h3 id="stanford-alpaca">Stanford alpaca</h3>
+<p>In order to further improve this model, Stanford Alpaca Project<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M. A., Lacroix, T., ... &amp; Lample, G. (2023). Llama: Open and efficient foundation language models. *arXiv preprint arXiv:2302.13971*.">[3]</span></a></sup> provided one way taking self-instruct learning strategy. They also shared a 52K dataset for training, make their work easy to reproduce. Here is one of the results of the reporduced 7B stanford alpaca:</p>
+<p><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/Screenshot from 2023-04-06 16-40-39.png" srcset="/img/loading.gif" lazyload alt="Fig 7. typical answer of version 3: conversation about python sort() function" style="zoom:80%;"></p>
+<p>Note that we did not implement any postprocessing methods to its answer, by which the model gains up to 10 times less response time and bigger training potential.</p>
+<p>In terms of the result, it looks good for the first 2 rounds. The model knows that <code>this function</code> means the built-in sort function in Python from the context. But in the 3rd round, the model starts to generate repetitive words.</p>
+<p>This is because this model is not trained with conversation before. More specific datasets are needed to improve the conversation ability.</p>
+<div class="note note-info">
+            <p>The most improtant thing is, from this framework, we are able to train any model with any dataset.</p><p>This means we can improve any abilities of the model by feeding it the corresponding training datasets.</p>
+          </div>
+<h3 id="further-trained-alpaca">Further trained alpaca</h3>
+<p>At this stage, since we have build the training and deploy process. We optimized the model in twofolds, training the model with more data, then scaling up the model to more parameters.</p>
+<h4 id="trained-with-more-data">Trained with more data</h4>
+<p>Thanks to <strong><a target="_blank" rel="noopener" href="https://github.com/PhoebusSi/Alpaca-CoT">Alpaca-CoT</a></strong>'s detailed dataset cellection. We desided to improve the model's reasoning (COT), coding, dialog, and Chinese performance. So we fine tuned the model with the following dataset:</p>
+<div id="echarts6704" style="width: 100%;height: 600px;margin: 0 auto"></div>
+<script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+<script type="text/javascript" src="https://www.makeapie.com/dep/echarts/map/js/china.js"></script>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('echarts6704'));
+  // 指定图表的配置项和数据
+  
+option = {
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: <br/> {c} <br/>({d}%)'
+  },
+  legend: {
+    data: [
+      'alpaca.json',
+      'CoT_data.json',
+      'gpt4all_without_p3_formatted.json',
+      'Vicuna.json',
+      'belle_data1M_cn.json',
+     'dialog_w_context/train.json',
+      'Chinese',
+      'dialoag',
+      'coding',
+      'reasoning'
+    ]
+  },
+  series: [
+    {
+      name: 'dataset',
+      type: 'pie',
+      selectedMode: 'single',
+      radius: [0, '30%'],
+      label: {
+        position: 'inner',
+        fontSize: 14
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1079517, name: 'Chinese' },
+        { value: 165681, name: 'dialoag' },
+        { value: 806199, name: 'coding' },
+        { value: 74771+51974, name: 'reasoning' }
+      ]
+    },
+    {
+      name: 'dataset',
+      type: 'pie',
+      radius: ['45%', '60%'],
+      labelLine: {
+        length: 30
+      },
+      label: {
+        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}\n  {per|{d}%}  ',
+        backgroundColor: '#F6F8FC',
+        borderColor: '#8C8D8E',
+        borderWidth: 1,
+        borderRadius: 4,
+        rich: {
+          a: {
+            color: '#6E7079',
+            lineHeight: 22,
+            align: 'center'
+          },
+          hr: {
+            borderColor: '#8C8D8E',
+            width: '100%',
+            borderWidth: 1,
+            height: 0
+          },
+          b: {
+            color: '#4C5058',
+            fontSize: 14,
+            fontWeight: 'bold',
+            lineHeight: 33
+          },
+          per: {
+            color: '#fff',
+            backgroundColor: '#4C5058',
+            padding: [3, 4],
+            borderRadius: 4
+          }
+        }
+      },
+      data: [
+        { value: 52002, name: 'alpaca.json' },
+        { value: 74771, name: 'CoT_data.json' },
+        { value: 806199, name: 'gpt4all_without_p3_formatted.json' },
+        { value: 51974, name: 'Vicuna.json' },
+        { value: 1079517, name: 'belle_data1M_cn.json' },
+        { value: 165681, name: 'dialog_w_context/train.json' }
+      ]
+    }
+  ]
+};
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+<p><a href="/2023/04/02/Improve-the-chatbot/#deployment-and-evaluation"><strong><em><u>This section</u></em></strong></a> presents the performance comparitions between the reproduced Stanford Alpaca 7B and the self-fine tuned 7B model. And the results show the fine tuned model has a big improvement on the reasoning (COT), coding, dialog, and Chinese abilities.</p>
+<p>And we can say, with a corresponding dataset, we can achieve better performances on any field/tasks.</p>
+<h4 id="scale-up-model">Scale up model</h4>
+<p>Then we scale up the model from 7B to 13B and 30B.</p>
+<p>A brief summery of results process is shown below:</p>
+<table>
+<thead>
+<tr class="header">
+<th><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/W&amp;B%20Chart%204_13_2023,%2010_13_11%20AM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_13_2023, 10_13_11 AM"></th>
+<th><img src="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/W&amp;B%20Chart%204_13_2023,%2010_13_24%20AM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_13_2023, 10_13_24 AM"></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>7B</th>
+<th>13B</th>
+<th>30B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Duration</td>
+<td>10h 37m 26s</td>
+<td>17h 49m 37s</td>
+<td>1d 3h 23m 7s</td>
+</tr>
+<tr class="even">
+<td>train loss</td>
+<td>0.8531</td>
+<td>0.7999</td>
+<td>0.7159</td>
+</tr>
+<tr class="odd">
+<td>eval loss</td>
+<td>0.8534914255142212</td>
+<td>0.7641683220863342</td>
+<td>0.7117758989334106</td>
+</tr>
+</tbody>
+</table>
+<p>A detailed evaluation across a large range of tasls among these models and with the ChatGPT's answers are shown <a href="/2023/04/12/scale-up-the-language-model/#evaluation"><strong><em><u>here</u></em></strong></a>.</p>
+<p>The result shows that our AI language model has been performing well after scaling up to 30B parameters. The 30B parameters version is better than the 7B parameters version, but it is still not as well as ChatGPT, especially on text generation tasks and safety tasks.</p>
+<h2 id="possible-applications">Possible applications</h2>
+<p>Refer to <strong><em><u><a href="/2023/04/14/One-possible-application/">this blog</a></u></em></strong>.</p>
+<h2 id="references">References</h2>
+<p>The icons and images from <a target="_blank" rel="noopener" href="https://www.flaticon.com/">FlatIcon</a> and created by midjouney</p>
+<p>Original front-end <a target="_blank" rel="noopener" href="https://github.com/run27017">run27017</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/run27017/vue-chat">vue-chat</a></strong>.</p>
+<p>LLaMA github (<a target="_blank" rel="noopener" href="https://github.com/facebookresearch">facebookresearch</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama">llama</a></strong>)</p>
+<p>alpaca dataset, <a href="yahma/alpaca-cleaned">yahma/alpaca-cleaned</a></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://ai.facebook.com/blog/large-language-model-llama-meta-ai/">LLaMA: Open and Efficient Foundation Language Models</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama/issues/158">Unofficial Llama Discord 😁 · Issue #158 · facebookresearch/llama · GitHub</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M. A., Lacroix, T., ... &amp; Lample, G. (2023). Llama: Open and efficient foundation language models. <em>arXiv preprint arXiv:2302.13971</em>. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/llama/">#llama</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Build and train an opensource chatGPT locally</div>
+      <div>https://daydreamatnight.github.io/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 18, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/" title="DuaSPHysics Cell Division Code Structure">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DuaSPHysics Cell Division Code Structure</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/14/One-possible-application/" title="Possible applications on Car industry of the language model">
+                        <span class="hidden-mobile">Possible applications on Car industry of the language model</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

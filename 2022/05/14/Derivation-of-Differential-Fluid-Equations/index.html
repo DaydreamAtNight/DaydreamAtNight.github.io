@@ -1,0 +1,1291 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Feeling unsafe when deploying CFD algorithms, the best way to alleviate the anxiety is to derive the fundamentals again.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Derivation of Differential Fluid Equations">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/05/14/Derivation-of-Differential-Fluid-Equations/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Feeling unsafe when deploying CFD algorithms, the best way to alleviate the anxiety is to derive the fundamentals again.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/deriving_NS_again.png">
+<meta property="article:published_time" content="2022-05-14T08:54:02.000Z">
+<meta property="article:modified_time" content="2022-05-29T07:55:39.096Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/deriving_NS_again.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Derivation of Differential Fluid Equations - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Derivation of Differential Fluid Equations"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-14 16:54" pubdate>
+          May 14, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          38k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          126 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Derivation of Differential Fluid Equations</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Feeling unsafe when deploying CFD algorithms, the best way to alleviate the anxiety is to derive the fundamentals again.</p>
+          </div>
+<span id="more"></span>
+<h2 id="acceleration-and-mass-conservation">1 Acceleration and Mass Conservation</h2>
+<h3 id="acceleration-field-of-a-fluid">1.1 Acceleration field of a fluid</h3>
+<h4 id="material-substantial-convective-derivatives">1.1.1 Material / substantial / convective derivatives</h4>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Material derivatives.png" srcset="/img/loading.gif" lazyload alt="Material derivatives" style="zoom:50%;"></p>
+<p>Given a spatial-temporal property <span class="math inline">\(f(x,y,z,t)\)</span> of a fluid particle in the Eulerian coordinate. After an infinitesimal period, the change in <span class="math inline">\(f\)</span> , is therefore: <span class="math display">\[
+\begin{aligned}
+\Delta f = f(x+\Delta x,y+\delta x,z+\delta z,t+\Delta t)- f(x,y,z,t) 
+\end{aligned}
+\]</span> set the position and time change tend to 0, <span class="math display">\[
+\Delta f = \frac{\partial f}{\partial x}\Delta x+\frac{\partial f}{\partial y}\Delta y+\frac{\partial f}{\partial z}\Delta z+\frac{\partial f}{\partial t}\Delta t
+\]</span> considering: <span class="math display">\[
+\Delta x = u \Delta t, \Delta y = v \Delta t, \Delta z = w \Delta t
+\]</span> then <span class="math display">\[
+\frac{\Delta f }{\Delta t}=\frac{\partial f}{\partial t} + \frac{\partial f}{\partial x}u+\frac{\partial f}{\partial y}v+\frac{\partial f}{\partial z}w
+\]</span> In the limit as <span class="math inline">\(\Delta t \rightarrow 0\)</span>, <span class="math display">\[
+\frac{D f }{D t}=\frac{\partial f}{\partial t} + \frac{\partial f}{\partial x}u+\frac{\partial f}{\partial y}v+\frac{\partial f}{\partial z}w
+\]</span> or in a vector form: <span class="math display">\[
+\color{purple}
+\frac{D f }{D t}=\frac{\partial f}{\partial t} + \mathbf{V} \cdot \boldsymbol{\nabla} f
+\]</span> In the scalar case <span class="math inline">\(\boldsymbol{\nabla} f\)</span> is simply the gradient of a scalar, while in the vector case, <span class="math inline">\(\boldsymbol{\nabla} \mathbf{f}\)</span> is the covariant derivative of the vector.</p>
+<div class="note note-info">
+            <p>Like the Reynolds Transport Theorem in the integral part, the material derivative connects the Lagrangian and Eulerian frame of references.</p>
+          </div>
+<h4 id="material-derivative-of-velocity">1.1.2 Material derivative of velocity</h4>
+<p>Set <span class="math inline">\(f\)</span> as <span class="math inline">\(\mathbf{V}\)</span> and the fluid acceleration as <span class="math inline">\(\mathbf{a}\)</span>, substitute to the formula above: <span class="math display">\[
+\mathbf{a} = \frac{D \mathbf{V} }{D t}=\underbrace{\frac{\partial \mathbf{V}}{\partial t}}_{\text {local}} + \underbrace{\mathbf{V} \cdot \boldsymbol{\nabla} \mathbf{V}}_{\text {convective}}
+\]</span> where <span class="math inline">\(\frac{\partial \mathbf{V}}{\partial t}\)</span> is called <strong>local acceleration</strong> while <span class="math inline">\((\mathbf{V} \cdot \boldsymbol{\nabla}) \mathbf{V}\)</span> is the <strong>convective acceleration</strong>.</p>
+<div class="note note-info">
+            <p>It is also written as <span class="math inline">\(\mathbf{a} = \frac{D \mathbf{V} }{D t}=\frac{\partial \mathbf{V}}{\partial t} + (\mathbf{V} \cdot \boldsymbol{\nabla}) \mathbf{V}\)</span>, but it's equivalent.</p>
+          </div>
+<h3 id="differential-equation-of-mass-conservation">1.2 Differential equation of mass conservation</h3>
+<p>Take an infinitesimally small cubic control volume as below.</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Differential mass conservation.png" srcset="/img/loading.gif" lazyload alt="Differential mass conservation" style="zoom:50%;"></p>
+<p>With the integral form with one-dimensional assumption: <span class="math display">\[
+\int_{C V} \frac{\partial \rho}{\partial t} d \mathcal{V}+\sum_{i}\left(\rho_{i} A_{i} V_{i}\right)_{o u t}-\sum_{i}\left(\rho_{i} A_{i} V_{i}\right)_{i n}=0
+\]</span></p>
+<ol type="1">
+<li><p>Density can be considered uniform in the CV, <span class="math display">\[
+\int_{C V} \frac{\partial \rho}{\partial t} d \mathcal{V} = \frac{\partial \rho}{\partial t} dxdydz
+\]</span></p></li>
+<li><p>Inlet mass flow in 3 directions <span class="math display">\[
+\dot{m}_{x} = \rho udydz, \dot{m}_{y} = \rho vdxdz, \dot{m}_{z} = \rho udxdy
+\]</span></p></li>
+<li><p>Outlet mass flow in x direction particular <span class="math display">\[
+\dot{m}_{x+dx} = \left(\rho u+\frac{\partial \rho u}{\partial x }dx\right)dydz
+\]</span></p></li>
+<li><p>Substitute all in the continuous function <span class="math display">\[
+\frac{\partial \rho}{\partial t} dxdydz +\frac{\partial \rho u}{\partial x}dxdydz +\frac{\partial \rho v}{\partial y}dxdydz +\frac{\partial \rho w}{\partial z}dxdydz  = 0
+\]</span> simplify: <span class="math display">\[
+\frac{\partial \rho}{\partial t}  +\frac{\partial \rho u}{\partial x} +\frac{\partial \rho v}{\partial y} +\frac{\partial \rho w}{\partial z}  = 0
+\]</span> or in the vector form: <span class="math display">\[
+\color{purple}
+\frac{\partial \rho}{\partial t}+\boldsymbol{\nabla} \cdot(\rho\mathbf{V})=0
+\]</span> <div class="note note-info">
+            <p>The only requirements of this equation are the density <span class="math inline">\(\rho\)</span> and velocity <span class="math inline">\(\mathbf{V}\)</span> are continuous in time and space. As a result, this equation is always called the <em>equation of continuity</em>.</p>
+          </div></p></li>
+</ol>
+<h4 id="simplifications">1.2.1 Simplifications</h4>
+<ul>
+<li><p>steady flow: <span class="math inline">\(\partial/\partial t = 0\)</span>, <span class="math display">\[
+\boldsymbol{\nabla} \cdot(\rho\mathbf{V})=0
+\]</span></p></li>
+<li><p>Incompressible flow: <span class="math inline">\(\rho = Const\)</span> spacial and temporal:</p></li>
+</ul>
+<p><span class="math display">\[
+\boldsymbol{\nabla} \cdot\mathbf{V}=0
+\]</span></p>
+<div class="note note-info">
+            <p>It makes the equation linear and much more tractable to solving analytically.</p>
+          </div>
+<h3 id="cylindrical-coordinates">1.3 Cylindrical coordinates</h3>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Polar coordinate.png" srcset="/img/loading.gif" lazyload alt="Polar coordinate" style="zoom:50%;"></p>
+<h4 id="transformation-of-coordinates">1.3.1 Transformation of coordinates</h4>
+<p>From cartesian to cylindrical: <span class="math display">\[
+r=\sqrt{x^{2}+y^{2}} \quad \theta=\tan ^{-1} \frac{y}{x} \quad z=z
+\]</span></p>
+<p>From cylindrical to cartesian: <span class="math display">\[
+x=r \cos \theta \quad y=r \sin \theta \quad z=z
+\]</span></p>
+<h4 id="differential-operators">1.3.2 Differential operators</h4>
+<p>Two differential operators in polar coordinate: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\nabla} f &amp;=\frac{\partial f}{\partial r} \hat{\boldsymbol{r}}+\frac{1}{r} \frac{\partial f}{\partial \theta} \hat{\boldsymbol{\theta}}+\frac{\partial f}{\partial z} \hat{\boldsymbol{z}}\\
+\boldsymbol{\nabla} \cdot \mathbf{V} &amp;=\frac{1}{r} \frac{\partial}{\partial r}\left(r V_{r}\right)+\frac{1}{r} \frac{\partial}{\partial \theta}\left(V_{\theta}\right)+\frac{\partial}{\partial z}\left(V_{z}\right)
+\end{aligned}
+\]</span></p>
+<h4 id="continuous-function-in-cylindrical-coordinates">6.3.3 Continuous function in cylindrical coordinates</h4>
+<p>It is easy to substitute the equation of divergence into the continuous function, <span class="math display">\[
+\frac{\partial \rho}{\partial t}+\frac{1}{r} \frac{\partial}{\partial r}\left(r \rho V_{r}\right)+\frac{1}{r} \frac{\partial}{\partial \theta}\left(\rho V_{\theta}\right)+\frac{\partial}{\partial z}\left(\rho V_{z}\right)=0
+\]</span></p>
+<h2 id="linear-momentum-and-energy">2 Linear Momentum and Energy</h2>
+<h3 id="conservation-laws-from-differential-reynolds-transport-theorem">2.1 Conservation laws from differential Reynolds transport theorem</h3>
+<p>Recall RTT on a fixed control volume <span class="math inline">\(\Omega\)</span>: <span class="math display">\[
+\frac{\mathrm{d}}{\mathrm{d} t}\left(B_{s}\right)=\int_{\Omega} \frac{\partial(\beta \rho)}{\partial t} d \mathcal{V}+\int_{\partial \Omega} \beta \rho(\mathbf{V} \cdot \mathbf{n}) d A
+\]</span> where <span class="math display">\[
+\beta=\frac{\partial B}{\partial m} \quad \Rightarrow \quad B=\int_{\bar{\Omega}} \beta \rho d \mathcal{V}
+\]</span> <span class="math inline">\(\bar{\Omega}\)</span> denotes the control volume in a Lagrangian frame of reference (close system), while <span class="math inline">\(\Omega\)</span> denotes the control volume in an Eulerian frame of reference (open system).</p>
+<div class="note note-info">
+            <p>Open system: matter and energy goes in and out</p><p>Close system: energy goes in and out while matter cannot</p><p>Isolated system: matter and energy cannot go in and out</p>
+          </div>
+<p>In the Lagrangian frame of reference, <span class="math display">\[
+\frac{\mathrm{d}}{\mathrm{d} t}(B)=\frac{\mathrm{d}}{\mathrm{d} t}\left(\int_{\bar{\Omega}} \beta \rho d \mathcal{V}\right)\underbrace{=}_{Leibniz&#39;s Rule}\int_{\bar{\Omega}} \frac{\partial(\beta \rho)}{\partial t} d \mathcal{V}=\int_{\bar{\Omega}} s d \mathcal{V}
+\]</span> <div class="note note-info">
+            <p>Leibniz's rule: the derivative moves into the integral symbol: <span class="math display">\[\frac{d}{d x}\left(\int_{a}^{b} f(x, t) d t\right)=\int_{a}^{b} \frac{\partial}{\partial x} f(x, t) d t\]</span></p>
+          </div></p>
+<p>Where <span class="math inline">\(s\)</span> denotes the "rate of change of <span class="math inline">\(B\)</span> per unit volume"</p>
+<p>Then the RTT is instead: <span class="math display">\[
+\int_{\bar{\Omega}} s d \mathcal{V} = \int_{\Omega} \frac{\partial(\beta \rho)}{\partial t} d \mathcal{V}+\int_{\partial \Omega} \beta \rho(\mathbf{V} \cdot \mathbf{n}) d A
+\]</span> Use divergence theorem, drop the bar notation with <span class="math inline">\(\Delta t \rightarrow 0\)</span>, and arrive a differential form: <span class="math display">\[
+\begin{array}{r}
+\int_{\Omega} s d \mathcal{V}=\int_{\Omega} \frac{\partial(\beta \rho)}{\partial t} d \mathcal{V}+\int_{\Omega} \boldsymbol{\nabla}  \cdot(\beta \rho \mathbf{V}) d \mathcal{V} \\
+\int_{\Omega} \frac{\partial(\beta \rho)}{\partial t}+\boldsymbol{\nabla}  \cdot(\beta \rho \mathbf{V})-s d \mathcal{V}=0 \\
+\Leftrightarrow \color{purple}{\frac{\partial(\beta \rho)}{\partial t}+\boldsymbol{\nabla}  \cdot(\beta \rho \mathbf{V})-s=0}
+\end{array}
+\]</span> <div class="note note-info">
+            <p>Divergence theorem: <span class="math display">\[\int_{S} \boldsymbol{\nabla}  \cdot \mathbf{F} d A=\int_{\partial S} \mathbf{F} \cdot \hat{\mathbf{n}} d s\]</span></p>
+          </div></p>
+<h4 id="continuity-equation-for-mass">2.1.1 Continuity equation for mass</h4>
+<p>Substitute <span class="math inline">\(\beta = 1\)</span> and <span class="math inline">\(s=0\)</span> (mass created = 0) into the differential RTT: <span class="math display">\[
+\frac{\partial(\rho)}{\partial t}+\boldsymbol{\nabla}  \cdot(\rho \mathbf{V})=0
+\]</span> and for incompressible flow: <span class="math display">\[
+\boldsymbol{\nabla}  \cdot \mathbf{V}=0
+\]</span></p>
+<h4 id="continuity-equation-for-linear-momentum">2.1.2 Continuity equation for linear momentum</h4>
+<p>Substitute <span class="math inline">\(\beta =\mathbf{V}\)</span> into the differential RTT: <span class="math display">\[
+\frac{\partial(\rho \mathbf{V})}{\partial t}+\boldsymbol{\nabla}  \cdot(\rho \mathbf{V}\otimes \mathbf{V}) -\mathbf{s} =0
+\]</span> <span class="math inline">\(\mathbf{s}\)</span> denotes the force per unit volume, and $$ denotes the outer product.</p>
+<div class="note note-info">
+            <p>Outer product or dyadic product follows: <span class="math display">\[\left[\begin{array}{c}u_{1} \\u_{2} \\\vdots \\u_{m}\end{array}\right] \otimes \left[\begin{array}{c}v_{1} \\v_{2} \\\vdots \\v_{n}\end{array}\right]=\left[\begin{array}{cccc}u_{1} v_{1} &amp; u_{1} v_{2} &amp; \ldots &amp; u_{1} v_{n} \\u_{2} v_{1} &amp; u_{2} v_{2} &amp; \ldots &amp; u_{2} v_{n} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\u_{m} v_{1} &amp; u_{m} v_{2} &amp; \ldots &amp; u_{m} v_{n}\end{array}\right]\]</span> The divergence of a dyad follows this formula: <span class="math display">\[\begin{aligned}&amp;\boldsymbol{\nabla}  \cdot(f \mathbf{a})=(\boldsymbol{\nabla}  f) \cdot \mathbf{a}+(\boldsymbol{\nabla}  \cdot \mathbf{a}) f \\&amp;\boldsymbol{\nabla}  \cdot(\mathbf{a b})=(\boldsymbol{\nabla}  \cdot \mathbf{a}) \mathbf{b}+\mathbf{a} \cdot \boldsymbol{\nabla}  \mathbf{b}\end{aligned}\]</span></p>
+          </div>
+<p>Expand the equation: <span class="math display">\[
+\begin{aligned}
+\rho \frac{\partial \mathbf{V}}{\partial t}+\mathbf{V} \frac{\partial \rho}{\partial t}+\mathbf{V V} \cdot \boldsymbol{\nabla}  \rho+\rho \mathbf{V} \cdot \boldsymbol{\nabla}  \mathbf{V}+\rho \mathbf{V} \boldsymbol{\nabla}  \cdot \mathbf{V} &amp;=\mathbf{s} \\
+\Leftrightarrow \mathbf{V}\left(\frac{\partial \rho}{\partial t}+\mathbf{V} \cdot \boldsymbol{\nabla}  \rho+\rho(\boldsymbol{\nabla}  \cdot \mathbf{V})\right)+\rho\left(\frac{\partial \mathbf{V}}{\partial t}+(\mathbf{V} \cdot \boldsymbol{\nabla} ) \mathbf{V}\right) &amp;=\mathbf{s}
+\end{aligned}
+\]</span> With <span class="math inline">\(\mathbf{V} \cdot \boldsymbol{\nabla} \rho+\rho(\boldsymbol{\nabla} \cdot \mathbf{V})=\boldsymbol{\nabla} \cdot(\rho \mathbf{V})\)</span>, we have the first left term a continuity equation. Drop it we have: <span class="math display">\[
+\mathbf{V}\underbrace{\left(\frac{\partial \rho}{\partial t}+\boldsymbol{\nabla}  \cdot(\rho \mathbf{V})\right)}_{0}+
+\rho\underbrace{\left(\frac{\partial \mathbf{V}}{\partial t}+(\mathbf{V} \cdot \boldsymbol{\nabla} ) \mathbf{V}\right)}_{\mathrm{material~derivative}} =\mathbf{s}
+\]</span> With the definition of material derivative, <span class="math display">\[
+\color{purple}
+\rho\left(\frac{D \mathbf{V}}{D t}\right) =\mathbf{s}
+\]</span> Without source or sink, the quantity <span class="math inline">\(\mathbf{s}\)</span> therefore represents ”<strong>force per unit volume</strong>“ <span class="math inline">\(\mathbf{s}=\frac{\mathrm{d} \mathbf{F}}{\mathrm{d} \mathcal{V}}\)</span>.</p>
+<h3 id="forces">2.2 Forces</h3>
+<p>The forces contain <em>body forces</em> and <em>surface forces</em> <span class="math inline">\(\mathbf{F}=\mathbf{F_b}+\mathbf{F_s}\)</span>,</p>
+<ul>
+<li><p>Body forces are due to external fields, take gravitational force as an example, <span class="math display">\[
+d \mathbf{F}_{g}=\rho \mathbf{g} d x d y d z \quad \mathbf{g}=-g \mathbf{k}
+\]</span> Consider the only body force in fluid dynamic is the gravity: <span class="math display">\[
+\color{purple}
+\frac{\mathrm{d}\mathbf{F_b}}{\mathrm{d}\mathcal{V}} = \rho\mathbf{g}
+\]</span></p></li>
+<li><p>Surface forces are due to hydrostatic pressure and viscous stresses on the <em>CS</em>: <span class="math display">\[
+\sigma_{i j}=\left|\begin{array}{ccc}
+-p+\tau_{x x} &amp; \tau_{y x} &amp; \tau_{z x} \\
+\tau_{x y} &amp; -p+\tau_{yy} &amp; \tau_{z y} \\
+\tau_{x z} &amp; \tau_{y z} &amp; -p+\tau_{z z}
+\end{array}\right|
+\]</span> <img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Viscous stress on CS.png" srcset="/img/loading.gif" lazyload alt="Stress on CS" style="zoom:50%;"></p>
+<p>Similar to what we do in the <a href="#differential-equation-of-mass-conservation">Mass Conservation</a>, the force is due to the stress change in each direction, for instance: <span class="math display">\[
+dF{s,xx} = \left(\sigma_{xx}+\frac{\partial\sigma_{xx}}{\partial x}dx\right)dydz-\sigma_{xx}dydz = \frac{\partial\sigma_{xx}}{\partial x}d\mathcal{V}
+\]</span> <img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Surface forces on CS.png" srcset="/img/loading.gif" lazyload alt="Surface forces on CS" style="zoom:50%;"></p>
+<p>as a result: <span class="math display">\[
+\begin{aligned}
+&amp;\frac{\mathrm{d} F_{x}}{\mathrm{~d} \mathcal{V}}=-\frac{\partial p}{\partial x}+\frac{\partial \tau_{x x}}{\partial x}+\frac{\partial \tau_{y x}}{\partial y}+\frac{\partial \tau_{z x}}{\partial z} \\
+&amp;\frac{\mathrm{d} F_{y}}{\mathrm{~d} \mathcal{V}}=-\frac{\partial p}{\partial y}+\frac{\partial \tau_{x y}}{\partial x}+\frac{\partial \tau_{y y}}{\partial y}+\frac{\partial \tau_{z y}}{\partial z} \\
+&amp;\frac{\mathrm{d} F_{z}}{\mathrm{~d} \mathcal{V}}=-\frac{\partial p}{\partial z}+\frac{\partial \tau_{x z}}{\partial x}+\frac{\partial \tau_{y z}}{\partial y}+\frac{\partial \tau_{z z}}{\partial z}
+\end{aligned}
+\]</span> surface force in vector form: <span class="math display">\[
+\color{purple}
+\frac{\mathrm{d} \mathbf{F_s}}{\mathrm{d} \mathcal{V}}=- \boldsymbol{\nabla}  p+ \boldsymbol{\nabla} \cdot\boldsymbol{\tau_{ij}}
+\]</span> <span class="math inline">\(\frac{\mathrm{d} \mathbf{F_s}}{\mathrm{d} \mathcal{V}}\)</span> also represents the Cauchy stress tensor:</p></li>
+</ul>
+<h3 id="general-differential-linear-momentum-equation">2.3 General differential linear momentum equation</h3>
+<p>Substitute force terms into earlier momentum conservation expression, <span class="math display">\[
+\color{purple}
+\rho\frac{D \mathbf{V}}{D t} = \rho\mathbf{g} - \boldsymbol{\nabla}  p+ \boldsymbol{\nabla} \cdot\mathbf{\tau_{ij}}
+\]</span></p>
+<p><span class="math display">\[
+\mathrm{density × acceleration = (Gravity + Pressure + Viscous) ~forces~per~unit~volume}
+\]</span></p>
+<p>These equations are valid for any fluid in general motion, particularly those which include viscous stresses. The non-linear convective terms on the left-hand side also complicates direct mathematical analysis.</p>
+<h3 id="differential-energy-equations">2.4 Differential energy equations</h3>
+<p>Similar to earlier routes, we arrive energy conservation equation: <span class="math display">\[
+\dot{Q}-\dot{W}_{v}=\left(\rho \frac{D e}{D t}+\mathbf{V} \cdot \boldsymbol{\nabla}  p+p \boldsymbol{\nabla}  \cdot \mathbf{V}\right) \mathrm{d}\mathcal{V}
+\]</span> Note that <span class="math inline">\(\dot{W}_{s} = 0\)</span> since there is no shaft work in an infinitesimal CV, as a result, similar CV flux analysis can be done to <span class="math inline">\(\dot{Q}\)</span> and <span class="math inline">\(\dot{W}_{v}\)</span>:</p>
+<ul>
+<li><p>Heat conduction <span class="math inline">\(\dot{Q}\)</span> is regulated by <strong>Fourier's law</strong> stating that the heat flux is proportional to the gradient of the temperature, <span class="math inline">\(\mathbf{q} = K\boldsymbol{\nabla}T\)</span>, using similar flux analysis to infinitesimal CV： <span class="math display">\[
+\dot{Q}=\boldsymbol{\nabla}  \cdot(k \boldsymbol{\nabla}   T)\mathrm{d}\mathcal{V}
+\]</span></p></li>
+<li><p>Similarly, the rate of work due to viscous stresses can be expanded to give: <span class="math display">\[
+\dot{W}_{v}=-\boldsymbol{\nabla} \cdot\left(\mathbf{V} \cdot \boldsymbol{\tau}_{i j}\right)\mathrm{d}\mathcal{V}
+\]</span></p></li>
+</ul>
+<p>Substitute into energy conservation equation to give: <span class="math display">\[
+\rho \frac{D e}{D t}+\mathbf{V} \cdot \boldsymbol{\nabla}  p+p \boldsymbol{\nabla}  \cdot \mathbf{V}
+=
+\boldsymbol{\nabla}  \cdot(k \boldsymbol{\nabla}   T)
++\boldsymbol{\nabla} \cdot\left(\mathbf{V} \cdot \boldsymbol{\tau}_{i j}\right)
+\]</span></p>
+<h4 id="general-energy-equation">2.4.1 General energy equation</h4>
+<p>Splitting the viscous work term: <span class="math display">\[
+\boldsymbol{\nabla} \cdot\left(\mathbf{V} \cdot \boldsymbol{\tau}_{i j}\right) \equiv \mathbf{V} \cdot \left( \boldsymbol{\nabla} \cdot \boldsymbol{\tau_{ij}} \right) + \underbrace{\boldsymbol{\tau_{ij}} : \left( \boldsymbol{\nabla}\mathbf{V} \right)}_{\boldsymbol{\Phi}}
+\]</span> where <span class="math inline">\(\boldsymbol{\Phi}\)</span> denotes the <strong>viscous-dissipation function</strong>, representing the dissipation of energy due to viscous effects. For <strong>Newtonian flow in a Cartesian coordinates</strong>: <span class="math display">\[
+\boldsymbol{\Phi}=\mu\left[2\left(\frac{\partial u}{\partial x}\right)^{2}+2\left(\frac{\partial v}{\partial y}\right)^{2}+2\left(\frac{\partial w}{\partial z}\right)^{2}+\left(\frac{\partial v}{\partial x}+\frac{\partial u}{\partial y}\right)^{2}+\left(\frac{\partial w}{\partial y}+\frac{\partial v}{\partial z}\right)^{2}+\left(\frac{\partial u}{\partial z}+\frac{\partial w}{\partial x}\right)^{2}\right]
+\]</span> <div class="note note-info">
+            <p>Dissipated energy means during the flow, it is converted into the internal energy of the material. Note <span class="math inline">\(\boldsymbol{\Phi}\)</span> is always positive, implying that viscous flow always loses energy.</p>
+          </div></p>
+<p>Expanding <span class="math inline">\(e = \hat{u}+\frac{1}{2}V^{2}+gz\)</span>, the general differential energy equation is : <span class="math display">\[
+\color{purple}
+\rho \frac{D \hat{u}}{D t}+p(\boldsymbol{\nabla} \cdot \mathbf{V})=\boldsymbol{\nabla} \cdot(k \boldsymbol{\nabla} T)+\mathbf{\Phi}
+\]</span> with further assumptions: <span class="math display">\[
+\begin{aligned}
+d \hat{u} &amp; \approx c_{v} d T \\
+c_{v}, \mu, k, \rho &amp; \approx \mathrm{const}
+\end{aligned}
+\]</span> for incompressible flow, we have: <span class="math display">\[
+\color{purple}{\rho c_{v} \frac{\partial T}{\partial t} =\cdot(k \boldsymbol{\nabla}^2 T)+\mathbf{\Phi}}
+\]</span></p>
+<h2 id="euler-and-navier-stokes-equations">3 Euler and Navier-Stokes Equations</h2>
+<p>Recall <a href="#general-differential-linear-momentum-equation">differential linear momentum equation</a>: <span class="math display">\[
+\rho\mathbf{g} - \boldsymbol{\nabla}  p+ \boldsymbol{\nabla} \cdot\boldsymbol{\tau_{ij}} = \rho\frac{D \mathbf{V}}{D t}
+\]</span> Equations of motion of <span class="math inline">\(\boldsymbol{\tau_{ij}}\)</span> is still needed, and its different depending on types of fluid</p>
+<h3 id="euler-equations-frictionless-flow">3.1 Euler equations (frictionless flow)</h3>
+<p>Use the inviscid flow assumption, that is <span class="math inline">\(\boldsymbol{\tau_{ij}}=0\)</span>, the momentum equation reduces to: <span class="math display">\[
+\color{purple}
+\rho\mathbf{g} - \boldsymbol{\nabla}  p+ \boldsymbol{\nabla} \cdot\boldsymbol{\tau_{ij}} = \rho\frac{D \mathbf{V}}{D t}
+\]</span> <div class="note note-info">
+            <p>Fluids with low viscosity can be reasonably modelled as inviscid, except near boundaries.</p>
+          </div></p>
+<h3 id="newtonian-fluid">3.2 Newtonian fluid</h3>
+<h4 id="strain">3.2.1 Strain</h4>
+<p>Strains of a fluid particle evaluate the deformation due to an applied <em>shear stress</em>.</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Fluid partical deformation.png" srcset="/img/loading.gif" lazyload alt="Fluid partical deformation" style="zoom:50%;"></p>
+<p>and strain is defined as (anticlockwise positive): <span class="math display">\[
+\mathrm{strain_{xy}} = \Delta\theta_x-(-\Delta\theta_y)
+\]</span> In a continuous system, the rate of strain is then: <span class="math display">\[
+\frac{\mathrm{d}}{\mathrm{d}t}(\mathrm{strain_{xy}}) = \epsilon_{xy} = \frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}
+\]</span> or in vector form: <span class="math display">\[
+\boldsymbol{\epsilon} = \nabla \mathbf{V}+(\nabla \mathbf{V}^{\top})
+\]</span></p>
+<h4 id="viscosity">3.2.2 Viscosity</h4>
+<p>Newton defined a <strong>newtonian fluid</strong> by a fluid in which the <em>viscous stresses</em> are linearly proportional to the local <em>strain rates</em>. <span class="math display">\[
+\boldsymbol{\tau_{ij}} \propto \boldsymbol{\epsilon_{ij}}
+\]</span> In order to apply this to the Naiver–Stokes equations, three assumptions were made by Stokes:</p>
+<ul>
+<li>The stress tensor is a linear function of the strain rate tensor or equivalently the velocity gradient.</li>
+<li>The fluid is isotropic.</li>
+<li>For a fluid at rest, <span class="math inline">\(\boldsymbol{\nabla} \cdot\boldsymbol{\tau_{ij}} = 0\)</span> (so that hydrostatic pressure results).</li>
+</ul>
+<p>And it leads to: <span class="math display">\[
+\color{purple}
+\boldsymbol{\tau}=\mu\left(\nabla \mathbf{u}+\nabla \mathbf{u}^{\top}\right)+\lambda(\nabla \cdot \mathbf{u}) \mathbf{I}
+\]</span> or <span class="math display">\[
+\boldsymbol{\tau_{ij}}=\mu\left(\frac{\partial u_{i}}{\partial x_{j}}+\frac{\partial u_{j}}{\partial x_{i}}\right)+\delta_{i j} \lambda \frac{\partial u_{k}}{\partial x_{k}} \\
+\]</span> where, <span class="math display">\[
+\delta_{i j}= \begin{cases}0 &amp; \text { if } i \neq j \\ 1 &amp; \text { if } i=j\end{cases}
+\]</span> As a result, expand the formula: <span class="math display">\[
+\boldsymbol{\tau_{ij}}=\left|\begin{array}{ccc}
+2 \mu \frac{\partial u}{\partial x}+\lambda \frac{\partial u_{}}{\partial x_{k}} &amp; \mu\left(\frac{\partial u}{\partial y}+\frac{\partial v}{\partial x}\right) &amp; \mu\left(\frac{\partial u}{\partial z}+\frac{\partial w}{\partial x}\right) \\
+\mu\left(\frac{\partial v}{\partial x}+\frac{\partial u}{\partial y}\right) &amp; 2 \mu \frac{\partial v}{\partial y}+\lambda \frac{\partial v}{\partial y} &amp; \mu\left(\frac{\partial v}{\partial z}+\frac{\partial w}{\partial y}\right) \\
+\mu\left(\frac{\partial w}{\partial x}+\frac{\partial u}{\partial z}\right) &amp; \mu\left(\frac{\partial w}{\partial y}+\frac{\partial v}{\partial z}\right) &amp; 2 \mu \frac{\partial w}{\partial z}+\lambda \frac{\partial w}{\partial z}
+\end{array}\right|
+\]</span> And <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\lambda\)</span> represents the <strong>shear/dynamic viscosity</strong> and <strong>volume/bulk viscosity</strong> respectively,</p>
+<blockquote>
+<p>The value of <em>λ</em>, which produces a viscous effect associated with volume change, is very difficult to determine, not even its sign is known with absolute certainty. Even in compressible flows, the term involving <em>λ</em> is often negligible; however it can occasionally be important even in nearly incompressible flows and is a matter of controversy. When taken nonzero, the most common approximation is <strong><em>λ</em> ≈ −2/3<em>μ</em></strong>.</p>
+</blockquote>
+<h3 id="navier-stokes-equations">3.3 Navier-Stokes equations</h3>
+<p>Substitute the stress representation into the linear momentum equation: <span class="math display">\[
+\rho\frac{D \mathbf{V}}{D t} = \rho\mathbf{g} - \boldsymbol{\nabla}  p+ \boldsymbol{\nabla} \cdot \mu\left( \left(\boldsymbol{\nabla} \mathbf{V}+\boldsymbol{\nabla} \mathbf{V}^{\top}\right)-\frac{2}{3}(\nabla \cdot \mathbf{V}) \mathbf{I}\right)
+\]</span> with further simplification we have: <span class="math display">\[
+\color{purple}
+\rho \frac{\mathrm{D} \mathbf{V}}{\mathrm{D} t}=\rho\left(\frac{\partial \mathbf{V}}{\partial t}+\mathbf{V} \cdot \nabla \mathbf{V}\right)=-\nabla p+\mu \nabla^{2} \mathbf{V}+\frac{1}{3} \mu \nabla(\nabla \cdot \mathbf{V})+\rho \mathbf{g}
+\]</span></p>
+<h4 id="incompressible-navier-stokes-equations">3.3.1 Incompressible Navier-Stokes equations</h4>
+<p>With incompressible flow we have no bulk viscosity so: <span class="math display">\[
+\boldsymbol{\tau}=\mu\left(\nabla \mathbf{u}+\nabla \mathbf{u}^{\top}\right)
+\]</span> And the Incompressible Navier-Stokes equations is therefore: <span class="math display">\[
+\rho\frac{D \mathbf{V}}{D t} = \rho\mathbf{g} - \boldsymbol{\nabla}  p+ \boldsymbol{\nabla} \cdot \mu\left( \boldsymbol{\nabla} \mathbf{V}+\boldsymbol{\nabla} \mathbf{V}^{\top}\right)
+\]</span> with <span class="math inline">\(\boldsymbol{\nabla} \cdot \mathbf{V}=0\)</span> for incompressible flow: <span class="math display">\[
+\boldsymbol{\nabla} \cdot \mu\left( \boldsymbol{\nabla} \mathbf{V}+\boldsymbol{\nabla} \mathbf{V}^{\top}\right) = \mu\boldsymbol{\nabla}^2\mathbf{V}
+\]</span> as a result: <span class="math display">\[
+\color{purple}
+\frac{\partial\mathbf{V}}{\partial t} +  \mathbf{V} \cdot \nabla \mathbf{V}= \mathbf{g} - \boldsymbol{\nabla}\frac{p}{\rho} +  \nu\boldsymbol{\nabla}^2\mathbf{V}
+\]</span> where <span class="math inline">\(\nu = \frac{\mu}{\rho}\)</span>, called <strong>kinetic viscosity</strong></p>
+<div class="note note-info">
+            <p>Meaning of each term: <span class="math display">\[\overbrace{\underbrace{\frac{\partial \mathbf{V}}{\partial t}}_{\text {Variation }}+\underbrace{(\mathbf{V} \cdot \nabla) \mathbf{V}}_{\text {Convection }}}^{\text {Inertia (per volume) }}= \overbrace{\underbrace{\nu \nabla^{2} \mathbf{V}}_{\text {Diffusion }}\underbrace{-\nabla w}_{\begin{array}{c}\text { Internal } \\\text { source }\end{array}}}^{\text {Divergence of stress }}+\underbrace{\mathbf{g}}_{\begin{array}{c}\text { External } \\\text { source }\end{array}} .\]</span></p>
+          </div>
+<p>Expanding along every coordinates gives that: <span class="math display">\[
+\begin{align}
+\frac{\partial u}{\partial t} +  u \frac{\partial u}{\partial x} + v\frac{\partial u}{\partial y} + w \frac{\partial u}{\partial z}&amp;= g_x - \frac{1}{\rho}\frac{\partial p}{\partial x} +  \nu\left(\frac{\partial^2u}{\partial^2x}+\frac{\partial^2u}{\partial^2y}+\frac{\partial^2u}{\partial^2z}\right) \\
+\frac{\partial v}{\partial t} +  u \frac{\partial v}{\partial x} + v\frac{\partial v}{\partial y} + w \frac{\partial v}{\partial z}&amp;= g_y - \frac{1}{\rho}\frac{\partial p}{\partial y} +  \nu\left(\frac{\partial^2v}{\partial^2x}+\frac{\partial^2v}{\partial^2y}+\frac{\partial^2v}{\partial^2z}\right) \\
+\frac{\partial w}{\partial t} +  u \frac{\partial w}{\partial x} + v\frac{\partial w}{\partial y} + w \frac{\partial w}{\partial z}&amp;= g_z - \frac{1}{\rho}\frac{\partial p}{\partial z} +  \nu\left(\frac{\partial^2w}{\partial^2x}+\frac{\partial^2w}{\partial^2y}+\frac{\partial^2w}{\partial^2z}\right)
+\end{align}
+\]</span></p>
+<h4 id="cylindrical-coordinates-1">3.3.2 Cylindrical coordinates</h4>
+<p>Recall the coordinates transformation: <span class="math display">\[
+r=\sqrt{x^{2}+y^{2}} \quad \theta=\tan ^{-1} \frac{y}{x} \quad z=z
+\]</span> and the differential operators: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\nabla} f &amp;=\frac{\partial f}{\partial r} \hat{\boldsymbol{r}}+\frac{1}{r} \frac{\partial f}{\partial \theta} \hat{\boldsymbol{\theta}}+\frac{\partial f}{\partial z} \hat{\boldsymbol{z}}\\
+\boldsymbol{\nabla} \cdot \mathbf{V} &amp;=\frac{1}{r} \frac{\partial}{\partial r}\left(r V_{r}\right)+\frac{1}{r} \frac{\partial}{\partial \theta}\left(V_{\theta}\right)+\frac{\partial}{\partial z}\left(V_{z}\right)\\
+\boldsymbol{\nabla}^2f &amp;= \left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} f}{\partial \theta^{2}}+\frac{\partial^{2} f}{\partial z^{2}}\right)
+\end{aligned}
+\]</span> And in z direction <span class="math display">\[
+\begin{align}
+\frac{\partial V_r}{\partial t} +  V_r \frac{\partial V_r}{\partial r} + V_\theta\frac{1}{r}\frac{\partial V_r}{\partial \theta} + V_z \frac{\partial V_r}{\partial z}&amp;= g_r - \frac{1}{\rho}\frac{\partial p}{\partial r} +  \nu\left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial V_{r}}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} V_{r}}{\partial \theta^{2}}+\frac{\partial^{2} V_{r}}{\partial z^{2}}\right) \\
+\frac{\partial V_\theta}{\partial t} +  V_r \frac{\partial  V_\theta}{\partial r} + V_\theta\frac{1}{r}\frac{\partial  V_\theta}{\partial \theta} + V_z \frac{\partial  V_\theta}{\partial z}&amp;= g_\theta - \frac{1}{\rho r}\frac{\partial p}{\partial \theta} +    \nu\left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial V_{\theta}}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} V_{\theta}}{\partial \theta^{2}}+\frac{\partial^{2} V_{\theta}}{\partial z^{2}}\right) \\
+\frac{\partial V_z}{\partial t} +  V_r \frac{\partial V_r}{\partial r} + V_\theta\frac{1}{r}\frac{\partial V_z}{\partial \theta} + V_z \frac{\partial V_z}{\partial z}&amp;= g_z - \frac{1}{\rho}\frac{\partial p}{\partial z} +  \nu\left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial V_{z}}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} V_{z}}{\partial \theta^{2}}+\frac{\partial^{2} V_{z}}{\partial z^{2}}\right)
+\end{align}
+\]</span></p>
+<h3 id="closing-the-system">3.3 Closing the system</h3>
+<p>To summarise, the 3 main functions are: <span class="math display">\[
+\begin{aligned} \frac{\partial \rho}{\partial t}+\nabla \cdot(\rho\mathbf{V}) &amp;=0 &amp; &amp; \text { continuity } \\ \rho \mathbf{g}-\nabla p+\boldsymbol{\nabla} \cdot \boldsymbol{\tau}_{i j} &amp;=\rho \frac{D \mathbf{V}}{D t} &amp; &amp; \text { momentum } \\ \rho \frac{D \hat{u}}{D t}=p(\boldsymbol{\nabla} \cdot \mathbf{V}) &amp;=\boldsymbol{\nabla} \cdot(k \boldsymbol{\nabla} T)+\mathbf{\Phi} &amp; &amp; \text { energy } \end{aligned}
+\]</span> Note that there are five unknowns <span class="math inline">\(\rho,\mathbf{V}, p, \hat{u},T\)</span>, but only three equations. Additional equations are state relations for the thermodynamic properties of the fluid. For example for perfect gas: <span class="math display">\[
+\rho=\frac{p}{R T} \quad \hat{u}=\int c_{v} d T
+\]</span> The system of equations is now well-posed and can be solved, subject to <em>boundary conditions.</em></p>
+<h4 id="incompressible-system">3.3.1 Incompressible system</h4>
+<p>We have: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\nabla} \cdot \mathbf{V} &amp;=0 \\
+\rho \frac{D \mathbf{V}}{D t} &amp;=\rho \boldsymbol{g}-\nabla p+\mu \nabla^{2} \mathbf{V} \\
+\rho c_{p} \frac{D T}{D t} &amp;=k \nabla^{2} T+\mathbf{\Phi}
+\end{aligned}
+\]</span> Note that for incompressible flow, <span class="math inline">\(\rho,\mu,k\)</span> are constants, only 3 unknowns are left <span class="math inline">\(p, \mathbf{V}, T\)</span>. So the incompressible system is already closed. Besides, continuity and momentum equations are independent of the <span class="math inline">\(T\)</span>, thus decouple from the energy equation.</p>
+<h3 id="boundary-conditions">3.4 Boundary conditions</h3>
+<ul>
+<li>Wall: these are typically solid, impermeable and there is a no-slip condition at the wall.</li>
+<li>Inlet: known velocity <span class="math inline">\(\mathbf{V}\)</span> and pressure <span class="math inline">\(p\)</span> (and temperature <span class="math inline">\(T\)</span>)</li>
+</ul>
+<h3 id="stream-function">3.5 Stream function</h3>
+<p>Stream function provides a mathematical tool to automatically satisfy the continuity constraint, after which we can then solve the momentum equation.</p>
+<div class="note note-info">
+            <p>It is only applicable to flows which are <strong>steady</strong>, <strong>incompressible</strong> and <strong>two-dimensional</strong>.</p>
+          </div>
+<p>With continuity equation: <span class="math display">\[
+\boldsymbol{\nabla}\cdot\mathbf{V} = 0 \Leftrightarrow \frac{\partial u }{\partial x} + \frac{\partial v}{\partial y} = 0
+\]</span> We seek to replace the velocity components <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> with a scalar function <span class="math inline">\(\psi(x,y)\)</span>, which satisfies the above constraint: <span class="math display">\[
+\frac{\partial}{\partial x}\left(\frac{\partial \psi}{\partial y}\right)  + \frac{\partial}{\partial y}\left(-\frac{\partial \psi}{\partial x}\right) \equiv 0
+\]</span> As a result: <span class="math display">\[
+u=\frac{\partial \psi}{\partial y} \qquad v=-\frac{\partial \psi}{\partial x}
+\]</span></p>
+<h4 id="properties-of-stream-function">3.5.1 Properties of stream function</h4>
+<ul>
+<li>Recall the definition of a streamline:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+&amp; \frac{dy}{v} = \frac{dx}{u} \\
+\Leftrightarrow\quad &amp; \frac{\partial \psi}{\partial y}u+\frac{\partial \psi}{\partial x}v=0 \\
+\Leftrightarrow\quad &amp; d\psi=0 \\
+\Leftrightarrow\quad &amp; \psi=Const
+\end{align}
+\]</span></p>
+<ul>
+<li><p>The change of <span class="math inline">\(\psi\)</span> across a control surface of unit depth is equal to the volume flow through the surface</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Stream function property.png" srcset="/img/loading.gif" lazyload alt="Stream function property" style="zoom:50%;"> <span class="math display">\[
+\begin{aligned}
+d Q &amp;=(\mathbf{V} \cdot \boldsymbol{n}) d A \\
+&amp;=\left(\boldsymbol{i} \frac{\partial \psi}{\partial y}-\boldsymbol{j} \frac{\partial \psi}{\partial x}\right) \cdot\left(\boldsymbol{i} \frac{\mathrm{d} y}{\mathrm{~d} s}-\boldsymbol{j} \frac{\mathrm{d} x}{\mathrm{~d} s}\right) d s \\
+&amp;=\frac{\partial \psi}{\partial x} d x+\frac{\partial \psi}{\partial y} d y \\
+&amp;=d \psi
+\end{aligned}
+\]</span></p></li>
+<li><p>The flow direction can be determined by observing whether <span class="math inline">\(\psi\)</span> increases or decreases</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Flow direction based on stream function.png" srcset="/img/loading.gif" lazyload alt="Flow direction based on stream function" style="zoom:50%;"></p></li>
+</ul>
+<h2 id="vorticity-and-irrotationality">4 Vorticity and Irrotationality</h2>
+<h3 id="vorticity">4.1 Vorticity</h3>
+<p>Recall how a fluid particle deforms under shear stresses:</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Fluid particle deformation.png" srcset="/img/loading.gif" lazyload alt="Fluid particle deformation" style="zoom:50%;"></p>
+<p>The angular velocity <span class="math inline">\(\omega_z\)</span> is defined as the average rate of counter-clockwise turning of the two sides: <span class="math display">\[
+\omega_z = \frac{1}{2}\left(\frac{\mathrm{d}(\Delta\theta_x)}{\mathrm{d}t}+\frac{\mathrm{d}(\Delta\theta_y)}{\mathrm{d}t}\right) =\frac{1}{2}\left(\frac{\partial v}{\partial x}-\frac{\partial u}{\partial y}\right)
+\]</span> Similarly, <span class="math display">\[
+\omega_{x}=\frac{1}{2}\left(\frac{\partial w}{\partial y}-\frac{\partial v}{\partial z}\right) \quad \omega_{y}=\frac{1}{2}\left(\frac{\partial u}{\partial z}-\frac{\partial w}{\partial x}\right)
+\]</span> Combine together the angular velocity: <span class="math display">\[
+\boldsymbol{\omega}=\frac{1}{2}(\underbrace{\boldsymbol{\nabla} \times \mathbf{V}}_{\text {curl } \mathbf{V}})=\frac{1}{2}\left|\begin{array}{ccc}
+\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \\
+\frac{\partial}{\partial x} &amp; \frac{\partial}{\partial y} &amp; \frac{\partial}{\partial z} \\
+u &amp; v &amp; w
+\end{array}\right|
+\]</span> And the vorticity is defined as twice the angular velocity i.e. curl of velocity: <span class="math display">\[
+\boldsymbol{\xi}=2 \boldsymbol{\omega}=\operatorname{curl} \mathbf{V}=\boldsymbol{\nabla} \times \mathbf{V}
+\]</span></p>
+<h3 id="vorticity-function-for-two-dimensional-incompressible-flow">4.2 Vorticity function for two-dimensional incompressible flow</h3>
+<p>First some math: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\nabla} \times \boldsymbol{\nabla} \phi &amp; \equiv 0 \qquad\qquad&amp;(4.1) \\
+\boldsymbol{\nabla} \times\left(\boldsymbol{\nabla}^{2} \mathbf{V}\right) &amp;=\boldsymbol{\nabla}^{2}(\boldsymbol{\nabla} \times \mathbf{V}) \qquad\qquad&amp;(4.2) \\
+(\mathbf{V} \cdot \boldsymbol{\nabla}) \mathbf{V} &amp;=\boldsymbol{\nabla}\left(\frac{1}{2} \mathbf{V} \cdot \mathbf{V}\right)-\mathbf{V} \times \boldsymbol{\xi} \qquad\qquad&amp;(4.3) \\
+\boldsymbol{\nabla} \times(\mathbf{V} \times \boldsymbol{\xi}) &amp;=-\boldsymbol{\xi}(\boldsymbol{\nabla} \cdot \mathbf{V})+(\boldsymbol{\xi} \cdot \boldsymbol{\nabla}) \mathbf{V}-(\mathbf{V} \cdot \boldsymbol{\nabla}) \boldsymbol{\xi} \qquad\qquad&amp;(4.4) 
+\end{aligned}
+\]</span> Recall the <a href="#incompressible-navier-stokes-equations">incompressible momentum equation</a>: <span class="math display">\[
+\frac{\partial\mathbf{V}}{\partial t} + \mathbf{V}\cdot\boldsymbol{\nabla}\mathbf{V} = \mathbf{g} -\boldsymbol{\nabla}\left(\frac{p}{\rho}\right) + \nu\boldsymbol{\nabla}^2\mathbf{V}
+\]</span> Take the curl for each term: <span class="math display">\[
+\underbrace{\boldsymbol{\nabla} \times\frac{\partial\mathbf{V}}{\partial t} }_{\frac{\partial\boldsymbol{\xi}}{\partial t}}+ \boldsymbol{\nabla} \times
+\underbrace{\mathbf{V}\cdot\boldsymbol{\nabla}\mathbf{V}}_{\boldsymbol{\nabla}\left(\frac{1}{2} \mathbf{V} \cdot \mathbf{V}\right)-\mathbf{V} \times \boldsymbol{\xi},~\mathrm{by}(4.3)} = 
+\underbrace{\boldsymbol{\nabla} \times\mathbf{g}}_{0} -
+\underbrace{\boldsymbol{\nabla} \times\boldsymbol{\nabla}\left(\frac{p}{\rho}\right)}_{0,~\mathrm{by} (4.1)}+ 
+\nu\underbrace{\boldsymbol{\nabla} \times\boldsymbol{\nabla}^2\mathbf{V}}_{\boldsymbol{\nabla}^{2}(\boldsymbol{\nabla} \times \mathbf{V}),~ \mathrm{by} (4.2)}
+\]</span> As a result: <span class="math display">\[
+\frac{\partial\boldsymbol{\xi}}{\partial t}+ \underbrace{\boldsymbol{\nabla} \times\boldsymbol{\nabla}\left(\frac{1}{2} \mathbf{V} \cdot \mathbf{V}\right)}_{0,~\mathrm{by} (4.1)}-\boldsymbol{\nabla} \times\mathbf{V} \times \boldsymbol{\xi}= \nu\boldsymbol{\nabla}^2\boldsymbol{\xi}
+\]</span> Apply <span class="math inline">\((4.4)\)</span> cancel terms due to assumptions: <span class="math display">\[
+\frac{\partial\boldsymbol{\xi}}{\partial t}
++\underbrace{\boldsymbol{\xi}(\boldsymbol{\nabla} \cdot \mathbf{V})}_{0,~\mathrm{steady~incompressible}}
+-\underbrace{(\boldsymbol{\xi} \cdot \boldsymbol{\nabla}) \mathbf{V}}_{0,~\mathrm{2D~flow}}
++(\mathbf{V} \cdot \boldsymbol{\nabla}) \boldsymbol{\xi}= \nu\boldsymbol{\nabla}^2\boldsymbol{\xi}
+\]</span> Finally, the vorticity function for 2D incompressible flow is: <span class="math display">\[
+\color{purple}
+\frac{\partial\boldsymbol{\xi}}{\partial t}
++(\mathbf{V} \cdot \boldsymbol{\nabla}) \boldsymbol{\xi}= 
+\frac{D\boldsymbol{\xi}}{D t}=
+\nu\boldsymbol{\nabla}^2\boldsymbol{\xi}
+\]</span> <div class="note note-info">
+            <p>Some of the terms have specific physical interpretations:</p><ul><li><span class="math inline">\((\mathbf{V} \cdot \boldsymbol{\nabla}) \boldsymbol{\xi}\)</span> is <em>convection</em></li><li><span class="math inline">\((\boldsymbol{\xi} \cdot \boldsymbol{\nabla}) \mathbf{V}\)</span> is <em>stretching</em></li><li><span class="math inline">\(\nu\boldsymbol{\nabla}^2\boldsymbol{\xi}\)</span> is <em>diffusion</em></li></ul>
+          </div></p>
+<div class="note note-info">
+            <p>Note that there is no pressure term in the vorticity equation, implying that vorticity dynamics are localised in space.</p>
+          </div>
+<h4 id="combine-with-continuity-equation">4.2.1 Combine with continuity equation</h4>
+<p>Recall the definition of the <a href="#stream-function">stream function</a> and take the curl: <span class="math display">\[
+\begin{aligned}
+\mathbf{V} &amp;= \mathbf{i}\frac{\partial\psi}{\partial y}-\mathbf{j}\frac{\partial\psi}{\partial x} \\
+\boldsymbol{\nabla}\times\mathbf{V} &amp;= -\mathbf{k}\boldsymbol{\nabla}^2\psi = -\mathbf{k}\left( \frac{\partial^2\psi}{\partial x^2} + \frac{\partial^2\psi}{\partial y^2} \right)
+\end{aligned}
+\]</span> Substitute these into the vorticity equation, a 4th-order single equation in <span class="math inline">\(\psi\)</span> arrived: <span class="math display">\[
+\color{purple}
+\frac{\partial \psi}{\partial y} \frac{\partial}{\partial x}\left(\nabla^{2} \psi\right)-\frac{\partial \psi}{\partial x} \frac{\partial}{\partial y}\left(\nabla^{2} \psi\right)=\nu \nabla^{2}\left(\nabla^{2} \psi\right)
+\]</span> <div class="note note-info">
+            <p>Assumptions made:</p><ul><li>Steady flow</li><li>Incompressible</li><li>Two dimensional</li></ul>
+          </div></p>
+<p>One important special case is when<br>
+<span class="math display">\[
+\boldsymbol{\nabla}^2\psi = \frac{\partial^2\psi}{\partial x^2} + \frac{\partial^2\psi}{\partial y^2} = 0
+\]</span> The flow is <strong>irrotational</strong>.</p>
+<h3 id="full-bernoulli-equations">4.3 Full Bernoulli equations</h3>
+<p>We now consider a flow which is <strong>inviscid</strong> (although may still be <strong>compressible</strong>).</p>
+<p>Recall <a href="#euler-equations-frictionless-flow">Euler's equation</a>: <span class="math display">\[
+\frac{\partial\mathbf{V}}{\partial t} + \mathbf{V}\cdot\boldsymbol{\nabla}\mathbf{V} = \mathbf{g} -\frac{1}{\rho}\boldsymbol{\nabla}\left(p\right)
+\]</span> Expand the convection term by <span class="math inline">\((4.3)\)</span>: <span class="math display">\[
+\frac{\partial\mathbf{V}}{\partial t} + \boldsymbol{\nabla}\left(\frac{1}{2} V^2\right)+
+\underbrace{\boldsymbol{\xi}\times\mathbf{V}}_{\mathbf{a}\times\mathbf{b}=-\mathbf{b}\times\mathbf{a}}- \mathbf{g} +\frac{1}{\rho}\boldsymbol{\nabla}\left(p\right)=0
+\]</span> Try to integrate it along an arbitrary trajectory in the flow, dot with a small displacement vector <span class="math inline">\(d\mathbf{r}\)</span>: <span class="math display">\[
+\left[\frac{\partial\mathbf{V}}{\partial t} + \boldsymbol{\nabla}\left(\frac{1}{2} V^2\right)+
+\boldsymbol{\xi}\times\mathbf{V}- \mathbf{g} +\frac{1}{\rho}\boldsymbol{\nabla}\left(p\right)\right]d\mathbf{r}=0
+\]</span> The 3<sup>rd</sup> term equals 0 when:</p>
+<ul>
+<li><p>Irrotational flow: <span class="math inline">\(\mathbf{\xi}\equiv0\)</span></p></li>
+<li><p>No flow: <span class="math inline">\(\mathbf{V}\equiv0\)</span>, not possible</p></li>
+<li><p><span class="math inline">\(d\mathbf{r}\)</span> is parallel to <span class="math inline">\(\mathbf{V}\)</span>, <span class="math inline">\(\mathbf{V} \times d \boldsymbol{r} \equiv 0\)</span></p>
+<p>since <span class="math inline">\((\boldsymbol{\xi} \times \mathbf{V}) \cdot d \boldsymbol{r} \equiv(\mathbf{V} \times d \boldsymbol{r}) \cdot \boldsymbol{\xi}\)</span></p>
+<p>our path is a streamline</p></li>
+</ul>
+<p>In order to eliminate the 3<sup>rd</sup> term while keeping the flow rotational, we integrate the equation along the streamline segment <span class="math inline">\(ds\)</span>, <span class="math display">\[
+\begin{aligned}
+\int_1^2\left[\frac{\partial\mathbf{V}}{\partial t} + \boldsymbol{\nabla}\left(\frac{1}{2} V^2\right)-
+\mathbf{g} +\frac{1}{\rho}\boldsymbol{\nabla}\left(p\right)\right]ds=0 \\
+\int_1^2\frac{\partial\mathbf{V}}{\partial t}ds + \left(\frac{1}{2} V_2^2-\frac{1}{2} V_1^2\right) + g(z_2-z_1) +\int_1^2\frac{1}{\rho}\left(dp\right)=0
+\end{aligned}
+\]</span> Rearrange to get the <strong>unsteady Bernoulli equation for compressible flow</strong>: <span class="math display">\[
+\color{purple}\int_1^2\frac{\partial\mathbf{V}}{\partial t}ds+\int_1^2\frac{1}{\rho}\left(dp\right)+ \left(\frac{1}{2} V_2^2-\frac{1}{2} V_1^2\right) + g(z_2-z_1)=0
+\]</span> Plus the <strong>steady and incompressible</strong> conditions, the function reduced to the familiar expression: <span class="math display">\[
+\color{purple}
+\frac{p}{\rho}+\frac{1}{2}V^2+gz = Const,~\mathrm{~along~a~streamline}
+\]</span> Plus the <strong>irrotational</strong> condition, the 3rd term remains 0 regardless the trajectory, the function becomes: <span class="math display">\[
+\color{purple}
+\frac{p}{\rho}+\frac{1}{2}V^2+gz = Const,~\mathrm{~everywhere}
+\]</span></p>
+<h3 id="velocity-potential">4.4 Velocity potential</h3>
+<p>Vector analysis tells us that if the curl of a vector field is zero then that vector field must itself be the gradient of a scalar function. That is,</p>
+<p>The function <span class="math inline">\(\phi\)</span> is called a potential function. <span class="math display">\[
+\boldsymbol{\nabla} \times \mathbf{V} \equiv 0 \quad \Rightarrow \quad \mathbf{V}=\boldsymbol{\nabla} \phi
+\]</span> <div class="note note-info">
+            <p>Velocity potential <span class="math inline">\(\phi\)</span> is another scalar function, a complementary to the <a href="#stream-function">stream function</a> <span class="math inline">\(\psi\)</span>.</p><p>It is applicable only in <strong>irrotational</strong> flow.</p>
+          </div></p>
+<p>Some useful properties:</p>
+<ul>
+<li><p>In Cartesian coordinate, it reduce the 3 velocity components <span class="math inline">\(u\)</span>, <span class="math inline">\(v\)</span>, <span class="math inline">\(w\)</span> into a single scalar: <span class="math display">\[
+u=\frac{\partial \phi}{\partial x} \quad v=\frac{\partial \phi}{\partial y} \quad w=\frac{\partial \phi}{\partial z}
+\]</span></p></li>
+<li><p>Line of constant <span class="math inline">\(\phi\)</span> is called <em>potential lines</em>.</p>
+<p>In <strong>two-dimensional flow</strong>, potential lines are everywhere orthogonal to the streamlines, because: <span class="math display">\[
+u=\frac{\partial \psi}{\partial y}=\frac{\partial \phi}{\partial x} \quad v=-\frac{\partial \psi}{\partial x}=\frac{\partial \phi}{\partial y}
+\]</span> The dot-product of their gradients are: <span class="math display">\[
+\left[\frac{\partial \psi}{\partial x} \mathbf{i}+\frac{\partial \psi}{\partial y} \mathbf{j}\right] \cdot\left[\frac{\partial \phi}{\partial x} \mathbf{i}+\frac{\partial \phi}{\partial y} \mathbf{j}\right]=u(-v)+u v \equiv 0
+\]</span></p></li>
+<li><p>If <span class="math inline">\(\phi\)</span> exists, substitute the definition into the unsteady Bernoulli equation, <span class="math display">\[
+\frac{\partial \phi}{\partial t}+\int \frac{d p}{\rho}+\frac{1}{2}|\boldsymbol{\nabla} \phi|^{2}+g z=\mathrm{const}
+\]</span> <div class="note note-info">
+            <p>It is an equation between just two scalar quantities, <span class="math inline">\(\phi\)</span> and <span class="math inline">\(p\)</span>.</p>
+          </div></p></li>
+</ul>
+<h2 id="vortex-motion-and-applications">5 Vortex Motion and Applications</h2>
+<p>Vortices are structures within the flow in which fluid is rotating about an axis line (which may be straight or curved). A <strong>vortex line</strong> is therefore defined as a line which is always in the same direction as the local vorticity vector <span class="math inline">\(\boldsymbol{\xi}\)</span>.</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Vortex line example.png" srcset="/img/loading.gif" lazyload alt="Vortex line example (red line) from physics.stackexchange.com" style="zoom:100%;"></p>
+<p>Similar to streamline, vortex lines <span class="math inline">\((x, y, z) = (x(s), y(s), z(s))\)</span> are obtained by solving: <span class="math display">\[
+\frac{dx/ds}{d\xi_x}=\frac{dy/ds}{d\xi_y}=\frac{dz/ds}{d\xi_z}
+\]</span> Similar to steam tube, vertex lines which pass through a closed curve in space form a <strong>vortex tube</strong>.</p>
+<h3 id="circulation">5.1 Circulation</h3>
+<p><strong>Fluid circulation</strong> describes the strength of rotation, or strength of fluid swirling, within a closed contour <span class="math inline">\(C(t)\)</span>. Mathematically it is defined as the integral of velocity along the contour curve: <span class="math display">\[
+\Gamma=\oint_{C(t)} \mathbf{V} d s=\int_{S} \boldsymbol{\xi} \cdot \boldsymbol{n} d S
+\]</span></p>
+<h4 id="material-elements-and-its-motion">5.1.1 Material elements and its motion</h4>
+<p>Consider how a infinitesimal displacement <span class="math inline">\(d\mathbf{s}\)</span> deforms over a small time <span class="math inline">\(dt\)</span>, illustrated in the diagram below.</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Displacement deformation.png" srcset="/img/loading.gif" lazyload alt="Displacement deformation" style="zoom:50%;"></p>
+<p>We have <span class="math inline">\(d(d\mathbf{s})\)</span> the <strong>material line element</strong>: <span class="math display">\[
+\begin{aligned}
+d(d \boldsymbol{s})=d \boldsymbol{s}_{1}-d \boldsymbol{s}_{0} &amp;=\left(\boldsymbol{x}+d \boldsymbol{s}_{0}+\mathbf{V}\left(\boldsymbol{x}+d \boldsymbol{s}_{0}\right) d t\right)-(\boldsymbol{x}+\mathbf{V}(\boldsymbol{x}) d t)-d \boldsymbol{s}_{0} \\
+&amp;=\left(\mathbf{V}\left(\boldsymbol{x}+d \boldsymbol{s}_{0}\right)-\mathbf{V}(\boldsymbol{x})\right) d t \\
+&amp;=d \boldsymbol{s}_{0} \frac{\partial \mathbf{V}}{\partial\left(d \boldsymbol{s}_{0}\right)} d t \\
+&amp;=d \boldsymbol{s}_{0} \cdot \boldsymbol{\nabla} \mathbf{V} d t
+\end{aligned}
+\]</span> Therefore: <span class="math display">\[
+\frac{D(d\mathbf{s})}{Dt} = (ds\cdot\boldsymbol{\nabla})\mathbf{V}
+\]</span></p>
+<h3 id="kelvins-circulation-theorem">5.2 Kelvin’s Circulation Theorem</h3>
+<blockquote>
+<p>Kelvin’s Circulation Theorem status the expression of the rate of change of the circulation <span class="math inline">\(\frac{D\Gamma}{Dt}\)</span> and determine how a circulation around a fluid loop varies as the loop moves with the flow. (<a target="_blank" rel="noopener" href="https://youtu.be/q4xSUYZCj84">reference</a>)</p>
+</blockquote>
+<p>Apply material derivative to circulation we have: <span class="math display">\[
+\begin{aligned}
+\frac{D}{Dt}\Gamma&amp;=\frac{D}{Dt}\oint_{C(t)} \mathbf{V} d \mathbf{s}    \\
+&amp;= \oint_{C(t)}\frac{D}{Dt}(\mathbf{V} d \mathbf{s} ) \\
+&amp;= \oint_{C(t)}\frac{D\mathbf{V}}{Dt}\cdot d \mathbf{s}  + \oint_{C(t)}\mathbf{V}\cdot \frac{D(d \mathbf{s})}{Dt}       \\
+\end{aligned}
+\]</span> Substitute material line element into the last term to get a scalar inside the loop integration, then we have: <span class="math display">\[
+\frac{D}{Dt}\Gamma = \oint_{C(t)}\frac{D\mathbf{V}}{Dt}d \mathbf{s}
+\]</span> Recall the <a href="#general-differential-linear-momentum-equation">general linear momentum equation</a> and substitute the material derivative of velocity: <span class="math display">\[
+\begin{aligned}
+\frac{D}{Dt}\Gamma &amp;= \oint_{C(t)}\left(\mathbf{g} - \frac{\boldsymbol{\nabla}p}{\rho} + \frac{\boldsymbol{\boldsymbol{\nabla}\cdot\tau_{ij}}}{\rho}\right)d \mathbf{s} \\
+&amp;= \oint_{C(t)}\mathbf{g}d \mathbf{s}  - \oint_{C(t)}\frac{\boldsymbol{\nabla}p}{\rho} d\mathbf{s}   + \oint_{C(t)}\frac{\boldsymbol{\nabla}\cdot\boldsymbol{\tau_{ij}}}{\rho}d \mathbf{s} 
+\end{aligned}
+\]</span> This function is not zero unless:</p>
+<ul>
+<li>1<sup>st</sup> term: body force torque is zero, body force is <strong>irrotational</strong>, <span class="math inline">\(\mathbf{g} = \nabla\phi\)</span>, <span class="math inline">\(\phi\)</span> is a scalar.</li>
+<li>2<sup>nd</sup> term: <span class="math inline">\(p = p(\rho)\)</span> or <span class="math inline">\(\rho = const.\)</span>(<strong>incompressible and isotropic</strong>)</li>
+<li>3<sup>rd</sup> term: <strong>inviscid</strong>, <span class="math inline">\(\boldsymbol{\tau_{ij}}=0\)</span></li>
+</ul>
+<h4 id="aerofoil-lift-and-kutta-joukowski-theorem">5.2.1 Aerofoil lift and Kutta-Joukowski Theorem</h4>
+<p>One application of the Kelvin Circulation Theorem is in explaining the lift attained by an aerofoil during the shedding of the starting vortex.</p>
+<p>Consider a stationary aerofoil shown in the diagram below.</p>
+<p><img src="/2022/05/14/Derivation-of-Differential-Fluid-Equations/Aerofoil vortex shedding.png" srcset="/img/loading.gif" lazyload alt="Aerofoil vortex shedding" style="zoom:50%;"></p>
+<p>At time <span class="math inline">\(t = 0\)</span>, the aerofoil is stationary, there is no vorticity and around the path <span class="math inline">\(C(t)\)</span> the circulation is <span class="math inline">\(\Gamma = 0\)</span>. As the flow velocity increases, vorticity is shed behind the aerofoil leading to positive <span class="math inline">\(\Gamma\)</span>.</p>
+<p>By Kelvin’s circulation theorem, the circulation <span class="math inline">\(\Gamma_0\)</span> around <span class="math inline">\(C(t)\)</span> is independent of time. Therefore, there must be negative <span class="math inline">\(\Gamma_1\)</span> around the aerofoil, which leads to lift by the Kutta-Joukowski theorem (<span class="math inline">\(L&#39; = −\rho u\Gamma\)</span>).</p>
+<h3 id="helmholtz-theorems">5.3 Helmholtz Theorems</h3>
+<p>Suppose we have an <strong>inviscid</strong>, <strong>incompressible</strong> fluid of <strong>constant density</strong> moving under a <strong>conservative body force</strong>, then</p>
+<ol type="1">
+<li><p>The quantity <span class="math display">\[
+\Gamma=\int_{S} \boldsymbol{\xi} \cdot \boldsymbol{n} d S
+\]</span> is the same for all cross-sections <span class="math inline">\(S\)</span> of a vortex tube. i.e. the strength of a vortex is constant along the length of the vortex.</p></li>
+<li><p>A vortex filament cannot end in the fluid; it must extend to the boundaries of the fluid, infinity, or form a closed loop</p></li>
+<li><p>If fluid is initially irrotational, in the absense of rotational forces, it remains irrotational indefinitely.</p></li>
+</ol>
+<h4 id="vortex-rings">5.3.1 Vortex rings</h4>
+<p>A vivid example of Helmholtz’s theorems can be seen in vortex (smoke) rings. These are vortices in which the core vortex line forms a closed loop (theorem #2).</p>
+<p>Such vortices can retain their strength (theorem #1) and travel significant distances (the smoke is carried in the vortex).</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Derivation of Differential Fluid Equations</div>
+      <div>https://daydreamatnight.github.io/2022/05/14/Derivation-of-Differential-Fluid-Equations/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 14, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/20/Derivation-of-Non-dimensional-NS-Equations/" title="Derivation of Non-dimensional NS Equations">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Derivation of Non-dimensional NS Equations</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/12/Derive-the-NS-equation-from-scratch-AGAIN/" title="Derivation of Integral Fluid Equations">
+                        <span class="hidden-mobile">Derivation of Integral Fluid Equations</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

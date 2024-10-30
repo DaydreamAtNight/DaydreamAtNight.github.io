@@ -1,0 +1,907 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Learning rate schedule is one commonly used trick to control the process of training. Different kinds of learning tricks are presented every day. In this article, I have put together classical method">
+<meta property="og:type" content="article">
+<meta property="og:title" content="learning rate schedule">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Learning rate schedule is one commonly used trick to control the process of training. Different kinds of learning tricks are presented every day. In this article, I have put together classical method">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/SGD%20with%20learning%20rate%20decay.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/SGDR.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/SGDR_REsult.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/CLR.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/2d%20cyclic%20learning%20rate%20schedule.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/cyclic%20learning%20rate%20schedule.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/warmup%20on%20large%20batches.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/experiment.png">
+<meta property="article:published_time" content="2022-03-08T01:32:32.000Z">
+<meta property="article:modified_time" content="2022-05-02T09:41:35.127Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="deep learning tricks">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/SGD%20with%20learning%20rate%20decay.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>learning rate schedule - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="learning rate schedule"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-08 09:32" pubdate>
+          March 8, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          37 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">learning rate schedule</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>Learning rate schedule is one commonly used trick to control the process of training. Different kinds of learning tricks are presented every day. In this article, I have put together classical methods theories and apply them in this little competition.</p>
+</blockquote>
+<blockquote>
+<p>Recently, I joined a <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/classify-leaves/">Kaggle image classification competition</a>, I used the pretrained ResNet50 plus other tricks and here is to record some of them I've learned for now.</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="introduction">Introduction</h3>
+<p>Learning rate is one critical parameter in alliterative algorithms, including PDE and ODE solving, optimization, and eigenvalue calculation. In the deep learning area, the learning rate is more than critical because of the notorious difficulty on <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">Stochastic gradient descent</a>.</p>
+<p>Strictly, there are two ways of adjusting the learning rate:</p>
+<ul>
+<li><p>learning rate scheduling:</p>
+<p>adjust the global learning rate during iteration</p></li>
+<li><p>adaptive learning rate:</p>
+<p>adjust the learning rate for each parameter based on their gradients updates(moments), also called adaptive gradient or gradient descent optimization.</p></li>
+</ul>
+<p>In this article, <strong>learning rate schedule is mainly discussed</strong>. Afterward, "learning rate" refers to the "global learning rate".</p>
+<h3 id="methods-of-learning-rate-scheduling">Methods of learning rate scheduling</h3>
+<p>Apart from the constant learning rate, there are several ways to schedule the learning rate:</p>
+<ul>
+<li>change with epoch numbers
+<ul>
+<li><p>learning rate decay: linear, step...</p></li>
+<li><p>learning rate down then up: stochastic gradient descent with warm restarts(SGDR) and Cyclical Learning rates(CLR)</p></li>
+<li><p>warmup</p></li>
+</ul></li>
+<li>change on some validation measurements: plateau</li>
+</ul>
+<h4 id="learning-rate-decay">learning rate decay</h4>
+<p>Under the upper concepts of decaying the learning rate while training, how to choose a specific decay policy is personal. It can be continuous or step, linear or polynomial, exponential or trigonometric.</p>
+<p>In articles, stepped learning rate decay is more often used as the default choice. For example, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1605.07146">Zagoruyko, S., &amp; Komodakis, N</a> set the initial learning rate as 0.1 and drop it by 0.2 every 60 epochs on their modified version of ResNet. And this version of learning rate decay is set as the control group to compare with the SGDR strategy later in <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.03983">Ilya Loshchilov &amp; Frank Hutter's work</a>. And in practice, the cosine annealing policy is a common choice today and can be used either alone or in combination with warmup and SGDR.</p>
+<h5 id="explanation">Explanation</h5>
+<p>Because of the presence of stochastic noise, the entire gradient descent process is not straightforward. With a constant learning rate, as shown in the gradient contour map below, the minima can not be reached with a constant step (blue) due to the relatively small steps at the bottom. And a lower minimum can be reached if the learning rate descends with the gradient i.e. epoch(green).</p>
+<p><img src="/2022/03/08/learning-rate-schedule/SGD%20with%20learning%20rate%20decay.png" srcset="/img/loading.gif" lazyload alt="SGD with learning rate decay" style="zoom:80%;"></p>
+<p>#### SGDR and CLR</p>
+<p>##### SGDR</p>
+<p>Stochastic gradient descent with warm restarts(SGDR) is firstly proposed to Deep learning in <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.03983">Ilya Loshchilov &amp; Frank Hutter's work</a>. They introduced a policy of reinitializing the learning rate every certain number of epochs. Applying cosine annealing learning rate decay during each resulting "mini-run", the results perform fascinating.</p>
+<p><img src="/2022/03/08/learning-rate-schedule/SGDR.png" srcset="/img/loading.gif" lazyload alt="SGDR" style="zoom:75%;"></p>
+<p><img src="/2022/03/08/learning-rate-schedule/SGDR_REsult.png" srcset="/img/loading.gif" lazyload alt="SGDR_REsult" style="zoom:100%;"></p>
+<p>As shown in the charts, compared to 2 default step learnin rate decay policies, they enacted several SGDR policies with different T_0 and T_mul. T_0 refers to the epoch interval of the first "mini-run" and the epoch interval is multiplied by T_mul after each restart. As a result, at the ith "mini-run", T_i = T_0*T_mul^(i)</p>
+<p>And they suggests a SGDR policy with a small T0 = 1 or 10 at start, and set Tmult = 2 to double the epoch interval after every restart. And they claim by this policy, at least 2× to 4× fewer epochs are required to achieve a comparable result than before.</p>
+<p>##### CLR</p>
+<p>A similar method called cyclical Learning rates(CLR) is proposed later by <a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/7926641/">Leslie N. Smith</a>, where 2 kinds of triangular and exponential CLR policies are demonstrated on CIFAR-10 and CIFAR-100 with most kinds of mainstream CNN modules.</p>
+<p><img src="/2022/03/08/learning-rate-schedule/CLR.png" srcset="/img/loading.gif" lazyload alt="CLR" style="zoom:75%;"></p>
+<p>Similarly, compared with a default fixed learnin rate, the demonstrats that their policies outperforms in accuracy and efficiency on several datasetes.</p>
+<blockquote>
+<p>one obtains the same test classification accuracy of 81.4% after only 25, 000 iterations with the triangular2 policy as obtained by running the standard hyper-parameter settings for 70, 000 iterations.</p>
+</blockquote>
+<p>##### explanation</p>
+<p>Because of the nonconvexity, it is common sense that reaching a global minima is impossible. With a standard learning rate decay, a saddle point, or unstable local minima is more likely to trap the descending process as shown below. But cyclical Learning rates(CLR) and stochastic gradient descent with warm restarts(SGDR) would allow the process to “jump” from one local minimum to another regularly until a stable one.</p>
+<p><img src="/2022/03/08/learning-rate-schedule/2d%20cyclic%20learning%20rate%20schedule.png" srcset="/img/loading.gif" lazyload alt="2d cyclic learning rate schedule" style="zoom:80%;"></p>
+<p><img src="/2022/03/08/learning-rate-schedule/cyclic%20learning%20rate%20schedule.png" srcset="/img/loading.gif" lazyload alt="cyclic learning rate schedule" style="zoom:80%;"></p>
+<p>Still there are several choices, but Cosine Cyclical and Cosine Annealing with Warm Restarts are more common.</p>
+<p>#### learning rate warmup</p>
+<p>Learning rate warmup is first applied in the famous <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">Resnet</a> paper in one of its experiments.</p>
+<blockquote>
+<p>In this case, we find that the initial learning rate of 0.1 is slightly too large to start converging5 . So we use 0.01 to warm up the training until the training error is below 80% (about 400 iterations), and then go back to 0.1 and continue training.</p>
+</blockquote>
+<p>And later <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1706.02677.pdf">Goyal and He's work</a> makes a major influence, where constant and gradual methods of warmup are discussed. And gradual warmup is proved to be effective on large minibatch size.</p>
+<blockquote>
+<p>As we discussed, for large minibatches (e.g., 8k) the linear scaling rule breaks down when the network is changing rapidly, which commonly occurs in early stages of training. We find that this issue can be alleviated by a properly designed warmup [16], namely, a strategy of using less aggressive learning rates at the start of training.</p>
+</blockquote>
+<p><img src="/2022/03/08/learning-rate-schedule/warmup%20on%20large%20batches.png" srcset="/img/loading.gif" lazyload alt="warmup on large batches" style="zoom:100%;"></p>
+<p>In practice, warmup are always combined with other learning rate methods afterwards. And linear warmup is a default method.</p>
+<p>#### Reducing the learning rate on plateau</p>
+<p>Apart from methods scheduling the learning rate with epoch, a dynamic learning rate decay method is also an option. It denotes the process of decaying the learning rate only when the optimizer fails to improve the accuracy or decrease the loss in serval epochs.</p>
+<p>For example, in <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html">AlexNet</a>,</p>
+<blockquote>
+<p>The heuristic which we followed was to divide the learning rate by 10 when the validation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.</p>
+</blockquote>
+<p>In <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">Resnet</a> after the warm-up,</p>
+<blockquote>
+<p>The learning rate starts from 0.1 and is divided by 10 when the error plateaus</p>
+</blockquote>
+<h3 id="apply-learning-rate-scheduling-in-pytorch">Apply learning rate scheduling in PyTorch</h3>
+<blockquote>
+<p><code>torch.optim.lr_scheduler</code> provides several methods to adjust the learning rate based on the number of epochs.</p>
+</blockquote>
+<p>For example,</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">train_ch6</span>(<span class="hljs-params">net, train_iter, test_iter, num_epochs, lr, device</span>):
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;training on&#x27;</span>, device)
+    net.to(device)
+    optimizer = torch.optim.Adam(net.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, num_epochs*<span class="hljs-built_in">len</span>(train_iter)/<span class="hljs-number">10</span>, eta_min=<span class="hljs-number">1e-9</span>)
+    loss = LSR(<span class="hljs-number">0.1</span>) 
+    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):
+        net.train()
+        <span class="hljs-keyword">for</span> i, (X, y) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(train_iter):
+            X, y = X.to(device), y.to(device)
+            optimizer.zero_grad()
+            y_hat = net(X)
+            l = loss(y_hat, y)
+            l.backward()
+            optimizer.step()
+            scheduler.step()</code></pre></div>
+<p>Apart from well defined <code>lr_scheduler</code> , <code>torch.optim.lr_scheduler.LambdaLR</code> allow us to apply self define scheduler such as:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;training on&#x27;</span>, device)
+net.to(device)
+optimizer = torch.optim.Adam(net.parameters(), lr=lr)
+
+t=<span class="hljs-number">10</span>*<span class="hljs-built_in">len</span>(train_iter)<span class="hljs-comment">#warmup</span>
+T=num_epochs*<span class="hljs-built_in">len</span>(train_iter)
+lambda1 = <span class="hljs-keyword">lambda</span> epoch: (<span class="hljs-number">0.9</span>*epoch / t+<span class="hljs-number">0.1</span>) <span class="hljs-keyword">if</span> epoch &lt; t <span class="hljs-keyword">else</span>  <span class="hljs-number">0.1</span>  <span class="hljs-keyword">if</span> <span class="hljs-number">0.5</span> * (<span class="hljs-number">1</span>+math.cos(math.pi*(epoch - t)/(T-t)))&lt;<span class="hljs-number">0.1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">0.5</span> * (<span class="hljs-number">1</span>+math.cos(math.pi*(epoch - t)/(T-t)))
+
+scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda1)
+
+<span class="hljs-comment"># plot learningrate_decay</span>
+lr_plot = []
+<span class="hljs-keyword">for</span> _i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):
+    <span class="hljs-keyword">for</span> _j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(train_iter)):
+        optimizer.step()
+        lr_plot.append(optimizer.param_groups[<span class="hljs-number">0</span>][<span class="hljs-string">&quot;lr&quot;</span>])
+        scheduler.step()
+plt.plot(lr_plot)</code></pre></div>
+<h3 id="should-we-do-scheduling-with-adaptive-learning-rate-method">Should we do scheduling with adaptive learning rate method?</h3>
+<p>From <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/39517431/should-we-do-learning-rate-decay-for-adam-optimizer">Should we do learning rate decay for adam optimizer</a>?, I found it as a arguable question.</p>
+<blockquote>
+<p>It depends. ADAM updates any parameter with an individual learning rate. This means that every parameter in the network has a specific learning rate associated.</p>
+<p>But* the single learning rate for each parameter is computed using lambda (the initial learning rate) as an upper limit. This means that every single learning rate can vary from 0 (no update) to lambda (maximum update).</p>
+<p>It's true, that the learning rates adapt themselves during training steps, but if you want to be sure that every update step doesn't exceed lambda you can than lower lambda using exponential decay or whatever. It can help to reduce loss during the latest step of training, when the computed loss with the previously associated lambda parameter has stopped to decrease.</p>
+</blockquote>
+<blockquote>
+<p>In my experience it usually not necessary to do learning rate decay with Adam optimizer.</p>
+<p>The theory is that Adam already handles learning rate optimization (<a target="_blank" rel="noopener" href="http://arxiv.org/pdf/1412.6980v8.pdf">check reference</a>) :</p>
+<blockquote>
+<p>"We propose Adam, a method for efficient stochastic optimization that only requires first-order gradients with little memory requirement. The method <strong>computes individual adaptive learning rates</strong> for different parameters from estimates of first and second moments of the gradients; the name Adam is derived from adaptive moment estimation."</p>
+</blockquote>
+<p>As with any deep learning problem YMMV, one size does not fit all, you should try different approaches and see what works for you, etc. etc.</p>
+</blockquote>
+<blockquote>
+<p>Yes, absolutely. From my own experience, it's very useful to Adam with learning rate decay. Without decay, you have to set a very small learning rate so the loss won't begin to diverge after decrease to a point.</p>
+</blockquote>
+<p>But in the article <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.05101">Decoupled weight decay regularization</a>(AdamW), it is encouraged.</p>
+<blockquote>
+<p>Adam can substantially benefit from a scheduled learning rate multiplier. The fact that Adam is an adaptive gradient algorithm and as such adapts the learning rate for each parameter does not rule out the possibility to substantially improve its performance by using a global learning rate multiplier, scheduled, e.g., by cosine annealing.</p>
+</blockquote>
+<p>In the CLR article, the authors encourage the combination of CLR methods with Adam as well.</p>
+<blockquote>
+<p>Adaptive learning rates are fundamentally different from CLR policies, and CLR can be combined with adaptive learning rates, as shown in Section 4.1. I</p>
+</blockquote>
+<p>All in all, theoretically, the adaptive learning rate methods such as Adam adjust the learning rate for each parameters under a upper limit as the global learning rate, which can be adjusted by scheduling.</p>
+<p>In practice, at least SGDR and CLR have been proved to be useful combining with optimizers.</p>
+<h3 id="experiment-adam-vs-adam-sgdr">Experiment: Adam vs Adam + SGDR</h3>
+<p>In this little experiment, the best setting in the last article is set as baseline, with Adam with constant learning rate. Leave other settings, Adam with cosine annealing learning rate, and AdamW with cosine annealing learning rate are compared.</p>
+<p><code>global learning rate = 0.005</code></p>
+<p><code>scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0 = **int**(num_epochs***len**(train_iter)/10), T_mult=1, eta_min=1e-9)</code></p>
+<p><img src="/2022/03/08/learning-rate-schedule/experiment.png" srcset="/img/loading.gif" lazyload alt="experiment" style="zoom:80%;"></p>
+<p>As shown in the line charts, SGDR lift both the training and test accuracies. And the overfitting of the baseline method is alleviated as well.</p>
+<p>In the second and sub-figure, the fluctuation in the process of gradient descend caused by the cosine learning rate is obvious. And after each learning rate restart, the rate of the descend also gets a restart. And it takes fewer epochs than to get the same accuracy than the baseline.</p>
+<h3 id="reference">Reference</h3>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1412.6980.pdf">Kingma, D. P., &amp; Ba, J. (2014). Adam: A method for stochastic optimization. <em>arXiv preprint arXiv:1412.6980</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.tum.de/display/lfdv/Adaptive+Learning+Rate+Method">Adaptive Learning Rate Method</a></p>
+<p><a target="_blank" rel="noopener" href="https://towardsdatascience.com/learning-rate-schedules-and-adaptive-learning-rate-methods-for-deep-learning-2c8f433990d1">Learning Rate Schedules and Adaptive Learning Rate Methods</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/analytics-vidhya/learning-rate-decay-and-methods-in-deep-learning-2cee564f910b#:~:text=Learning%20rate%20decay%20is%20a,help%20both%20optimization%20and%20generalization.">Learning Rate Decay and methods in Deep Learning</a></p>
+<p><a target="_blank" rel="noopener" href="https://towardsdatascience.com/https-medium-com-reina-wang-tw-stochastic-gradient-descent-with-restarts-5f511975163">A Newbie’s Guide to Stochastic Gradient Descent With Restarts</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1605.07146">Zagoruyko, S., &amp; Komodakis, N. (2016). Wide residual networks. <em>arXiv preprint arXiv:1605.07146</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.03983">Loshchilov, I., &amp; Hutter, F. (2016). Sgdr: Stochastic gradient descent with warm restarts. <em>arXiv preprint arXiv:1608.03983</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/7926641/">Smith, L. N. (2017, March). Cyclical learning rates for training neural networks. In <em>2017 IEEE winter conference on applications of computer vision (WACV)</em> (pp. 464-472). IEEE.</a></p>
+<p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf">He, K., Zhang, X., Ren, S., &amp; Sun, J. (2016). Deep residual learning for image recognition. In <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em> (pp. 770-778).</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.0267">Goyal, P., Dollár, P., Girshick, R., Noordhuis, P., Wesolowski, L., Kyrola, A., ... &amp; He, K. (2017). Accurate, large minibatch sgd: Training imagenet in 1 hour. <em>arXiv preprint arXiv:1706.02677</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html">Krizhevsky, A., Sutskever, I., &amp; Hinton, G. E. (2012). Imagenet classification with deep convolutional neural networks. <em>Advances in neural information processing systems</em>, <em>25</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/optim.html">torch.optim — PyTorch 1.10 documentation</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/39517431/should-we-do-learning-rate-decay-for-adam-optimizer">Should we do learning rate decay for adam optimizer</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.05101">Loshchilov, I., &amp; Hutter, F. (2017). Decoupled weight decay regularization. <em>arXiv preprint arXiv:1711.05101</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.kaggle.com/isbhargav/guide-to-pytorch-learning-rate-scheduling">Guide to Pytorch Learning Rate Scheduling</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/deep-learning-tricks/">#deep learning tricks</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>learning rate schedule</div>
+      <div>https://daydreamatnight.github.io/2022/03/08/learning-rate-schedule/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 8, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/02/paper-reading-start/" title="paper reading: start">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">paper reading: start</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/04/Intro-and-Pytorch-Implementation-of-Label-Smoothing-Regularization-LSR/" title="Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)">
+                        <span class="hidden-mobile">Intro and Pytorch Implementation of Label Smoothing Regularization (LSR)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

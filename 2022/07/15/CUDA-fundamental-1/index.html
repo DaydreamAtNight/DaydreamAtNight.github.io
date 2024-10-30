@@ -1,0 +1,1040 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is a very quick review on the CPU&#39;s fundamentals, in order to compare with GPU&#39;s when learning CUDA.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPU architecture">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/07/15/CUDA-fundamental-1/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a very quick review on the CPU&#39;s fundamentals, in order to compare with GPU&#39;s when learning CUDA.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/CUDA_1.png">
+<meta property="article:published_time" content="2022-07-15T15:40:00.000Z">
+<meta property="article:modified_time" content="2022-09-02T13:00:10.268Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/CUDA_1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CPU architecture - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CPU architecture"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-07-15 23:40" pubdate>
+          July 15, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          5.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          18 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CPU architecture</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>This is a very quick review on the CPU's fundamentals, in order to compare with GPU's when learning CUDA.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>All the pics and contents are not original. The contents of the whole series are mainly collected from:</p><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1kx411m7Fk">NVIDIA CUDA初级教程视频</a></p><p><a target="_blank" rel="noopener" href="https://cis565-fall-2019.github.io/">CIS 565 2019</a></p><p><a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15418-s21/www/index.html">CMU 15-418/618 (2018)</a></p>
+          </div>
+<p>Outline:</p>
+<table>
+<thead>
+<tr class="header">
+<th>中文</th>
+<th>English term</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>流水线</td>
+<td>Pipelining</td>
+</tr>
+<tr class="even">
+<td>分支预测</td>
+<td>Branch Prediction / Speculation</td>
+</tr>
+<tr class="odd">
+<td>超标量</td>
+<td>Superscalar</td>
+</tr>
+<tr class="even">
+<td>乱序执行</td>
+<td>Out-of-Order(OoO) Execution</td>
+</tr>
+<tr class="odd">
+<td>存储器层次</td>
+<td>Memory Hierarchy</td>
+</tr>
+<tr class="even">
+<td>矢量操作</td>
+<td>Vector Operations</td>
+</tr>
+<tr class="odd">
+<td>多核处理</td>
+<td>Multi-Core</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cpu-introduction">CPU Introduction</h2>
+<h5 id="what-is-cpu-machine-processing-instructions.">What is CPU: Machine processing <strong><em>instructions</em></strong>.</h5>
+<p>Example of types of CPU instructions?</p>
+<ul>
+<li><p>arithmetic: <code>add r3,r4 -&gt; r4</code></p></li>
+<li><p>load-store: <code>load [r4] -&gt; r7</code></p></li>
+<li><p>sequencing/control: <code>jz end</code></p></li>
+</ul>
+<h5 id="aim-to-be-optimized">Aim to be optimized:</h5>
+<p><span class="math display">\[
+\frac{cycles}{instructions} \times \frac{seconds}{cycle}
+\]</span></p>
+<p>cycles per instructions(CPI) times time per cycle.</p>
+<blockquote>
+<p>cycle: 时钟周期</p>
+</blockquote>
+<p>These two parameters are not independent, need trade-off.</p>
+<h5 id="cpu-programs">CPU programs:</h5>
+<ul>
+<li>light threaded</li>
+<li>heavy memory access</li>
+<li>heavy branches</li>
+</ul>
+<p>very less arithmetic instructions.</p>
+<h5 id="cpu-structure">CPU structure</h5>
+<p><img src="/2022/07/15/CUDA-fundamental-1/Intel Core Die Map.png" srcset="/img/loading.gif" lazyload alt="Intel Core Die Map" style="zoom:50%;"></p>
+<ul>
+<li>Very large memory size (Shared L3 Cache)</li>
+<li>Controller (Memory Controller) - also for memory</li>
+<li>less calculators (Core)</li>
+</ul>
+<h5 id="cpu-related-parallelisms">CPU related parallelisms</h5>
+<ul>
+<li>Instructional level parallelism (ILP) (will talk about it very soon)
+<ul>
+<li>Superscalar</li>
+<li>Out-of-Order</li>
+</ul></li>
+<li>Data-level parallelism (DLP)
+<ul>
+<li>vectors</li>
+</ul></li>
+<li>Thread-level parallelism (TLP)
+<ul>
+<li>simultaneous multithreading (SMT)</li>
+<li>multicore</li>
+</ul></li>
+</ul>
+<h2 id="pipelining">Pipelining</h2>
+<h3 id="introduction">Introduction</h3>
+<h5 id="standard-5-stage-pipeline">Standard 5-stage pipeline:</h5>
+<p>Fetch--&gt;Decode--&gt;Execute--&gt;Memory--&gt;Writeback</p>
+<blockquote>
+<p>取址--&gt;译码--&gt;执行--&gt;访存--&gt;写回</p>
+</blockquote>
+<p><img src="/2022/07/15/CUDA-fundamental-1/CPU classic pipeline.gif" srcset="/img/loading.gif" lazyload alt="CPU classic pipeline" style="zoom:80%;"></p>
+<h5 id="instruction-level-parallelism-ilp">instruction-level parallelism (ILP)</h5>
+<ul>
+<li><p>√ reduce clock period</p></li>
+<li><p>× more latency and area</p></li>
+<li><p>? dependent instructions -- Bypassing, Stall and OoO</p></li>
+<li><p>? branching -- Branch Prediction / Branch Predication</p></li>
+<li><p>? alleged pipeline lengths</p>
+<ul>
+<li>Core - 14, Pentium 4 (Prescott) - &gt;20, Sandy Bridge - medium</li>
+</ul></li>
+</ul>
+<p>Increase ILP: Superscalar, scheduling, out-of-order</p>
+<h5 id="bypassing">Bypassing</h5>
+<div class="code-wrapper"><pre><code class="hljs assembly">sub R2, R3 -&gt; R7
+add R1, R7 -&gt; R2</code></pre></div>
+<p><code>execute</code> <code>line 2</code> immediately after <code>execute</code> <code>line 1</code>, not until finishing of <code>Memory</code> and <code>writeback</code> of <code>line1</code>.</p>
+<h5 id="stall">Stall</h5>
+<div class="code-wrapper"><pre><code class="hljs assembly">load [R3] -&gt; R7
+add R1, R7 -&gt; R2</code></pre></div>
+<p><code>line 2</code> can only <code>execute</code> until the finishing of <code>Memory</code> and <code>writeback</code> of <code>line1</code>. The program have to wait.</p>
+<h5 id="branches">Branches</h5>
+<div class="code-wrapper"><pre><code class="hljs assembly">jeq loop</code></pre></div>
+<p>prediction of how the branch will go, or predication.</p>
+<h3 id="branches-1">Branches</h3>
+<h5 id="branch-prediction">Branch Prediction</h5>
+<p>Guess what's next, based on branch history.</p>
+<p>Modern predictors &gt;90% accuracy</p>
+<ul>
+<li><p>√ Raise performance and energy efficiency</p></li>
+<li><p>× Area increase and potentially latency (need time for guessing)</p></li>
+</ul>
+<h5 id="branch-predication">Branch Predication</h5>
+<p>Calculate results for all the conditions</p>
+<p>Replace branches with conditional instructions, Avoids branch predictor.</p>
+<ul>
+<li>√ no misprediction</li>
+<li>√ no area increase</li>
+<li>× unnecessary <code>nop</code>.</li>
+</ul>
+<p>GPUs also use predication</p>
+<h3 id="increasing-ipc">Increasing IPC</h3>
+<h4 id="superscalar">Superscalar</h4>
+<p>Normal IPC is limited by the 1 instruction per clock setting.</p>
+<p>Superscalar is introduced to increase the pipeline width.</p>
+<ul>
+<li>√ IPC *N</li>
+<li>× Increase Area
+<ul>
+<li>resources *N</li>
+<li>number of bypassing networks *N^2</li>
+<li>more registers and memory bandwidth</li>
+</ul></li>
+</ul>
+<p><img src="/2022/07/15/CUDA-fundamental-1/Sandy bridge pipeline.png" srcset="/img/loading.gif" lazyload alt="Sandy bridge pipeline" style="zoom:80%;"></p>
+<p>Sandy-Bridge has 6 ports, indicating 6 instructions per clock, managed by Scheduler.</p>
+<h4 id="scheduling">Scheduling</h4>
+<h5 id="register-renamingaliasing">Register Renaming/Aliasing</h5>
+<p>Check out this piece of code:</p>
+<div class="code-wrapper"><pre><code class="hljs assembly">xor r1, r2 -&gt; r3
+add r3, r4 -&gt; r4
+sub r5, r2 -&gt; r3
+addi r3, 1 -&gt; r1</code></pre></div>
+<p><code>line 1</code> and <code>line 2</code>, dependent (Read-After-Write, RAW)</p>
+<p><code>line 3</code> and <code>line 4</code>, dependent (RAW)</p>
+<p><code>line 1</code> and <code>line 3</code> independent (Write-After-Write, WAW), maybe they can execute in parallel, but register <code>r3</code> is used for both of the lines, can't run in parallel, without any modifications.</p>
+<p>So we introduce register renaming to rename <code>r3</code> into different registers.</p>
+<div class="code-wrapper"><pre><code class="hljs assembly">xor p1, p2 -&gt; p6
+add p6, p4 -&gt; p7
+sub p5, p2 -&gt; p8
+addi p8, 1 -&gt; p9</code></pre></div>
+<p>enable to parallel.</p>
+<h5 id="out-of-order-ooo-execution">Out-of-Order (OoO) Execution</h5>
+<p>"Shuffle" the instructions to avoid waiting.</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.gamedev.net/articles/programming/general-and-gameplay-programming/a-journey-through-the-cpu-pipeline-r3115/">A Journey Through the CPU Pipeline</a>:</p>
+<p>Micro-ops can be processed out of order as long as their data is ready, sometimes skipping over unready micro-ops for a long time while working on other micro-ops that are ready. This way a long operation does not block quick operations and the cost of pipeline stalls is greatly reduced.</p>
+</blockquote>
+<p><img src="/2022/07/15/CUDA-fundamental-1/OoO core illustration.png" srcset="/img/loading.gif" lazyload alt="OoO core illustration" style="zoom:80%;"></p>
+<p>Fetch -&gt; decode -&gt; Rename -&gt; Dispatch -&gt; issue -&gt; register read -&gt; execute -&gt; memory -&gt; writeback -&gt; commit</p>
+<p>Devices about OoO include:</p>
+<ul>
+<li>Reorder Buffer (ROB), record all the instructions state on execution.</li>
+<li>Issue Queue/Scheduler, choose next instruction</li>
+</ul>
+<p>Advantages and disadvantages:</p>
+<ul>
+<li>√ push IPC nearly to the ideal</li>
+<li>× increase area</li>
+<li>× increase consumption</li>
+</ul>
+<p>In-order CPUs: Intel Atom, ARM Cortex-A8, Qualcomm Scorpion</p>
+<p>OoO CPUs: Intel Pentium Pro and onwards, ARM Cortex-9 (Apple A5, NV Tegra 2/3)， Qualcomm Krait</p>
+<p>OoO is not available on some phones, which need area and low consumption</p>
+<h2 id="memory-hierarchy">Memory Hierarchy</h2>
+<p>The bigger the memory, the slower it is, more delay it has.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Memory type</th>
+<th>latency</th>
+<th>bandwidth</th>
+<th>size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SRAM (L1, L2, L3)</td>
+<td>1 - 2 ns</td>
+<td>200 GB/s</td>
+<td>1 - 20 MB</td>
+</tr>
+<tr class="even">
+<td>DRAM (memory)</td>
+<td>70 ns</td>
+<td>20 GB/s</td>
+<td>1 - 20 GB</td>
+</tr>
+<tr class="odd">
+<td>Flash (disk)</td>
+<td>70 - 90 μs</td>
+<td>200 MB/s</td>
+<td>100 - 1000 GB</td>
+</tr>
+<tr class="even">
+<td>HDD (disk)</td>
+<td>10 ms</td>
+<td>1-150 MB/s</td>
+<td>500 - 3000 GB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cashing">Cashing</h3>
+<p>save the most useful memory as near as possible.</p>
+<h4 id="cash-hierarchy">Cash hierarchy</h4>
+<h5 id="hardware-management">hardware management</h5>
+<ul>
+<li>L1 instruction / Data cashes</li>
+<li>L2 unified cache</li>
+<li>L3 unified cache</li>
+</ul>
+<h5 id="software-management">software management</h5>
+<ul>
+<li>Main memory</li>
+<li>Disk</li>
+</ul>
+<p><img src="/2022/07/15/CUDA-fundamental-1/CPU memory hierarchy.jpeg" srcset="/img/loading.gif" lazyload alt="CPU memory hierarchy" style="zoom:80%;"></p>
+<h3 id="other-consideration-of-memory">Other consideration of memory</h3>
+<h5 id="banking">Banking</h5>
+<p>avoid multiple access</p>
+<h5 id="coherency">Coherency</h5>
+<h5 id="memory-controller">Memory controller</h5>
+<h2 id="increasing-data-level-parallelism-dlp">Increasing Data-level parallelism (DLP)</h2>
+<h3 id="vector">vector</h3>
+<h4 id="motivation">motivation</h4>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++)
+&#123;
+    A[i] = A[i] + B[i] + c[i];
+&#125;</code></pre></div>
+<p>when N is very big, need to be faster, because each instruction per loop are independent, change the code into:</p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i+=<span class="hljs-number">4</span>)
+&#123;
+    <span class="hljs-comment">// working on parallel, 4 &quot;threads&quot;</span>
+    A[i] = A[i] + B[i] + c[i];
+    A[i+<span class="hljs-number">1</span>] = A[i+<span class="hljs-number">1</span>] + B[i+<span class="hljs-number">1</span>] + c[i+<span class="hljs-number">1</span>];
+    A[i+<span class="hljs-number">2</span>] = A[i+<span class="hljs-number">2</span>] + B[i+<span class="hljs-number">2</span>] + c[i+<span class="hljs-number">2</span>];
+    A[i+<span class="hljs-number">3</span>] = A[i+<span class="hljs-number">3</span>] + B[i+<span class="hljs-number">3</span>] + c[i+<span class="hljs-number">3</span>];
+&#125;</code></pre></div>
+<p>Single Instruction Multiple Data (SIMD)</p>
+<ul>
+<li>ALU is wide</li>
+<li>register is big</li>
+</ul>
+<h4 id="x86-vector-sets">x86 vector sets</h4>
+<h5 id="sse2">SSE2</h5>
+<ul>
+<li>4-width float or integer instruction</li>
+<li>Intel Pentium 4 onwards</li>
+<li>AMD Athlon 64 onwards</li>
+</ul>
+<h5 id="avx">AVX</h5>
+<ul>
+<li><p>8-width float or integer instruction</p></li>
+<li><p>Intel Sandy Bridge</p></li>
+<li><p>AMD Bulldozer</p></li>
+</ul>
+<h2 id="increasing-thread-level-parallelism-tlp">Increasing Thread-level parallelism (TLP)</h2>
+<h3 id="simultaneous-multithreading-smt">simultaneous multithreading (SMT)</h3>
+<p>Including:</p>
+<ul>
+<li><p>instruction streams</p></li>
+<li><p>private PC ,registers, stack</p></li>
+<li><p>Shared global, heap</p></li>
+</ul>
+<p>Thread can be created or destroyed.</p>
+<p>Both programmer and OS can schedule it.</p>
+<h3 id="multicore">multicore</h3>
+<p>Pure replicating the whole pipeline. (Sandy Bridge-E: 6 cores)</p>
+<ul>
+<li>√ full core, don not share other resources except the L1 cache</li>
+<li>√ keep the mole's theory</li>
+<li>× problems of multicore thread of efficiency</li>
+</ul>
+<h5 id="locks-coherence-and-consistency">Locks, Coherence and Consistency</h5>
+<p>multiple threads read-write same data -- add lock</p>
+<p>who's data is correct -- coherence</p>
+<p>which type of data is correct -- consistency</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CPU architecture</div>
+      <div>https://daydreamatnight.github.io/2022/07/15/CUDA-fundamental-1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 15, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/07/23/Solving-Wave-Equation-in-Different-Languages/" title="Solving Wave Equation in Different Languages">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Solving Wave Equation in Different Languages</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/07/01/Play-with-CUDA/" title="Play with CUDA">
+                        <span class="hidden-mobile">Play with CUDA</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

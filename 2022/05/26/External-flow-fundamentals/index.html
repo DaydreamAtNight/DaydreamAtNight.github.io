@@ -1,0 +1,1384 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Internal pipe flow is not enough for me, continue to review the tricky part.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="External flow fundamentals">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/05/26/External-flow-fundamentals/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Internal pipe flow is not enough for me, continue to review the tricky part.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/external_flow.png">
+<meta property="article:published_time" content="2022-05-26T05:15:15.000Z">
+<meta property="article:modified_time" content="2022-06-16T07:51:56.427Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/external_flow.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>External flow fundamentals - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="External flow fundamentals"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-26 13:15" pubdate>
+          May 26, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          32k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          107 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">External flow fundamentals</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Internal pipe flow is not enough for me, continue to review the tricky part.</p>
+          </div>
+<span id="more"></span>
+<h2 id="fluid-structure-interaction">4 Fluid-structure interaction</h2>
+<p>When an unbounded homogeneous flow approaches an obstacle, viscous effects become important and substantially deform the flow profile. The resulting boundary layers and wakes are responsible for generating forces and moments on the obstacle.</p>
+<h3 id="examples">4.1 Examples</h3>
+<h4 id="lift-generation">4.1.1 Lift generation</h4>
+<p>Here comes the most popular question: how does an aircraft fly?</p>
+<p>The basic answer is that</p>
+<blockquote>
+<p>The airfoil is shaped so that its upper surface is longer than its lower surface. A parcel of fluid arriving at the leading edge then splits into two parcels, one following the upper surface and the other the lower surface. As the fluid has more distance to travel on the upper surface than on the lower surface, it goes faster to have the <strong>same transit time</strong>. The Bernoulli effect follows: the higher velocity on the upper surface yields a lower pressure and an ascending force is created: the lift.</p>
+</blockquote>
+<p>The use of Bernoulli effect is, to some extent, correct. However, based on experiment findings shown below, the same transit time assumption is not quite right.</p>
+<p>I{t}s clear the upper flow is accelerated compared to the lower flow. This happens already at the leading edge, but the lower flow never catches up with the upper one. As a result, the upper flow possesses a shorter transit time.</p>
+<p><img src="/2022/05/26/External-flow-fundamentals/Flow past an airfoil.gif" srcset="/img/loading.gif" lazyload alt="Flow past an airfoil visualised through the trajectory of one pulse of smoke. After Babinsky (http://www.cam.ac.uk/research/news/how-wings-really-work)." style="zoom:100%;"></p>
+<p>As a consequence, the physical mechanism behind lift is not so simple. A plausible answer is twofolds.</p>
+<ul>
+<li>On the one hand, the fluid is accelerated on the upper surface and slowed down on the lower surface, creating a descending pressure gradient, hence lift.</li>
+<li>On the other hand, the fluid trajectory is overall deflected downwards when passing the airfoil. This implies that the airfoil creates a descending force onto the fluid, and, by Newton’s third law, that the fluid generates an ascending force onto the airfoil.</li>
+</ul>
+<h4 id="wingtip-vortices">4.1.2 Wingtip vortices</h4>
+<p>At the tip of the wing, when the lower pressure upper surface meets the higher pressure lower surface, wingtip vortices are generated. These vortices are generally strong, long-lived and consequently dangerous, as shown below:</p>
+<p><img src="/2022/05/26/External-flow-fundamentals/Wingtip vortex.jpeg" srcset="/img/loading.gif" lazyload alt="Wingtip vortex behind a plane visualised with red smoke." style="zoom:50%;"></p>
+<p>Flying through such a vortex will create a rolling moment that can destabilize the flight. Many such incidents have happened during takeoff and landing. As a result, airports have decided on quiet periods of one to two minutes between two successive takeoffs or landings to allow for these vortices to dissipate to a less dangerous strength.</p>
+<p><img src="/2022/05/26/External-flow-fundamentals/V formation.jpeg" srcset="/img/loading.gif" lazyload alt="Birds flying in V-formation." style="zoom:50%"></p>
+<p>Yet the wingtip vortices are leveraged perfectly by the nature, the V-formation. When one bird follows another bird, it places itself a little bit on the side to benefit from the lift generated by the wingtip vortices of its leader.</p>
+<h4 id="others">4.1.3 Others</h4>
+<p>Wind and ocean engineering also present important challenges in the area of fluid-structure interaction.</p>
+<p>The construction of tall building is necessary to accommodate large professional centres and these tall buildings interact strongly with the wind. Similar issues arise with bridges. Serious oscillation would be generated due to the "wind load".</p>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tHMPR7flpf4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</p>
+<p>In water, it is important to understand fluid-structure interactions to design efficient breakwaters and protect constructions on the shore or beaches. Pier piles are also good examples of structures interacting with water and that have to be designed carefully.</p>
+<p>Lastly, we can take advantage of natural phenomena such as wind and currents by designing structures that will store such energy like wind and water turbines.</p>
+<h3 id="effect-of-a-structure-on-the-fluid">4.2 Effect of a structure on the fluid</h3>
+<p>When an external flow goes past an obstacle, boundary layer and wake effects occur on the walls and after the obstacle respectively.</p>
+<h4 id="boundary-layers">4.2.1 Boundary layers</h4>
+<p><img src="/2022/05/26/External-flow-fundamentals/Boundary layers.png" srcset="/img/loading.gif" lazyload alt="Sketch of the flow past a sharp flat plate oriented in the direction of the flow.
+Two situations are shown: a low-Re flow (ReL= 10) and a high-Re flow (ReL= 107) and the associated boundary layers depicted. After White, Fluid Mechanics (2011)." style="zoom:50%;"></p>
+<p><strong>Convenient definition</strong>: a region where the fluid’s velocity parallel to the wall is smaller or equal to 99% of the external velocity.</p>
+<ul>
+<li>Inside the boundary layer, the flow feels the effect of the wall and is gradually slowed down as we approach the wall. The presence of these velocity gradients is a consequence of <strong>viscous dissipation</strong>.</li>
+<li>Outside the boundary layer, the flow does not feel the presence of the walls. It remains homogeneous and is considered <strong>inviscid</strong>.</li>
+</ul>
+<div class="note note-info">
+            <p>Note that this is only an assumption, the interaction between the boundary layer and the outer pressure distribution is neglected. For slender bodies at large <span class="math inline">\(Re\)</span>, such as airfoils, when placed parallel to the flow, this assumption provides good results due to the thin and weak boundary layer.</p>
+          </div>
+<p>There are <strong>two types</strong> of the boundary layers defined by the Reynolds number:</p>
+<ul>
+<li>Low <span class="math inline">\(Re\)</span>, laminar boundary layer. Because spatial variations are slow, the laminar boundary layer occupies a large spatial region.</li>
+<li>High <span class="math inline">\(Re\)</span>, two distinct regions in the boundary layer:
+<ul>
+<li>laminar boundary layer similar to that of low-Re flows but much thinner</li>
+<li>turbulent boundary layer that occurs further away in the streamwise direction and is larger than the laminar boundary layer.</li>
+</ul></li>
+</ul>
+<p>The <strong>viscous displacement effect</strong> describes the non-zero velocity in the direction orthogonal to the wall because the velocity parallel to the wall varies in the direction orthogonal to the wall.</p>
+<ul>
+<li>For low <span class="math inline">\(Re\)</span> laminar boundary layers, this effect is important</li>
+<li>For high <span class="math inline">\(Re\)</span> boundary layers, these boundary layers are so thin that this effect is negligible.</li>
+</ul>
+<h4 id="wakes">4.2.2 Wakes</h4>
+<p><img src="/2022/05/26/External-flow-fundamentals/Wakes.png" srcset="/img/loading.gif" lazyload alt="Sketch of the wake past a cylinder and the different regimes observed as a function of the Reynolds number Re = UR/ν, where U is the velocity of the fluid infinitely far away from the cylinder, R the cylinder radius and ν the fluid’s kinematic viscosity. After Middleton & Southard, Mechanics of Sediment Movement, SEPM Short Course Notes, Vol. 3 (1984)." style="zoom:50%;"></p>
+<p>When the inertia is non-trivial (equivalently viscous effects are not overwhelmingly dominant), the gradients of velocity induced by the boundary layer are advected downstream and create a <strong>wake</strong> past the obstacle. This region can display dramatic departures from the established flow infinitely far away from the obstacle.</p>
+<p>The sketch above shows how several typical regimes of the wake past a cylinder in different <span class="math inline">\(Re\)</span>s:</p>
+<ul>
+<li>Low <span class="math inline">\(Re\)</span>: steady and symmetric flow</li>
+<li><span class="math inline">\(Re=\mathcal{O}(10)\)</span>:
+<ul>
+<li>the upstream-downstream symmetry is broken</li>
+<li>flow separation occurs. The boundary layers separate from the wall and a recirculation zone is created where two counter-rotating vortices live.</li>
+<li>wake remains stationary</li>
+<li>the up-down symmetry is still preserved</li>
+</ul></li>
+<li><span class="math inline">\(Re=\mathcal{O}(100)\)</span>:
+<ul>
+<li>the up-down symmetry is broken</li>
+<li>flow separation developed</li>
+<li>wake is now periodic in time, vortices periodically break away from the back of the cylinder in an alternate fashion and are advected downstream</li>
+<li>This type of wake is called <strong>Von Kármán streets</strong>.</li>
+</ul></li>
+<li><span class="math inline">\(Re&gt;\mathcal{O}(1000)\)</span>: any simple time-dependence in the wake is lost and it is now turbulent.</li>
+</ul>
+<p>Note that as the Reynolds number is increased, different types of turbulent wakes can be observed.</p>
+<ul>
+<li>At <span class="math inline">\(Re = 5\times10^3\)</span>, the turbulent wake is detached from the wall and a laminar bubble is observed at the back of the cylinder.</li>
+<li>As the Reynolds number is increased, this bubble shrinks</li>
+<li>At <span class="math inline">\(Re = 10^5\)</span>, the back of the cylinder has become fully turbulent</li>
+<li>As Re is further increased, the turbulent wake becomes thinner and thinner and the influence of the cylinder on the flow decreases. This is the result of the fact that the characteristic length for advection becomes incomparably larger than the diameter of the cylinder</li>
+</ul>
+<h3 id="effect-of-the-fluid-on-a-structure">4.3 Effect of the fluid on a structure</h3>
+<p>In this section, we look at the opposite interaction: the impact of boundary layers and wakes on the structures.</p>
+<h4 id="free-kick-like-cristiano-ronaldo">4.3.1 Free kick like Cristiano Ronaldo</h4>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MscZ_pd7iAM?start=12" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</p>
+<p>Personally, I'm not a big fan of football. The only football game I watch is FIFA. And I happened to watch this legendary game on live. I remember it was 3 o'clock in the morning and I barely held my scream.</p>
+<p><img src="/2022/05/26/External-flow-fundamentals/magnus effect illustration.png" srcset="/img/loading.gif" lazyload alt="Illustration of the Magnus effect using a downward flow past an anti-clockwise rotating sphere. The flow is slowed down on the right as opposed to the left. The pressure is then greater on the right of the sphere and a leftward force is generated." style="zoom:50%;"></p>
+<p>The explanation of such a trajectory lies in the <strong>Magnus effect</strong> which describes a spinning object moving through a fluid. Rotating the ball accelerates the flow on one side while slowing it down on the other. This difference of velocity breaks the symmetry of the flow and creates a difference of pressure. And this results in an additional force that bends the trajectory of the ball.</p>
+<h4 id="the-tacoma-narrows-bridge">4.3.2 The Tacoma Narrows bridge</h4>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XggxeuFDaDU?start=15" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</p>
+<p>Another famous aeroelastic failure is this 1.8km long bridge in the state of Washington. The 6 million dollar bridge collapsed in a steady standard wind in November, 1940, only 3 months after its opening date. Back then this wind interacted in an unexpected manner with the bridge and created a positive feedback loop called <strong>aeroelastic flutter</strong>. A oscillating wake due to the periodic vortex shedding excited a <strong>second torsional mode</strong>: the midpoint of the bridge remained motionless while the two opposite halves twisted in opposite directions. This torsion further enhanced the strength of the wake, which in turn enhanced the torsion until the bridge collapsed.</p>
+<h2 id="boundary-layer-theory-integral-approach">5 Boundary layer theory – Integral approach</h2>
+<p>First, a control volume is defined as blow:</p>
+<ul>
+<li>Boundary ①: the segment <span class="math inline">\((0, 0)\)</span> to <span class="math inline">\((0, h)\)</span>, where <span class="math inline">\(\mathbf{u} = U\mathbf{\hat{x}}\)</span>.</li>
+<li>Boundary ②: the streamline <span class="math inline">\((0, h)\)</span> to <span class="math inline">\((L, \delta)\)</span>, where <span class="math inline">\(\mathbf{u}\cdot \mathbf{n} = 0\)</span>.</li>
+<li>Boundary ③: the segment <span class="math inline">\((L, \delta)\)</span> to <span class="math inline">\((L, 0)\)</span>, where $ = u(x, y) + v(x, y)$.</li>
+<li>Boundary ④: the plate surface and streamline <span class="math inline">\((L, 0)\)</span> to <span class="math inline">\((0, 0)\)</span>, where <span class="math inline">\(u = 0\)</span>.</li>
+</ul>
+<p><img src="/2022/05/26/External-flow-fundamentals/Boundary layer control volume.png" srcset="/img/loading.gif" lazyload alt="Sketch of a developing boundary layer on a flat plate. The control volume used is delimited by the boundaries labeled ①, ②, ③ and ④." style="zoom:30%;"></p>
+<h3 id="viscous-displacement">5.1 Viscous displacement</h3>
+<h4 id="physical-origin">5.1.1 Physical origin</h4>
+<p>The viscous displacement determines the upstream streamlines parallel to the wall to move away from the wall i.e. boundary ② to tilt upward. It can be explained by the 2D compressible continuity equation: <span class="math display">\[
+\partial_x u+\partial_y v=0
+\]</span> Near the boundary ③, the no-slip condition gives <span class="math inline">\(\partial_xu&lt;0\)</span>, to compensate for it, <span class="math inline">\(\partial_yv&gt;0\)</span>, and the consequence of this is the viscous displacement.</p>
+<h4 id="displacement-thickness">5.1.2 Displacement thickness</h4>
+<p><img src="/2022/05/26/External-flow-fundamentals/displacement thickness.png" srcset="/img/loading.gif" lazyload alt="Actual viscous boundary layer vs analogy with an inviscid flow displaying the same flow rate. The wall-normal delay δ* necessary to obtain the same flow rate is called displacement thickness." style="zoom:30%;"></p>
+<p>The quantity <span class="math inline">\(\delta^*\)</span> is called <strong>displacement thickness</strong> and represents the distance by which the wall would have to be moved in the wall normal direction to <strong>obtain the same flow rate</strong> in an inviscid flow. i.e. the additional blockage/deflection due to viscosity.</p>
+<p>By definition, it is easy to conclude that <span class="math inline">\(\delta = \delta^*+h\)</span>. And by mass conservation between the inlet and the outlet, the displacement thickness can be described: <span class="math display">\[
+\begin{aligned}
+\rho\int_1(\mathbf{u}\cdot\mathbf{n})ds&amp;+\rho\int_3(\mathbf{u}\cdot\mathbf{n})ds =0 \\
+\int^{\delta-\delta^*}_0(-U&amp;)dy+\int^\delta_0udy=0 \\
+Uh&amp;= \int^\delta_0udy \\
+\end{aligned}
+\]</span> Substitute <span class="math inline">\(h\)</span> with <span class="math inline">\(\delta-\delta^*\)</span> : <span class="math display">\[
+\begin{aligned}
+U(\delta-\delta^*) &amp;= \int^\delta_0udy \\
+U(\delta-\delta^*) &amp;= \int^\delta_0\left(u+U-U\right)dy \\
+U(\delta-\delta^*) &amp;= U\delta+\int^\delta_0\left(u-U\right)dy \\
+\Rightarrow \quad\delta^* = \int_0^\delta&amp;\left(1-\frac uU\right)dy\\
+\Rightarrow \quad\color{purple}{\frac{\delta^*}{\delta} = \int_0^1}&amp;\color{purple}{\left(1-\frac uU\right)d\eta}, \quad\mathrm{where~}\eta=\frac{y}{\delta}\\
+\end{aligned}
+\]</span></p>
+<h3 id="friction-drag">5.2 Friction drag</h3>
+<h4 id="drag-as-a-boundary-layer-effect">5.2.1 Drag as a boundary layer effect</h4>
+<p>Assume a constant pressure throughout the domain, and a steady flow. The conservation of momentum in <span class="math inline">\(\mathbf{\hat{x}}\)</span> writes: <span class="math display">\[
+\begin{aligned}
+\rho\int_1u(0,y)(\mathbf{u}\cdot\mathbf{n})ds + 
+\underbrace{\rho\int_2u(x,y)(\mathbf{u}\cdot\mathbf{n})ds+}_{\mathrm{streamline:~}\mathbf{u}\cdot\mathbf{n}=0} ...\\
+\rho\int_3u(L,y)(\mathbf{u}\cdot\mathbf{n})ds+
+\underbrace{\rho\int_4u(x,0)(\mathbf{u}\cdot\mathbf{n})ds}_{\mathrm{wall:~}u=0}=
+\Sigma F_x = -D\mathbf{\hat{x}}
+\end{aligned}
+\]</span> The equation simplifies into: <span class="math display">\[
+\begin{aligned}
+\rho\int_0^hU(-U)dy + \rho\int_0^\delta u^2dy=-D \\
+\Rightarrow\qquad D = \rho hU^2 -\rho\int_0^\delta u^2dy
+\end{aligned}
+\]</span> Combine with the <strong>mass conservation</strong> result <span class="math inline">\(Uh= \int^\delta_0udy\)</span>: <span class="math display">\[
+\begin{aligned}
+D &amp;= \rho \int_0^\delta Uudy-\rho\int_0^\delta u^2dy \\
+\color{purple}{D }&amp;\color{purple}{= \rho \int_0^\delta \frac{u}{U}\left(1-\frac{u}{U}\right) dy}
+\end{aligned}
+\]</span></p>
+<h4 id="momentum-thickness">5.2.2 Momentum thickness</h4>
+<p>The quantity <span class="math inline">\(\theta\)</span> is called <strong>momentum thickness</strong> and represents the distance by which the wall would have to be moved in the wall normal direction to <strong>obtain the same momentum</strong> in an inviscid flow. <span class="math display">\[
+\color{purple}\frac{\theta}{\delta} = \frac{D}{\rho U^2\delta} = \int_0^1 \frac{u}{U}\left(1-\frac{u}{U}\right) d\eta, \quad \mathrm{where~}\eta = \frac{y}{\delta}
+\]</span> i.e. the <strong>momentum deficit</strong> can be determined by: <span class="math display">\[
+\rho U^2\theta = \rho \int_0^\delta \frac{u}{U}\left(1-\frac{u}{U}\right)dy
+\]</span> <div class="note note-info">
+            <p>There is another <strong>Energy thickness</strong> writes: <span class="math display">\[\color{purple}\frac{\theta&#39;}{\delta} = \int_0^1 \frac{u}{U}\left(1-\frac{u^2}{U^2}\right) d\eta, \quad \mathrm{where~}\eta = \frac{y}{\delta}\]</span></p>
+          </div></p>
+<p>We can then define the <strong>shape factor</strong>: <span class="math display">\[
+H = \frac{\delta^*}{\theta}
+\]</span> <div class="note note-info">
+            <p>Shape factor indicates the wall-normal distance on which the fluid is deflected from the plate compared to that on which gradients of streamwise velocities are felt.A large shape factor indicates a flow near separation.</p>
+          </div></p>
+<h4 id="relation-to-wall-shear-stress">5.2.3 Relation to wall shear stress</h4>
+<p>The drag force is the integration of wall shear stress <span class="math inline">\(\tau_w\)</span> along the plate: <span class="math display">\[
+D = \int_0^L\tau_wdx
+\]</span> Or in differential form: <span class="math display">\[
+\tau_w = \partial_xD
+\]</span> Differentiate the momentum thickness representation: <span class="math display">\[
+\partial_x\theta = \frac{\partial_xD}{\rho U^2}=\frac{\tau_w}{\rho U^2}
+\]</span> As a result, the wall shear: <span class="math display">\[
+\color{purple}\tau_w = \rho U^2\partial_x\theta
+\]</span></p>
+<h3 id="velocity-profile-approximations">5.3 Velocity profile approximations</h3>
+<p>For <em>laminar</em> boundary layers, Von Kármán assumed that the velocity profile (<span class="math inline">\(\frac{u}{U}\)</span>) within the boundary layer had a parabolic shape:</p>
+<p>Given: <span class="math display">\[
+\eta = \frac{y}{\delta(x)}
+\]</span> The velocity profile (<span class="math inline">\(\frac{u}{U}\)</span>) writes: <span class="math display">\[
+\frac{u}{U}\approx 2\eta -\eta^2, \qquad 0\leq \eta\leq 1
+\]</span> For <em>turbulent</em> boundary layers, Prandtl highlighted a one-seventh power velocity profile: <span class="math display">\[
+\frac{u}{U}\approx\eta^\frac{1}{7}, \qquad 0\leq \eta\leq 1
+\]</span> These first order approximations are very close to the reality as shown below:</p>
+<p><img src="/2022/05/26/External-flow-fundamentals/velocity profiles.png" srcset="/img/loading.gif" lazyload alt="Comparison of velocity profiles u/U in the boundary layer y/δ < 1 between the Von Kármán and Prandtl’s approximations and the actual laminar and turbulent flows. After White, Fluid Mechanics (2011)." style="zoom:50%;"></p>
+<h3 id="laminar-results-von-kármán-results">5.4 Laminar results (Von Kármán results)</h3>
+<p>Based on Von Kármán's approximation, <span class="math inline">\(\frac{u}{U}\approx \frac{2y}{\delta} -\left(\frac{y}{\delta}\right)^2\)</span>. It is easy to get:</p>
+<ul>
+<li><p>Boundary thickness:</p>
+<p>The key point is that the wall shear stress can be expressed in two ways,</p>
+<ul>
+<li><p>by definition: <span class="math display">\[
+\begin{aligned}
+\tau_w &amp;= \mu \partial_yu|_{y=0} \\
+\Rightarrow \quad \tau_{w} &amp;\approx \mu \partial_{y}\left.\left(\frac{2 y}{\delta}-\frac{y^{2}}{\delta^{2}}\right)\right|_{y=0} \\
+\Rightarrow \quad \tau_{w} &amp;\approx \mu \frac{2 U}{\delta}\\
+\end{aligned}
+\]</span></p></li>
+<li><p>and by the derivative of drag: <span class="math display">\[
+\begin{aligned}
+\tau_w &amp;= \rho U^2\partial_x\theta \\
+\Rightarrow \quad \tau_{w} &amp;\approx \rho U^2\partial_x\left[\int_{0}^{\delta}\left(\frac{2 y}{\delta}-\frac{y^{2}}{\delta^{2}}\right)\left(1-\frac{2 y}{\delta}+\frac{y^{2}}{\delta^{2}}\right) d y \right] \\
+\Rightarrow \quad \tau_{w} &amp;\approx \frac{2\rho U^2}{15}\partial_x\delta
+\end{aligned}
+\]</span></p></li>
+</ul>
+<p>As a result, connect these expressions: <span class="math display">\[
+\begin{aligned}
+&amp;\mu \frac{2 U}{\delta} \approx \frac{2\rho U^2}{15}\partial_x\delta \\
+\Rightarrow \quad &amp;\int_0^x dx \approx \int_0^\delta \frac{\rho U}{15}\delta d\delta \\
+\Rightarrow \quad &amp;x \approx \frac{\rho U \delta^2}{30\mu} \\
+\Rightarrow \quad &amp; \left(\frac{\delta}{x}\right)^2 \approx \frac{30\mu}{\rho U x} \\
+\Rightarrow \quad &amp; \color{purple}{\frac{\delta}{x}  \approx 5.5 Re_x^{-1/2}} \\
+\end{aligned}
+\]</span> where <span class="math inline">\(\color{purple}Re_x= Ux/\nu\)</span> as the <strong>streamwise Reynold</strong>.</p></li>
+<li><p>the displacement thickness: <span class="math display">\[
+\begin{aligned}
+\delta^* &amp;= \int_0^\delta\left(1-\frac{u}{U}\right)dy \\
+&amp;\approx \int_0^\delta\left(1-\frac{2y}{\delta}+\left(\frac{y}{\delta}\right)^2\right)dy \\
+\Rightarrow \quad \delta^*&amp;\approx \frac{1}{3}\delta\\
+\end{aligned}
+\]</span> with the boundary thickness expression: <span class="math display">\[
+\begin{aligned}
+\color{purple}\frac{\delta^*}{x}\approx 1.83 Re_x^{-1/2}
+\end{aligned}
+\]</span></p></li>
+<li><p>the momentum displacement and the factor of friction: <span class="math display">\[
+\begin{aligned}
+\theta &amp;= \int_{0}^{\delta}\left(\frac{2 y}{\delta}-\frac{y^{2}}{\delta^{2}}\right)\left(1-\frac{2 y}{\delta}+\frac{y^{2}}{\delta^{2}}\right) d y \\
+\Rightarrow \quad &amp; \theta \approx \frac{2}{15}\delta \\
+\Rightarrow \quad &amp; \color{purple}{\frac{\theta}{x}  \approx 0.73 Re_x^{-1/2}} 
+\end{aligned}
+\]</span> The factor of friction has the same order with the momentum displacement, as <span class="math display">\[
+\color{purple}{C_f   \approx 0.73 Re_x^{-1/2}}
+\]</span></p></li>
+<li><p>the shape factor: <span class="math display">\[
+\color{purple}
+H = \frac{\delta^*}{\theta} \approx 2.5
+\]</span></p></li>
+</ul>
+<h3 id="laminar-results-blasius-results">5.5 Laminar results (Blasius results)</h3>
+<p>Reference to <a target="_blank" rel="noopener" href="https://web.mit.edu/fluids-modules/www/highspeed_flows/ver2/bl_Chap2.pdf">MIT's note</a>, <a target="_blank" rel="noopener" href="https://youtu.be/Lw6aQJGD3FU">MECH 346 – Heat Transfer's Youtube channel</a></p>
+<h4 id="governing-equations">5.5.1 Governing equations</h4>
+<p>Conditions:</p>
+<ul>
+<li><p>2D</p></li>
+<li><p>Steady</p></li>
+<li><p>Incompressible</p></li>
+<li><p>Neglect viscous dissipation, gravity and thermal dissipation</p></li>
+<li><p>Plus the <strong>thin layer assumption (<span class="math inline">\(L\gg\delta\)</span>)</strong> for boundary layer (Obtained by non-dimensional scaling analysis, Full deriving on <a href="#a.1-governing-equation-of-boundary-layers">Appendix A.1</a>): <span class="math display">\[
+\begin{aligned}
+u&amp;\gg v \\
+\frac{\partial}{\partial y}&amp;\gg\frac{\partial}{\partial x}
+\end{aligned}
+\]</span></p></li>
+</ul>
+<p>The mass and momentum conservation equations reduces to: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y} &amp;= 0 \\
+u\frac{\partial u}{\partial x}+v\frac{\partial u}{\partial y}&amp;=-\frac{1}{\rho}\frac{\partial p}{\partial x}+
+\nu\left(\overbrace{\frac{\partial^2u}{\partial x^2}}^{\mathrm{0}}+\frac{\partial^2u}{\partial y^2}\right) \\
+u\frac{\partial v}{\partial x}+v\frac{\partial v}{\partial y}&amp;=
+\underbrace{-\frac{1}{\rho}\frac{\partial p}{\partial y}}_{\text{principle order}}+\nu\left(\frac{\partial^2v}{\partial x^2}+\frac{\partial^2v}{\partial y^2}\right)
+\end{aligned}
+\]</span> as a result: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y} &amp;= 0 \\
+u\frac{\partial u}{\partial x}+v\frac{\partial u}{\partial y}&amp;=-\frac{1}{\rho}\frac{\partial p}{\partial x}+\nu\frac{\partial^2u}{\partial y^2} \\
+\frac{1}{\rho}\frac{\partial p}{\partial y}&amp;=0
+\end{aligned}
+\]</span></p>
+<p>For the flat plate boundary layer, it is easy to get <span class="math inline">\(\frac{\partial p}{\partial x}=0\)</span> because the free stream pressure gradient in the <span class="math inline">\(x\)</span> direction is <span class="math inline">\(0\)</span>, so as in the boundary layer given the <span class="math inline">\(\frac{\partial p}{\partial y}=0\)</span>. As a consequence there is no pressure gradient within the flat plate boundary layer. The final governing equation writes:</p>
+<p><span class="math display">\[
+\color{purple}
+\begin{aligned}
+\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y} &amp;= 0 \\
+u\frac{\partial u}{\partial x}+v\frac{\partial u}{\partial y}&amp;=\nu\frac{\partial^2u}{\partial y^2} \\
+\end{aligned}
+\]</span></p>
+<p>And the boundary conditions are:</p>
+<p><span class="math display">\[
+\color{purple}
+\begin{aligned}
+u=v = 0\quad&amp;\mathrm{at}\quad y = 0\\
+u = U\quad&amp;\mathrm{at}\quad x = 0 \\
+u \rightarrow U\quad&amp;\mathrm{as}\quad y \rightarrow \infty \\
+\end{aligned}
+\]</span></p>
+<div class="note note-info">
+            <p>These conditions demand an <em>infinite gradient</em> in speed at the leading edge <span class="math inline">\(x = y = 0\)</span>, which implies a singularity in the mathematical solution there. The solution given by the boundary layer approximation is not valid at the leading edge.</p>
+          </div>
+<p>Define a stream function so that the continuity equation will be automatically included: <span class="math display">\[
+\begin{aligned}
+\psi &amp;= \int u dy \\
+u = \frac{\partial\psi}{\partial y}&amp;, \quad v = -\frac{\partial \psi}{\partial x}
+\end{aligned}
+\]</span> Subscribe into the momentum equation to get an single variable equation: <span class="math display">\[
+\color{purple}
+\frac{\partial\psi}{\partial y} \frac{\partial^2\psi}{\partial x \partial y}- \frac{\partial\psi}{\partial x} \frac{\partial^2\psi}{\partial y^2} = \nu\frac{\partial^3\psi}{\partial y^3}
+\]</span> with boundary conditions: <span class="math display">\[
+\color{purple}
+\begin{aligned}
+\frac{\partial\psi}{\partial y}=\frac{\partial\psi}{\partial x} = 0\quad&amp;\mathrm{at}\quad y = 0\\
+\frac{\partial\psi}{\partial y} = U\quad&amp;\mathrm{at}\quad x = 0 \\
+\frac{\partial\psi}{\partial y} \rightarrow U\quad&amp;\mathrm{as}\quad y \rightarrow \infty \\
+\end{aligned}
+\]</span> Through a coordinate transformation(<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Self-similar_solution">similarity solution</a>), this PDE can be transferred into an ODE and thus be solved easily.</p>
+<h4 id="similarity-solution">5.5.2 Similarity solution</h4>
+<blockquote>
+<p>In the study of partial differential equations, particularly in fluid dynamics, a <strong>self-similar solution</strong> is a form of solution which is similar to itself if the independent and dependent variables are appropriately scaled.</p>
+</blockquote>
+<p>In contrast to the most frequently used method of "separation variables", the similarity solution involves combining the variables in a special way. Another example of using similarity to solve Heat diffusion equation lies on the <a href="#a.2-solving-the-heat-equation-using-similarity-solution">Appendix A.2</a>.</p>
+<p>A self-similar equation doesn't change regardless how the variables scale. So assume a transformation: <span class="math display">\[
+\begin{aligned}
+y = \lambda^a\bar{y}\\
+x = \lambda^b\bar{x}\\
+\psi = \lambda^c\bar{\psi}\\
+\end{aligned}
+\]</span> The resulting scaled function and writes: <span class="math display">\[
+\begin{aligned}
+\lambda^{3c-2a-b}\frac{\partial\bar{\psi}}{\partial \bar{y}} \frac{\partial^2\bar{\psi}}{\partial \bar{x} \partial \bar{y}}- 
+\lambda^{3c-2a-b}\frac{\partial\bar{\psi}}{\partial \bar{x}} \frac{\partial^2\bar{\psi}}{\partial \bar{y}^2} =
+\lambda^{3c-3a}\nu\frac{\partial^3\bar{\psi}}{\partial \bar{y}^3} \\
+\Leftrightarrow\quad\frac{\partial\bar{\psi}}{\partial \bar{y}} \frac{\partial^2\bar{\psi}}{\partial \bar{x} \partial \bar{y}}- 
+\frac{\partial\bar{\psi}}{\partial \bar{x}} \frac{\partial^2\bar{\psi}}{\partial \bar{y}^2} =
+\lambda^{-3c-a+b}\nu\frac{\partial^3\bar{\psi}}{\partial \bar{y}^3}
+\end{aligned}
+\]</span> And the scaled boundary conditions gives: <span class="math display">\[
+\begin{aligned}
+\lambda^{c-a}\frac{\partial\bar{\psi}}{\partial \bar{y}}=\lambda^{c-b}\frac{\partial\bar{\psi}}{\partial \bar{x}} = 0\quad&amp;\mathrm{at}\quad \lambda^{a}\bar{y} = 0\\
+\end{aligned}
+\]</span> As a result, all the powers should be 0: <span class="math display">\[
+\left.\begin{array}{c}
+\left.\begin{array}{c}
+-c-a+b=0 \\
+c-a=0
+\end{array}\right\} \quad b=a / 2 \\
+c-b=0 \qquad \qquad  \quad
+\end{array}\quad\right\} \quad c=a / 2
+\]</span> Here I need to put my derivation here:</p>
+<blockquote>
+<p>Similar to <a href="#a.2-solving-the-heat-equation-using-similarity-solution">Appendix A.2</a>, we can construct an expression of <span class="math inline">\(\psi\)</span> as: <span class="math display">\[
+\psi(x,y)= x^{1/2}f^\dagger(\eta^\dagger), \quad \eta^\dagger = yx^{-1/2}
+\]</span> <div class="note note-danger">
+            <blockquote><p><strong>Personal comment:</strong> I still don't know how to construct this kinda thing or why it work. The formula in Appendix gives me some idea but following it I got <span class="math inline">\(\psi(x,y)= x^{1}f^\dagger(\eta^\dagger)\)</span>, <span class="math inline">\(\eta^\dagger = yx^{-1/2}\)</span> instead...</p></blockquote>
+          </div></p>
+<p>Substitute the expression of <span class="math inline">\(\psi\)</span> into the equation with <span class="math inline">\(f^{\dagger&#39;} = \partial_{\eta^{\dagger}}f^{\dagger}\)</span>: <span class="math display">\[
+\begin{aligned}
+\frac{\partial\psi}{\partial y} &amp;= f^{\dagger&#39;} \\
+\frac{\partial^2\psi}{\partial y^2} &amp;= x^{-1/2}f^{\dagger&#39;&#39;} \\
+\frac{\partial^3\psi}{\partial y^3}&amp;= x^{-1}f^{\dagger&#39;&#39;&#39;}\\
+\frac{\partial\psi}{\partial x} &amp;= \frac{1}{2}x^{-1/2}f^{\dagger}-\frac{1}{2}x^{-1}f^{\dagger&#39;}y \\
+&amp;= \frac{1}{2}x^{-1/2}(f^{\dagger} -\eta^{\dagger} f^{\dagger&#39;}) \\
+\frac{\partial^2\psi}{\partial x \partial y} &amp;= \frac{1}{2}x^{-1/2}(x^{-1/2}f^{\dagger&#39;} -x^{-1/2}\eta^{\dagger} f^{\dagger&#39;&#39;} - x^{-1/2}f^{\dagger&#39;}) \\
+&amp;=-\frac{1}{2}x^{-1}\eta^{\dagger} f^{\dagger&#39;&#39;}\\ 
+\frac{\partial\psi}{\partial y}\frac{\partial^2\psi}{\partial x \partial y} &amp;= f^{\dagger&#39;}\left[-\frac{1}{2}x^{-1}\eta^{\dagger} f^{\dagger&#39;&#39;}\right] \\
+&amp;= -\frac{1}{2}x^{-1} \eta^{\dagger}f^{\dagger&#39;}f^{\dagger&#39;&#39;} \\
+-\frac{\partial\psi}{\partial x}\frac{\partial^2\psi}{\partial y^2} &amp;=\frac{1}{2}x^{-1/2}(f^{\dagger} -\eta^{\dagger} f^{\dagger&#39;})\left[x^{-1/2}f^{\dagger&#39;&#39;}\right] \\
+&amp;= \frac{1}{2}x^{-1}(f^{\dagger} +\eta^{\dagger} f^{\dagger&#39;})f^{\dagger&#39;&#39;}\\
+\end{aligned}
+\]</span> As a result: <span class="math display">\[
+\begin{aligned}
+-\frac{1}{2}x^{-1}\eta^{\dagger} f^{\dagger&#39;}f^{\dagger&#39;&#39;}+ \frac{1}{2}x^{-1}(f^{\dagger} &amp;+\eta^{\dagger} f^{\dagger&#39;})f^{\dagger&#39;&#39;} = \nu x^{-1}f^{\dagger&#39;&#39;&#39;}\\
+\Leftrightarrow \qquad \nu f^{\dagger&#39;&#39;&#39;} - &amp;\frac{1}{2} f^{\dagger}f^{\dagger&#39;&#39;} = 0
+\end{aligned}
+\]</span></p>
+</blockquote>
+<p>Ok.. above is what I derived, it's still an ODE but normally we want a cleaner result.</p>
+<p>So Blasius construct <span class="math inline">\(\psi\)</span> and <span class="math inline">\(\eta\)</span> with physical meaningful non-dimensional parameters to get (reference to <a target="_blank" rel="noopener" href="https://youtu.be/Lw6aQJGD3FU">MECH 346 – Heat Transfer's Youtube channel</a>): <span class="math display">\[
+\color{purple}
+\psi(x,y)= (\nu Ux)^{1/2}f(\eta), \quad \eta = \left(\frac{U}{\nu x}\right)^{1/2}y
+\]</span> So that: <span class="math display">\[
+\begin{aligned}
+\eta = \sqrt{\frac{U}{\nu x}}y,&amp; \quad\mathrm{dimensionless~wall~normal~coordinate}\\
+f = \frac{\psi}{\sqrt{\nu Ux}},&amp; \quad\mathrm{dimensionless~stream~function}\\
+f&#39; = \frac{u}{U},&amp; \quad\mathrm{dimensionless~velocity~profile} \\
+f&#39;&#39; = \frac{\sqrt{\nu Ux}}{U^2}\partial_yu, &amp;\quad\mathrm{related~to~shear~stress} \\
+\end{aligned}
+\]</span> And terms of the governing equation becomes: <span class="math display">\[
+\begin{aligned}
+\frac{\partial\psi}{\partial y} &amp;= Uf&#39; \\
+\frac{\partial^2\psi}{\partial y^2} &amp;= {(U\nu x)}^{-1/2}f&#39;&#39; \\
+\frac{\partial^3\psi}{\partial y^3}&amp;= U^2x^{-1}f&#39;&#39;&#39;\\
+\frac{\partial\psi}{\partial x} &amp;= \frac{1}{2}(\nu U/x)^{1/2}(f -\eta f&#39;)\\
+\frac{\partial^2\psi}{\partial x \partial y} &amp;=-\frac{1}{2}Ux^{-1}\eta f&#39;&#39;
+\\ 
+\frac{\partial\psi}{\partial y}\frac{\partial^2\psi}{\partial x \partial y} &amp;= -\frac{1}{2}U^2x^{-1}\eta f&#39;f&#39;&#39;\\
+-\frac{\partial\psi}{\partial x}\frac{\partial^2\psi}{\partial y^2}
+&amp;= \frac{1}{2}U^2x^{-1}(f +\eta f&#39;)f&#39;&#39;\\
+\end{aligned}
+\]</span> And the ODE turns out to be: <span class="math display">\[
+\color{purple}
+2f&#39;&#39;&#39; +ff&#39;&#39; = 0
+\]</span> Resulting boundary condition is: <span class="math display">\[
+\color{purple}
+\begin{aligned}
+f&#39; = 0\quad &amp;at\quad \eta=0     \quad\mathrm{(no~slip)}\\
+f = 0\quad &amp;at\quad \eta=0      \quad\mathrm{(impenetrability)} \\
+f&#39; = 1\quad &amp;at\quad \eta\rightarrow\infty \quad(u = U\mathrm{~free stream}) \\
+f&#39;&#39; = 0\quad &amp;at\quad \eta\rightarrow\infty \quad(\partial_yu=0,\mathrm{unnecessary}) \\
+\end{aligned}
+\]</span></p>
+<h4 id="solving-the-similarity-solution">5.5.3 Solving the similarity solution</h4>
+<p>Split the 3-order ODE into a set of 3 first order ODEs: <span class="math display">\[
+\left\{\begin{array}{l}
+    f_p  = f&#39; \\
+    f_{pp} = f_p&#39; \\
+    2f&#39;_{pp} +ff_{pp}  = 0
+\end{array}\right.
+\]</span> with boundary conditions: <span class="math display">\[
+\begin{aligned}
+f_p = 0\quad &amp;at\quad \eta=0    \\
+f = 0\quad &amp;at\quad \eta=0      \\
+f_p = 1\quad &amp;at\quad \eta\rightarrow\infty \\
+f_{pp} = 0\quad &amp;at\quad \eta\rightarrow\infty,\mathrm{unnecessary} \\
+\end{aligned}
+\]</span> The third boundary condition has no closed form solution, so we need to solve it numerically.</p>
+<ol type="1">
+<li><p>One method of doing it is guessing another initial condition <span class="math inline">\(f_{pp} = ?\)</span> at <span class="math inline">\(\eta=0\)</span>, integrating the equation from <span class="math inline">\(\eta=0\)</span> with Runge-Kutta method to meet the 3rd boundary condition i.e. <strong>transfer the boundary condition to the initial condition</strong>.</p>
+<div class="note note-info">
+            <p>Runge–Kutta method is an effective and widely used numerical method for solving the initial-value problems of differential equations. It integrated the function discretely from zero in small steps (<span class="math inline">\(h\)</span>) in an order of 4 (more on <a target="_blank" rel="noopener" href="https://youtu.be/kUcc8vAgoQ0">LearnChemE's Youtube</a>). <span class="math display">\[\left\{\begin{array}{l}y_{n+1}=y_{n}+\frac{1}{6}\left(K_{1}+2 K_{2}+2 K_{3}+K_{4}\right) \\K_{1}=h f\left(x_{n}, y_{n}\right) \\K_{2}=h f\left(x_{n}+\frac{1}{2} h, y_{n}+\frac{1}{2} K_{1}\right) \\K_{3}=h f\left(x_{n}+\frac{1}{2} h, y_{n}+\frac{1}{2} K_{2}\right) \\K_{4}=h f\left(x_{n}+h, y_{n}+K_{3}\right)\end{array}\right.\]</span></p>
+          </div>
+<p>It turns out it meets the 3<sup>rd</sup> boundary condition when: <span class="math display">\[
+f_{pp} = 0.332~at~ \eta=0
+\]</span> And the function looks like below:</p>
+<p><img src="/2022/05/26/External-flow-fundamentals/Similarity solution.png" srcset="/img/loading.gif" lazyload alt="Numerical solution to the similarity solution, the 4 boundary conditions are fitted. After MECH 346 – Heat Transfer's Youtube channel(https://youtu.be/Lw6aQJGD3FU)" style="zoom:40%;"></p>
+<p>From the solution, we can see the stream function <span class="math inline">\(f\)</span> first increases with a decreasing slop then approaches to a linear increase line. While the velocity profile <span class="math inline">\(f&#39;\)</span> and shear stress <span class="math inline">\(f&#39;&#39;\)</span> approach the 1 and 0 at the free stream respectively,</p></li>
+<li><p>Another method is solve <span class="math inline">\(f_{pp}~at~ \eta=0\)</span> directly numerically. And the solution is: <span class="math display">\[
+f_{pp} = 0.332096~at~ \eta=0
+\]</span> More on <a target="_blank" rel="noopener" href="https://youtu.be/Lw6aQJGD3FU">MECH 346 – Heat Transfer's Youtube channel</a> and <a target="_blank" rel="noopener" href="https://web.mit.edu/fluids-modules/www/highspeed_flows/ver2/bl_Chap2.pdf">MIT's note</a>.</p></li>
+</ol>
+<h4 id="blasius-results">5.5.4 Blasius results</h4>
+<p>As a consequence, similar to what we do based on the <a href="#laminar-results-von-k%C3%A1rm%C3%A1n-results">Von Kármán results result</a>, recall the definition of the boundary layer: <span class="math display">\[
+f_p = \frac{u|_\delta}{U} =  0.99
+\]</span> It is easy to get</p>
+<ul>
+<li><p>the boundary layer thickness: <span class="math display">\[
+\begin{aligned}
+\eta_1&amp;=\sqrt{\frac{U}{\nu x}}\delta\approx5.0 \\
+\Rightarrow \delta &amp;\approx 5.0 \sqrt{\frac{\nu x}{U}} \\
+\Rightarrow \frac{\delta}{x} &amp;\approx 5.0 \sqrt{\frac{\nu}{Ux}} \\
+\color{purple}{\frac{\delta}{x} }&amp;\color{purple}{\approx 5 Re_x^{-1/2}}\\
+\end{aligned}
+\]</span> with <span class="math inline">\(\color{purple}Re_x= Ux/\nu\)</span> as the <strong>streamwise Reynolds number</strong>.</p></li>
+<li><p>the thickness displacement: <span class="math display">\[
+\begin{aligned}
+\delta^* &amp;= \int_0^\delta\left(1-\frac{u}{U}\right)dy \\
+&amp;= \sqrt{\frac{\nu x}{U}}\int_0^{\eta_1\approx5.0 }\left(1-f&#39;\right)d\eta \\
+&amp;= \sqrt{\frac{\nu x}{U}}\left[\eta_1 - f_1\right]\\
+\end{aligned}
+\]</span> with <span class="math inline">\(f_1 \approx 3.283\)</span>: <span class="math display">\[
+\begin{aligned}
+\color{purple}\frac{\delta^*}{x}\approx 1.721 Re_x^{-1/2}
+\end{aligned}
+\]</span></p></li>
+<li><p>the momentum displacement and the factor of friction: <span class="math display">\[
+\tau_w = \rho\nu\frac{\partial u}{\partial y}|_{y=0} = \rho\nu U\sqrt{\frac{U}{\nu x}}f&#39;&#39;(0)
+\]</span> with <span class="math inline">\(f&#39;&#39;(0) \approx 0.332\)</span>: <span class="math display">\[
+C_f = \frac{\tau_w}{1/2\rho U^2} \approx 0.664Re_x^{-1/2}
+\]</span></p>
+<p><span class="math display">\[
+\color{purple}
+\frac{\theta}{x} \approx 0.664Re_x^{-1/2}
+\]</span></p></li>
+<li><p>the shape factor: <span class="math display">\[
+\color{purple}
+H = \frac{\delta^*}{\theta} \approx 2.59
+\]</span></p></li>
+</ul>
+<h3 id="validity-of-the-laminar-results">5.6 Validity of the laminar results</h3>
+<p>The above results are based on the hypothesis that the boundary layer is thin enough so that the coupling with the outer flow is negligible. This theory breaks down as soon as <span class="math inline">\(\frac{\delta}{x}=\mathcal{O}(1)\)</span> i.e. <span class="math inline">\(\frac{\delta}{x}&lt;0.1\)</span>. As a result, based on the Blasius result, the upper limit of the streamwise Reynolds number depends on transition to turbulence writes <span class="math display">\[
+5Re_x^{-1/2}&lt;0.1\\
+\Rightarrow Re_{x,min} &gt; 2500
+\]</span> For smaller <span class="math inline">\(Re_x\)</span>, the interaction with the outer flow is important and leads to departures from these results.</p>
+<p>Besides, at a threshold Reynolds number, the boundary layer becomes <strong>turbulent</strong> and the results above do not hold. This critical value of the Reynolds number is <span class="math inline">\(Re_c\approx 3 × 10^6\)</span>. Usually, the surfaces are not smooth and transition occurs earlier, sometimes at Reynolds numbers as low as <span class="math inline">\(10^5\)</span>.</p>
+<h3 id="comparison-of-the-results">5.7 Comparison of the results</h3>
+<p>Similar to what we do based on the <a href="#laminar-results-von-k%C3%A1rm%C3%A1n-results">Von Kármán results result</a>, based on the Prandtl one-seventh power law, the turbulence results can be derived easily, here is the table of all results:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Results</th>
+<th><span class="math inline">\(\delta/x\)</span></th>
+<th><span class="math inline">\(\delta^*/x\)</span></th>
+<th><span class="math inline">\(H\)</span></th>
+<th><span class="math inline">\(c_f\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Blasius laminar</td>
+<td><span class="math inline">\(5.0Re_x^{-1/2}\)</span></td>
+<td><span class="math inline">\(1.72Re_x^{-1/2}\)</span></td>
+<td><span class="math inline">\(2.59\)</span></td>
+<td><span class="math inline">\(0.664Re_x^{-1/2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Integral laminar</td>
+<td><span class="math inline">\(5.5Re_x^{-1/2}\)</span></td>
+<td><span class="math inline">\(1.83Re_x^{-1/2}\)</span></td>
+<td><span class="math inline">\(2.5\)</span></td>
+<td><span class="math inline">\(0.73Re_x^{-1/2}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Error</td>
+<td><span class="math inline">\(10\%\)</span></td>
+<td><span class="math inline">\(6\%\)</span></td>
+<td><span class="math inline">\(3\%\)</span></td>
+<td><span class="math inline">\(10\%\)</span></td>
+</tr>
+<tr class="even">
+<td>Integral turbulent</td>
+<td><span class="math inline">\(0.16Re_x^{-1/7}\)</span></td>
+<td><span class="math inline">\(0.02Re_x^{-1/7}\)</span></td>
+<td><span class="math inline">\(1.3\)</span></td>
+<td><span class="math inline">\(0.027Re_x^{-1/7}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Several points:</p>
+<ul>
+<li>There is an error of less than 10% between integral and Blasius results.</li>
+<li>The boundary layer thickness <span class="math inline">\(\delta\)</span> grows like <span class="math inline">\(x^{6/7}\)</span> for turbulent flows, which represents a faster growth than the <span class="math inline">\(x^{1/2}\)</span> law for the laminar boundary layer.</li>
+<li>The viscous displacement thickness <span class="math inline">\(\delta^*\)</span> and the shape factor <span class="math inline">\(H=\delta^*/\theta\)</span> for turbulent boundary layers is very small.</li>
+<li>The skin friction coefficient <span class="math inline">\(c_f\)</span> is greater for turbulent boundary layers than for the laminar ones.</li>
+</ul>
+<h2 id="appendix">Appendix</h2>
+<h3 id="a.1-governing-equation-of-boundary-layers">A.1 Governing equation of boundary layers</h3>
+<h4 id="a.1.1-scalings">A.1.1 Scalings</h4>
+<p>Started by scaling the spatial derivatives: <span class="math display">\[
+\partial_x \sim \frac{1}{L} \qquad \partial_y \sim \frac{1}{\delta}
+\]</span> By the thin-layer condition: <span class="math inline">\(L\gg\delta\)</span>, we can introduce a small parameter <span class="math inline">\(\epsilon \ll 1\)</span> as: <span class="math display">\[
+\frac{\delta}{L} = \epsilon
+\]</span> As a result, introduce the stream function <span class="math inline">\(\psi\)</span> under the conditions of 2D and incompressibility. The proportion of the streamwise and normal streamwise velocities <span class="math inline">\(u, v\)</span> can be expressed as: <span class="math display">\[
+\frac{u}{v} = \frac{\partial_y\psi}{-\partial_x\psi}\sim\frac{L}{\delta}
+\]</span> which gives: <span class="math display">\[
+\Rightarrow \quad v\sim\epsilon u
+\]</span> implying that the <span class="math inline">\(v\)</span> is much smaller than <span class="math inline">\(u\)</span>.</p>
+<p>Then rescale the wall normal quantities according to the streamwise quantities: <span class="math display">\[
+\begin{aligned}
+x^* &amp;= \frac{x}{L} \\
+y^* &amp;= \frac{y}{\delta} = \frac{y}{\epsilon L}\\
+u^* &amp;= \frac{u}{U} \\
+v^* &amp;= \frac{v}{\epsilon U} \\
+p^* &amp;= \frac{p}{\rho U^2}
+\end{aligned}
+\]</span> <div class="note note-info">
+            <p>In this case, <span class="math inline">\(p^*\)</span> can be thought of as a mathematical function to ensure incompressibility of the scaled function.</p>
+          </div></p>
+<h4 id="a.1.2-asymptotic-derivation">A.1.2 Asymptotic derivation</h4>
+<p>Substitute the scaled variables into the governing equations: <span class="math display">\[
+\begin{aligned}
+\frac{U}{L} \partial_{x^{*}} u^{*}+\frac{\epsilon U}{\epsilon L} \partial_{y^{*}} v^{*} &amp;= 0 \\
+\frac{U^{2}}{L} u^{*} \partial_{x^{*}} u^{*}+\frac{U^{2}}{L} v^{*} \partial_{y^{*}} u^{*}&amp;=-\frac{ U^{2}}{L} \partial_{x^{*}} p^{*}+\nu\left(\frac{U}{L^{2}} \partial_{x^{*}}^{2} u^{*}+\frac{U}{\epsilon^{2} L^{2}} \partial_{y^{*}}^{2} u^{*}\right) \\
+\frac{\epsilon U^{2}}{L} u^{*} \partial_{x^{*}} v^{*}+\frac{\epsilon U^{2}}{L} v^{*} \partial_{y^{*}} v^{*} &amp;=-\frac{ U^{2}}{\epsilon L} \partial_{y^{*}} p^{*}+\nu\left(\frac{\epsilon U}{L^{2}} \partial_{x^{*}}^{2} v^{*}+\frac{U}{\epsilon L^{2}} \partial_{y^{*}}^{2} v^{*}\right)
+\end{aligned}
+\]</span> Can be simplified into: <span class="math display">\[
+\begin{aligned}
+\partial_{x^{*}} u^{*}+\partial_{y^{*}} v^{*} &amp;= 0 \\
+u^{*} \partial_{x^{*}} u^{*}+v^{*} \partial_{y^{*}} u^{*} &amp;=-\partial_{x^{*}} p^{*}+\frac{1}{Re_{L}} \partial_{x^{*}}^{2} u^{*}+\frac{1}{\epsilon^{2} Re_{L}} \partial_{y^{*}}^{2} u^{*} \\
+u^{*} \partial_{x^{*}} v^{*}+v^{*} \partial_{y^{*}} v^{*} &amp;=-\frac{1}{\epsilon^{2}} \partial_{y^{*}} p^{*}+\frac{1}{Re_{L}} \partial_{x^{*}}^{2} v^{*}+\frac{1}{\epsilon^{2} Re_{L}} \partial_{y^{*}}^{2} v^{*}
+\end{aligned}
+\]</span> where <span class="math inline">\(Re_L = UL/\nu\)</span></p>
+<p>To keep a balance between the advection(LHS) and diffusion (RHS), impose: <span class="math display">\[
+\epsilon^2Re_L=1 \\
+\Rightarrow \epsilon = \frac{\delta}{L}=Re_L^{-1/2}
+\]</span> As a result, the leading order of the system is: <span class="math display">\[
+\begin{aligned}
+\partial_{x^{*}} u^{*}+\partial_{y^{*}} v^{*} &amp;= 0 \\
+u^{*} \partial_{x^{*}} u^{*}+v^{*} \partial_{y^{*}} u^{*} &amp;=-\partial_{x^{*}} p^{*}+\partial_{y^{*}}^{2} u^{*} \\
+0&amp;=\partial_{y^{*}} p^{*}
+\end{aligned}
+\]</span></p>
+<h3 id="a.2-solving-the-heat-equation-using-similarity-solution">A.2 Solving the heat equation using similarity solution</h3>
+<p>References：<a target="_blank" rel="noopener" href="https://youtu.be/dNLmvhZWEq8">Dr Chris Tisdell's Youtube</a>, <a target="_blank" rel="noopener" href="https://www.ucl.ac.uk/~ucahhwi/LTCC/sectionB-similarity.pdf">UCL's class note</a>.</p>
+<p>Given PDE with boundary and initial conditions: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} =&amp; k\frac{\partial^2 u}{\partial x^2}\\
+u(x,0)=0, &amp;\quad x&gt;0\\
+u(x,t)\rightarrow0, &amp;\quad x\rightarrow\infty \\
+\partial_x u(0,t)=N, &amp;\quad t&gt;0
+\end{aligned}
+\]</span></p>
+<ol type="1">
+<li><p>Determine a set of transformations: <span class="math display">\[
+\begin{aligned}
+x &amp;= \lambda^a\bar{x}\\
+t &amp;= \lambda^b\bar{t}\\
+u &amp;= \lambda^c\bar{u}\\
+\end{aligned}
+\]</span> Substitute into the equation: <span class="math display">\[
+\begin{aligned}
+\lambda^{c-b}\frac{\partial \bar{u}}{\partial \bar{t}} = \lambda^{c-2a}k\frac{\partial^2 \bar{u}}{\partial \bar{x}^2} \\
+\frac{\partial \bar{u}}{\partial \bar{t}} = \lambda^{-2a+b}k\frac{\partial^2 \bar{u}}{\partial \bar{x}^2}
+\end{aligned}
+\]</span> Boundary condition: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial x} =N, \quad t&gt;0 \\
+\lambda^{c-a}\frac{\partial \bar{u}}{\partial \bar{x}}=N
+\end{aligned}
+\]</span></p>
+<p>As a result: <span class="math display">\[
+\begin{aligned}
+-2a+b &amp;= 0 \\
+c-a&amp;=0
+\end{aligned}
+\]</span></p></li>
+<li><p>Determin <span class="math inline">\(s\)</span> and <span class="math inline">\(r\)</span> such that: <span class="math display">\[
+\bar{x\vphantom{t}}\bar{t}^s=xt^s\qquad \bar{u\vphantom{t}}\bar{t}^r = ut^r
+\]</span> Substitute we have: <span class="math display">\[
+\begin{aligned}
+\bar{x\vphantom{t}}\bar{t}^s&amp;=xt^s \\
+\bar{x\vphantom{t}}\bar{t}^s &amp;= \lambda^{a+sb}\bar{x\vphantom{t}}\bar{t}^s  \\
+\Rightarrow \quad s &amp;= -a/b =  -1/2
+\end{aligned}
+\]</span> and， <span class="math display">\[
+\begin{aligned}
+\bar{u\vphantom{t}}\bar{t}^r&amp;=ut^r \\
+\bar{u\vphantom{t}}\bar{t}^r &amp;= \lambda^{c+rb}\bar{x\vphantom{t}}\bar{t}^r = \lambda^{(c+2ar)}\bar{x\vphantom{t}}\bar{t}^r\\
+\Rightarrow \quad r &amp;= -c/b = -1/2
+\end{aligned}
+\]</span></p></li>
+<li><p>With two terms unchanged by the transformation. A solution combines these two terms can be constructed as： <span class="math inline">\(u(x,t) = t^{-r}f(xt^s) = t^{-r}f(\eta)\)</span>: <span class="math display">\[
+\begin{aligned}
+u(x,t) = t^{c/b}f(\eta), \quad\mathrm{where~}\eta = xt^{-a/b} \\
+\Leftrightarrow\quad u(x,t) = t^{1/2}f(\eta),\quad\mathrm{where~}\eta = \frac{x}{t^{1/2}}
+\end{aligned}
+\]</span> <div class="note note-info">
+            <p>Note that <span class="math inline">\(u(x,t) = t^{c/b}f(\eta), \quad \eta = xt^{-a/b}\)</span> is a general solution and it suits for every conditions.</p>
+          </div></p></li>
+<li><p>Substitute into the original function to get a ODE: <span class="math display">\[
+\begin{aligned}
+\frac{\partial u}{\partial t} &amp;= \frac{1}{2}t^{-1/2}f - \frac{1}{2}t^{-1}xf&#39; \\ &amp;= \frac{1}{2}t^{-1/2}f - \frac{1}{2}t^{-1/2}\eta f&#39;\\&amp;=\frac{1}{2}t^{-1/2}\left(f-\eta f&#39;\right)\\
+\frac{\partial^2 u}{\partial x^2} &amp;= t^{-1/2}f&#39;&#39;\\
+\end{aligned}
+\]</span> The resulting equation is therefore: <span class="math display">\[
+\begin{aligned}
+&amp;\frac{1}{2}t^{-1/2}\left(f-\eta f&#39;\right)= kt^{-1/2}f&#39;&#39; \\
+\Leftrightarrow\quad&amp; \frac{1}{2}\left(f-\eta f&#39;\right)= kf&#39;&#39; \\
+\Leftrightarrow\quad&amp; 2kf&#39;&#39;+\eta f&#39;-f = 0
+\end{aligned}
+\]</span></p>
+<p>The following work is solving this ODE, which is illustrated more on <a target="_blank" rel="noopener" href="https://www.ucl.ac.uk/~ucahhwi/LTCC/sectionB-similarity.pdf">UCL's class note</a>.</p></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>External flow fundamentals</div>
+      <div>https://daydreamatnight.github.io/2022/05/26/External-flow-fundamentals/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 26, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/01/Lesson-note-Machine-learning-for-fluids-dynamics/" title="Introduction, Machine learning for fluids dynamics">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Introduction, Machine learning for fluids dynamics</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/21/Internal-flow-fundamentals/" title="Internal flow fundamentals">
+                        <span class="hidden-mobile">Internal flow fundamentals</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

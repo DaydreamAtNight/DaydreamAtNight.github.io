@@ -1,0 +1,924 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="GPT-3 is the most popular generative language model now. With more than 100 billion parameters, the performance is proved to be great and by now there are more than hundreds of works (commercial or a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPT1-3">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="GPT-3 is the most popular generative language model now. With more than 100 billion parameters, the performance is proved to be great and by now there are more than hundreds of works (commercial or a">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/paper-reading-GPT1-3.png">
+<meta property="article:published_time" content="2022-04-18T00:58:59.000Z">
+<meta property="article:modified_time" content="2022-06-09T10:25:32.570Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="paper reading">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/paper-reading-GPT1-3.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>GPT1-3 - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="GPT1-3"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-18 08:58" pubdate>
+          April 18, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          16k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          54 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">GPT1-3</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>GPT-3 is the most popular generative language model now. With more than 100 billion parameters, the performance is proved to be great and by now there are more than hundreds of works (commercial or academic) built on it, including the famous <a target="_blank" rel="noopener" href="https://copilot.github.com/">GitHub Copilot</a>.</p>
+</blockquote>
+<blockquote>
+<p>This is a <a href="/2022/04/02/paper-reading-start/">series of paper reading notes</a> hopefully, to push me to read paper casually and to leave some record of what I've learned.</p>
+</blockquote>
+<span id="more"></span>
+<p>Paper links:</p>
+<p>GPT-1: <a target="_blank" rel="noopener" href="https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf">Improving language understanding by generative pre-training</a></p>
+<p>GPT-2: <a target="_blank" rel="noopener" href="http://www.persagen.com/files/misc/radford2019language.pdf">Language models are unsupervised multitask learners</a></p>
+<p>GPT-3: <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">Language models are few-shot learners</a></p>
+<p>Useful links:</p>
+<p>https://www.bilibili.com/video/BV1AF411b7xQ/</p>
+<p><a target="_blank" rel="noopener" href="https://gpt3demo.com/">GPT-3 Demo: 300+ GPT-3 Examples, Demos, Apps</a></p>
+<p><a target="_blank" rel="noopener" href="https://towardsdatascience.com/gpt-3-demos-use-cases-implications-77f86e540dc1">GPT-3: Demos, Use-cases, Implications</a></p>
+<p><em>Since my own interest is not NLP, I haven't read these paper by myself. Instead, I follow a reference video above directly and make notes together with it.</em></p>
+<h2 id="history-and-timeline">History and Timeline</h2>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT timeline.png" srcset="/img/loading.gif" lazyload alt="GPT timeline" style="zoom:50%;"></p>
+<p>Given that the GPT series are all developed by the <a target="_blank" rel="noopener" href="https://openai.com/">OpenAI</a> and the Transformer &amp; Bert are developed by Google, it seems there are two companies combating. And it is inevitable to compare these two series.</p>
+<p>From the perspective of number of cites, it is obviously that OpenAI have catch less attention from the academic world despite the huge cost. But it's not because GPT series are less novel, but because the goal of GPT series is bigger than that of Transformer &amp; Bert. Transformer is originally developed for Machine Translation task only. And Bert simply aims to push the pre-training technic forward. That's the reason why Bert performs better than GPT if the number of parameters are the same. As a result, GPT is harder and more expensive to train a decent model. And the size of model make others hardly to reconstruct it. From the companies' perspective, OpenAI does this because they want to build the strong AI, but Transformer &amp; Bert are developed only by the teams of Google.</p>
+<h2 id="gpt-1">GPT-1</h2>
+<h3 id="abstract">Abstract</h3>
+<p>The whole idea is similar to what CV did in the last several decades, that is pre-training of a model on a massive dataset followed by fine-tuning on a small specialist dataset. Lacking of large labelled data such as ImageNet of 10 million, however, NLP can't do what CV does exactly. The scale of machine translation database might reach 10 million but one piece of image possesses almost 10 times of information than a sentence. So the database is still not big enough.</p>
+<p>GPT makes a big step by using unlabelled data for pre-training. And then aero shot on GPT-2 makes another big step. It is fair to say CV led the trend of deep learning in the first 5 years, but recent years, more new thoughts are coming from the NLP field. And these new thoughts have inspired the CV field as well such as <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.11929">ViT</a>, <a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v139/radford21a">CLIP</a> and <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2111.06377">MAE</a>.</p>
+<p>Besides, actually it had been a long time since NLP started to use unsupervised pre-training back then. For example, the word embedding model had been used for decades. But, the word embedding can only be seen as a layer, extra layers of model need to be designed to suit for various tasks. With GPT, however, the architecture doesn't need much change, only adjusting the input to suit the tasks is ok.</p>
+<p>The result is good but not as good as BERT, but the novelty of this paper is much better than BERT.</p>
+<h3 id="introduction">Introduction</h3>
+<p>After briefly introducing the word embedding, problems of pre-training more than word-level data are presented. For example the type of optimisation objectives and how to transfer the extracted information to the tasks. The main reason of this problem is the variety of NLP tasks. There is no way to suit all the needs together.</p>
+<p>Then this paper introduces a semi-supervised method which has been explained many times. But actually GPT and BERT are normally called self-supervised model. Though they are the same to me. Semi-supervised learning is a common concept in the Machine Learning. It refers learning from a mix of massive unlabelled data and a few labelled data.</p>
+<p>Then the architecture is described. Interestingly, in order to list the reason of choosing transformer over RNN as backbone. The authors say</p>
+<blockquote>
+<p>This model choice provides us with a more structured memory for handling long-term dependencies in text, compared to alternatives like recurrent networks, resulting in robust transfer performance across diverse tasks.</p>
+</blockquote>
+<p>Besides, the paper accents the task-specific input adaptions, which is the key of this paper.</p>
+<h3 id="framework">Framework</h3>
+<h4 id="unsupervised-learning">Unsupervised learning</h4>
+<p>GPT uses a task that giving the data of u<sub>n-k</sub> to u<sub>n-1</sub> to predict the u<sub>n</sub>. So the likelihood function to be maximised is:</p>
+<p><span class="math display">\[
+L_{1}(\mathcal{U})=\sum_{i} \log P\left(u_{i} \mid u_{i-k}, \ldots, u_{i-1} ; \Theta\right)
+\]</span> Because the predicting task, the mechanism of the mask multi-head attention of transformer decoder matches the likelihood function perfectly. Because in the first layer of the transformer decoder, the data after u{i} are simply masked to be 0.</p>
+<p>And the whole pre-training process is like this:</p>
+<p><span class="math display">\[
+\begin{aligned}
+h_{0} &amp;=U W_{e}+W_{p} \\
+h_{l} &amp;=\operatorname{transformer}\_\operatorname{block}\left(h_{l-1}\right) \forall i \in[1, n] \\
+P(u) &amp;=\operatorname{softmax}\left(h_{n} W_{e}^{T}\right)
+\end{aligned}
+\]</span> Compared with BERT, the biggest difference is never encoder or decoder, bidirectional or one-way along. The key is the pre-training task they choose, the completion task that Bert use is much easier than GPT's prediction task. Because this is the <strong>difference between interpolation and extrapolation</strong>. Therefore, BERT outperforms GPT on the same number of parameters. But the potential of the GPT series goes far beyond BERT. As a result, it took OpenAI years to develop such an impressive GPT-3 model. On another side, however, GPT's prediction task leads to a different architecture with BERT. And the decoder architecture makes the GPT model hard to be bidirectional from the start. We'll see how it conquer this.</p>
+<h4 id="supervised-fine-tuning">Supervised fine-tuning</h4>
+<p>The fine-tuning task follows the standard supervise learning process as follows:</p>
+<p><span class="math display">\[
+L_{2}(\mathcal{C})=\sum_{(x, y)} \log P\left(y \mid x^{1}, \ldots, x^{m}\right)
+\]</span> with <span class="math display">\[
+P\left(y \mid x^{1}, \ldots, x^{m}\right)=\operatorname{softmax}\left(h_{l}^{m} W_{y}\right)
+\]</span> And the authors find it helpful to optimise the L1 and L2 together as:</p>
+<p><span class="math display">\[
+L_{3}(\mathcal{C})=L_{2}(\mathcal{C})+\lambda * L_{1}(\mathcal{C})
+\]</span></p>
+<h4 id="task-specific-input-transformations">Task-specific input transformations</h4>
+<p>The last thing to do is how to apply this framework to different tasks. Similar to with BERT, the pre-trained transformer block doesn't have to be changed.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT objectives.png" srcset="/img/loading.gif" lazyload alt="GPT objectives" style="zoom:40%;"></p>
+<h3 id="experiments">Experiments</h3>
+<p>The dataset GPT trained on is <a target="_blank" rel="noopener" href="https://paperswithcode.com/dataset/bookcorpus">BooksCorpus dataset</a>, and the model has 12 layers with H<sub>model</sub> = 768, same as BERT<sub>base</sub>. Although the transformer encoder has one layer less than the decoder, GPT and BERT's numbers of parameters are still at the same level. Yet BERT has a 3 times larger BERT<sub>large</sub> model than the base. Because in addition to the BookCorpus dataset, BERT uses one more dataset for pre-training, in total the dataset is 4 times larger than GPT's.</p>
+<blockquote>
+<p>For the pre-training corpus we use the <a target="_blank" rel="noopener" href="https://paperswithcode.com/dataset/bookcorpus">BooksCorpus</a> (800M words) (Zhu et al., 2015) and <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Wikipedia:Database_download">English Wikipedia</a> (2,500M words).</p>
+</blockquote>
+<p>And unfortunately, the average accuracy of BERT<sub>base</sub> is higher than GPT at this time. Besides with the BERT<sub>large</sub> model , the accuracy can go higher, as shown below in BERT's paper.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/BERT result with GPT.png" srcset="/img/loading.gif" lazyload alt="BERT result with GPT" style="zoom:50%;"></p>
+<h2 id="gpt-2">GPT-2</h2>
+<p>After GPT-1 got defeated by BERT in 4 months, of course, GPT-2 aims to fight back and beat BERT to the ground. Considering the decoder path can't shift to the encoder with dignity, the simplest way then is to enlarge the model and the dataset. But what if it's still not working?</p>
+<h3 id="abstract-1">Abstract</h3>
+<p>After developing a new dataset of millions of webpages called WebText, and training on a new1.5B parameter model. The result turns out to be no significant difference with BERT. So they bring out another sell point, zero shot.</p>
+<p>Actually, the zero-shot behaviour is mentioned in the last section of GPT-1's paper in order to understand more of the unsupervised pre-training mechanism. And in GPT-2, this behaviour is brought front to increase the novelty.</p>
+<h3 id="introduction-1">Introduction</h3>
+<blockquote>
+<p><strong>Zero-shot learning</strong> (ZSL) is a problem setup in <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Machine_learning">machine learning</a>, where at test time, a learner observes samples from classes, which were not observed during <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Machine_learning#Training_models">training</a>, and needs to predict the class that they belong to. Zero-shot methods generally work by associating observed and non-observed classes through some form of auxiliary information, which encodes observable distinguishing properties of objects.[<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Zero-shot_learning#cite_note-1">1]</a></p>
+</blockquote>
+<p>The main-steam approach is one dataset - one task instead of one dataset - multiple tasks because of the generalisation that state of art models lack. Yet multitask learning (trending 2000-2010) represents the idea of training one model with a combination of multiple datasets and different loss functions. So GPT-2 takes the idea of multitask learning and trains the model with the zero-shot setting, under which the downstream tasks can be handled with no collecting of supervised data or fine-tuning. The result is competitive and promising according to the authors.</p>
+<h3 id="approach">Approach</h3>
+<p>The model architectures of GPT1 and GPT2 are pretty much the same. But the input methods are different.</p>
+<p>In detail, recalling that during fine tuning process, the GPT1 introduces extra tokens such as [start], [Delim] and [Extract] to modify the input. But in GPT2 without the supervised fine-tuning process, these extra tokens would cause confusion. As a result, the downstream task input need to be more likely to the natural language when constructing.</p>
+<p>As a result, the authors introduce what we are used to calling it "prompt", here are the examples:</p>
+<blockquote>
+<p>For example, a translation training example can be written as the sequence (<strong>translate to french</strong>, english text, french text). Likewise, a reading comprehension training example can be written as (<strong>answer the question</strong>, document, question, answer).</p>
+</blockquote>
+<p>And afterward, 2 ideas for why this would work are discussed. First, if the model is powerful enough, it might be capable of understanding the prompts. Second, in such a big dataset, this kind of data structure exists. Take machine translation as an example, there should be many sentences containing "translate to French", English text, and French text. The authors point out some of them below.</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;">Examples of machine translation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">”I’m not the cleverest man in the world, but like they say in French: Je ne suis pas un imbecile [I’m not a fool]. <br><br>In a now-deleted post from Aug. 16, Soheil Eid, Tory candidate in the riding of Joliette, wrote in French: ”Mentez mentez, il en restera toujours quelque chose,” which translates as, ”Lie lie and something will always remain.”<br><br>“I hate the word ‘perfume,”’ Burr says. ‘It’s somewhat better in French: ‘parfum.’<br><br>If listened carefully at 29:55, a conversation can be heard between two guys in French: “-Comment on fait pour aller de l’autre coté? -Quel autre coté?”, which means “- How do you get to the other side? - What side?”. <br><br>If this sounds like a bit of a stretch, consider this question in French: As-tu aller au cinéma?, or Did you go to the movies?, which literally translates as Have-you to go to movies/theater? “<br><br>Brevet Sans Garantie Du Gouvernement”, translated to English: “Patented without government warranty”.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="training-data"><strong>Training data</strong></h4>
+<p>After considering the need for larger data and the disadvantage(noise) of the existing dataset, they developed a new dataset. The data is collected by first crawling 45 million links discussed on Reddit, and then extracting all the contents of these pages. The dataset contains 8 million documents, 40 GB of text.</p>
+<h3 id="experiment">Experiment</h3>
+<p>With 4 level of model, the one-short performances on 4 downstream tasks are shown blow:</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT2 performance.png" srcset="/img/loading.gif" lazyload alt="GPT2 performance" style="zoom:50%;"></p>
+<p>It can be seen that first 3 tasks, the results are not the best yet not the worst, however, the performance on Question Answering is bad, and other works perform way better than GPT-2.</p>
+<p>But this is not over, because in the figure, there is still room for performance improvement on all 4 tasks as the size of the larger model increases. So here comes GPT-3.</p>
+<h2 id="gpt-3">GPT-3</h2>
+<p>The value of an article depends on the topic, effectiveness and novelty. GPT-2 has rather low effectiveness but strong novelty. As a result, GPT-3 aims to promote the effectiveness of its predecessor, while loosing the zero-shot condition to few-shot condition.</p>
+<h3 id="abstract-2">Abstract</h3>
+<p>The parameters of GPT-3 are enlarged 10 times to 175 billion. When applying GPT-3 to downstream tasks, strong performance is achieved without gradient update or fine-tuning. Besides, GPT-3 is capable of generating articles that are indistinguishable from humans' work.</p>
+<p>Besides, unlikely to former papers, this is a 63-page technic report. Without limitation of words or page number, it is very detailed, especially for the experiment and discussion sections.</p>
+<h3 id="introduction-2">Introduction</h3>
+<p>There are 3 problems of current pre-training + fine-tuning language model:</p>
+<ul>
+<li>A large labeled dataset is still needed for a good result</li>
+<li>The pre-training model is not really generalisable because of the need for fine-tuning</li>
+<li>Human doesn't need large fine tuning dataset</li>
+</ul>
+<p>When introducing their work, the authors try to re-define the concept of "meta-learning" and "in-context learning". What they really mean are training a huge generalisable model and train without updating the gradient, respectively.</p>
+<p>Then 3 evaluation methods are presented:</p>
+<ul>
+<li><p>Few-shot learning: 10-100 task-related data</p></li>
+<li><p>One-shot learning</p></li>
+<li><p>Zero-short learning</p></li>
+</ul>
+<p>And the performance with model size is plotted below (1.3B matches the GPT-2 model). Can be seen the final accuracy (few shot - 175B) almost doubled the former GPT-2 accuracy (1.3B zero-short)</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 performance.png" srcset="/img/loading.gif" lazyload alt="GPT3 performance" style="zoom:50%;"></p>
+<h3 id="approach-1">Approach</h3>
+<p>In this section, fine-tuning, few-shot, one-shot, zero-shot learning are explained first in this figure below:</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT-3 approach.png" srcset="/img/loading.gif" lazyload alt="GPT-3 approach" style="zoom:50%;"></p>
+<p>The right column denotes the traditional fine-tuning process that requires extra few gradient update steps. The left side shows how GPT-3 applies "in-context learning" during inference. Basically, the input is divided by 3 parts, task description, example, and prompt. The task description and prompt are ended by ":", and "=&gt;" respectively. The Transformer Decoder extracts the features of the "context" and then predicts the next several words starting from the prompt. As a result, the model is able to infer without gradient updates. Yet it comes 2 problems with few-shot:</p>
+<ul>
+<li>Unable to process really long examples. For example, thousands of English-French translation dataset is easy to get access but they can rarely be leveraged to promote the model performance.</li>
+<li>The inference is one-time thing, meaning the model can't actually learn from previous task description or example. Same samples have to be inputed again an again.</li>
+</ul>
+<p>As a result, the few-shot learning is not commonly used.</p>
+<h4 id="model-and-architectures">Model and Architectures</h4>
+<p>GPT-3 uses the same architecture as GPT-2 yet uses the methods form "<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.10509">Sparse Transformer</a>" to modify the layers. And 8 different size of models are developed.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 models.png" srcset="/img/loading.gif" lazyload alt="GPT3 models" style="zoom:60%;"></p>
+<p>Yet compared with previous models, GPT-3 is "fatter" ,meaning with same <em>d<sub>model</sub></em> (192x of GPT3<sub>small</sub>), <em>n<sub>layers</sub></em> is smaller (only 8x of GPT3<sub>small</sub>).</p>
+<p>The mini-batch size goes up to 3.2M, definitely not mini. Large batch size improves the computational performance and parallelism while reducing the noise in each batch and making the model easier to overfitting. However, this defect is not evident in GPT-3. It is still an open question, now people consider it from two aspects: (1) the internal structure prevents the model from overfitting. (2) Such a large model is able to search for large space and it is more prone to converge to a simpler architecture.</p>
+<p>The learning rate decreases with batch size increasing according to <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2001.08361">research1</a> and <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1812.06162">research2</a>, also counter-intuitive. <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.02677">Former work</a> shows that batch size should increase linear with the learning rate.</p>
+<h4 id="training-dataset">Training Dataset</h4>
+<p>With a huge model, <a target="_blank" rel="noopener" href="https://commoncrawl.org/">Common Craw dataset</a> has come back as an option. The authors clean this dataset in 3 steps:</p>
+<ul>
+<li>A logistic classification model is built, taking samples of Common Craw dataset as negative and WebText as positive. Such model is used on the whole dataset of Common Craw to predict positive (high quality) or negative. The positive stay and the negative are filtered.</li>
+<li><a target="_blank" rel="noopener" href="https://www.pinecone.io/learn/locality-sensitive-hashing/">LSH algorithm</a> is applied on the remaining dataset to filter the similar content.</li>
+<li>More "clean" datasets are mixed in with weight.</li>
+</ul>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 training data.png" srcset="/img/loading.gif" lazyload alt="GPT3 training data" style="zoom:50%;"></p>
+<h4 id="training-process">Training Process</h4>
+<p>Specific training details are not presented. Information so far is <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/dgx-1/">DGX-1 cluster</a> is used.</p>
+<h3 id="results">Results</h3>
+<p>The results are too many so only interesting figures are covered.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 performance with compute.png" srcset="/img/loading.gif" lazyload alt="GPT3 performance with compute" style="zoom:50%;"></p>
+<p>From the figure, the power law distribution of performance with compute are found, i.e. in order to decrease the validation loss linearly, the FLOPS need to increase exponentially. This still is a major problem in Machine Learning.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 result.png" srcset="/img/loading.gif" lazyload alt="GPT3 result" style="zoom:50%;"></p>
+<p>This figure shows the compression of results with Zero-shot SOTO and human. Nothing to comment. Just ... good.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT-3 result 2.png" srcset="/img/loading.gif" lazyload alt="GPT-3 result 2" style="zoom:50%;">And on the Open-Domain QA tasks, GPT-3 outperform other models such as google T5. Google T5 can be considered as a model with both encoder and decoder.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 result 3.png" srcset="/img/loading.gif" lazyload alt="GPT3 result 3" style="zoom:50%;"></p>
+<p>And few shot learning outperform SOTO fine tuning models.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 result4.png" srcset="/img/loading.gif" lazyload alt="GPT3 result4" style="zoom:50%;"></p>
+<p>In the machine translation task, it is interesting to see that other language to English is better than English to others.</p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT 3 result 5.png" srcset="/img/loading.gif" lazyload alt="GPT 3 result 5" style="zoom:50%;"></p>
+<p>Then a news article is generated with GPT-3 with numbers, years and time that makes the article look legit.</p>
+<h3 id="limitations">Limitations</h3>
+<ul>
+<li>Text synthesis, the predicted texts are always looping.</li>
+<li>The bidirectional limit still exist because of the decoder structure.</li>
+<li>The tokens that learned by GPT3 are equally weighted, yet wasting the model on the meaningless but high frequent function words.</li>
+<li>No experience in Videos or real-world physical interaction.</li>
+<li>The interpretation is still low. It's nearly impossible to know how does such a big model works.</li>
+</ul>
+<h3 id="broader-impact">Broader Impact</h3>
+<ul>
+<li>Can be used for fraud and crimes</li>
+<li>Gender difference and race</li>
+<li>Energy consuming</li>
+</ul>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 gender.png" srcset="/img/loading.gif" lazyload alt="GPT3 gender" style="zoom:50%;"></p>
+<p><img src="/2022/04/18/paper-reading-GPT1-3/GPT3 race.png" srcset="/img/loading.gif" lazyload alt="GPT3 race" style="zoom:50%;"></p>
+<h2 id="reference">Reference</h2>
+<p><a href>Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., ... &amp; Houlsby, N. (2020). An image is worth 16x16 words: Transformers for image recognition at scale. <em>arXiv preprint arXiv:2010.11929</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v139/radford21a">Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., ... &amp; Sutskever, I. (2021, July). Learning transferable visual models from natural language supervision. In <em>International Conference on Machine Learning</em> (pp. 8748-8763). PMLR.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2111.06377">He, K., Chen, X., Xie, S., Li, Y., Dollár, P., &amp; Girshick, R. (2021). Masked autoencoders are scalable vision learners. <em>arXiv preprint arXiv:2111.06377</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.10509">Child, R., Gray, S., Radford, A., &amp; Sutskever, I. (2019). Generating long sequences with sparse transformers. <em>arXiv preprint arXiv:1904.10509</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2001.08361">Kaplan, J., McCandlish, S., Henighan, T., Brown, T. B., Chess, B., Child, R., ... &amp; Amodei, D. (2020). Scaling laws for neural language models. <em>arXiv preprint arXiv:2001.08361</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1812.06162">McCandlish, S., Kaplan, J., Amodei, D., &amp; Team, O. D. (2018). An empirical model of large-batch training. <em>arXiv preprint arXiv:1812.06162</em>.</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.02677">Goyal, P., Dollár, P., Girshick, R., Noordhuis, P., Wesolowski, L., Kyrola, A., ... &amp; He, K. (2017). Accurate, large minibatch sgd: Training imagenet in 1 hour. <em>arXiv preprint arXiv:1706.02677</em>.</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+        <a href="/tags/paper-reading/">#paper reading</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>GPT1-3</div>
+      <div>https://daydreamatnight.github.io/2022/04/18/paper-reading-GPT1-3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 18, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/21/paper-reading-Vision-Transformer/" title="Vision Transformer">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Vision Transformer</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/15/paper-reading-bert/" title="Bert">
+                        <span class="hidden-mobile">Bert</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

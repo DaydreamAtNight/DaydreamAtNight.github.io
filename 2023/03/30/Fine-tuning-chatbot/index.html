@@ -1,0 +1,1273 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is a process of optimizing the chat bot that I just build in last blog. We first make the model more like chatGPT by few shot learning, then we fine tune the model follow Stanford&#39;s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fine tuning chatbot">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="This is a process of optimizing the chat bot that I just build in last blog. We first make the model more like chatGPT by few shot learning, then we fine tune the model follow Stanford&#39;s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/alpaca.png">
+<meta property="article:published_time" content="2023-03-30T08:16:10.000Z">
+<meta property="article:modified_time" content="2023-04-08T17:26:03.834Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/alpaca.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Fine tuning chatbot - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Fine tuning chatbot"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-30 16:16" pubdate>
+          March 30, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          16k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          54 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Fine tuning chatbot</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>This is a process of optimizing the chat bot that I just build in last blog. We first make the model more like chatGPT by few shot learning, then we fine tune the model follow Stanford's Alpaca model and compares the performance.</p>
+          </div>
+<span id="more"></span>
+<h2 id="problems-of-original-version">Problems of original version</h2>
+<p>Here are 3 typical answers of the original llama version:</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/Screenshot from 2023-03-30 16-44-21.png" srcset="/img/loading.gif" lazyload alt="typical answer from last version 1" style="zoom: 80%;"></p>
+<p>We can see the even if we don't ask it the questions, the reasonable answer (first line) is always followed by a nonsense babbling that goes any where and shows less relevant to the topic.</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/Screenshot from 2023-03-30 16-51-15.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-03-30 16-51-15" style="zoom:80%;"></p>
+<p>In the above conversation, we used few short learning <sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Few-shot learning in practice: GPT-Neo and the 🤗 Accelerated Inference API](https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api)">[1]</span></a></sup><sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Example of Prompts](https://www.promptingguide.ai/introduction/examples)">[2]</span></a></sup> to give it a longer prompt with examples, it tends to prolong this pattern after the correct answer(first line), then keeps babbling. If we give a relatively longer example, it continue this pattern until reach the <code>max_gen_len</code>.</p>
+<h2 id="few-short-learning">Few short learning</h2>
+<p>In this section, we make the original model talk like a human i.e., make it more chatGPT.</p>
+<p>As we can see from the crude version, the model generates the natural continuation of the prompt and doesn't know where to stop, which is kinda sucks. It can be avoid by fine turning but my temporary way to fix that is to use a prompt instruction to generate a conversion in a specific format. Such as:</p>
+<div class="code-wrapper"><pre><code class="hljs python">utit = <span class="hljs-string">&quot;Human: &quot;</span>
+btit = <span class="hljs-string">&quot;AI: &quot;</span>
+context = <span class="hljs-string">&quot;Instruction: This is a conversation between the user and the AI consultant. In each turn, the user&#x27;s input is the first sentence and the AI&#x27;s input is the second sentence. The user asks staring with \&quot;&quot;</span>+utit+<span class="hljs-string">&quot;\&quot; the consultant answers staring with \&quot;&quot;</span>+btit+<span class="hljs-string">&quot;\&quot; each message ends with a \&quot;\\n\&quot;. For example:\n &quot;</span>+utit+<span class="hljs-string">&quot;What are some common causes of car accidents?\n &quot;</span>+btit+<span class="hljs-string">&quot;1. Distracted driving \n2. Driving under the influence of alcohol or drugs \n3. Speeding \n&quot;</span>+utit+<span class="hljs-string">&quot;What are the benefits of using artificial intelligence in the transportation system?\n &quot;</span>+btit+<span class="hljs-string">&quot;The use of artificial intelligence in the transportation system offers many potential benefits, such as improved efficiency and safety, reduced traffic congestion, smarter infrastructure, and enhanced customer experience.\n Now, the conversation begins:\n&quot;</span>
+prompt=context+utit</code></pre></div>
+<p>If we input a instruction/question, for example <code>Hi, who are you?</code>. The text would be appended to the context with a Q&amp;A pattern:</p>
+<blockquote>
+<p>----------<small> prompt that input into the model </small>----------</p>
+<p>Instruction: This is a conversation between the user and the AI consultant. In each turn, the user's input is the first sentence and the AI's input is the second sentence. The user asks staring with "<font style="background:yellow">Human: </font>" the consultant answers staring with "<font style="background:yellow">AI: </font>" each message ends with a "\n". For example:</p>
+<p><font style="background:yellow">Human: </font>What are some common causes of car accidents?</p>
+<p><font style="background:yellow">AI: </font>1. Distracted driving</p>
+<ol start="2" type="1">
+<li>Driving under the influence of alcohol or drugs</li>
+<li>Speeding</li>
+</ol>
+<p><font style="background:yellow">Human: </font>What are the benefits of using artificial intelligence in the transportation system?</p>
+<p><font style="background:yellow">AI: </font>The use of artificial intelligence in the transportation system offers many potential benefits, such as improved efficiency and safety, reduced traffic congestion, smarter infrastructure, and enhanced customer experience.</p>
+<p>Now, the conversation begins:</p>
+<p>----------<small> Context above, real prompt starts below </small>----------</p>
+<p><font style="background:yellow">Human: </font><strong><em>Hello, who are you?</em></strong></p>
+</blockquote>
+<p>The response of the AI tends to predict not only its own answer, but the afterward user's questions and its corresponding responses to continue this conversation. Like this:</p>
+<blockquote>
+<p>----------<small> raw response that returns from the model (excludes the inputted prompt) </small>----------</p>
+<p><font style="background:yellow">AI: </font><strong><em>Hi, I am AI.</em></strong></p>
+<p>----------<small> keep the first response above, drop whatever follows </small>----------</p>
+<p><font style="background:yellow">Human: </font>Hi, AI.</p>
+<p><font style="background:yellow">AI: </font>What do you want me to tell you?</p>
+<p><font style="background:yellow">Human: </font>I want to know what are the causes of car accidents.</p>
+<p><font style="background:yellow">AI: </font>Okay, I will explain it to you.</p>
+<p><font style="background:yellow">Human: </font>I have just found out that the majority of car accidents are caused by alcohol.</p>
+<p><font style="background:yellow">AI: </font>Yes, that is true. Alcohol consumption is one of the major causes of car accidents.</p>
+<p><font style="background:yellow">Human: </font>I have just found out that more than 60% of car accidents are caused by drivers under the influence of alcohol or drugs.</p>
+<p>...</p>
+</blockquote>
+<p>So we split the first answer and truncates whatever that follows via <code>utit</code> and <code>btit</code>:</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_text</span>(<span class="hljs-params">prompt: <span class="hljs-built_in">str</span>, generator: LLaMA, utit: <span class="hljs-built_in">str</span>, btit: <span class="hljs-built_in">str</span>, max_gen_len: <span class="hljs-built_in">int</span> = <span class="hljs-number">256</span>, temperature: <span class="hljs-built_in">float</span> = <span class="hljs-number">0.8</span>, top_p: <span class="hljs-built_in">float</span> = <span class="hljs-number">0.95</span></span>) -&gt; <span class="hljs-built_in">str</span>:
+    results = generator.generate([prompt], max_gen_len=max_gen_len, temperature=temperature, top_p=top_p)
+    result = results[<span class="hljs-number">0</span>][<span class="hljs-built_in">len</span>(prompt):] 			<span class="hljs-comment"># drop the prompt</span>
+    <span class="hljs-keyword">try</span>: result = result.split(utit)[<span class="hljs-number">0</span>]			<span class="hljs-comment"># select the text before user title </span>
+    <span class="hljs-keyword">except</span>: <span class="hljs-keyword">pass</span>
+    <span class="hljs-keyword">try</span>: result = result.split(btit)[<span class="hljs-number">1</span>]			<span class="hljs-comment"># select the text after bot title </span>
+    <span class="hljs-keyword">except</span>: <span class="hljs-keyword">pass</span>
+    result = result.strip(<span class="hljs-string">&quot; &quot;</span>).strip(<span class="hljs-string">&quot;\n&quot;</span>) + <span class="hljs-string">&quot;\n&quot;</span> 	<span class="hljs-comment"># further formatting</span>
+
+    <span class="hljs-keyword">return</span> result</code></pre></div>
+<p>Besides, in each session, the new message is appended to the old chat history as a input i.e. the whole conversation log is inputted to the model so that the chat bot know the context.</p>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">getReply</span>(<span class="hljs-params">prompts</span>):
+    <span class="hljs-keyword">global</span> prompt
+    logging(prompts, <span class="hljs-string">&quot;sent&quot;</span>)
+    prompt=prompt + utit + prompts.rstrip(<span class="hljs-string">&quot;\n&quot;</span>) + <span class="hljs-string">&quot;\n&quot;</span>
+    result, response_time= generate_text(prompt, generator, utit, btit, max_gen_len, temperature, top_p)
+    prompt=prompt + btit + result
+    logging(result, <span class="hljs-string">&quot;reply&quot;</span>, <span class="hljs-string">&quot;%.2f&quot;</span> % response_time)
+    <span class="hljs-keyword">return</span> result</code></pre></div>
+<div class="note note-warning">
+            <p>Effective as it is, the response time turns to be really long even for a really short answer (16s per response). First reason is the much longer input length as before. Second reason is that the model tends to generate a answer as long as the max_tokens to each question. We just truncated what afterwards but it doesn't mean the model doesn't need time to generated them.</p>
+          </div>
+<div class="note note-info">
+            <p>After further research, this process can be done with <a target="_blank" rel="noopener" href="https://python.langchain.com/en/latest/reference/modules/chains.html?highlight=ConversationChain#langchain.chains.ConversationChain">langchain.chains.<strong>ConversationChain</strong></a>. I am pretty happy to see my idea aligning with one of the main approach.</p><p>Langchain also provides a <a target="_blank" rel="noopener" href="https://python.langchain.com/en/latest/modules/memory/types/buffer_window.html">ConversationBufferWindowMemory</a> to control how many rounds of conversation will be input into the model, instead of throwing all the chat history into it.</p>
+          </div>
+<p>Now deploy the chat bot again and see the result:</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/interface_version2_1.png" srcset="/img/loading.gif" lazyload alt="Screenshot of a conversation about the python sorting method" style="zoom:80%;"></p>
+<p>Both bubble sorting script and the python build-in sorting methods work.</p>
+<p>Try another longer conversation:</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/interface_version2_2.png" srcset="/img/loading.gif" lazyload alt="Screenshot of a conversation about the vehicle sealing strip" style="zoom:80%;"></p>
+<p>Well, now it performs more like a consultant chatbot, and starts giving me some interesting information. <del><em>Although at the end of the conversation, I know actually PTFE is the same thing as Either...</em></del></p>
+<h2 id="fine-tuning---alpaca">Fine tuning - Alpaca</h2>
+<p>Ok, next thing to do is to make this model smarter.</p>
+<p>Stanford Alpaca Project<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="[Alpaca: A Strong, Replicable Instruction-Following Model](https://crfm.stanford.edu/2023/03/13/alpaca.html)">[3]</span></a></sup> fine tuned the 7B and 13B model using self-instruct learning<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Wang, Y., Kordi, Y., Mishra, S., Liu, A., Smith, N. A., Khashabi, D., &amp; Hajishirzi, H. (2022). Self-Instruct: Aligning Language Model with Self Generated Instructions. *arXiv preprint arXiv:2212.10560*.">[4]</span></a></sup>. They use 52K instruction-following data, including questions and the answers from <code>text-davinci-003</code> model (GPT3) to achieve a similar performance to its teacher network.</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/alpaca_main.jpg" srcset="/img/loading.gif" lazyload alt="alpaca method, pic from alpaca repo" style="zoom:80%;"></p>
+<p>I try to reproduce their work in this section.</p>
+<p>The good thing is, they’ve provided the 52K instruction-following examples, so I only need to reproduce the supervised fine tuning part of the process.</p>
+<div class="note note-info">
+            <p>It turns out that the original Alpaca 52K data still contains some low-quality and toxic contents. <a target="_blank" rel="noopener" href="https://github.com/gururise">gururise</a> has provided a cleaned data. See their GitHub <strong><a target="_blank" rel="noopener" href="https://github.com/gururise/AlpacaDataCleaned">AlpacaDataCleaned</a></strong> or the hugging face hub <a href="yahma/alpaca-cleaned">yahma/alpaca-cleaned</a> for more details. And this is the dataset that I choose to use.</p>
+          </div>
+<h3 id="dependencies">Dependencies</h3>
+<p>After cloning the <strong><a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">stanford_alpaca</a></strong> repo, first install the requirements:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">pip install -r requirements.txt -i  http://pypi.douban.com/simple/ --trusted-host pypi.douban.com</code></pre></div>
+<p>Then cloning the <strong><a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers">transformers</a></strong> repo, editable install the repo.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">pip install -e . -i  http://pypi.douban.com/simple/ --trusted-host pypi.douban.com</code></pre></div>
+<p>Check if the transformer repo has been properly installed (test code from hugging face <a target="_blank" rel="noopener" href="https://huggingface.co/docs/transformers/installation">installation guide</a>).</p>
+<div class="code-wrapper"><pre><code class="hljs shell">python -c &quot;from transformers import pipeline; print(pipeline(&#x27;sentiment-analysis&#x27;)(&#x27;I love you&#x27;))&quot;</code></pre></div>
+<div class="note note-info">
+            <p>In the original blog, stanford said one specific PR should be installed instead of the huggingface main branch. But I found right now the PR has been merged. So, installing the main branch will do.</p>
+          </div>
+<h3 id="training">Training</h3>
+<p>In order to use hugging face to train and deploy llama, we need to convert the weight into the hugging face format.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">python src/transformers/models/llama/convert_llama_weights_to_hf.py \
+    --input_dir /path/to/downloaded/llama/weights \
+    --model_size 7B \
+    --output_dir /output/path</code></pre></div>
+<div class="code-wrapper"><pre><code class="hljs shell">python fintune/transformers-main/src/transformers/models/llama/convert_llama_weights_to_hf.py  --input_dir llama/ --model_size 7B --output_dir fintune/llama_weights_converted/7B
+python fintune/transformers-main/src/transformers/models/llama/convert_llama_weights_to_hf.py  --input_dir llama/ --model_size 13B --output_dir fintune/llama_weights_converted/13B
+python fintune/transformers-main/src/transformers/models/llama/convert_llama_weights_to_hf.py  --input_dir llama/ --model_size 30B --output_dir fintune/llama_weights_converted/30B
+python fintune/transformers-main/src/transformers/models/llama/convert_llama_weights_to_hf.py  --input_dir llama/ --model_size 65B --output_dir fintune/llama_weights_converted/65B</code></pre></div>
+<div class="note note-secondary">
+            <p>It takes no more than 3 min to convert the 65B model.</p><p>The size of the original and converted model weights are pretty much the same.</p><table><thead><tr class="header"><th>model</th><th>Original size</th><th>Converted Size</th></tr></thead><tbody><tr class="odd"><td>7B</td><td>13G</td><td>13G</td></tr><tr class="even"><td>13B</td><td>25G</td><td>25G</td></tr><tr class="odd"><td>30B</td><td>61G</td><td>61G</td></tr><tr class="even"><td>65B</td><td>122G</td><td>122G</td></tr></tbody></table>
+          </div>
+<p>Then we fine tune the 7B using this command:</p>
+<div class="code-wrapper"><pre><code class="hljs shell">torchrun --nproc_per_node=8 --master_port=&lt;your_random_port&gt; train.py \
+    --model_name_or_path &lt;your_path_to_hf_converted_llama_ckpt_and_tokenizer&gt; \
+    --data_path ./alpaca_data.json \
+    --bf16 True \
+    --output_dir &lt;your_output_dir&gt; \
+    --num_train_epochs 3 \
+    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 4 \
+    --gradient_accumulation_steps 4 \
+    --evaluation_strategy &quot;no&quot; \
+    --save_strategy &quot;steps&quot; \
+    --save_steps 2000 \
+    --save_total_limit 1 \
+    --learning_rate 2e-5 \
+    --weight_decay 0. \
+    --warmup_ratio 0.03 \
+    --lr_scheduler_type &quot;cosine&quot; \
+    --logging_steps 1 \
+    --fsdp &quot;full_shard auto_wrap&quot; \
+    --fsdp_transformer_layer_cls_to_wrap &#x27;&#x27; \
+    --tf32 True</code></pre></div>
+<div class="note note-info">
+            <p>About the hyperparameter,</p><ul><li>Standford set their overall batch size as 128, but they never tested on other batch sizes.</li><li>People has been saying that 3 epoches are too much. But I decided to keep on stanford’s original settings.</li><li>Keep an eye on the <code>--fsdp_transformer_layer_cls_to_wrap</code>, for the latest main branch, there is a slight difference with the original arg. <code>LlamaDecoderLayer</code> instead of <code>LLaMADecoderLayer</code>.</li></ul>
+          </div>
+<div class="note note-info">
+            <p>It only took 40 min on 8*NVIDIA A800-SXM4-80GB to finish training. I also trained the 13B model and it took 2h 43m 14s. The training processes are attached to the <a href="#appendix">Appendix</a> section.</p>
+          </div>
+<h3 id="deploying">Deploying</h3>
+<h4 id="no-context-inferencing">No context inferencing</h4>
+<p>We first deploy the code with the same prompt as training shown below.</p>
+<div class="code-wrapper"><pre><code class="hljs python">utit = <span class="hljs-string">&quot;### Instruction:&quot;</span>
+btit = <span class="hljs-string">&quot;### Response:&quot;</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_prompt</span>(<span class="hljs-params">instruction</span>):
+    <span class="hljs-keyword">if</span> g.load_context:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;\n&quot;</span> + utit + <span class="hljs-string">f&quot;&quot;&quot;</span>
+<span class="hljs-string"><span class="hljs-subst">&#123;instruction&#125;</span></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">&quot;&quot;&quot;</span> + btit + <span class="hljs-string">&quot;\n&quot;</span>
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;Below is an instruction that describes a task. Write a response that appropriately completes the request.&quot;</span> + <span class="hljs-string">&quot;\n\n&quot;</span> + utit + <span class="hljs-string">f&quot;&quot;&quot;</span>
+<span class="hljs-string"><span class="hljs-subst">&#123;instruction&#125;</span></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">&quot;&quot;&quot;</span> + btit + <span class="hljs-string">&quot;\n&quot;</span>
+</code></pre></div>
+<p>Disable the <code>load_context</code> inference (no conversation) , with the first user input shown below, this is what the model sees:</p>
+<blockquote>
+<p>Below is an instruction that describes a task. Write a response that appropriately completes the request.</p>
+<p><font style="background:yellow">### Instruction: </font></p>
+<p><strong><em>How to sort a list in Python?</em></strong></p>
+<p><font style="background:yellow">### Response: </font></p>
+</blockquote>
+<p>Below is the raw result (only exclude the user prompt before its real answer, no truncation or other preprocessing) The performance looks pretty good actually.</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/Screenshot from 2023-04-06 16-17-38.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-06 16-17-38" style="zoom:80%;"></p>
+<p>Note that the second round, the AI responses my question perfectly because I give it enough information in this single message. But for the 3rd instruction, I ask, <code>tell me more about it.</code> The model misunderstood the meaning of "it" to IoT because it has no access to the chat history.</p>
+<div class="note note-warning">
+            <p>Note that the second answer is WRONG. Python uses <strong>Timsort algorithm</strong> as the default sort algorithm. And TimSort is actually a combination of Merge sort and Insert sort. For the same question with different context, the model first give an answer of Merge sort, then Insert sort in next section.</p>
+          </div>
+<h4 id="inferencing-w-context">Inferencing w context</h4>
+<h5 id="method-1">method 1</h5>
+<p>Now we turn <code>load_context</code> on, mimicking what we did to the original llama code. For example for the second rounds of the conversation below, after the user's message inputed, this is what the model sees:</p>
+<blockquote>
+<p>Below is an instruction that describes a task. Write a response that appropriately completes the request.</p>
+<p><font style="background:yellow">### Instruction: </font></p>
+<p>How to sort a list in Python?</p>
+<p><font style="background:yellow">### Response: </font></p>
+<p>In Python, you can sort a list using the built-in sort() function. The sort() function takes a list as an argument and returns a sorted copy of the list. To sort a list in ascending order, you can use the built-in sort() function as follows:</p>
+<p>list_to_sort = [1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>sorted_list = sort(list_to_sort)</p>
+<p>print(sorted_list)</p>
+<p>Output:</p>
+<p>[1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>To sort a list in descending order, you can use the reverse() function as follows:</p>
+<p>list_to_sort = [1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>sorted_list = sort(list_to_sort, reverse</p>
+<p><font style="background:yellow">### Instruction: </font></p>
+<p>Which algorithm does this function use? Explain in detail.</p>
+<p><font style="background:yellow">### Response: </font></p>
+</blockquote>
+<p>we show the raw answer as before:</p>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/Screenshot from 2023-04-06 16-40-39.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-06 16-40-39" style="zoom:80%;"></p>
+<p>Note the second round looks pretty good, the model know <code>this function</code> means the built-in sort function in Python from the context. But for the 3rd round, the model starts to generate repetitive words. Because this model is not trained with conversation before.</p>
+<div class="note note-info">
+            <p>The conservation ability even lower than the llama original with few shot learning.</p>
+          </div>
+<h5 id="method-2">method 2</h5>
+<p>A second method (mainsteam) is appending the new message directly to the history as a big <code>### Instruction</code>. For example for the second round, this is what the model sees:</p>
+<blockquote>
+<p>Below is an instruction that describes a task. Write a response that appropriately completes the request.</p>
+<p><font style="background:yellow">### Instruction: </font></p>
+<p>How to sort a list in Python?</p>
+<p>In Python, you can sort a list using the built-in sort() function. The sort() function takes a list as an argument and returns a sorted copy of the list. To sort a list in ascending order, you can use the built-in sort() function as follows:</p>
+<p>list_to_sort = [1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>sorted_list = sort(list_to_sort)</p>
+<p>print(sorted_list)</p>
+<p>Output:</p>
+<p>[1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>To sort a list in descending order, you can use the reverse() function as follows:</p>
+<p>list_to_sort = [1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>sorted_list = sort(list_to_sort, reverse</p>
+<p>Which algorithm does this function use? Explain in detail.</p>
+<p><font style="background:yellow">### Response: </font></p>
+</blockquote>
+<p><img src="/2023/03/30/Fine-tuning-chatbot/Screenshot from 2023-04-06 17-30-24.png" srcset="/img/loading.gif" lazyload alt="Screenshot from 2023-04-06 17-30-24" style="zoom:80%;"></p>
+<p>We can see a similar performance as before. The conversation works until the 3rd round, where the model returns repetitive answers.</p>
+<h3 id="comments-on-standford-alpaca">Comments on standford alpaca</h3>
+<p>Compared with the original llama model, after instructional fine tuning, alpaca shows a better performance answering questions</p>
+<ul>
+<li>Far less prompt needed to get a better performance on answering questions.</li>
+<li>Not need to truncate the response as it only tends to answer the instruction.</li>
+</ul>
+<p>The negative side is that</p>
+<ul>
+<li>Wrong and misleading answer</li>
+<li>Limited conversation ability as it is not trained for answering conversation. The conservation ability even lower than the llama original with few shot learning.</li>
+</ul>
+<h2 id="on-next">ON NEXT</h2>
+<p>Considering this is a very hot topic and there are new repos and trending models coming out everyday.</p>
+<p>Next we will try to</p>
+<ul>
+<li>Reproduce the alpaca-lora, which allows alpaca training more efficiently.</li>
+<li>Take a look at other llama extensions, such as
+<ul>
+<li>the Chinese alpaca, model that retrained llama and alpaca-lora with more Chinese dataset</li>
+<li>the GPT4all, an opensource mode based on lamma and alpaca that using GPT4 dataset</li>
+</ul></li>
+</ul>
+<h2 id="appendix">Appendix</h2>
+<h3 id="b-training">7B training</h3>
+<table>
+
+<thead>
+<tr class="header">
+<th>Overview</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State</td>
+<td>finished</td>
+</tr>
+<tr class="even">
+<td>Start time</td>
+<td>April 1st, 2023 at 10:33:31 am</td>
+</tr>
+<tr class="odd">
+<td>Duration</td>
+<td>40m 41s</td>
+</tr>
+<tr class="even">
+<td>Hostname</td>
+<td>localhost.localdomain</td>
+</tr>
+<tr class="odd">
+<td>OS</td>
+<td>Linux-3.10.0-957.el7.x86_64-x86_64-with-glibc2.17</td>
+</tr>
+<tr class="even">
+<td>Python version</td>
+<td>3.9.12</td>
+</tr>
+<tr class="odd">
+<td>Python executable</td>
+<td>/home/conda/llama/bin/python</td>
+</tr>
+<tr class="even">
+<td>Command</td>
+<td>/home/singleGPU/chatbot/fintune/stanford_alpaca-main/train.py --model_name_or_path ../llama_weights_converted/7B/ --data_path ./alpaca_data_cleaned.json --bf16 True --output_dir ../alpaca_weight_tuned/7B_cleaned --num_train_epochs 3 --per_device_train_batch_size 4 --per_device_eval_batch_size 4 --gradient_accumulation_steps 4 --evaluation_strategy no --save_strategy steps --save_steps 2000 --save_total_limit 1 --learning_rate 2e-5 --weight_decay 0. --warmup_ratio 0.03 --lr_scheduler_type cosine --logging_steps 1 --fsdp "full_shard auto_wrap" --fsdp_transformer_layer_cls_to_wrap LlamaDecoderLayer --tf32 True</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>System Hardware</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPU count</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<td>GPU count</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>GPU type</td>
+<td>NVIDIA A800-SXM4-80GB</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Train logs:</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>epoch</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>global_step</td>
+<td>1212</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>2e-5</td>
+</tr>
+<tr class="even">
+<td>loss</td>
+<td>0.3975</td>
+</tr>
+<tr class="odd">
+<td>total_flos</td>
+<td>153924206059323400</td>
+</tr>
+<tr class="even">
+<td>train_loss</td>
+<td>0.7330102721850077</td>
+</tr>
+<tr class="odd">
+<td>train_runtime</td>
+<td>2421.2348</td>
+</tr>
+<tr class="even">
+<td>train_samples_per_second</td>
+<td>64.074</td>
+</tr>
+<tr class="odd">
+<td>train_steps_per_second</td>
+<td>0.501</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Training process visualization</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_13_05%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_13_05 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_13_35%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_13_35 PM"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_37%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_14_37 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_27%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_14_27 PM"></td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_15%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_14_15 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_25%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_14_25 PM"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_13_52%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_13_52 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_14_05%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_14_05 PM"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="b-training-1">13B training</h3>
+<table>
+
+<thead>
+<tr class="header">
+<th>Overview</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State</td>
+<td>finished</td>
+</tr>
+<tr class="even">
+<td>Start time</td>
+<td>April 1st, 2023 at 11:20:25 am</td>
+</tr>
+<tr class="odd">
+<td>Duration</td>
+<td>2h 47m 20s</td>
+</tr>
+<tr class="even">
+<td>Hostname</td>
+<td>localhost.localdomain</td>
+</tr>
+<tr class="odd">
+<td>OS</td>
+<td>Linux-3.10.0-957.el7.x86_64-x86_64-with-glibc2.17</td>
+</tr>
+<tr class="even">
+<td>Python version</td>
+<td>3.9.12</td>
+</tr>
+<tr class="odd">
+<td>Python executable</td>
+<td>/home/conda/llama/bin/python</td>
+</tr>
+<tr class="even">
+<td>Command</td>
+<td>/home/singleGPU/chatbot/fintune/stanford_alpaca-main/train.py --model_name_or_path ../llama_weights_converted/13B/ --data_path ./alpaca_data_cleaned.json --bf16 True --output_dir ../alpaca_weight_tuned/13B_cleaned --num_train_epochs 3 --per_device_train_batch_size 2 --per_device_eval_batch_size 2 --gradient_accumulation_steps 8 --evaluation_strategy no --save_strategy steps --save_steps 2000 --save_total_limit 1 --learning_rate 2e-5 --weight_decay 0. --warmup_ratio 0.03 --lr_scheduler_type cosine --logging_steps 1 --fsdp "full_shard auto_wrap" --fsdp_transformer_layer_cls_to_wrap LlamaDecoderLayer --tf32 True</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>System Hardware</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPU count</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<td>GPU count</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>GPU type</td>
+<td>NVIDIA A800-SXM4-80GB</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Train logs:</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>epoch</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>global_step</td>
+<td>1212</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>2e-5</td>
+</tr>
+<tr class="even">
+<td>loss</td>
+<td>0.3184</td>
+</tr>
+<tr class="odd">
+<td>total_flos</td>
+<td>242450863476441100</td>
+</tr>
+<tr class="even">
+<td>train_loss</td>
+<td>0.6685134294648768</td>
+</tr>
+<tr class="odd">
+<td>train_runtime</td>
+<td>9978.7829</td>
+</tr>
+<tr class="even">
+<td>train_samples_per_second</td>
+<td>15.547</td>
+</tr>
+<tr class="odd">
+<td>train_steps_per_second</td>
+<td>0.121</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Training process visualization</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_02_38%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_02_38 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_02_50%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_02_50 PM"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_56%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_06_56 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_45%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_06_45 PM"></td>
+</tr>
+<tr class="odd">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_25%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_06_25 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_36%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_06_36 PM"></td>
+</tr>
+<tr class="even">
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_01%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_06_01 PM"></td>
+<td><img src="/2023/03/30/Fine-tuning-chatbot/W&amp;B%20Chart%204_1_2023,%205_06_15%20PM.png" srcset="/img/loading.gif" lazyload alt="W&amp;B Chart 4_1_2023, 5_06_15 PM"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<p>LangChain document: <a target="_blank" rel="noopener" href="https://python.langchain.com/en/latest/index.html#">LangChain 0.0.128</a></p>
+<p>Alpaca: <a target="_blank" rel="noopener" href="https://github.com/tatsu-lab">tatsu-lab</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">stanford_alpaca</a></strong></p>
+<p>Alpaca data cleaned: <a href="yahma/alpaca-cleaned">yahma/alpaca-cleaned</a></p>
+<p>Self instruct: <a target="_blank" rel="noopener" href="https://github.com/yizhongw">yizhongw</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/yizhongw/self-instruct">self-instruct</a></strong></p>
+<p>Hugging face Transformer: <a target="_blank" rel="noopener" href="https://github.com/huggingface">huggingface</a>/<strong><a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers">transformers</a></strong></p>
+<p>Hugging face <a target="_blank" rel="noopener" href="https://huggingface.co/docs/transformers/installation">installation guide</a></p>
+<p>Hugging face llama pull request <a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers/pull/21955">LLaMA Implementation #21955</a></p>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api">Few-shot learning in practice: GPT-Neo and the 🤗 Accelerated Inference API</a> <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://www.promptingguide.ai/introduction/examples">Example of Prompts</a> <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://crfm.stanford.edu/2023/03/13/alpaca.html">Alpaca: A Strong, Replicable Instruction-Following Model</a> <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Wang, Y., Kordi, Y., Mishra, S., Liu, A., Smith, N. A., Khashabi, D., &amp; Hajishirzi, H. (2022). Self-Instruct: Aligning Language Model with Self Generated Instructions. <em>arXiv preprint arXiv:2212.10560</em>. <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/deep-learning/">#deep learning</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Fine tuning chatbot</div>
+      <div>https://daydreamatnight.github.io/2023/03/30/Fine-tuning-chatbot/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 30, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/01/Chinese-chatbot/" title="Chinese chatbot summary">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Chinese chatbot summary</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/22/build-a-chatbot-backended-by-Meta-llama/" title="build a chatbot backended by Meta LLaMA">
+                        <span class="hidden-mobile">build a chatbot backended by Meta LLaMA</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

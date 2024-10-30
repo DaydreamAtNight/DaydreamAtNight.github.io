@@ -1,0 +1,1108 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Attend to validate a turbulence modeling, need a quick recap on the classical theorem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RANS recap">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/09/29/RANS-recap/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Attend to validate a turbulence modeling, need a quick recap on the classical theorem.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/RANs_recap.png">
+<meta property="article:published_time" content="2022-09-29T14:16:30.000Z">
+<meta property="article:modified_time" content="2022-10-21T14:35:17.437Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/RANs_recap.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>RANS recap - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RANS recap"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-29 22:16" pubdate>
+          September 29, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          27k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          91 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">RANS recap</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Attend to validate a turbulence modeling, need a quick recap on the classical theorem.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>This is a crash introduction of turbulence and RANs, if need further information, here are some useful references. Most of the concepts, formulas, figures of this blog are collected from these resources:</p><p><a target="_blank" rel="noopener" href="http://profs.sci.univr.it/~zuccher/downloads/FD-MAE553-Smits.pdf">note: Viscous Flows and Turbulence - profs.scienze.univr.it</a></p><p><a target="_blank" rel="noopener" href="https://figshare.com/articles/presentation/OpenFOAM_advanced_training_Turbulence_modeling_in_general_CFD_and_OpenFOAM_-_Theory_and_applications/19310162/1">slides: Turbulence modeling in OpenFOAM and general CFD - Advanced training</a></p><p><a target="_blank" rel="noopener" href="https://youtu.be/zIQpxmLwbXQ">video: Turbulence Closure Models: Reynolds Averaged Navier Stokes (RANS) &amp; Large Eddy Simulations (LES)</a></p><p><a target="_blank" rel="noopener" href="https://cfd.spbstu.ru/agarbaruk/doc/1976_Townsend_The%20Structure%20of%20Turbulent%20Shear%20Flow.pdf">book: The structure of turbulent shear flow</a> <sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Boussinesq, J. (1877). *Essai sur la théorie des eaux courantes*. Impr. nationale.">[7]</span></a></sup></p>
+          </div>
+<h2 id="turbulence-introduction">Turbulence Introduction</h2>
+<h3 id="the-nature-of-turbulent-flow">The Nature of Turbulent Flow</h3>
+<p>Turbulent flow is characterised by:</p>
+<ol type="1">
+<li><p>Three-dimensionality. Turbulence is inherently three-dimensional. Although some people study two-dimensional turbulence (this may have some application to geophysical flows (see figure 6.1). Note that the “stretching and tilting” term in the vorticity transport equation is absent in two-dimensional flows, and therefore two-dimensional turbulence is considerably simpler than the real-life three-dimensional variety.</p></li>
+<li><p>Time-dependency. Turbulence is characterised by unsteady variations in velocity, density, temperature or concentration, and the variation (fluctuations) occurs over a wide range of time scales. Turbulence has a broad frequency spectrum.</p></li>
+<li><p>A wide range of length scales. Turbulence has a broad wavenumber spectrum. If we consider the example of turbulent pipe flow, a range of scales which goes from the largest (of order <span class="math inline">\(D\)</span>, the pipe diameter) to the smallest (of order <span class="math inline">\(ν/u_\tau\)</span>, where <span class="math inline">\(u_\tau\)</span> is the friction velocity, which is a velocity scale based on the wall shear stress: it is of the same order as a typical velocity fluctuation)</p></li>
+<li><p>Effective mixing of all fluid properties.</p></li>
+</ol>
+<h3 id="study-turbulence">Study Turbulence</h3>
+<p>Historically, studies of turbulence have relied on a very restricted set of “tools”:</p>
+<ol type="1">
+<li>Approximate analysis of average properties of highly idealized turbulent flows (eg. grid turbulence);</li>
+<li>Analysis of idealized linear stability problems;</li>
+<li>Measurements of time-averaged properties and ensemble-average properties (<span class="math inline">\(\bar{U}, \bar{U&#39;^2}, \bar{U&#39;v&#39;}, \Psi(\omega), p(u)\)</span>, etc.);</li>
+<li>Flow visualization;</li>
+<li>Dimensional analysis and scaling arguments.</li>
+</ol>
+<p>From this work we have obtained</p>
+<ol type="1">
+<li>a small set of widely accepted “facts”, for example, the logarithmic variation of velocity in a turbulent boundary layer;</li>
+<li>a small set of widely accepted correlations, for example the friction factor for pipes as a function of Reynolds number;</li>
+<li>a small set of widely accepted theories eg. Kolmogoroff’s inertial range, Batchelor’s final decay of grid turbulence;</li>
+<li>a qualitative notion of energy transfer (the energy cascade);</li>
+<li>the kinematics and other general features of turbulence and eddies, for example the role of bulges, horshoe-vortices, “typical” eddies, etc.;</li>
+<li>some useful but rather restricted sets of predictive tools, for example, the k-ε turbulence model;</li>
+<li>a good appreciation of scaling arguments.</li>
+</ol>
+<p>The difficulty is:</p>
+<ul>
+<li>Turbulence is complex. Extremely complex.</li>
+</ul>
+<p>The main goal is:</p>
+<ul>
+<li>To develop approximations to the N-S equations which embody sufficient dynamical information to allow reliable and efficient predictions of turbulent flows.</li>
+</ul>
+<p>We need:</p>
+<ol type="1">
+<li>high quality simulations;</li>
+<li>high quality experiments;</li>
+<li>good ideas.</li>
+</ol>
+<p><img src="/2022/09/29/RANS-recap/The evolving role of computers, experiments and theory.png" srcset="/img/loading.gif" lazyload alt="Perry's diagram of the evolving role of computers, experiments and theory. (a). only good ideas (b). ideas guided by experiment and theory, with a little help from the numerics(c). the help from computers becomes stronger as a 3rd leg (d). computers empower both experiment and theory." style="zoom:50%;"></p>
+<h3 id="approaches-to-turbulence">Approaches to Turbulence</h3>
+<p>The major varieties are the</p>
+<ul>
+<li>time-averaged approach (also called Reynolds averaged approach);</li>
+<li>ensemble-averaged approach;</li>
+<li>instantaneous realisation approach</li>
+</ul>
+<h4 id="reynolds-averaged">Reynolds-averaged</h4>
+<ul>
+<li>most common approach</li>
+<li>most studied</li>
+<li>most limited in terms of understanding</li>
+<li>form the basis of all engineering calculation methods</li>
+</ul>
+<p>idea</p>
+<ul>
+<li>turbulence is seen as a purely statistical phenomena</li>
+<li>N-S equations are written in terms of mean quantities by using time averages</li>
+<li>turbulence model is incorporated to close the model</li>
+</ul>
+<h4 id="ensemble-averaged">Ensemble-averaged</h4>
+<ul>
+<li>a way of thinking, rather than a parallel approach to RANs</li>
+</ul>
+<p>idea</p>
+<ul>
+<li>turbulence has an underlying structure instead of randomness</li>
+<li>similarity among eddies, determine the average properties of an eddy, and how these properties scale with size, position, etc</li>
+<li>take some of the turbulent structure into account</li>
+</ul>
+<p>Examples see phase-averaging (Cantwell &amp; Coles<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Cantwell, B., &amp; Coles, D. (1983). An experimental study of entrainment and transport in the turbulent near wake of a circular cylinder. *Journal of fluid mechanics*, *136*, 321-374.">[1]</span></a></sup> Perry &amp; Tan<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="Perry, A. E., &amp; Tan, D. K. M. (1984). Simple three-dimensional vortex motions in coflowing jets and wakes. *Journal of Fluid Mechanics*, *141*, 197-231.">[2]</span></a></sup>) and VITA<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="Blackwelder, R. F., &amp; Kaplan, R. E. (1976). On the wall structure of the turbulent boundary layer. *Journal of Fluid Mechanics*, *76*(1), 89-112.">[3]</span></a></sup> approach (Spina &amp; Donovan<sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="Spina, E. F., Donovan, J. F., &amp; Smits, A. J. (1991). On the structure of high-Reynolds-number supersonic turbulent boundary layers. *Journal of Fluid Mechanics*, *222*, 293-327.">[4]</span></a></sup>).</p>
+<h4 id="instantaneous-realisation">Instantaneous realisation</h4>
+<ul>
+<li>a way of thinking, again</li>
+<li>one can do this in experiments (e.g. PIV (Particle-Image Velocimetry)) or simulations.</li>
+</ul>
+<p>idea</p>
+<ul>
+<li>understand turbulence by looking at individual events</li>
+<li>picking out features which occur often (link to ensemble-averaged approach above)</li>
+<li>looking at a relatively small number of events</li>
+</ul>
+<p>see Robinson's work<sup id="fnref:5" class="footnote-ref"><a href="#fn:5" rel="footnote"><span class="hint--top hint--rounded" aria-label="Robinson, P. A. (1997). Nonlinear wave collapse and strong turbulence. *Reviews of modern physics*, *69*(2), 507.">[5]</span></a></sup>.</p>
+<div class="note note-info">
+            <p>Note that these 3 approaches can be used together by researchers, there are no cut line among these.</p>
+          </div>
+<div class="note note-warning">
+            <p>What is <strong>structure</strong> in turbulence?</p><p>Turbulence usually displays departures from Gaussian behavior - these departures may be called structure, and might be embodied in terms of the moments of the pdf’s of <span class="math inline">\(u&#39;, v&#39;\)</span> and <span class="math inline">\(w&#39;\)</span></p><p>A description of individual eddying motions in the turbulence. Also called <strong>coherent structures</strong> ” if they represent some sort of entity which can be followed in time.</p>
+          </div>
+<h2 id="reynolds-averaged-equations">Reynolds-Averaged Equations</h2>
+<h3 id="example-turbulent-channel-flow">Example: Turbulent channel flow</h3>
+<p><img src="/2022/09/29/RANS-recap/instantaneous and mean velocity profiles in fully-developed channel flow.png" srcset="/img/loading.gif" lazyload alt="instantaneous and mean velocity profiles in fully-developed channel flow" style="zoom:50%;"></p>
+<p><img src="/2022/09/29/RANS-recap/Time histories of 3 velocity components in turbulent channel flow.png" srcset="/img/loading.gif" lazyload alt="Time histories of 3 velocity components in turbulent channel flow" style="zoom:57%;"></p>
+<p>Consider the above channel flow at high Reynolds number ( <span class="math inline">\(Re &gt;&gt; 2000\)</span>, where <span class="math inline">\(Re = U_{av}h/\nu\)</span> ). The pressure drop driving the flow is assumed to be steady. At any point in the flow, the magnitude of the velocity in all three directions fluctuates in time. If we insert a probe into the flow so that we can measure the velocity at a given point, we would see the time traces shown in the diagram. Note that we can define a time-averaged velocity: <span class="math display">\[
+\bar{U}(x)=\lim _{T \rightarrow \infty} \frac{1}{T} \int_{t_0}^{t_0+T} U(x, t) d t
+\]</span> where <span class="math inline">\(t_0\)</span> is an arbitrary start sampling time</p>
+<p>and a space-averaged velocity: <span class="math display">\[
+U_{a v}=\frac{1}{A} \int \bar{U} d A=\frac{1}{h} \int_{-h / 2}^{+h / 2} \bar{U} d y .
+\]</span></p>
+<h3 id="reynolds-decomposition">Reynolds decomposition</h3>
+<p>The concept of a time-averaged velocity also leads to the concept of the flow being composed of a time-averaged field, and a fluctuating field. This is called the <strong>Reynolds decomposition</strong> where we write (in Cartesian coordinates, where <span class="math inline">\(\mathbf{V} = U\mathbf{i}+V\mathbf{j}+W\mathbf{k}\)</span> ): <span class="math display">\[
+\color{purple}
+\begin{aligned}
+\mathbf{V}(\mathbf{x},t)=\bar{\mathbf{V}}(\mathbf{x})+\mathbf{v}&#39;(\mathbf{x},t) \\
+p(\mathbf{x},t)=\bar{p}(\mathbf{x})+p&#39;(\mathbf{x},t)
+\end{aligned}
+\]</span> (<span class="math inline">\(V, W\)</span> and the pressure <span class="math inline">\(p\)</span> are decomposed similarly)</p>
+<div class="note note-info">
+            <p>The rules for averaging are: <span class="math display">\[\begin{aligned}\overline{a^{\prime}} &amp;=0 \\\overline{a+b} &amp;=\bar{a}+\bar{b} \\\overline{\bar{a}} &amp;=\bar{a} \\\overline{\bar{a} \cdot \bar{b}} &amp;=\bar{a} \cdot \bar{b} \\\overline{\left( \frac{\partial a}{\partial s}\right)} &amp;=\frac{\partial \bar{a}}{\partial s}\end{aligned}\]</span> IMPORTANT: <span class="math display">\[\color{purple}\overline{a \cdot b} \neq \bar{a}\bar{b}\]</span> This means even though the fluctuation <span class="math inline">\(u_i&#39;\)</span> is zero mean i.e. <span class="math inline">\(\overline{u_i^{\prime}}=0\)</span>, it is NOT zero variance i.e. the higher motion (Reynolds stress) is non-trivial i.e. <span class="math display">\[\begin{aligned}\overline{u&#39;^2} &amp;\neq 0 \\\overline{u^{\prime}v^{\prime}}&amp; \neq 0\end{aligned}\]</span></p>
+          </div>
+<p>Start with the continuity and Navier-Stokes equations (for <strong><em>incompressible flow and no body forces</em></strong>): <span class="math display">\[
+\begin{aligned}
+\nabla \cdot \mathbf{V}&amp;=0 \\
+\\
+\frac{D \mathbf{V}}{D t}=\frac{\partial \mathbf{V}}{\partial t}+\mathbf{V} \cdot \nabla \mathbf{V}&amp;=-\frac{1}{\rho} \nabla p+\nu \nabla^2 \mathbf{V} \\
+or \quad \frac{\partial u_i}{\partial t}+u_i \frac{\partial u_i}{\partial x_j}&amp;=-\frac{1}{\rho} \frac{\partial p}{\partial x_i}+\nu \frac{\partial^2 u_i}{\partial x_j^2}
+\end{aligned}
+\]</span> Plug the Reynolds decomposition of <span class="math inline">\(\mathbf{V}\)</span> into Continuity and Momentum:</p>
+<h3 id="continuity-equation">Continuity Equation</h3>
+<p>With the Reynolds decomposition, the continuity equation becomes: <span class="math display">\[
+\frac{\partial \bar{U}}{\partial x}+\frac{\partial \bar{V}}{\partial y}+\frac{\partial \bar{W}}{\partial z}+\frac{\partial u^{\prime}}{\partial x}+\frac{\partial v^{\prime}}{\partial y}+\frac{\partial w^{\prime}}{\partial z}=0
+\]</span> Taking the time average we obtain: <span class="math display">\[
+\frac{\partial \bar{U}}{\partial x}+\frac{\partial \bar{V}}{\partial y}+\frac{\partial \bar{W}}{\partial z}=0
+\]</span> That is, <span class="math display">\[
+\color{purple}
+\nabla \cdot \overline{\mathbf{V}}=0
+\]</span> <div class="note note-info">
+            <p>Note that <span class="math inline">\(\nabla \cdot \mathbf{v}^{\prime}=0\)</span> as well, denoting the mean and fluctuating velocities individually satisfy the continuity equation.</p>
+          </div></p>
+<h3 id="momentum-equation">Momentum Equation</h3>
+<p>Consider the x-component of the momentum equation, just like decomposing the continuity equation <span class="math display">\[
+\begin{aligned}
+&amp;\frac{\partial \bar{U}}{\partial t}+\frac{\partial u^{\prime}}{\partial t}\\
+&amp;+\bar{U} \frac{\partial \bar{U}}{\partial x}+u^{\prime} \frac{\partial u^{\prime}}{\partial x}+u^{\prime} \frac{\partial \bar{U}}{\partial x}+\bar{U} \frac{\partial u^{\prime}}{\partial x}\\
+&amp;+\bar{V} \frac{\partial \bar{U}}{\partial y}+v^{\prime} \frac{\partial u^{\prime}}{\partial y}+v^{\prime} \frac{\partial \bar{U}}{\partial y}+\bar{V} \frac{\partial u^{\prime}}{\partial y}\\
+&amp;+\bar{W} \frac{\partial \bar{U}}{\partial z}+w^{\prime} \frac{\partial u^{\prime}}{\partial z}+w^{\prime} \frac{\partial \bar{U}}{\partial z}+\bar{W} \frac{\partial u^{\prime}}{\partial z}\\
+&amp;=-\frac{1}{\rho} \frac{\partial \bar{p}}{\partial x}-\frac{1}{\rho} \frac{\partial p^{\prime}}{\partial x}+\nu \nabla^2 \bar{U}+\nu \nabla^2 u^{\prime} .
+\end{aligned}
+\]</span> Taking the time average, we have <span class="math display">\[
+\begin{aligned}
+U \frac{\partial U}{\partial x}+V \frac{\partial U}{\partial y}+&amp;W \frac{\partial U}{\partial z}=\\
+-\frac{1}{\rho} &amp;\frac{\partial p}{\partial x}+\nu \nabla^2 U
+-\left(\overline{u^{\prime}\frac{\partial u^{\prime}}{\partial x}}+\overline{v^{\prime}\frac{\partial u^{\prime}}{\partial x}}+\overline{v^{\prime}\frac{\partial u^{\prime}}{\partial x}}\right)
+\end{aligned}
+\]</span> <div class="note note-secondary">
+            <p>Recall the knowledge of the chain rule, we can divided the last term with: <span class="math display">\[\begin{aligned}&amp; \overline{u^{\prime} u_x^{\prime}}=\frac{\partial \overline{u^{\prime} u^{\prime}}}{\partial x}-\overline{u^{\prime} u_x^{\prime}} \\&amp;\overline{v^{\prime} u_y^{\prime}}=\frac{\partial \overline{u^{\prime} v^{\prime}}}{\partial y}-\overline{u^{\prime} v_y^{\prime}} \\&amp;\overline{w^{\prime} u_z^{\prime}}=\frac{\partial \overline{u^{\prime} w^{\prime}}}{\partial z}-\overline{u^{\prime} w_z^{\prime}}\end{aligned}\]</span></p>
+          </div></p>
+<p>cancel out the underlying continuity equation multiplied by <span class="math inline">\(u&#39;\)</span> term, we obtain: <span class="math display">\[
+\begin{aligned}
+U \frac{\partial U}{\partial x}+V \frac{\partial U}{\partial y}+&amp;W \frac{\partial U}{\partial z}=\\
+-\frac{1}{\rho} &amp;\frac{\partial p}{\partial x}+\nu \nabla^2 U-\left(\frac{\partial \overline{u^{\prime 2}}}{\partial x}+\frac{\partial \overline{u^{\prime} v^{\prime}}}{\partial y}+\frac{\partial \overline{u^{\prime} w^{\prime}}}{\partial z} + \underbrace{u&#39; \nabla \cdot \mathbf{v}^{\prime}}_{ = 0}\right)
+\end{aligned}
+\]</span> Similarly, for the <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> components: <span class="math display">\[
+\begin{aligned}
+U \frac{\partial V}{\partial x}+V \frac{\partial V}{\partial y}+&amp;W \frac{\partial V}{\partial z}= \\
+-\frac{1}{\rho} &amp;\frac{\partial p}{\partial y}+\nu \nabla^2 V -\left(\frac{\partial \overline{u^{\prime} v^{\prime}}}{\partial x}+\frac{\partial \overline{v^{\prime 2}}}{\partial y}+\frac{\partial \overline{v^{\prime} w^{\prime}}}{\partial z}\right)\\ \\
+U \frac{\partial W}{\partial x}+V \frac{\partial W}{\partial y}+&amp;W \frac{\partial W}{\partial z}= \\
+-\frac{1}{\rho}&amp; \frac{\partial p}{\partial z}+\nu \nabla^2 W-\left(\frac{\partial \overline{u^{\prime} w^{\prime}}}{\partial x}+\frac{\partial \overline{v^{\prime} w^{\prime}}}{\partial y}+\frac{\partial \overline{w^2}}{\partial z}\right)
+\end{aligned}
+\]</span> or in the compacted form: <span class="math display">\[
+\color{purple}
+\nabla \cdot(\overline{\mathbf{V}} \overline{\mathbf{V}})=\frac{-\nabla \bar{p}}{\rho}+\nu \nabla^2 \overline{\mathbf{V}}+\frac{1}{\rho} \nabla \cdot \tau^R
+\]</span> where <span class="math display">\[
+\color{purple}
+\tau^R=-\rho\left(\overline{\mathbf{v}^{\prime} \mathbf{v}^{\prime}}\right)=-\left(\begin{array}{lll}
+\rho \overline{u^{\prime} u^{\prime}} &amp; \rho \overline{u^{\prime} v^{\prime}} &amp; \rho \overline{u^{\prime} w^{\prime}}\\
+\rho \overline{v^{\prime} u^{\prime}} &amp; \rho \overline{v^{\prime} v^{\prime}} &amp; \rho \overline{v^{\prime} w^{\prime}} \\
+\rho\overline{w^{\prime} u^{\prime}} &amp; \rho \overline{w^{\prime} v^{\prime}} &amp; \rho \overline{w^{\prime} w^{\prime}}
+\end{array}\right)
+\]</span> Or in the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Einstein_notation">Einstein notation</a>: <span class="math display">\[
+\overline{U}_j \frac{\partial \overline{U}_i}{\partial x_j}=\frac{1}{\rho} \frac{\partial}{\partial x_j}\left(-p \delta_{i j}+2 \mu \overline{S}_{i j}+\tau_{i j}\right)
+\]</span> where <span class="math display">\[
+\overline{S}_{i j}=\frac{1}{2}\left(\frac{\partial \overline{U_i}}{\partial x_j}+\frac{\partial \overline{U_j}}{\partial x_i}\right)
+\]</span> We also use <span class="math display">\[
+\tau_{i j}=-\rho \overline{u&#39;_i u&#39;_j}=\tau_{j i}
+\]</span> <div class="note note-info">
+            <p>Note in URANS, an extra time derivative <span class="math inline">\(\frac{\partial \overline{\mathbf{V}}}{\partial t}\)</span> term is retained.</p>
+          </div></p>
+<p>The second-order mean products of fluctuating quantities appear in the equation for the mean flow. Therefore the system of time-averaged equations describing <span class="math inline">\(p\)</span> and <span class="math inline">\(\mathbf{V}\)</span> is NOT closed.</p>
+<h3 id="reynolds-stress">Reynolds stress</h3>
+<p>Since since the gradient of the extra terms <span class="math inline">\(\tau^R\)</span> has the dimension of a force per unit volume, it is called the <strong><em>Reynolds stress</em></strong>. It is, only apparent stress since it arises from the non-linear convective term in the Navier-Stokes equation.</p>
+<p>The second-order fluctuation terms in the Reynolds stress expression can be divided into:</p>
+<ul>
+<li><p><span class="math inline">\(\overline{u_i^{\prime 2}}\)</span> variance, mean square.</p>
+<p>Recall the derivation of the <a href="/2022/05/14/Derivation-of-Differential-Fluid-Equations/#forces">differential linear momentum equation</a>,</p>
+<p><span class="math inline">\(\rho\overline{u_i^{\prime 2}}\)</span> denotes the extra normal stress on unit face (<span class="math inline">\(d_j d_k\)</span>) due to the turbulent motion</p>
+<p><span class="math inline">\(\rho\overline{u_i^{\prime 2}}d_jd_k\)</span> additional mean <span class="math inline">\(i\)</span> - momentum flux component per unit face (<span class="math inline">\(d_j d_k\)</span>)</p>
+<p>specially, <span class="math inline">\(\sqrt{\overline{u_i^{\prime 2}}}\)</span> denotes the root mean square, is known as the intensity of the turbulence component <span class="math inline">\(i\)</span>,</p>
+<p>specially, <span class="math inline">\(\sqrt{\overline{q^{2}}} = \sqrt{\overline{u^{\prime 2}}+\overline{v^{\prime 2}}+\overline{w^{\prime 2}}}\)</span> denotes the intensity of the turbulence</p>
+<p>specially, <span class="math inline">\(\frac{1}{2}\rho\overline{q^2} = \frac{1}{2}\rho(\overline{u^{\prime 2}}+\overline{v^{\prime 2}}+\overline{w^{\prime 2}})\)</span>, denotes the kinetic energy of the turbulence (per unit volume)</p></li>
+<li><p><span class="math inline">\(\overline{u^\prime_i u^\prime_j}\)</span> co-variance, cross-products, single-point correlations</p>
+<p><span class="math inline">\(\rho\overline{u^\prime_i u^\prime_j}\)</span> denotes extra shear stress on unit face (<span class="math inline">\(d_i d_k\)</span>) due to the turbulent motion</p>
+<p><span class="math inline">\(\rho\overline{u_i^{\prime 2}}d_jd_k\)</span> denotes one of the additional mean <span class="math inline">\(i\)</span> - momentum flux per unit face (<span class="math inline">\(d_j d_k\)</span>)</p>
+<p>The correlation coefficient is defined as <span class="math display">\[
+R_{i,j}=\frac{\overline{u^\prime_i u^\prime_j}}{\sqrt{\overline{u_i^{\prime 2}}}\sqrt{\overline{u_j^{\prime 2}}}} \leq 1
+\]</span> If <span class="math inline">\(u^\prime_i\)</span> and <span class="math inline">\(u^\prime_j\)</span> are independent then the correlation <span class="math inline">\(u^\prime_i u^\prime_j=0\)</span>.</p></li>
+</ul>
+<div class="note note-info">
+            <p>turbulent fluctuations also lead to extra fluxes of quantities other than momentum. For example, if there are temperature fluctuations <span class="math inline">\(\theta &#39;\)</span>, then there is an extra rate of enthalpy transfer <span class="math inline">\(\rho C_p \overline{θ&#39;u}\)</span> in the <span class="math inline">\(x\)</span>-direction, etc., in addition to the enthalpy transfer by molecular conduction.</p><p>Note, in addition, that whether a stress is a “normal” or a “shear” stress depends solely on the axes chosen, and, as in solids, we can always find a set of principal axes with respect to which only normal stresses remain. Since <span class="math inline">\(q^2\)</span> is the trace of the Reynolds stress tensor it is invariant with rotation of axes.</p>
+          </div>
+<div class="note note-danger">
+            <p>Sections below will not resolve the Reynolds stress, or close the system. They are just some math to understand the turbulence.</p>
+          </div>
+<h3 id="reynolds-stress-equations">Reynolds Stress Equations</h3>
+<p>There is a way deriving Reynolds Stress transport functions from the N-S equation, take the Reynolds decomposed momentum equation (first equation of <a href="#momentum-equation">this section</a>), multiply by <span class="math inline">\(u&#39;\)</span> then average, instead of average directly as what we did above. <span class="math display">\[
+\begin{aligned}
+\frac{D\frac{1}{2}\overline{u&#39;^2}}{Dt} &amp; = \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial t}+\bar{U} \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial x}+\bar{V} \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial y}+\bar{W} \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial z}\\
+&amp;=-\frac{1}{\rho}\overline{u^{\prime} \frac{\partial p^{\prime}}{\partial x}}+\nu \overline{u^{\prime} \nabla^2 u^{\prime}}-\left(\overline{u^{\prime} u^{\prime}} \frac{\partial \bar{U}}{\partial x}+\overline{u^{\prime} v^{\prime}} \frac{\partial \bar{U}}{\partial y}+\overline{u^{\prime} w^{\prime}} \frac{\partial \bar{U}}{\partial z}\right)\\
+&amp;-\left(\overline{u^{\prime} u^{\prime} \frac{\partial u^{\prime}}{\partial x}}+\overline{u^{\prime} v^{\prime} \frac{\partial u^{\prime}}{\partial y}}+\overline{u^{\prime} w^{\prime} \frac{\partial u^{\prime}}{\partial z}}\right)
+\end{aligned}
+\]</span> Similarly, multiplying the fluctuation continuity equation by <span class="math inline">\(u&#39;^2\)</span>, and adding the result to equation, we can change the last term and the equation is therefore: <span class="math display">\[
+\begin{aligned}
+&amp;\frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial t}+\bar{U} \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial x}+\bar{V} \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial y}+\bar{W} \frac{\partial \frac{1}{2} \overline{u^{\prime} u^{\prime}}}{\partial z}\\
+&amp;=-\frac{1}{\rho}\overline{u^{\prime} \frac{\partial p^{\prime}}{\partial x}}+\nu \overline{u^{\prime} \nabla^2 u^{\prime}}-\left(\overline{u^{\prime} u^{\prime}} \frac{\partial \bar{U}}{\partial x}+\overline{u^{\prime} v^{\prime}} \frac{\partial \bar{U}}{\partial y}+\overline{u^{\prime} w^{\prime}} \frac{\partial \bar{U}}{\partial z}\right)\\
+&amp;-\frac{1}{2}\left(\overline{\frac{\partial u^{\prime} u^{\prime} u^{\prime}}{\partial x}}+\overline{\frac{\partial u^{\prime}u^{\prime} v^{\prime}}{\partial y}}+\overline{\frac{\partial u^{\prime}u^{\prime} w^{\prime}}{\partial z}}\right)
+\end{aligned}
+\]</span> Besides, note the first term of <span class="math inline">\(LHS\)</span>, similarly, <span class="math display">\[
+-\frac{1}{\rho}\overline{u^{\prime} \frac{\partial p^{\prime}}{\partial x}} = 
+-\frac{1}{\rho}\frac{\partial \overline{p^{\prime} u&#39;}}{\partial x}+
+\underbrace{\frac{1}{\rho}\overline{p^{\prime} \frac{\partial u^{\prime}}{\partial x}}}_{\text{cancelled out when sum}}
+\]</span> <div class="note note-info">
+            <p>There are actual meanings for each <span class="math inline">\(LHS\)</span> term:</p><ul><li><p><span class="math inline">\(\overline{p^{\prime} u&#39;}\)</span>: the rate of work done by the fluid against fluctuations in pressure;</p></li><li><p><span class="math inline">\(-\frac{1}{\rho}\frac{\partial \overline{p^{\prime} u&#39;}}{\partial x}\)</span>:</p><p>the spatial transport of the Reynolds stress (one component of the turbulent kinetic energy) by pressure gradients (diffusion);</p><p>the net loss of turbulent energy by work done in transporting fluid through regions of changing pressure;</p></li><li><p><span class="math inline">\(\frac{1}{\rho}\overline{p^{\prime} \frac{\partial u^{\prime}}{\partial x}}\)</span>:</p><p>the transfer of turbulent energy from the <span class="math inline">\(u\)</span> component to <span class="math inline">\(v\)</span> and <span class="math inline">\(w\)</span> components;</p><p>when we write an equation for <span class="math inline">\(q^2\)</span> these terms sum to zero because of continuity;</p><p>the “tendency-to-isotropy” term, as this transfer of energy tends to isotropize the turbulence.</p></li></ul>
+          </div></p>
+<p>For the transport equation of <span class="math inline">\(\overline{u&#39;v&#39;}\)</span>, take the Reynolds decomposed momentum equation, multiply by <span class="math inline">\(v&#39;\)</span> then average, we have: <span class="math display">\[
+\begin{aligned}
+\frac{D \overline{u v}}{D t}=&amp;-\frac{1}{\rho}\left(\frac{\partial \overline{p^{\prime} u}}{\partial y}+\frac{\partial \overline{p^{\prime} v}}{\partial x}\right)+\frac{1}{\rho} \overline{p^{\prime}}\left(\frac{\partial u}{\partial y}+\frac{\partial v}{\partial x}\right)+v\left(\overline{u \nabla^2 v}+\overline{v \nabla^2 u}\right) \\ 
+&amp;\text{ + other terms involving second and third order correlations }
+\end{aligned}
+\]</span> Note an extra 3<sup>rd</sup> order moments (triple correlations) are introduced, which need extra function to model it. And the 3<sup>rd</sup> order moments can be modelled by a introducing extra 4<sup>th</sup> order moments. The closure problem never ends.</p>
+<p>As a result, the highest-order products need to be expressed in terms of lower-order products so that the number of equations equals the number of unknowns. This is called turbulence modelling (see below), and most attention has been focussed on the turbulence kinetic energy, despite the fact that <span class="math inline">\(q^2\)</span> does not appear in any of the mean momentum equations.</p>
+<h3 id="turbulent-kinetic-energy-equation">Turbulent Kinetic Energy Equation</h3>
+<p>Add up the three equations for the normal stresses <span class="math inline">\(\overline{u^{\prime 2}}, \overline{v^{\prime 2}}, \overline{w^{\prime 2}}\)</span> , we obtain: <span class="math display">\[
+\begin{aligned}
+\frac{D\left(\frac{1}{2} \overline{q^2}\right)}{D t} &amp;=-\frac{1}{\rho}\left(\frac{\partial \overline{p^{\prime} u&#39;}}{\partial x}+\frac{\partial \overline{p^{\prime} v&#39;}}{\partial y}+\frac{\partial \overline{p^{\prime} w&#39;}}{\partial z}\right)
++\underbrace{\frac{1}{\rho} \overline{p^{\prime}\left(\frac{\partial u&#39;}{\partial x}+\frac{\partial v&#39;}{\partial y}+\frac{\partial w&#39;}{\partial z}\right)}}_{=0} \\
+&amp;+\nu\left(\overline{u&#39; \nabla^2 u&#39;}+\overline{v&#39; \nabla^2 v&#39;}+\overline{w&#39; \nabla^2 w&#39;}\right)\\
+&amp;-\left[\overline{u&#39;^2} \frac{\partial U}{\partial x}+\overline{u&#39; v&#39;} \frac{\partial U}{\partial y}+\overline{u&#39; w&#39;} \frac{\partial U}{\partial z}+\overline{u&#39; v&#39;} \frac{\partial V}{\partial x}+\overline{v&#39;^2} \frac{\partial V}{\partial y}+\overline{v&#39; w&#39;} \frac{\partial V}{\partial z}\right.\\
+&amp;\left.+\overline{u&#39; w&#39;} \frac{\partial W}{\partial x}+\overline{v&#39; w&#39;} \frac{\partial W}{\partial y}+\overline{w&#39;^2} \frac{\partial W}{\partial z}\right]-\frac{1}{2}\left[\frac{\partial \overline{u&#39;^3}}{\partial x}+\frac{\partial \overline{u&#39;^2 v&#39;}}{\partial y}+\frac{\partial \overline{u&#39;^2 w&#39;}}{\partial z}\right.\\
+&amp;\left.+\frac{\partial \overline{v&#39;^2 u&#39;}}{\partial x}+\frac{\partial \overline{v&#39;^3}}{\partial y}+\frac{\partial \overline{v&#39;^2 w&#39;}}{\partial z}+\frac{\partial \overline{w&#39;^2 u&#39;}}{\partial x}+\frac{\partial \overline{w&#39;^2 v&#39;}}{\partial y}+\frac{\partial \overline{w&#39;^3}}{\partial z}\right]
+\end{aligned}
+\]</span> In tensor notation: <span class="math display">\[
+\color{purple}
+\begin{aligned}
+\frac{D\left(\frac{1}{2} \overline{q^2}\right)}{D t} &amp;=\frac{\partial\left(\frac{1}{2} \overline{q^2}\right)}{\partial t}+\overbrace{U_j \frac{\partial\left(\frac{1}{2} \overline{q^2}\right)}{\partial x_j}}^{&lt;1&gt;} \\
+&amp;=-\frac{\partial}{\partial x_j}\left(\overbrace{\overline{\frac{p^{\prime} u_j}{\rho}}}^{&lt;2&gt;}+\overbrace{\frac{1}{2} \overline{u_j q^2}}^{&lt;3&gt;}\right)-\underbrace{\overline{u_i u_j}\frac{\partial U_i}{\partial x_j}}_{&lt;4&gt;}+\underbrace{\nu \overline{u_i\frac{\partial^2 u_i}{\partial x_j^2}}}_{&lt;5&gt;}
+\end{aligned}
+\]</span> Physical meaning associated with the labeled terms above is given as, follow the Townsend<sup id="fnref:6" class="footnote-ref"><a href="#fn:6" rel="footnote"><span class="hint--top hint--rounded" aria-label="Townsend, A. A. R. (1980). *The structure of turbulent shear flow*. Cambridge university press.">[6]</span></a></sup></p>
+<p><img src="/2022/09/29/RANS-recap/turbulence transport.png" srcset="/img/loading.gif" lazyload alt="The most general case of fluid motion, exhibiting all the complications allowed by the Navier-Stokes equations, is called turbulence, Peter Bradshaw, 1971." style="zoom:30%;"></p>
+<ul>
+<li><p><code>&lt;1&gt;&amp;&lt;3&gt;</code>: the net rate of transport of <span class="math inline">\(\frac{1}{2}q^2\)</span></p>
+<p><code>&lt;1&gt;</code>: the advection, mean energy transport, the rate of change of <span class="math inline">\(\frac{1}{2}q^2\)</span> along a mean streamline</p>
+<p><code>&lt;3&gt;</code>: turbulence transport</p></li>
+<li><p><code>&lt;2&gt;</code>: pressure diffusion, net loss of turbulent energy by the work done in transporting the fluid through a region of changing pressure</p>
+<p><code>&lt;2&gt;&amp;&lt;3&gt;</code>: turbulent energy transport, energy diffusion</p></li>
+<li><p><code>&lt;4&gt;</code>: an extraction of energy from the mean flow by the turbulence</p>
+<p><span class="math inline">\(\frac{1}{2}q^2\)</span> increases with a large shear on the flow</p>
+<p>energy production term, from the point of view of the turbulence</p>
+<p>energy loss term, from the point of view of the mean flow</p>
+<p>these same terms will appear in the mean flow kinetic energy equation with an opposite sign</p>
+<p>the only one involving a mean velocity gradient, the only term can act to take energy from the mean motion</p>
+<p><span class="math inline">\(−ρ\overline{u&#39;^2}\frac{∂U}{∂x}dxdydz\)</span>, the rate of work against the <span class="math inline">\(x\)</span> component of the Reynolds normal stress to stretch an element of fluid <span class="math inline">\(dxdydz\)</span> in the <span class="math inline">\(x\)</span>-direction at a rate <span class="math inline">\(\partial U / \partial x\)</span></p>
+<p><span class="math inline">\(−ρ\overline{u&#39;v&#39;} \frac{\partial U} {\partial y} dxdydz\)</span>, more important, the rate of work against the shear stress <span class="math inline">\(−ρ\overline{u&#39;v&#39;}\)</span> to shear an element of fluid at the rate <span class="math inline">\(∂U/∂y\)</span></p></li>
+</ul>
+<p>Before term <code>&lt;5&gt;</code>, we need to derive the expression of turbulence dissipation <span class="math inline">\(\varepsilon\)</span> from the mean flow viscous term</p>
+<ul>
+<li><p><span class="math inline">\(\left(\mu \frac{\partial U}{\partial y}\right) \frac{\partial U}{\partial y}\)</span>:</p>
+<p>the product of the instantaneous viscous stress and the instantaneous rate of strain,</p>
+<p>a transfer of energy between the bulk motion and the molecular motion,</p>
+<p>a dissipation of bulk kinetic energy into thermal energy by viscosity</p>
+<p>a source of energy, from the point of view of the temperature field, “aerodynamic” heating in high-speed flows</p></li>
+<li><p>the viscous term in the energy equation (the enthalpy equation) is: <span class="math display">\[
+\Phi=2 \mu S_{i j} \frac{\partial U_j}{\partial x_i}=\frac{\partial U_j}{\partial x_i}\left(\mu\left(\frac{\partial U_i}{\partial x_j}+\frac{\partial U_j}{\partial x_i}\right)\right)=\text { dissipation function }
+\]</span></p>
+<p>substitute the Reynolds decomposition and take the time average, we obtain <span class="math display">\[
+\bar{\Phi}=\frac{\partial \bar{U}_j}{\partial x_i}\left(\mu\left(\frac{\partial \bar{U}_i}{\partial x_j}+\frac{\partial \bar{U}_j}{\partial x_i}\right)\right)+\overline{\frac{\partial u&#39;_j}{\partial x_i}\left(\mu\left(\frac{\partial u&#39;_i}{\partial x_j}+\frac{\partial u&#39;_j}{\partial x_i}\right)\right)}
+\]</span></p>
+<ul>
+<li><p>1<sup>st</sup> term on <span class="math inline">\(RHS\)</span> (<span class="math inline">\(=\Phi_m\)</span>):</p>
+<p>dissipation of mean flow kinetic energy into thermal internal energy</p>
+<p>viscous diffusion of <span class="math inline">\(U\)</span></p>
+<p>the “direct” dissipation function</p></li>
+<li><p>2<sup>nd</sup> term on <span class="math inline">\(RHS\)</span> (=<span class="math inline">\(\varepsilon\)</span>):</p>
+<p>viscous dissipation of turbulent kinetic energy</p>
+<p>the “turbulent”dissipation function</p></li>
+</ul>
+<p>We have <span class="math inline">\(\varepsilon &gt;&gt; \Phi_m\)</span> since the instantaneous velocity gradients associated with the turbulence are much greater than the mean velocity gradients (except very close to a solid surface)</p></li>
+<li><p><code>&lt;5&gt;</code> can be rewritten as: <span class="math display">\[
+\begin{aligned}
+&amp;\nu\left(\overline{u&#39; \nabla^2 u&#39;}+\overline{v&#39; \nabla^2 v&#39;}+\overline{w&#39; \nabla^2 w&#39;}\right) \\
+&amp;=\nu\left(\frac{1}{2} \nabla^2\left(\overline{u&#39;^2}+\overline{v&#39;^2}+\overline{w&#39;^2}\right)-\overline{\left(\frac{\partial u&#39;}{\partial x}\right)^2}-\overline{\left(\frac{\partial u&#39;}{\partial y}\right)^2}-\overline{\left(\frac{\partial u&#39;}{\partial z}\right)^2}-\cdots\right) \\
+\end{aligned}
+\]</span> where the squares of velocity gradients as elements of <span class="math inline">\(\varepsilon\)</span> (not all of them)</p>
+<p>the missing cross product terms (e.g. <span class="math inline">\(\mu\frac{\partial^2\overline{u&#39;v&#39;}}{\partial x\partial y}\)</span>) are usually interpreted as a diffusion term, small, except near the wall</p>
+<p><span class="math inline">\(\mu \frac{1}{2}\nabla^2\left(\overline{u&#39;^2}+\overline{v&#39;^2}+\overline{w&#39;^2}\right) = \mu\nabla^2(\frac{1}{2}\overline{q^2})\)</span>, viscous diffusion of <span class="math inline">\(\frac{1}{2}q^2\)</span></p>
+<p><span class="math inline">\(\mu\frac{\partial^2\overline{u&#39;v&#39;}}{\partial x\partial y}\)</span>, viscous diffusion of <span class="math inline">\(\overline{u&#39;v&#39;}\)</span>, small at all Reynolds numbers that are not too low as <span class="math display">\[
+\mu \overline{\left(\frac{\partial u_j}{\partial x_i}\right)^2} \approx \varepsilon \approx \mu\left(\overline{u^{\prime} \nabla^2 u^{\prime}}+\overline{v^{\prime} \nabla^2 v^{\prime}}+\overline{w^{\prime} \nabla^2 w^{\prime}}\right)
+\]</span> And <code>&lt;5&gt;</code> can be finally written as: <span class="math display">\[
+\nu \overline{u_i\frac{\partial^2 u_i}{\partial x_j^2}} = \nu \frac{\partial^2\left(\frac{1}{2}q^2\right)}{\partial x^2_j} - \nu \overline{\left(\frac{\partial u_i}{\partial x_j}\right)^2}
+\]</span></p></li>
+</ul>
+<div class="note note-info">
+            <p>Note this equation does NOT close the model still, the 3<sup>rd</sup> order term <code>&lt;3&gt;</code> still exist, because this equation is based on the <a href="#reynolds-stress-equations">Reynolds Stress equation</a> derived in the last section.</p><p>One way is the eddy viscosity models and the boussinesq assumption<sup id="fnref:7" class="footnote-ref"><a href="#fn:7" rel="footnote"><span class="hint--top hint--rounded" aria-label="Boussinesq, J. (1877). *Essai sur la théorie des eaux courantes*. Impr. nationale.">[7]</span></a></sup> with which the turbulence fluctuation can be modelled (with an effective turbulence viscosity times mean flow velocity gradients), and the model is closed, with extra varies turbulence models.</p>
+          </div>
+<p>Energy balances (turbulence kinetic energy budget) diagram for the wake of a circular cylinder, zero pressure gradient boundary layer (outer scaling), a fully developed pipe flow (wall region (inner scaling) and core region (outer scaling)) is compared below:</p>
+<table>
+<thead>
+<tr class="header">
+<th><img src="/2022/09/29/RANS-recap/trubulence energy banlence for a wake flow.png" srcset="/img/loading.gif" lazyload alt="trubulence energy banlence for a wake flow (upper) and zero pressure gradient boundary laye (lower)" style="zoom:100%;"></th>
+<th><img src="/2022/09/29/RANS-recap/trubulence energy banlence for a pipe flow.png" srcset="/img/loading.gif" lazyload alt="trubulence energy banlence for a pipe flow on wall region(upper) and core region (lower)" style="zoom:100%;"></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<ul>
+<li>The wall bounded flows (boundary layer and pipe)
+<ul>
+<li>production term is approximately balanced by the dissipation term in large regions</li>
+<li>diffusion terms become important
+<ul>
+<li>near the wall</li>
+<li>near the outer edge of the layer, since all other terms become very small there</li>
+</ul></li>
+</ul></li>
+<li>The wake flow is somewhat more complicated
+<ul>
+<li>all terms appear to be important everywhere</li>
+</ul></li>
+</ul>
+<p>Similar diagrams are shown below, results of jet flow, and DCBL of atmosphere</p>
+<p><img src="/2022/09/29/RANS-recap/Kinetic-energy-budget-across-the-jet-mean-flow-convection-LES-o-P-L-production_W640.jpg" srcset="/img/loading.gif" lazyload alt="Kinetic energy budget across the jet mean flow convection LES, from [8] " style="zoom:73%;"></p>
+<p><img src="/2022/09/29/RANS-recap/TKE budget for dry convective boundary layer (DCBL) of atmosphere.png" srcset="/img/loading.gif" lazyload alt="TKE budget for dry convective boundary layer (DCBL) of atmosphere, from http://climate-dynamics.org/" style="zoom:30%;"></p>
+<p><div class="note note-secondary">
+            <p>Note in atmosphere science, the buoyancy term is not negligible in N-S equation as well as the TKE equation,</p><blockquote><p><span class="math display">\[\delta_{i 3} \frac{g}{\bar{\theta}_v}\left(\overline{u_i{ }^{\prime}{\theta}_v{ }^{\prime}}\right)\]</span></p><p>buoyant production or consumption term, a production or loss depending on whether the heat flux <span class="math inline">\(\overline{u_i{ }^{\prime}{\theta}_v{ }^{\prime}}\)</span> is positive (during daytime over land) or negative (at night over land)</p></blockquote><p>See more in <a target="_blank" rel="noopener" href="http://climate-dynamics.org/wp-content/uploads/2015/05/Lecture_TKE_150310.pdf">turbulence kinetic energy - Climate Dynamics Group</a></p>
+          </div></p>
+<h2 id="reference">Reference</h2>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span>Cantwell, B., &amp; Coles, D. (1983). An experimental study of entrainment and transport in the turbulent near wake of a circular cylinder. <em>Journal of fluid mechanics</em>, <em>136</em>, 321-374. <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span>Perry, A. E., &amp; Tan, D. K. M. (1984). Simple three-dimensional vortex motions in coflowing jets and wakes. <em>Journal of Fluid Mechanics</em>, <em>141</em>, 197-231. <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Blackwelder, R. F., &amp; Kaplan, R. E. (1976). On the wall structure of the turbulent boundary layer. <em>Journal of Fluid Mechanics</em>, <em>76</em>(1), 89-112. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Spina, E. F., Donovan, J. F., &amp; Smits, A. J. (1991). On the structure of high-Reynolds-number supersonic turbulent boundary layers. <em>Journal of Fluid Mechanics</em>, <em>222</em>, 293-327. <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span>Robinson, P. A. (1997). Nonlinear wave collapse and strong turbulence. <em>Reviews of modern physics</em>, <em>69</em>(2), 507. <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:6" class="footnote-text"><span>Townsend, A. A. R. (1980). <em>The structure of turbulent shear flow</em>. Cambridge university press. <a href="#fnref:6" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:7" class="footnote-text"><span>Boussinesq, J. (1877). <em>Essai sur la théorie des eaux courantes</em>. Impr. nationale. <a href="#fnref:7" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:8" class="footnote-text"><span>Bogey, C., &amp; Bailly, C. (2006). Computation of the self-similarity region of a turbulent round jet using large-eddy simulation. In <em>Direct and Large-Eddy Simulation VI</em> (pp. 285-292). Springer, Dordrecht. <a href="#fnref:8" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RANS recap</div>
+      <div>https://daydreamatnight.github.io/2022/09/29/RANS-recap/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 29, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/02/paraview-web-server/" title="paraview web server">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">paraview web server</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/20/hand-written-SPH-method/" title="hand written SPH method">
+                        <span class="hidden-mobile">hand written SPH method</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

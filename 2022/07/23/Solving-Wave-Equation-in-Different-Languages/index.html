@@ -1,0 +1,1463 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="2D wave equation with Dirichlet boundary condition is solved in C++ (with blas and Lapack), Python (with numpy), Matlab and Julia. Euler backward in time and central finite difference in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Solving Wave Equation in Different Languages">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="2D wave equation with Dirichlet boundary condition is solved in C++ (with blas and Lapack), Python (with numpy), Matlab and Julia. Euler backward in time and central finite difference in">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/solve_wave_eq.png">
+<meta property="article:published_time" content="2022-07-22T16:16:30.000Z">
+<meta property="article:modified_time" content="2022-12-11T18:27:53.373Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/solve_wave_eq.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Solving Wave Equation in Different Languages - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Solving Wave Equation in Different Languages"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-07-23 00:16" pubdate>
+          July 23, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          19k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          64 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Solving Wave Equation in Different Languages</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>2D wave equation with Dirichlet boundary condition is solved in C++ (with blas and Lapack), Python (with numpy), Matlab and Julia. Euler backward in time and central finite difference in space discretisation methods are adopted.</p>
+          </div>
+<span id="more"></span>
+<div class="note note-secondary">
+            <p>The aim is to compare the scientific calculation related syntaxes between these 4 languages. And have simple a comparison on their performances.</p>
+          </div>
+<h2 id="problem-setup">Problem setup</h2>
+<h3 id="wave-equation">Wave equation</h3>
+<p>Wave equation is used for describe the wave fields such as water waves, sound waves and electromagnetic waves. The equation is: <span class="math display">\[
+\mathbf{\ddot {U}}=C^2\mathbf{\nabla} ^{2}\mathbf{U}
+\]</span> In 2D, the principle is: <span class="math display">\[
+\frac{\partial^2u}{\partial t^2} = C^2\left(\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}\right), \quad u = f(x,t)
+\]</span> From the formula, we can see it is <em>second order, linear, hyperbolic PDE</em>. Although it can be solved analytically (by variable separation), but we ignore that fact and try to solved it numerically.</p>
+<h5 id="initial-condition">Initial condition</h5>
+<p><span class="math display">\[
+u^0_{(x, y)}=\left[r_{(x, y)}^{4}-1\right]\left[\mathrm{e}^{-4 \omega^{2} r_{(x, y)}^{2}}-\mathrm{e}^{-4 \omega^{2}}-\frac{3}{4}\left(\mathrm{e}^{-\omega^{2} r_{(x, y)}^{2}}-\mathrm{e}^{-\omega^{2}}\right)\right] .
+\]</span></p>
+<h5 id="boundary-condition">Boundary condition</h5>
+<p>Dirchlet boundary is adopted, i.e. all the <span class="math inline">\(u\)</span> at the boundary is a fixed value 0;</p>
+<h3 id="finite-difference-methods">Finite difference methods</h3>
+<h5 id="time-derivative-discretisation">Time Derivative Discretisation</h5>
+<p>Central difference is adopted, with a equal space time-step <span class="math inline">\(dt\)</span>: <span class="math display">\[
+\begin{aligned}
+\left[\frac{\partial^2u}{\partial t^2}\right]^k_{ij}  =&amp; \frac{v^{k}_{ij}-v^{k-1}_{ij}}{dt}, \\
+\text{where} \quad v^k_{ij} = \left[\frac{\partial u}{\partial t}\right]^k_{ij} =&amp; \frac{u^{k+1}_{ij}-u^{k}_{ij}}{dt}
+\end{aligned}
+\]</span></p>
+<h5 id="space-derivatives-discretisation">Space Derivatives Discretisation</h5>
+<p>Central difference is adopted, with a equal-space orthogonal cartesian mesh (<span class="math inline">\(dx\)</span> for horizontal and <span class="math inline">\(dy\)</span> for vertical), the derivatives become: <span class="math display">\[
+\begin{aligned}
+\left[\frac{\partial^2u}{\partial x^2}\right]^k_{ij} = \frac{u^k_{i+1,j}-2u^k_{ij}+u^k_{i-1,j}}{dx^2} \\ 
+\left[\frac{\partial^2u}{\partial y^2}\right]^k_{ij} = \frac{u^k_{i,j+1}-2u^k_{ij}+u^k_{i,j-1}}{dy^2}
+\end{aligned}
+\]</span></p>
+<h5 id="desirable-result">Desirable result</h5>
+<p><img src="/2022/07/23/Solving-Wave-Equation-in-Different-Languages/Desire result_o.gif" srcset="/img/loading.gif" lazyload alt="Desirable result" style="zoom:90%;"></p>
+<h3 id="iteration-steps">Iteration steps</h3>
+<h5 id="element-wise-loop">Element-wise loop:</h5>
+<p>This method is adopted in the Codes section. It is efficient for this problem, but the scalability is poor and not used in reality.</p>
+<ol type="1">
+<li><p><span class="math display">\[
+u^{k+1}_{ij} = u^k_{ij}+v^k_{ij}dt
+\]</span></p></li>
+<li><p><span class="math display">\[
+v^{k+1}_{ij} = Cdt\left(\frac{u^{k+1}_{i+1,j}-2u^{k+1}_{ij}+u^{k+1}_{i-1,j}}{dx^2} + \frac{u^{k+1}_{i,j+1}-2u^{k+1}_{ij}+u^{k+1}_{i,j-1}}{dy^2}\right) + v^{k}_{ij}
+\]</span></p></li>
+</ol>
+<h5 id="matrix-operation-form">Matrix operation form:</h5>
+<ol type="1">
+<li><p><span class="math display">\[
+\mathbf{U^{k+1}} = \mathbf{V^{k}} dt + \mathbf{U^{k}}
+\]</span></p></li>
+<li><p>In most of the cases, the 2D matrix is flattened into an 1D column vector*, and the formula turns into: <span class="math display">\[
+\mathbf{V}^{k+1} = C^2dt\mathbf{AU}^{k+1}+\mathbf{V}^{k}
+\]</span> where <span class="math display">\[
+\mathbf{A}=\left[\begin{array}{cccccccc}
+e &amp; a &amp;   &amp; b &amp;    &amp;      &amp;  &amp;&amp;&amp; \\
+a &amp; e &amp; a &amp;    &amp; b &amp;      &amp; &amp;&amp;&amp; \\
+ &amp; \ddots   &amp;\ddots &amp; \ddots&amp; &amp; \ddots &amp; &amp;&amp;\\
+b &amp;   &amp; a &amp; e &amp; a &amp; &amp; b&amp;&amp;&amp;\\
+   &amp; \ddots&amp;     &amp; \ddots &amp; \ddots &amp; \ddots &amp; &amp;\ddots&amp;&amp; \\
+  &amp; &amp; b &amp;     &amp; a &amp; e &amp; a &amp; &amp;b&amp; \\
+   &amp;    &amp;    &amp; \ddots &amp;     &amp;   \ddots&amp; \ddots &amp; \ddots&amp;  &amp;\\
+   &amp;    &amp;    &amp;     &amp; b &amp;   &amp; a&amp; e &amp; a&amp; \\
+     &amp; &amp;    &amp;    &amp;     &amp; b &amp;  &amp; a&amp; e &amp;
+\end{array}\right], 
+\quad  
+\mathbf{U} = 
+\left[\begin{array}{c}
+u_{00} \\
+u_{10} \\
+\vdots \\
+u_{01} \\
+u_{21} \\
+\vdots \\
+\vdots \\
+\vdots \\
+u_{mn}
+\end{array}\right], 
+\quad  
+\mathbf{V} = 
+\left[\begin{array}{c}
+v_{00} \\
+v_{10} \\
+\vdots \\
+v_{01} \\
+v_{21} \\
+\vdots \\
+\vdots \\
+\vdots \\
+v_{mn}
+\end{array}\right]
+\]</span></p>
+<p><span class="math display">\[
+\text{which }\quad a = \frac{1}{dx^2}, \qquad b = \frac{1}{dy^2},  \qquad e = -\frac{2}{dx^2}-\frac{2}{dy^2}
+\]</span></p></li>
+<li><p>Set the boundary values back to 0</p></li>
+</ol>
+<div class="note note-info">
+            <p>*If the matrix is not flattened:</p><p>In 2D case, the equivalent matrix operations formula is: <span class="math display">\[\mathbf{V^{k+1}} = \left(\frac{C^2dt}{dx^2}\mathbf{U^{k+1}}\begin{bmatrix}1 &amp;  1 &amp;  &amp;  &amp;  &amp;  \\  &amp; -2 &amp; 1 &amp;  &amp;  &amp; \\  &amp; 1 &amp; -2 &amp; \ddots &amp;  &amp; \\  &amp;  &amp; 1 &amp; \ddots &amp; 1 &amp; \\  &amp;  &amp;  &amp; \ddots &amp; -2 &amp; \\  &amp;  &amp;  &amp; &amp; 1 &amp; 1 \\\end{bmatrix}+\frac{C^2dt}{dy^2}\begin{bmatrix}1 &amp;   &amp;  &amp;  &amp;  &amp;  \\1 &amp; -2 &amp; 1 &amp;  &amp;  &amp; \\  &amp; 1 &amp; -2 &amp; 1 &amp;  &amp;  \\  &amp;  &amp; \ddots &amp; \ddots &amp; \ddots &amp; \\  &amp;  &amp;  &amp; 1 &amp; -2 &amp; 1  \\  &amp;  &amp;  &amp;  &amp;  &amp; 1 \\\end{bmatrix} \mathbf{U^{k+1}}\right) + \mathbf{V^k}\]</span> Unfortunately this formula isn't provided in all the mature CFD codes. Maybe because it requests 2 matrix MULTI-ADDs at one step, but the main reason is that when dealing with unstructured mesh i.e. nodes are located freely in the space, not on a cartesian grid, the 2D matrix cannot be used.</p><p>*The matrix is flattened in column major way, for example: <span class="math display">\[\left[\begin{array}{lll}u_{00} &amp; u_{01} &amp; u_{02} \\u_{10} &amp; u_{11} &amp; u_{12} \\u_{20} &amp; u_{21} &amp; u_{22}\end{array}\right]  \Rightarrow\left[\begin{array}{c}u_{00} \\u_{10} \\u_{20} \\u_{01} \\\vdots \\u_{22}\end{array}\right]\]</span></p>
+          </div>
+<h2 id="codes">Codes</h2>
+<p>All the codes are available here: <a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/solve-wave-equation">solve-wave-equation</a>. Central difference in time and space, element-wise operations are applied.</p>
+<h3 id="python-julia-matlab">Python, Julia, Matlab</h3>
+<p>These 3 languages have very similar syntaxes, as shown below:</p>
+<div class="note note-secondary">
+            <p>Scroll horizontally to see all the codes.</p>
+          </div>
+<table>
+<tr>
+<th>
+Python
+</th>
+<th>
+Julia
+</th>
+<th>
+Matlab
+</th>
+</tr>
+<tr>
+<td>
+<div class="code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> time
+
+<span class="hljs-comment"># define parameters</span>
+nSteps = <span class="hljs-number">1000</span>  		<span class="hljs-comment"># Number of timesteps</span>
+Dt = <span class="hljs-number">1e-3</span>  				<span class="hljs-comment"># Length of a timestep</span>
+C = <span class="hljs-number">15</span>  					<span class="hljs-comment"># Stiffness constant, sqaure of wave speed</span>
+nx = <span class="hljs-number">300</span>  				<span class="hljs-comment"># Number of x support points</span>
+ny = <span class="hljs-number">300</span>  				<span class="hljs-comment"># Number of y support points</span>
+w = <span class="hljs-number">20</span>  					<span class="hljs-comment"># Initial wave width</span>
+
+<span class="hljs-comment"># Domain size (-xmax&lt;x&lt;xmax, -ymax&lt;y&lt;ymax)</span>
+xmax = <span class="hljs-number">1</span>
+ymax = <span class="hljs-number">1</span>
+
+<span class="hljs-comment"># Initialise the arrays with initial values.</span>
+Dx = <span class="hljs-number">2</span> * xmax / nx
+Dy = <span class="hljs-number">2</span> * ymax / ny
+[y, x] = np.meshgrid(np.arange(-ymax, ymax + Dy, Dy), np.arange(-xmax, xmax + Dx, Dx))
+r = np.square(x) + np.square(y)
+v = np.zeros(np.shape(x))
+u = np.zeros(np.shape(x))
+pos = (r &lt; <span class="hljs-number">1</span>)
+u[pos] = np.exp(-<span class="hljs-number">4</span> * w**<span class="hljs-number">2</span> * np.square(r[pos])) - <span class="hljs-number">0.75</span> * np.exp(-w**<span class="hljs-number">2</span> * np.square(r[pos]))
+u[pos] = u[pos] + <span class="hljs-number">0.75</span> * np.exp(-w**<span class="hljs-number">2</span>) - np.exp(-<span class="hljs-number">4</span> * w**<span class="hljs-number">2</span>)
+u[pos] = u[pos] * (np.power(r[pos], <span class="hljs-number">4</span>) - <span class="hljs-number">1</span>)
+
+<span class="hljs-comment"># Loop over timesteps</span>
+plt.ion()
+fig, ax = plt.subplots(figsize=(<span class="hljs-number">7</span>, <span class="hljs-number">7</span>), subplot_kw=&#123;<span class="hljs-string">&quot;projection&quot;</span>: <span class="hljs-string">&quot;3d&quot;</span>&#125;)
+fig.canvas.draw()
+
+tic = time.perf_counter()
+<span class="hljs-keyword">for</span> step <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nSteps):
+    u[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>:-<span class="hljs-number">1</span>] = u[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>:-<span class="hljs-number">1</span>] + Dt * v[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>:-<span class="hljs-number">1</span>]
+    v[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>]  = v[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>]+ \
+                (C*Dt/(Dx**<span class="hljs-number">2</span>))*( u[<span class="hljs-number">0</span>:-<span class="hljs-number">2</span>,<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>] - <span class="hljs-number">2.</span>*u[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>] + u[<span class="hljs-number">2</span>:,<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>] )+ \
+                (C*Dt/(Dy**<span class="hljs-number">2</span>))*( u[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>,<span class="hljs-number">0</span>:-<span class="hljs-number">2</span>] - <span class="hljs-number">2.</span>*u[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>] + u[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>,<span class="hljs-number">2</span>:] )
+
+    <span class="hljs-keyword">if</span> step % <span class="hljs-number">5</span> == <span class="hljs-number">0</span>:
+        ax.clear()
+        ax.plot_surface(x, y, u, cmap=plt.cm.winter,vmin=-<span class="hljs-number">0.1</span>, vmax=<span class="hljs-number">0.1</span>)
+        toc = time.perf_counter()
+        ax.text(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.2</span>, <span class="hljs-built_in">str</span>(np.floor(<span class="hljs-number">1</span>/(toc-tic)))+<span class="hljs-string">&quot; fps&quot;</span>,fontsize=<span class="hljs-number">12</span>)
+        tic = time.perf_counter()
+        ax.set_xlim([-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>])
+        ax.set_ylim([-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>])
+        ax.set_zlim([-<span class="hljs-number">0.2</span>, <span class="hljs-number">0.5</span>])
+        ax.set_xlabel(<span class="hljs-string">&#x27;x&#x27;</span>)
+        ax.set_ylabel(<span class="hljs-string">&#x27;y&#x27;</span>)
+        ax.set_zlabel(<span class="hljs-string">&#x27;u(t,x)&#x27;</span>)
+        plt.pause(<span class="hljs-number">0.001</span>)
+        fig.canvas.flush_events()
+        
+plt.ioff()
+
+</code></pre></div>
+</td>
+<td>
+<div class="code-wrapper"><pre><code class="hljs julia"><span class="hljs-keyword">import</span> PyPlot; <span class="hljs-comment"># matplolib.PyPlot API is used for julia</span>
+<span class="hljs-keyword">const</span> plt = PyPlot;
+<span class="hljs-keyword">using</span> Dates;
+
+<span class="hljs-comment"># define parameters</span>
+nSteps = <span class="hljs-number">1000</span>;          <span class="hljs-comment"># Number of timeSteps</span>
+Dt = <span class="hljs-number">1e-3</span>;               <span class="hljs-comment"># Length of a timeStep</span>
+C = <span class="hljs-number">15</span>;                  <span class="hljs-comment"># Stiffness constant</span>
+nx = <span class="hljs-number">300</span>;                <span class="hljs-comment"># Number of x support points</span>
+ny = <span class="hljs-number">300</span>;                <span class="hljs-comment"># Number of y support points</span>
+w = <span class="hljs-number">20</span>;                  <span class="hljs-comment"># Initial wave width</span>
+
+<span class="hljs-comment"># Domain size (-xmax&lt;x&lt;xmax, -ymax&lt;y&lt;ymax)</span>
+xmax = <span class="hljs-number">1</span>;
+ymax = <span class="hljs-number">1</span>;
+
+<span class="hljs-comment"># Initialise the arrays with initial values.</span>
+Dx = <span class="hljs-number">2</span> * xmax / nx;
+Dy = <span class="hljs-number">2</span> * ymax / ny;
+x = collect(-xmax:Dx:xmax) .* ones(ny + <span class="hljs-number">1</span>)&#x27;; <span class="hljs-comment"># broadcasting is used to generate 2D array</span>
+y = collect(-ymax:Dy:ymax)&#x27; .* ones(nx + <span class="hljs-number">1</span>);
+r = x .^ <span class="hljs-number">2</span> + y .^ <span class="hljs-number">2</span>;
+v = zeros(size(x));
+u = zeros(size(x));
+pos = r .&lt; <span class="hljs-number">1</span>;
+u[pos] = exp.(-<span class="hljs-number">4</span> * w^<span class="hljs-number">2</span> * r[pos] .^ <span class="hljs-number">2</span>) - <span class="hljs-number">0.75</span> * exp.(-w^<span class="hljs-number">2</span> * r[pos] .^ <span class="hljs-number">2</span>);
+u[pos] = u[pos] .+ <span class="hljs-number">0.75</span> .* exp.(-w^<span class="hljs-number">2</span>) .- exp.(-<span class="hljs-number">4</span> .* w^<span class="hljs-number">2</span>);
+u[pos] = u[pos] .* (r[pos] .^ <span class="hljs-number">4</span> .- <span class="hljs-number">1</span>);
+
+<span class="hljs-comment"># Loop over timesteps</span>
+plt.ion();
+fig, ax = plt.subplots(figsize=(<span class="hljs-number">7</span>, <span class="hljs-number">7</span>), subplot_kw=<span class="hljs-built_in">Dict</span>(<span class="hljs-string">&quot;projection&quot;</span> =&gt; <span class="hljs-string">&quot;3d&quot;</span>));
+fig.canvas.draw();
+
+<span class="hljs-keyword">global</span> tic = now();
+<span class="hljs-keyword">for</span> step <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>:nSteps
+    u[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny] = u[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny] + Dt .* v[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny];
+    v[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny] = v[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny] + 
+                    (C * Dt / Dx^<span class="hljs-number">2</span>) .* (u[<span class="hljs-number">1</span>:nx-<span class="hljs-number">1</span>, <span class="hljs-number">2</span>:ny] .- <span class="hljs-number">2</span> .* u[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny] + u[<span class="hljs-number">3</span>:nx+<span class="hljs-number">1</span>, <span class="hljs-number">2</span>:ny]) + 
+                    (C * Dt / Dy^<span class="hljs-number">2</span>) .* (u[<span class="hljs-number">2</span>:nx, <span class="hljs-number">1</span>:ny-<span class="hljs-number">1</span>] .- <span class="hljs-number">2</span> .* u[<span class="hljs-number">2</span>:nx, <span class="hljs-number">2</span>:ny] + u[<span class="hljs-number">2</span>:nx, <span class="hljs-number">3</span>:ny+<span class="hljs-number">1</span>]);
+    <span class="hljs-keyword">if</span> step % <span class="hljs-number">5</span> == <span class="hljs-number">0</span>
+        ax.clear();
+        ax.plot_surface(x, y, u, cmap=plt.cm.winter, vmin=-<span class="hljs-number">0.1</span>, vmax=<span class="hljs-number">0.1</span>);
+        toc = now();
+        ax.text(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.2</span>, string(floor(<span class="hljs-number">1000</span> / (toc - tic).value)) * <span class="hljs-string">&quot; fps&quot;</span>, fontsize=<span class="hljs-number">12</span>);
+        <span class="hljs-keyword">global</span> tic = now();
+        ax.set_xlim([-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>]);
+        ax.set_ylim([-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>]);
+        ax.set_zlim([-<span class="hljs-number">0.2</span>, <span class="hljs-number">0.5</span>]);
+        ax.set_xlabel(<span class="hljs-string">&quot;x&quot;</span>);
+        ax.set_ylabel(<span class="hljs-string">&quot;y&quot;</span>);
+        ax.set_zlabel(<span class="hljs-string">&quot;u(t,x)&quot;</span>);
+        plt.pause(<span class="hljs-number">0.001</span>);
+        fig.canvas.flush_events();
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+plt.ioff();</code></pre></div>
+</td>
+<td>
+<div class="code-wrapper"><pre><code class="hljs matlab"><span class="hljs-comment">% no package needed in matlab</span>
+
+
+
+<span class="hljs-comment">% Define parameters</span>
+nSteps = <span class="hljs-number">1000</span>;            <span class="hljs-comment">% Number of timesteps</span>
+Dt = <span class="hljs-number">1e-3</span>;                <span class="hljs-comment">% Length of a timestep</span>
+C = <span class="hljs-number">15</span>;                   <span class="hljs-comment">% Stiffness constant</span>
+nx = <span class="hljs-number">200</span>;                 <span class="hljs-comment">% Number of support points in x</span>
+ny = <span class="hljs-number">200</span>;                 <span class="hljs-comment">% Number of support points in y</span>
+w = <span class="hljs-number">20</span>;                   <span class="hljs-comment">% Initial wave width</span>
+
+<span class="hljs-comment">% Domain size (-xmax&lt;x&lt;xmax, -ymax&lt;y&lt;ymax)</span>
+xmax = <span class="hljs-number">1</span>;
+ymax = <span class="hljs-number">1</span>;
+
+# Initialise the arrays with initial values.
+Dx = <span class="hljs-number">2</span>*xmax/nx;
+Dy = <span class="hljs-number">2</span>*ymax/ny;
+[y,x] = <span class="hljs-built_in">meshgrid</span>(-ymax:Dy:ymax,-xmax:Dx:xmax);
+r = x.^<span class="hljs-number">2</span> + y.^<span class="hljs-number">2</span>;
+v = <span class="hljs-built_in">zeros</span>(<span class="hljs-built_in">size</span>(x));
+u = <span class="hljs-built_in">zeros</span>(<span class="hljs-built_in">size</span>(x));
+pos = (r&lt;<span class="hljs-number">1</span>);
+u(pos) = <span class="hljs-built_in">exp</span>(<span class="hljs-number">-4</span>*w^<span class="hljs-number">2</span>*r(pos).^<span class="hljs-number">2</span>) - <span class="hljs-number">0.75</span>*<span class="hljs-built_in">exp</span>(-w^<span class="hljs-number">2</span>*r(pos).^<span class="hljs-number">2</span>);
+u(pos) = u(pos) + <span class="hljs-number">0.75</span>*<span class="hljs-built_in">exp</span>(-w^<span class="hljs-number">2</span>) - <span class="hljs-built_in">exp</span>(<span class="hljs-number">-4</span>*w^<span class="hljs-number">2</span>);
+u(pos) = u(pos).*(r(pos).^<span class="hljs-number">4</span><span class="hljs-number">-1</span>);
+
+<span class="hljs-comment">% Loop over timesteps</span>
+tic
+<span class="hljs-keyword">for</span> step = <span class="hljs-number">0</span>:nSteps
+    u(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny) = u(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny) + Dt.*v(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny);
+    v(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny) = v(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny) ...
+        +(C*Dt/Dx^<span class="hljs-number">2</span>).*( u(<span class="hljs-number">1</span>:nx<span class="hljs-number">-1</span>,<span class="hljs-number">2</span>:ny) - <span class="hljs-number">2.</span>*u(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny) + u(<span class="hljs-number">3</span>:nx+<span class="hljs-number">1</span>,<span class="hljs-number">2</span>:ny) ) ...
+        +(C*Dt/Dy^<span class="hljs-number">2</span>).*( u(<span class="hljs-number">2</span>:nx,<span class="hljs-number">1</span>:ny<span class="hljs-number">-1</span>) - <span class="hljs-number">2.</span>*u(<span class="hljs-number">2</span>:nx,<span class="hljs-number">2</span>:ny) + u(<span class="hljs-number">2</span>:nx,<span class="hljs-number">3</span>:ny+<span class="hljs-number">1</span>) );
+    
+    <span class="hljs-comment">% Plot every 5 steps, otherwise too slow</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">mod</span>(step,<span class="hljs-number">5</span>)==<span class="hljs-number">0</span>)
+        surf(x(<span class="hljs-number">1</span>:<span class="hljs-number">5</span>:<span class="hljs-keyword">end</span>,<span class="hljs-number">1</span>:<span class="hljs-number">5</span>:<span class="hljs-keyword">end</span>),y(<span class="hljs-number">1</span>:<span class="hljs-number">5</span>:<span class="hljs-keyword">end</span>,<span class="hljs-number">1</span>:<span class="hljs-number">5</span>:<span class="hljs-keyword">end</span>),u(<span class="hljs-number">1</span>:<span class="hljs-number">5</span>:<span class="hljs-keyword">end</span>,<span class="hljs-number">1</span>:<span class="hljs-number">5</span>:<span class="hljs-keyword">end</span>))
+        colormap winter
+        <span class="hljs-comment">% shading interp</span>
+        <span class="hljs-comment">% light</span>
+        axis equal;
+        xlabel(<span class="hljs-string">&#x27;x&#x27;</span>)
+        ylabel(<span class="hljs-string">&#x27;y&#x27;</span>)
+        zlabel(<span class="hljs-string">&#x27;u(t,x,y)&#x27;</span>)
+        caxis([<span class="hljs-number">-.2</span>, <span class="hljs-number">.2</span>])
+        axis([-xmax, xmax, -ymax ymax <span class="hljs-number">-0.2</span> <span class="hljs-number">0.5</span>])
+        <span class="hljs-built_in">hold</span> on
+        text(<span class="hljs-number">.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.2</span>, strcat(num2str(<span class="hljs-built_in">floor</span>(<span class="hljs-number">1</span>/toc)), <span class="hljs-string">&quot; fps&quot;</span>), <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">12</span>)
+        tic
+        <span class="hljs-built_in">hold</span> off
+        drawnow
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+
+</code></pre></div>
+</td>
+</tr>
+<tr>
+<td>
+<p><img src="/2022/07/23/Solving-Wave-Equation-in-Different-Languages/python_o.gif" srcset="/img/loading.gif" lazyload alt="Python result" style="zoom:30%;"></p>
+</td>
+<td>
+<p><img src="/2022/07/23/Solving-Wave-Equation-in-Different-Languages/julia_o.gif" srcset="/img/loading.gif" lazyload alt="Julia result" style="zoom:30%;"></p>
+</td>
+<td>
+<p><img src="/2022/07/23/Solving-Wave-Equation-in-Different-Languages/matlab_o.gif" srcset="/img/loading.gif" lazyload alt="Matlab result, implemented on Octave" style="zoom:50%;"></p>
+</td>
+</tr>
+</table>
+<h3 id="c">C++</h3>
+<p>Because of the flexibility (difficulty) of C++, there are extra concerns as:</p>
+<h5 id="matrix-datatype">Matrix Datatype:</h5>
+<p>In order to take advantage of the efficiency of STL(standard template library) without worrying about the memory control, <code>vector&lt;double&gt;</code> is used to store the data to be calculated.</p>
+<p>There are two ways of storing a 2D matrix,</p>
+<ul>
+<li>1D <code>vector&lt;double&gt;</code>, the most common way. The matrix is flattened as discussed above.</li>
+<li>2D <code>vector&lt;vector&lt;double&gt; &gt;</code>, consistent with the Python/Julia/Matlab codes.</li>
+</ul>
+<div class="note note-secondary">
+            <p>How to represent a 2D matrix is not a c++ exclusive question. The languages above can also handling both 1D 2D matrix.</p>
+          </div>
+<p>2D vector is adopted here for the sake of simplicity.</p>
+<h5 id="matrix-operations">Matrix operations</h5>
+<p>There are 2 options for matrix operations</p>
+<ul>
+<li><p>Nested 2-layer for-loops to conduct the element-wised operations. Serial and slow it seems to be, but thanks to the compiler, it will be optimised to be data-level-parallel and the speed is ok.</p></li>
+<li><p>Besides, there is a fortran library <a target="_blank" rel="noopener" href="https://netlib.org/blas/">BLAS (Basic Linear Algebra Subprograms)</a>, famous of the efficiency and high performance on matrix operations. BLAS has been widely used in the scientific computing field. It not only supports general full-populated matrix type, but also supports the triangular, symmetric and banded matrix computing. (Similar to the sparse matrix type in MATLAB, but less flexible)</p></li>
+</ul>
+<p>Here I choose option 1, still working on option 2.</p>
+<div class="note note-info">
+            <p>Since BLAS is written on Fortran, there are 2 ways of calling BLAS in C/C++</p><ul><li>Calling the Fortran BLAS library in C++, need extra attention on the matrix storage method*, and the compiling method*</li><li>Use the <a target="_blank" rel="noopener" href="https://netlib.org/blas/#_cblas">CBLAS wrapper</a>, may not work on all of the HPCs, but more convenient. The storage method can be pre-assigned when calling. No need to take care of the compiling method.</li></ul><blockquote><p>*With a 2D matrix, there are two ways of storage in the memory, row-major or column-major. The convention is row-major but on Fortran, it is column-major. <span class="math display">\[\begin{aligned}Conventional:&amp;\quad \left(\begin{array}{lll}a_{11} &amp; a_{12} &amp; a_{13} \\a_{21} &amp; a_{22} &amp; a_{23}\end{array}\right) \quad \text { stored as }[\underbrace{a_{11} a_{12} a_{13}}_{\text {Row } 1} \underbrace{a_{21} a_{22} a_{23}}_{\text {Row } 2}] \\Fortran:&amp; \quad\left(\begin{array}{lll}a_{11} &amp; a_{12} &amp; a_{13} \\a_{21} &amp; a_{22} &amp; a_{23}\end{array}\right) \quad \text { stored as }[\underbrace{a_{11} a_{21}}_{\text {Col. } 1} \underbrace{a_{12} a_{22}}_{\text {Col. } 2} \underbrace{a_{13} a_{23}}_{\text {Col. } 3}]\end{aligned}\]</span></p></blockquote><blockquote><p>*The way Fortran and C++ compilers generate compiled forms of a function differ, so in order to use a Fortran code, we must tell the C++ compiler to look for the compiled symbol with a slightly different name than what it would otherwise expect. There are two main changes:</p><ul><li><p>Fortran appends the function name with an underscore (_), whereas C/C++ compilers do not.</p></li><li><p>Since C++ supports function overloading (see Section 6.5), it “mangles” the function names with the parameter datatypes to ensure they are always unique.</p></li></ul><p>In order to call Fortran 90 functions from our C++ code, we therefore need to add the underscore and turn off the name mangling.</p></blockquote>
+          </div>
+<h5 id="plotting-methods">Plotting methods:</h5>
+<p>Although there is no official plotting library in C++, there are many libraries available, such as: <a target="_blank" rel="noopener" href="http://stahlke.org/dan/gnuplot-iostream/">GNUPlot</a>, <a target="_blank" rel="noopener" href="http://www.codecutter.net/tools/koolplot/byExample.html">Koolplot</a>, <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16258815/call-a-matlab-code-from-visual-studio-c">MATLAB</a>, <a target="_blank" rel="noopener" href="https://github.com/lava/matplotlib-cpp">matplotlib-cpp</a>. See <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4283731/plotting-package-for-c">plotting package for c++</a> in detail. I prefer GNUPlot, a fast and powerful, widely used plotting library.</p>
+<p>And There are two options of plotting,</p>
+<ul>
+<li>Joint: Embedding GNUPlot with C++ (with <strong><a target="_blank" rel="noopener" href="https://github.com/dstahlke/gnuplot-iostream">gnuplot-iostream</a></strong>), updates the plot real-time with iteration.</li>
+<li>Two-stage: First output all the data of every plotting step, then shade them with GNUPlot all together.</li>
+</ul>
+<p>In order to keep align with the codes in the last section, I choose the Joint method here.</p>
+<h5 id="main-code">Main code</h5>
+<p>Some of the code is here:</p>
+<div class="note note-secondary">
+            <p>Scroll horizontally to see the utils</p>
+          </div>
+<table>
+<tr>
+<th>
+main
+</th>
+<th>
+utils.hpp
+</th>
+<th>
+gnuplot-support.cpp
+</th>
+</tr>
+<tr>
+<td>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _USE_MATH_DEFINES</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span> </span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;utils.hpp&quot;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+  <span class="hljs-comment">// define parameters</span>
+  <span class="hljs-type">int</span> nSteps = <span class="hljs-number">1000</span>;
+  <span class="hljs-type">double</span> Dt = <span class="hljs-number">0.001</span>;
+  <span class="hljs-type">double</span> C = <span class="hljs-number">15</span>;
+  <span class="hljs-type">int</span> nx = <span class="hljs-number">300</span>, ny = <span class="hljs-number">300</span>;
+  <span class="hljs-type">double</span> w = <span class="hljs-number">20</span>;
+
+  <span class="hljs-comment">// Domain size (-xmax&lt;x&lt;xmax, -ymax&lt;y&lt;ymax)</span>
+  <span class="hljs-type">double</span> xmax = <span class="hljs-number">1.0</span>, ymax = <span class="hljs-number">1.0</span>;
+
+  <span class="hljs-comment">// Initialise the arrays with initial values.</span>
+  <span class="hljs-type">double</span> Dx = <span class="hljs-number">2</span> * xmax / nx;
+  <span class="hljs-type">double</span> Dy = <span class="hljs-number">2</span> * ymax / ny;
+
+	vector&lt;<span class="hljs-type">double</span>&gt; x = <span class="hljs-built_in">linespace</span>( -xmax,  xmax,  nx+<span class="hljs-number">1</span>);
+	vector&lt;<span class="hljs-type">double</span>&gt; y = <span class="hljs-built_in">linespace</span>( -ymax,  ymax,  ny+<span class="hljs-number">1</span>);
+
+	vector&lt;vector&lt;<span class="hljs-type">double</span>&gt; &gt; X, Y, r, v, u;
+	r.<span class="hljs-built_in">assign</span>(y.<span class="hljs-built_in">size</span>(), <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">double</span>&gt;(x.<span class="hljs-built_in">size</span>()));
+	v.<span class="hljs-built_in">assign</span>(y.<span class="hljs-built_in">size</span>(), <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">double</span>&gt;(x.<span class="hljs-built_in">size</span>()));
+	u.<span class="hljs-built_in">assign</span>(y.<span class="hljs-built_in">size</span>(), <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">double</span>&gt;(x.<span class="hljs-built_in">size</span>()));
+
+  <span class="hljs-built_in">meshgrid</span>(x, y, X, Y);
+
+	<span class="hljs-comment">// initialization</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j &lt; ny+<span class="hljs-number">1</span>; j++)
+    &#123;
+    	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i &lt; nx+<span class="hljs-number">1</span>; i++)
+        &#123;
+			r[j][i] = <span class="hljs-built_in">pow</span>(X[j][i],<span class="hljs-number">2</span>) + <span class="hljs-built_in">pow</span>(Y[j][i],<span class="hljs-number">2</span>);
+			<span class="hljs-keyword">if</span>(r[j][i]&lt;<span class="hljs-number">1</span>)
+			&#123;
+				u[j][i] = <span class="hljs-built_in">exp</span>(<span class="hljs-number">-4</span> * <span class="hljs-built_in">pow</span>(w,<span class="hljs-number">2</span>) * <span class="hljs-built_in">pow</span>(r[j][i],<span class="hljs-number">2</span>))\
+                  - <span class="hljs-number">0.75</span> * <span class="hljs-built_in">exp</span>(-<span class="hljs-built_in">pow</span>(w,<span class="hljs-number">2</span>) * <span class="hljs-built_in">pow</span>(r[j][i],<span class="hljs-number">2</span>));
+				u[j][i] = u[j][i] + <span class="hljs-number">0.75</span> * <span class="hljs-built_in">exp</span>(-<span class="hljs-built_in">pow</span>(w,<span class="hljs-number">2</span>)) - <span class="hljs-built_in">exp</span>(<span class="hljs-number">-4</span> * <span class="hljs-built_in">pow</span>(w,<span class="hljs-number">2</span>));
+				u[j][i] = u[j][i]*(<span class="hljs-built_in">pow</span>(r[j][i], <span class="hljs-number">4</span>) - <span class="hljs-number">1</span>);
+			&#125;
+        &#125;
+    &#125;
+
+	<span class="hljs-comment">// Loop over timesteps</span>
+    GnuPlotWrapper&lt;<span class="hljs-type">double</span>&gt; GPW;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> step = <span class="hljs-number">0</span>; step &lt; nSteps; step++)
+	&#123;
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>; j &lt; ny; j++)
+		&#123;
+			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>; i &lt; nx; i++)
+			&#123;
+				u[j][i] = u[j][i] + Dt * v[j][i];
+			&#125;
+		&#125;
+
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>; j &lt; ny; j++)
+		&#123;
+			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>; i &lt; nx; i++)
+			&#123;
+				v[j][i] = v[j][i] + 
+				(C*Dt/(<span class="hljs-built_in">pow</span>(Dx,<span class="hljs-number">2</span>)))*(u[j][i<span class="hljs-number">-1</span>]<span class="hljs-number">-2</span>*u[j][i]+u[j][i+<span class="hljs-number">1</span>])+ 
+				(C*Dt/(<span class="hljs-built_in">pow</span>(Dy,<span class="hljs-number">2</span>)))*(u[j<span class="hljs-number">-1</span>][i]<span class="hljs-number">-2</span>*u[j][i]+u[j+<span class="hljs-number">1</span>][i]);
+			&#125;
+		&#125;
+
+        <span class="hljs-keyword">if</span> (step%<span class="hljs-number">5</span> ==<span class="hljs-number">0</span>)
+        &#123;
+            GPW.<span class="hljs-built_in">update</span>(x,y,u);
+            <span class="hljs-built_in">usleep</span>(<span class="hljs-number">1</span>);
+        &#125;
+	&#125;
+&#125;
+
+
+
+</code></pre></div>
+</td>
+<td>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gnuplot-support.cpp&quot;</span></span>
+
+<span class="hljs-function">vector&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">linespace</span><span class="hljs-params">(<span class="hljs-type">double</span> start, <span class="hljs-type">double</span> ed, <span class="hljs-type">int</span> num)</span></span>;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">meshgrid</span><span class="hljs-params">(vector&lt;<span class="hljs-type">double</span>&gt; xin, vector&lt;<span class="hljs-type">double</span>&gt; yin, </span></span>
+<span class="hljs-params"><span class="hljs-function">              vector&lt;vector&lt;<span class="hljs-type">double</span>&gt;&gt; &amp;xout, </span></span>
+<span class="hljs-params"><span class="hljs-function">              vector&lt;vector&lt;<span class="hljs-type">double</span>&gt;&gt; &amp;yout)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">inline</span> string <span class="hljs-title">time_diff</span><span class="hljs-params">(chrono::duration&lt;<span class="hljs-type">double</span>&gt; elapsed_seconds)</span></span>;
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">GnuPlotWrapper</span>
+&#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">GnuPlotWrapper</span>()
+    &#123;
+        <span class="hljs-built_in">init_style</span>();
+        start = chrono::system_clock::<span class="hljs-built_in">now</span>();
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">init_style</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        gp &lt;&lt; <span class="hljs-string">&quot;set term qt size 700, 700 position 0,0\n&quot;</span>;
+        gp &lt;&lt; <span class="hljs-string">&quot;set xyplane at -0.2\n&quot;</span>;
+        gp &lt;&lt; <span class="hljs-string">&quot;set zrange [-0.2:0.75]\n&quot;</span>;
+        gp &lt;&lt; <span class="hljs-string">&quot;set cbrange [-0.1:0.13]\n&quot;</span>;
+        gp &lt;&lt; <span class="hljs-string">&quot;set hidden3d nooffset\n&quot;</span>;
+        gp &lt;&lt; <span class="hljs-string">&quot;set pm3d\n&quot;</span>;
+        <span class="hljs-comment">// other unnecessary settings</span>
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(vector&lt;T&gt; &amp;x, vector&lt;T&gt; &amp;y, vector&lt;vector&lt;T&gt;&gt; &amp;u, <span class="hljs-type">int</span> step = <span class="hljs-number">5</span>)</span></span>
+<span class="hljs-function">    </span>&#123;
+        <span class="hljs-built_in">pts_reset</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i = <span class="hljs-number">0</span>; i &lt; x.<span class="hljs-built_in">size</span>(); i += step)
+        &#123;
+            <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">segment_reset</span>();
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> j = <span class="hljs-number">0</span>; j &lt; y.<span class="hljs-built_in">size</span>(); j += step)
+            &#123;
+                <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">seg_push_back</span>(x[i], y[j], u[j][i]);
+            &#125;
+            <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">pts_push_back</span>();
+        &#125;
+        <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">plot</span>();
+    &#125;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">pts_reset</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        pts.<span class="hljs-built_in">erase</span>(pts.<span class="hljs-built_in">begin</span>(), pts.<span class="hljs-built_in">end</span>());
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">segment_reset</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        segment.<span class="hljs-built_in">erase</span>(segment.<span class="hljs-built_in">begin</span>(), segment.<span class="hljs-built_in">end</span>());
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">seg_push_back</span><span class="hljs-params">(T &amp;x, T &amp;y, T &amp;z)</span></span>
+<span class="hljs-function">    </span>&#123;
+        segment.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">MyTriple</span>&lt;T&gt;(x, y, z));
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">pts_push_back</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        pts.<span class="hljs-built_in">push_back</span>(segment);
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">plot</span><span class="hljs-params">()</span></span>
+<span class="hljs-function">    </span>&#123;
+        gp &lt;&lt; <span class="hljs-string">&quot;splot &#x27;-&#x27; w pm3d notitle\n&quot;</span>;
+        gp.<span class="hljs-built_in">send2d</span>(pts);
+        <span class="hljs-keyword">auto</span> end = chrono::system_clock::<span class="hljs-built_in">now</span>();
+        gp &lt;&lt; <span class="hljs-string">&quot;set label 1 &#x27;&quot;</span> &lt;&lt; <span class="hljs-built_in">time_diff</span>(end - start) \
+           &lt;&lt; <span class="hljs-string">&quot; fps&#x27; at -0.8,0,0.3\n&quot;</span>;
+        start = chrono::system_clock::<span class="hljs-built_in">now</span>();
+        gp.<span class="hljs-built_in">flush</span>();
+    &#125;
+
+<span class="hljs-keyword">private</span>:
+    Gnuplot gp;
+    vector&lt;vector&lt;MyTriple&lt;T&gt;&gt;&gt; pts;
+    vector&lt;MyTriple&lt;T&gt;&gt; segment;
+    chrono::system_clock::time_point start;
+&#125;;</code></pre></div>
+</td>
+<td>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gnuplot-iostream.h&quot;</span></span>
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyTriple</span>
+&#123;
+    <span class="hljs-built_in">MyTriple</span>() : <span class="hljs-built_in">x</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">y</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">z</span>(<span class="hljs-number">0</span>) &#123;&#125;
+    <span class="hljs-built_in">MyTriple</span>(T _x, T _y, T _z) : <span class="hljs-built_in">x</span>(_x), <span class="hljs-built_in">y</span>(_y), <span class="hljs-built_in">z</span>(_z) &#123;&#125;
+
+    T x, y, z;
+&#125;;
+
+<span class="hljs-comment">// Tells gnuplot-iostream how to print objects of class MyTriple.</span>
+<span class="hljs-keyword">namespace</span> gnuplotio
+&#123;
+    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">BinfmtSender</span>&lt;MyTriple&lt;T&gt;&gt;
+    &#123;
+        <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">send</span><span class="hljs-params">(std::ostream &amp;stream)</span></span>
+<span class="hljs-function">        </span>&#123;
+            BinfmtSender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream);
+            BinfmtSender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream);
+            BinfmtSender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream);
+        &#125;
+    &#125;;
+
+    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">BinarySender</span>&lt;MyTriple&lt;T&gt;&gt;
+    &#123;
+        <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">send</span><span class="hljs-params">(std::ostream &amp;stream, <span class="hljs-type">const</span> MyTriple&lt;T&gt; &amp;v)</span></span>
+<span class="hljs-function">        </span>&#123;
+            BinarySender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream, v.x);
+            BinarySender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream, v.y);
+            BinarySender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream, v.z);
+        &#125;
+    &#125;;
+
+    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">TextSender</span>&lt;MyTriple&lt;T&gt;&gt;
+    &#123;
+        <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">send</span><span class="hljs-params">(std::ostream &amp;stream, <span class="hljs-type">const</span> MyTriple&lt;T&gt; &amp;v)</span></span>
+<span class="hljs-function">        </span>&#123;
+            TextSender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream, v.x);
+            stream &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;
+            TextSender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream, v.y);
+            stream &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;
+            TextSender&lt;T&gt;::<span class="hljs-built_in">send</span>(stream, v.z);
+        &#125;
+    &#125;;
+&#125; <span class="hljs-comment">// namespace gnuplotio</span>
+
+<span class="hljs-function">MyTriple&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">get_point</span><span class="hljs-params">(<span class="hljs-type">double</span> &amp;x, <span class="hljs-type">double</span> &amp;y, <span class="hljs-type">double</span> &amp;z)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">MyTriple</span>&lt;<span class="hljs-type">double</span>&gt;(x, y, z);
+&#125;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre></div>
+</td>
+</tr>
+</table>
+<h5 id="result">Result</h5>
+<p><img src="/2022/07/23/Solving-Wave-Equation-in-Different-Languages/c++_o.gif" srcset="/img/loading.gif" lazyload alt="C++ realtime result" style="zoom:90%;"></p>
+<h3 id="benchmark-on-the-matrix-computing">Benchmark on the matrix computing</h3>
+<p>The codes are evaluated without the I/O or rendering. With purely matrix computing, the time consumptions are:</p>
+<div id="echarts3777" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+<script type="text/javascript" src="https://www.makeapie.com/dep/echarts/map/js/china.js"></script>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('echarts3777'));
+  // 指定图表的配置项和数据
+  
+option = {
+  tooltip: {
+      trigger: 'axis',
+      formatter: function (params) {
+          let newParams = [];
+          let tooltipString = [];
+          newParams = [...params];
+          newParams.sort((a,b) => {return a.value - b.value});
+          newParams.forEach((p) => {
+              const cont = p.marker + ' ' + p.seriesName + ': \n' + p.value + '<br/>';
+              tooltipString.push(cont);
+          });
+          return tooltipString.join('');
+      }
+  },
+  legend: {
+    data: ['C++ O0', 'C++ O2', 'C++ O3', 'Python', 'Matlab', 'Julia']
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'category',
+    name: 'matrix width',
+    boundaryGap: false,
+    data: ['30', '300', '3000']
+  },
+  yAxis: {
+    type: 'log',
+    name: 'time/s'
+  },
+  series: [
+    {
+      name: 'C++ O0',
+      type: 'line',
+      data: [0.0345, 3.52, 348.8]
+    },
+    {
+      name: 'C++ O2',
+      type: 'line',
+      data: [0.00198, 0.138, 13.46]
+    },
+    {
+      name: 'C++ O3',
+      type: 'line',
+      data: [0.000987, 0.0968, 10.18]
+    },
+    {
+      name: 'Python',
+      type: 'line',
+      data: [0.01715, 0.6984, 93.605]
+    },
+    {
+      name: 'Julia',
+      type: 'line',
+      data: [0.295, 1.229, 99.56]
+    },
+    {
+      name: 'Matlab',
+      type: 'line',
+      data: [0.0379, 0.733, 146.079]
+    }
+  ]
+};
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+<p>Data is in <a target="_blank" rel="noopener" href="https://github.com/DaydreamAtNight/solve-wave-equation/blob/main/BenchMarkCodes/result.md">result.md</a>.</p>
+<div class="note note-info">
+            <p>Compared with original code, <code>Dt = 1e-5</code> to avoid the divergence when increasing the matrix dimension.</p>
+          </div>
+<h2 id="conclusions">Conclusions</h2>
+<ul>
+<li>C++ is great!
+<ul>
+<li>Although 4 languages are covered, I feel like I spent my entire time writing C++. And the better performance over all the other interpreted codes makes me feel well paid off.</li>
+</ul></li>
+<li>Python is great
+<ul>
+<li>Although Python is famous to be slow, but with numpy library (As far as I know, Anaconda numpy use OpenBLAS) it speed for matrix computation is not bad.</li>
+</ul></li>
+<li>Julia is NOT fast, at my level
+<ul>
+<li>Actually, I wrote this blog aiming at learning Julia. I was hoping Julia can run as fast as C++ as they claimed. But the performance is the worst of all the codes. Maybe it is because of the JIM system. Or I need more time working on it.</li>
+<li>Besides, the plotting is inefficient. Again, it is not quite fair because I used Julia to call python API. I haven't look into the plotting function in Julia.</li>
+<li>For now, I'd rather use Python or MATLAB for quick preliminary developing and C++ for deploying.</li>
+</ul></li>
+<li>MATLAB has a really efficient plotting method, even I use octave as a alternative for now. I wander if I can seek the same plotting performance on C++.</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Solving Wave Equation in Different Languages</div>
+      <div>https://daydreamatnight.github.io/2022/07/23/Solving-Wave-Equation-in-Different-Languages/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 23, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/02/CUDA-fundamental-2/" title="Parallelism Concepts">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Parallelism Concepts</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/07/15/CUDA-fundamental-1/" title="CPU architecture">
+                        <span class="hidden-mobile">CPU architecture</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

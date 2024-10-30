@@ -1,0 +1,1042 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Try to clarify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods. Concepts of finite">
+<meta property="og:type" content="article">
+<meta property="og:title" content="from ROMs to Discretization Methods">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Try to clarify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods. Concepts of finite">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/ROM%20to%20FEM.png">
+<meta property="article:published_time" content="2022-10-21T14:19:20.000Z">
+<meta property="article:modified_time" content="2022-10-28T11:43:13.670Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="fluid dynamics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/ROM%20to%20FEM.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>from ROMs to Discretization Methods - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="from ROMs to Discretization Methods"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-21 22:19" pubdate>
+          October 21, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          20k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          67 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">from ROMs to Discretization Methods</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-primary">
+            <p>Try to clarify the connections between reduce order models and finite element methods, especially in terms of the weighted residual and the Galerkin projection methods. Concepts of finite volume and finite difference methods are also encapsulated in this framework.</p>
+          </div>
+<span id="more"></span>
+<h2 id="intuitive-introduction">Intuitive Introduction</h2>
+<h3 id="better-than-linear-regression">Better than Linear regression</h3>
+<p>Linear regression is a widely used method seeking the 'best' linear relation between two input and output variables, say <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>As shown below, there is a difference between the linear regression results considering input as <span class="math inline">\(x\)</span> output as <span class="math inline">\(y\)</span> and the other way around. The difference between the actual value of <span class="math inline">\(y\)</span> and the predicted value for a few samples are plotted as well.</p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/linear regression results of x-y and y-x.png" srcset="/img/loading.gif" lazyload alt="linear regression results of coordinates x-y and y-x, from https://shankarmsy.github.io/posts/pca-vs-lr.html" style="zoom:67%;"></p>
+<p>The reason of the difference is shown clearly. The direction along which the (Ordinary Least Squares) error is minimized is different in different coordinates. If the two coordinates are correlated with each other, then typically regression outputs become sensitive to noise.</p>
+<p>If we develop a algorithm to find a new set of coordinates such that as least orthogonal error as possible is in one direction of the new coordinate system, we can have a better regression. Unluckily we have this method, called PCA. As shown below, the orthogonal error to the model line is minimized.</p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/PCA results.png" srcset="/img/loading.gif" lazyload alt="PCA results" style="zoom:67%;"></p>
+<p>The result comparison is shown below, not surprisingly the PCA "regression" is in between of the two traditional results.</p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/linear regression results and PCA result comparison.png" srcset="/img/loading.gif" lazyload alt="linear regression results and PCA result comparison" style="zoom:67%;"></p>
+<div class="note note-secondary">
+            <p>Coordinate shifting and weighted inner production is ignored, i.e. the variable is normalized.</p>
+          </div>
+<h3 id="pca-and-model-reduction">PCA and model reduction</h3>
+<p>Slightly different from last subsection, intuatively, what PCA does is to find a rotation of the coordinate s.t. as much variance as possible is represented in one direction of the new coordinate system.</p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/Rotation of coordinate of PCA.png" srcset="/img/loading.gif" lazyload alt="Rotation of coordinate of PCA, from Tim Colonius's lecture" style="zoom:67%;"></p>
+<p>Actually the main area of PCA is not regression, but the model reduction. In a random system, the variance means information. And according to the intuitive definition, PCA holds the most variance, as well as the most information in one direction. So if one wants to represent/approximate the data in an 1D coordinate, instead of 2D as before. The best coordinate is the dominant direction found by PCA. And what they do next is projecting the 2D data onto the coordinate.</p>
+<p>Of course, nobody reduces data from 2D to 1D, usually people are talking about reduce order in the contexts of</p>
+<ol type="1">
+<li>M dimension vector space -&gt; N (100-1000) dimension vector space</li>
+<li>M dimension random variables -&gt; N (100-1000) dimension random variables</li>
+<li>Infinite dimension space (Hilbert space) -&gt; finite dimension system</li>
+<li>Discretization of PDE</li>
+</ol>
+<p>And the method is renamed as SVD, PCA, POD, and {spectral, spectral collocation, spectral-element, and finite-element}, in above contexts respectively. But the underlying ideas are the same.</p>
+<div class="note note-info">
+            <p>Technically, SVD dentoes the algorithm used by PCA and POD to find the basis of the decomposition. For the diecretization methods, a human defined basis is selected, instead of obtained by SVD as before.</p><p>Here are more names for SVD in other fields: Hotelling analysis, empirical component analysis, quasiharmonic modes, empirical eigenfunction decomposition and so on.</p><p>For more of information: see Ref.<sup id="fnref:8" class="footnote-ref"><a href="#fn:8" rel="footnote"><span class="hint--top hint--rounded" aria-label="Holmes, P., Lumley, J. L., Berkooz, G., and Rowley, C. W., Turbulence, coherent structures, dynamical systems and symmetry, Cambridge Univ. Press, 2nd ed., 2012.">[8]</span></a></sup> and Ref.<sup id="fnref:9" class="footnote-ref"><a href="#fn:9" rel="footnote"><span class="hint--top hint--rounded" aria-label="Berkooz, G., Holmes, P., and Lumley, J. L., “The proper orthogonal decomposition in the analysis of turbulent flows,” Annu. Rev. Fluid Mech., Vol. 25, 1993, pp. 539–575.">[9]</span></a></sup>.</p>
+          </div>
+<h2 id="model-reduction">Model reduction</h2>
+<p>Same approaches can be generalized as:</p>
+<ol type="1">
+<li>define inner product</li>
+<li>define representation in subspace spanned by orthogonal basis/trail vectors and the resultant residual/error compared to the original space</li>
+<li>define test/weight vectors and require them orthogonal (or oblique orthogonal) to the error (let the inner product of the test vector and the error equals to 0)</li>
+<li>rearranging and define the representations of basis, parameters, and projection matrix</li>
+</ol>
+<p>We are going to apply this process on different kinds of spaces.</p>
+<h3 id="finite-dimensional-vector-space">Finite dimensional vector space</h3>
+<p>Consider a vector space <span class="math inline">\(\mathbf{X}\in\mathbb{R}^m\)</span> as <span class="math inline">\(\mathbf{X}=\left[\begin{array}{llll}x_1 &amp; x_2 &amp; \ldots &amp; x_m\end{array}\right]^T\)</span></p>
+<ol type="1">
+<li><p>inner product of arbitrary vectors <span class="math inline">\(\mathbf{u}\in \mathbb{R}^m\)</span> and <span class="math inline">\(\mathbf{v}\in \mathbb{R}^m\)</span> is defined simply as: <span class="math display">\[
+(\mathbf{u}, \mathbf{v})=\mathbf{v}^T \mathbf{u}
+\]</span></p></li>
+<li><p>The reduced-order representation of <span class="math inline">\(\mathbf{X}\in \mathbb{R}^m\)</span> is always defined as: <span class="math display">\[
+\tilde{\mathbf{X}}=\sum_{i=1}^p \alpha_i \boldsymbol{\phi}_i=\boldsymbol{\Phi} \boldsymbol{\alpha},\qquad \tilde{\mathbf{X}}\in\mathbb{R}^{m}, \mathbf{\Phi}\in\mathbb{R}^{m\times p}, \boldsymbol{\alpha}\in\mathbb{R}^{p}
+\]</span> where the basis <span class="math inline">\(\mathbf{\Phi}=\left[\begin{array}{llll}\phi_1 &amp; \phi_2 &amp; \ldots &amp; \phi_p\end{array}\right]\)</span></p>
+<p>And the error is considered as: <span class="math display">\[
+\boldsymbol{\epsilon} = \mathbf{X}-\tilde{\mathbf{X}}, \qquad \boldsymbol{\epsilon}\in\mathbb{R}^{m}
+\]</span> note that <span class="math inline">\(n\)</span> dimensional does not expand the <span class="math inline">\(m\)</span> dimensional space. Unless <span class="math inline">\(m=p\)</span>, we cannot make the error zero everywhere. The exact equality requirment can be loosened by introducing a test vector as shown below.</p></li>
+<li><p>Define a set of <span class="math inline">\(p\)</span> test/weight vectors <span class="math inline">\(\boldsymbol{\Psi}\)</span>, and require them to be orthogonal to the residual (error), letting the inner product of the test vecror and the error equals to 0 <span class="math display">\[
+(\boldsymbol{\Psi}, \boldsymbol{\epsilon})=\boldsymbol{\Psi}^T\boldsymbol{\epsilon} =0,\qquad \mathbf{\Psi}\in\mathbb{R}^{m\times p}
+\]</span> where <span class="math inline">\(\boldsymbol{\Psi}=\left[\begin{array}{llll}\psi_1 &amp; \psi_2 &amp; \ldots &amp; \psi_p\end{array}\right]\)</span> refers to the plane that the system is projected to. We require the error to be zero in the projected sub space, instead of exact zero error everywhere.</p></li>
+<li><p>rearranging the last representation: <span class="math display">\[
+\begin{aligned}
+\boldsymbol{\Psi}^T(\mathbf{X}-\tilde{\mathbf{X}}) &amp;=0 \\
+\boldsymbol{\Psi}^T \mathbf{X} &amp;=\boldsymbol{\Psi}^T \boldsymbol{\Phi} \boldsymbol{\alpha}
+\end{aligned}
+\]</span> <div class="note note-info">
+            <p>Note that <span class="math inline">\(\boldsymbol{\Psi}^T \boldsymbol{\Phi}\)</span> must be non-singular i.e. the null space of <span class="math inline">\(\boldsymbol{\Phi}\)</span> cannot be in the subspace <span class="math inline">\(\boldsymbol{\Psi}\)</span>.</p>
+          </div></p>
+<p>continue <span class="math display">\[
+\begin{aligned}
+\left(\boldsymbol{\Psi}^T \boldsymbol{\Phi}\right)^{-1} \boldsymbol{\Psi}^T \mathbf{X}&amp;=\boldsymbol{\alpha} \\
+\boldsymbol{\Phi}\left(\boldsymbol{\Psi}^T \boldsymbol{\Phi}\right)^{-1} \boldsymbol{\Psi}^T \mathbf{X}&amp;=\boldsymbol{\Phi} \boldsymbol{\alpha}=\tilde{\mathbf{X}} \\
+\mathbf{P X}&amp;=\tilde{\mathbf{X}} \\
+\text { where } \mathbf{P}&amp;=\boldsymbol{\Phi}\left(\boldsymbol{\Psi}^T \boldsymbol{\Phi}\right)^{-1} \boldsymbol{\Psi}^T
+\end{aligned}
+\]</span> <span class="math inline">\(\mathbf{P}\)</span> refers to the projection matrix, projecting <span class="math inline">\(m\)</span> dimensional space into <span class="math inline">\(p\)</span> dimensional sub space.</p>
+<div class="note note-info">
+            <p>Note the projection matrix holds the property as <span class="math inline">\(\mathbf{P}^2=\mathbf{P}\)</span></p>
+          </div>
+<p>Now we can gathered what we have so far: <span class="math display">\[
+\begin{aligned}
+\tilde{\mathbf{X}}&amp;=\boldsymbol{\Phi} \boldsymbol{\alpha}\\
+\mathbf{P X}&amp;=\tilde{\mathbf{X}} \\
+\text { where } \mathbf{P}&amp;=\boldsymbol{\Phi}\left(\boldsymbol{\Psi}^T \boldsymbol{\Phi}\right)^{-1} \boldsymbol{\Psi}^T \\
+\text { and } \boldsymbol{\alpha} &amp;=\left(\boldsymbol{\Psi}^T \boldsymbol{\Phi}\right)^{-1} \boldsymbol{\Psi}^T \mathbf{X}
+\end{aligned}
+\]</span> Treat this as a system of functions, since we know <span class="math inline">\(\mathbf{X}\)</span>, the system is closed if we define the test function <span class="math inline">\(\boldsymbol{\Psi}\)</span> and the basis <span class="math inline">\(\mathbf{\Phi}\)</span>.</p>
+<p>There are several ways of choosing <span class="math inline">\(\mathbf{\Phi}\)</span> and <span class="math inline">\(\mathbf{\Psi}\)</span>, here we only present one of them.</p>
+<ul>
+<li>Orthogonal/Galerkin projection, letting <span class="math inline">\(\boldsymbol{\Psi}=\boldsymbol{\Phi}\)</span> i.e. letting error <span class="math inline">\(\boldsymbol{\alpha}\)</span> orthogonal to the subspace <span class="math inline">\(\boldsymbol{\Phi}\)</span></li>
+<li>Orthonormal basis, <span class="math inline">\(\boldsymbol{\Phi}\)</span> is chosen as orthonormal i.e. <span class="math inline">\(\boldsymbol{\Phi}^T\boldsymbol{\Phi}=\mathbf{I}\)</span></li>
+</ul>
+<p>In this case, the representation <span class="math inline">\(\mathbf{P}\)</span> and <span class="math inline">\(\boldsymbol{\alpha}\)</span> are simplified as: <span class="math display">\[
+\begin{aligned}
+   \mathbf{P}^\bot&amp;=\boldsymbol{\Phi}\boldsymbol{\Phi}^T \\
+   \boldsymbol{\alpha} &amp;=\boldsymbol{\Phi}^T \mathbf{X}
+   \end{aligned}
+\]</span> Galerkin projection has some very good properties:</p>
+<ul>
+<li>minimum length (norm) of the error <span class="math inline">\(\boldsymbol{\epsilon}^T\boldsymbol{\epsilon}\)</span> based on the basis</li>
+<li>same as the standard least square solution to the over-constrained (inconsistent) system</li>
+</ul>
+<p>Still, there is an infinite number of orthonormal basis we can choose (Fourier expansion for example). But one optimal set of basis is called the (left) singular vector, can be obtained by singular vector decomposition <strong>SVD</strong> (what shown in the <a href="#pca-and-model-reduction">introduction section</a>), where <span class="math inline">\(\boldsymbol{\Phi} = \tilde{\mathbf{U}}=\left[\begin{array}{llll}U_1 &amp; U_2 &amp; \ldots &amp; U_p\end{array}\right]\)</span> is the basis (i.e. first <span class="math inline">\(p\)</span> columns of <span class="math inline">\(\mathbf{U}\)</span>) and the corresponding parameter <span class="math inline">\(\boldsymbol{\alpha} = \tilde{\boldsymbol{\Sigma}}\tilde{\mathbf{V}}^T = \tilde{\mathbf{U}}^T\mathbf{X}\)</span> if orthogonally projecting vector space <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{m}\)</span> into subspace <span class="math inline">\(\mathbb{R}^{p}\)</span></p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/SVD illustration.png" srcset="/img/loading.gif" lazyload alt="SVD illustration" style="zoom:67%;"></p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/efficient SVD.png" srcset="/img/loading.gif" lazyload alt="efficient SVD illustration" style="zoom:69%;"></p>
+<p>Note in SVD, <span class="math inline">\(\mathbf{U}\)</span> (and <span class="math inline">\(\mathbf{V}\)</span>) is unitary, as a result, if <span class="math inline">\(m=p\)</span>, <span class="math inline">\(\mathbf{P}=\mathbf{I}\)</span> and <span class="math inline">\(\mathbf{X}=\tilde{\mathbf{X}}\)</span></p>
+<p>SVD finds the subspace <span class="math inline">\(\boldsymbol{\Phi}\)</span> that maximizes the individual element of the approximation of the matrix, good for model reduction as</p>
+<blockquote>
+<p>The best approximation to a matrix (Frobenius norm) for a given rank is given by a projection into a subspace spanned by the first <span class="math inline">\(p\)</span> columns of <span class="math inline">\(\mathbf{U}\)</span></p>
+</blockquote></li>
+</ol>
+<h4 id="podpca-examples">POD/PCA examples</h4>
+<p>Here are POD analysis on two similar fluid related scenarios. We can see the flow field can be reconstructed by a small number of modes. More fascinatingly, we can see a strong resembleness of the extracted modes between these two cases, indicating a similarity of the underlying coherent structres of nearly laminar and high turbulent flows.</p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/Modal decomposition of two-dimensional incompressible flow over a flat-plate wing.png" srcset="/img/loading.gif" lazyload alt="Modal decomposition of two-dimensional incompressible flow over a flat-plate wing (Re = 100 and α = 30 deg). This example shows complex nonlinear separated flow being well represented by only two POD(PCA) unsteady modes and the mean flowfield. Visualized are the streamwise velocity profiles. From [1], quoted from [4][5]" style="zoom:67%;"></p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/Modal decomposition of three-dimensional incompressible flow over a NACA0012 airfoil.png" srcset="/img/loading.gif" lazyload alt="POD analysis of turbulent flow over a NACA0012 airfoil at Re = 23,000 and α = 9◦. Shown are the instantaneous and time-averaged streamwise velocity fields and the associated four most dominant POD modes, From [1], quoted from [6][7]" style="zoom:80%;"></p>
+<div class="note note-info">
+            <p>Note the instantaneous flow fields represents a stack of snapshotes, instead of one picture.</p>
+          </div>
+<p>POD/PCA technique is applied in a large varity of fields including fundamental analysis of fluids flows, reducedorder modeling, data compression/reconstruction, flow control, and aerodynamic design optimization. See Section III of Ref.<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Taira, K., Brunton, S. L., Dawson, S. T., Rowley, C. W., Colonius, T., McKeon, B. J., ... &amp; Ukeiley, L. S. (2017). Modal analysis of fluid flows: An overview. *Aiaa Journal*, *55*(12), 4013-4041.">[1]</span></a></sup>.</p>
+<h4 id="generalization">Generalization</h4>
+<ol type="1">
+<li><p>The real space <span class="math inline">\(\mathbb{R}^m\)</span> can be generalized seamlessly to complex space <span class="math inline">\(\mathbb{C}^m\)</span> within which the transpose of a real value vector space <span class="math inline">\(\mathbf{v}\)</span> as <span class="math inline">\(\mathbf{v}^T\)</span>becomes the Hermitian/conjugate transpose of a complex value vector as <span class="math inline">\(\mathbf{v}^*\)</span></p></li>
+<li><p>The inner product can be generalized to be weighted inner product as (in complex value space) <span class="math display">\[
+(\mathbf{u}, \mathbf{v})_{\mathbf{w}}=\mathbf{v}^* \mathbf{W} \mathbf{u}
+\]</span> where the weighting matrix <span class="math inline">\(\mathbf{W}\)</span> inside the inner product is symmetric and positive definite</p>
+<p>As a result the weighted projection matrix becomes: <span class="math display">\[
+\mathbf{P}=\boldsymbol{\Phi}\left(\boldsymbol{\Phi}^* \mathbf{W} \boldsymbol{\Phi}\right)^{-1} \boldsymbol{\Phi}^* \mathbf{W}
+\]</span> Resulting in the orthogonal projection <span class="math inline">\(\boldsymbol{\Psi}=\boldsymbol{\Phi}\)</span> to be an oblique projection as <span class="math inline">\(\boldsymbol{\Psi}=\mathbf{W}\boldsymbol{\Phi}\)</span></p></li>
+</ol>
+<h3 id="random-variables">Random variables</h3>
+<p>Lets change our context back to that of the introduction section:</p>
+<p>Consider a set of random variables <span class="math inline">\(\mathbf{x}\in\mathbb{R}^m\)</span> as <span class="math inline">\(\mathbf{x}=\left[\begin{array}{llll}x_1 &amp; x_2 &amp; \ldots &amp; x_m\end{array}\right]^T\)</span></p>
+<p>In order to reduce the order of the <span class="math inline">\(\mathbf{x}\)</span>, first we need to build a <strong>data matrix</strong> based on <span class="math inline">\(n\)</span> observations of <span class="math inline">\(\mathbf{x}\)</span>, such that <span class="math display">\[
+\mathbf{X}=\left[\begin{array}{llll}\mathbf{x^1} &amp; \mathbf{x^2} &amp; \ldots &amp; \mathbf{x^n}\end{array}\right]
+\]</span> <div class="note note-info">
+            <p>Note: <span class="math inline">\(rank(\mathbf{X})\leq min(m,n)\)</span></p><ul><li>Typical in statistics: <span class="math inline">\(n \gg m\)</span></li><li>Typical in fluid dynamics <span class="math inline">\(m \ll n\)</span></li><li>The inequality holds for repeated observations (duplicate columns) or with linear dependencies amongst data points (linear combinations of rows)</li></ul>
+          </div></p>
+<p>Center the data matrix by subtracting by the sampled expected/mean value <span class="math display">\[
+\mathbf{X_c}=\frac{1}{\sqrt{n-1}}\left[\begin{array}{llll}
+\mathbf{x}^1-\overline{\mathbf{x}} &amp; \mathbf{x}^2-\overline{\mathbf{x}} &amp; \cdots &amp; \mathbf{x}^n-\overline{\mathbf{x}}
+\end{array}\right]
+\]</span> where <span class="math inline">\(\overline{\mathbf{x}}=\frac{1}{n} \sum_{k=1}^n \mathbf{x}^k\)</span></p>
+<div class="note note-secondary">
+            <p>It is possible to get the expect value via integration over the probability space, but theoretically</p>
+          </div>
+<p>Then we can project it into a subspace, using the basis obtained by SVD (called PCA in this context) of the centered data matrix. The projection process is well illustrated above. Here we only talked about another benefit of the basis obtained by PCA.</p>
+<p>Recal efficient SVD and the projection relationship, we set <span class="math inline">\(p=rank(\mathbf{X})=rank(\mathbf{U1})\)</span> so that no information truncation is performed, we map the data matrix in terms of a "full" order space, i.e. a rotation of the coordinate. <span class="math display">\[
+\begin{aligned}
+\mathbf{X_c}&amp;=\mathbf{U_1}\boldsymbol{\Sigma_1}\mathbf{V^*_1}\\
+\mathbf{U_1}\mathbf{U_1}^*\mathbf{X_c}&amp;=\tilde{\mathbf{X_c}} \\
+\end{aligned}
+\]</span> Take the sampled covariance of the varible as: <span class="math display">\[
+\begin{aligned}
+\mathbf{C_s} &amp;= \mathbf{X_c}\mathbf{X^*_c}=\mathbf{U_1}\boldsymbol{\Sigma^2_1}\mathbf{U^*_1} \\
+\mathbf{U^*_1}\mathbf{C_s}\mathbf{U_1} &amp;= \tilde{\mathbf{X_c}}\tilde{\mathbf{X^*_c}} = \mathbf{\Sigma^2_1}\\
+\end{aligned}
+\]</span> We can see columns of <span class="math inline">\(\mathbf{U_1}\)</span> are eigenvectors of the covariance matrix, more importantly, after projection, the sampled covariance of the resultant varibles are diagonal, meas the resultant variables are un-correlated.</p>
+<p>Naturally, we can concludes that PCA</p>
+<ul>
+<li>Maximizes the total variance (trace of the covariance matrix) in the subspace</li>
+<li>Minimizes the mean-square error between vectors in the original space and their projections (approximations) in the subspace</li>
+</ul>
+<div class="note note-info">
+            <p>We can still change the inner product as weighted production, in order to scale the variables into same unit.</p>
+          </div>
+<h3 id="infinite-dimensional-function-space">Infinite dimensional (function) space</h3>
+<p>Consider a Hilbert space <span class="math inline">\(L2([a,b])\)</span>, we use the same process as <a href="#finite-dimensional-vector-space">before</a>. But the basis function is not chosen by SVD/PCA/POD.</p>
+<ol type="1">
+<li><p>Weighted inner product of two complex functions <span class="math inline">\(f(\xi), g(\xi)\)</span> are: <span class="math display">\[
+(f(\xi), g(\xi))_w=\int_a^b f(\xi) g^*(\xi) w(\xi) d \xi, \quad w(\xi) \geq 0
+\]</span></p></li>
+<li><p>For a function <span class="math inline">\(x(t, \xi)\)</span>, we can represented it into a finite dimensional space spanned by a set of basis/trail functions, <span class="math display">\[
+\phi_j(t, \xi), \qquad j=1,2,\dots, p
+\]</span> such that reduced order function <span class="math inline">\(\tilde{x}(t, \xi)\)</span> in the sub space can be expressed as: <span class="math display">\[
+\tilde{x}(t, \xi)=\sum_{j=1}^p \alpha_j \phi_j(t, \xi)
+\]</span> <div class="note note-info">
+            <p>Morden method decompose the function such that the space and time is split. <span class="math display">\[\tilde{x}(t, \xi)=\sum_{j=1}^p \alpha_j(t) \phi_j(\xi)\]</span></p>
+          </div></p></li>
+<li><p>Consider test functions <span class="math display">\[
+\psi_j(t, \xi), \qquad j=1,2,\dots, p
+\]</span> and the wighted function of error is such that <span class="math display">\[
+(\epsilon(t, \xi), \psi_j(t, \xi))_w=\int_a^b \epsilon(t, \xi) \psi^*_j(t, \xi) w(t, \xi) d \xi = 0
+\]</span> as a result: <span class="math display">\[
+\left(\tilde{x}, \psi_j\right)_w-\sum_i \alpha_i\left(\phi_i, \psi_j\right)_w=0, \quad j=1,2, \ldots, p
+\]</span> rearranging: <span class="math display">\[
+\begin{aligned}
+\mathbf{r} &amp;= \mathbf{M} \boldsymbol{\alpha}  \\
+\text{where: }\{\mathbf{r}\}_j &amp;=\left(\tilde{x}, \psi_j\right) \\
+\{\mathbf{M}\}_{j i} &amp;=\left(\phi_i, \psi_j\right)
+\end{aligned}
+\]</span></p></li>
+<li><p>Still here leaves several choices of test functions and basis functions:</p>
+<ul>
+<li><p>Choice of test functions</p>
+<ul>
+<li>Galerkin method/orthogonal projection, finite element</li>
+<li>Collocation method (non-orthogonal), finite difference</li>
+<li>Step function, finite volume</li>
+</ul></li>
+<li><p>Choice of basis function</p>
+<ul>
+<li>Fourier series / Trigonometric series, spectral methods</li>
+<li>Polynomials
+<ul>
+<li>Global, usually Chebyshev poly</li>
+<li>Local, e.g. Piecewise Polynomials
+<ul>
+<li>linear "hat/tent function" (finite element)</li>
+<li>higher order (spectral element)</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Generally to be computationally efficient, we want the matrix <span class="math inline">\(\mathbf{M}\)</span> to be sparse</p>
+<ul>
+<li><span class="math inline">\(\mathbf{M}\)</span> is diagonal for Galerkin with orthogonal basis functions</li>
+<li><span class="math inline">\(\mathbf{M}\)</span> is sparse (banded) for Galerkin/collocation with piecewise polynomials</li>
+<li><span class="math inline">\(\mathbf{M}\)</span> is diagonal for bi-orthogonal function</li>
+</ul></li>
+</ol>
+<h2 id="discretization-methods-of-pde">Discretization methods of PDE</h2>
+<p>The discretization methods of a PDE is basically mapping a dynamic system (PDE) from Hilbert space into finite dimensional space, just as illustrated above. As a result, in this section, same methods is applied on an example.</p>
+<p>Consider a 1D Poisson equation with Dirichlet and Neumann boundary condition <span class="math display">\[
+\begin{aligned}
+\mathbb{L}(u) \equiv \nabla^2u = f(\xi) &amp;\qquad\text{in } \Omega = \{\xi | 0 &lt; \xi &lt; 1\} \\
+u(0)=\mathcal{g_D}, &amp;\qquad \frac{\partial u}{\partial \xi}(1)=\mathcal{g_N}
+\end{aligned}
+\]</span> with a solution <span class="math inline">\(u\)</span> in Hilbert space.</p>
+<div class="note note-secondary">
+            <p><span class="math inline">\(u\)</span> is denotes the data variable, instead of <span class="math inline">\(x\)</span> as before. <span class="math inline">\(\xi\)</span> represents the spatial coordinates</p><p>Poisson equation is a typical elliptic PDE</p>
+          </div>
+<ol type="1">
+<li><p>Inner production in domain <span class="math inline">\(\Omega\)</span> <span class="math display">\[
+(f(\xi), g(\xi))=\int_{\Omega} f(\xi) g(\xi) d \xi
+\]</span></p></li>
+<li><p>We have a reduced order solution <span class="math inline">\(\tilde{u}(\xi)\)</span> in <span class="math inline">\(N\)</span> dimensional space spanned by basis <span class="math inline">\(\phi_i(\xi)\)</span>: <span class="math display">\[
+\tilde{u}(\xi)=\sum_{i=1}^N \hat{u}_i \phi_i(\xi)
+\]</span> and therefore <span class="math display">\[
+\tilde{\mathbb{L}}(\tilde{u}(\xi)) = \nabla^2\tilde{u}
+\]</span> and the error/residual: <span class="math display">\[
+\epsilon = \tilde{\mathbb{L}}-\mathbb{L}=  \nabla^2\tilde{u} - f(\xi)
+\]</span></p></li>
+<li><p>Consider a <span class="math inline">\(N\)</span> dimensional test function <span class="math inline">\(\Psi\)</span> spanned by <span class="math inline">\(\psi_i(\xi)\)</span>, and consider inner production of test function and error function: <span class="math display">\[
+(\Psi(\xi), \epsilon(\xi))= \int_{\Omega} \Psi(\xi) (\tilde{\mathbb{L}}(\tilde{u}(\xi))-f(\xi)) d \xi = 0
+\]</span> Above is called the <strong>weak formulation</strong>. Similar to the test vector, the test function release the "strict" requirement of an exact solution everywhere.</p></li>
+<li><p>We are going to use the finite element, so we choose the basis as a set of local linear tent functions as:</p>
+<p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/N=6, first basis function.png" srcset="/img/loading.gif" lazyload alt="N=6, i=1 basis function" style="zoom:50%;"> <span class="math display">\[
+\psi_i(\xi)= \begin{cases}\frac{\xi-\xi_{i-1}}{\xi_i-\xi_{i-1}} &amp; \text { if } \xi \in\left[\xi_{i-1}, \xi_i\right] \\ \frac{x_{i+1}-\xi}{\xi_{i+1}-\xi_i} &amp; \text { if } \xi \in\left[\xi_i, \xi_{i+1}\right] \\ 0 &amp; \text { otherwise }\end{cases}
+\]</span> <div class="note note-info">
+            <p>In such a basis, the solution is required to be exact only locally in each cell.</p>
+          </div></p>
+<p>For test function, we use Galerkin formulation as <span class="math display">\[
+\psi_j(\boldsymbol{\xi}) =\phi_j
+\]</span></p>
+<div class="note note-info">
+            <p>Different test/weight functions lead to different methods of discretization</p><p><img src="/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/Local step weight function of Finite Volume Method.png" srcset="/img/loading.gif" lazyload alt="Local step weight function of Finite Volume Method" style="zoom:25%;"> <span class="math display">\[\begin{aligned}&amp;\text { Test functions used in the method of weighted residuals}\\&amp;\begin{aligned}\hline &amp; \text { Test function } &amp; &amp; \text { Type of method } \\ &amp; &amp; &amp;\\\psi_j(\boldsymbol{\xi}) &amp;=\delta\left(\boldsymbol{\xi}-\boldsymbol{\xi}_j\right) &amp; &amp; \text { Collocation/Finite Difference } \\\psi_j(\boldsymbol{\xi}) &amp;=\left\{\begin{array}{llll}1 &amp; \text { inside } &amp; \Omega^j \\0 &amp; \text { outside } &amp; \Omega^j\end{array}\right.&amp; &amp; \text { Finite volume (subdomain） } \\\psi_j(\boldsymbol{\xi}) &amp;=\frac{\partial R}{\partial \hat{u}_j} &amp; &amp;\text { Least-squares} \\\psi_j(\boldsymbol{\xi}) &amp;=\boldsymbol{\xi}^j &amp; &amp; \text { Method of moments } \\\psi_j(\boldsymbol{\xi}) &amp;=\phi_j &amp; &amp; \text { Galerkin } \\\psi_j(\boldsymbol{\xi}) &amp;\neq \phi_j &amp; &amp; \text { Petrov-Galerkin moments } \\\hline\end{aligned}\end{aligned}\]</span></p>
+          </div></li>
+</ol>
+<h3 id="weak-formulation-of-poisson-equation">Weak formulation of Poisson equation</h3>
+<p>Now add some details, the weak formulation in step 3 should be: <span class="math display">\[
+\int_{0}^1 (\nabla^2\tilde{u}-f(\xi))\Psi(\xi) d\xi = 0
+\]</span> Use the integration by parts rule:</p>
+<p><span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial \xi} \frac{\partial \tilde{u}}{\partial \xi} d \xi=\int_0^1 \psi f d \xi+\left[\psi \frac{\partial \tilde{u}}{\partial \xi}\right]_0^1
+\]</span></p>
+<h3 id="implementation-of-boundary-conditions">Implementation of boundary conditions</h3>
+<p>As <span class="math inline">\(\psi(0)=0\)</span>, apply the Neumann boundary condition <span class="math inline">\(\frac{\partial u}{\partial \xi}(1)=\mathcal{g_N}\)</span> directly, <span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial \xi} \frac{\partial \tilde{u}}{\partial \xi} d \xi=\int_0^1 \psi f d \xi+\psi(1) {\mathcal{g_N}}
+\]</span> For the Dirichlet boundary <span class="math inline">\(u(0)=\mathcal{g_D}\)</span>, it cannot be implemented directly. Instead, this can treat as an inhomogeneity part of the solution, such as: <span class="math display">\[
+\tilde{u}=\tilde{u}^\mathcal{H}+\tilde{u}^\mathcal{D}
+\]</span> where <span class="math inline">\(\tilde{u}^\mathcal{H}\)</span> and <span class="math inline">\(\tilde{u}^\mathcal{D}\)</span> denote the homogenize and inhomogenize part respectively, and we have: <span class="math display">\[
+\tilde{u}^\mathcal{H}(0) = 0 \qquad \tilde{u}^\mathcal{D}(0) = \mathcal{g_D}
+\]</span> Plug into the formulation as: <span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial \xi} \frac{\partial \tilde{u}^\mathcal{H}}{\partial \xi} d \xi + \int_0^1 \frac{\partial \psi}{\partial \xi} \frac{\partial \tilde{u}^\mathcal{D}}{\partial \xi} d \xi=\int_0^1 \psi f d \xi+\psi(1) {\mathcal{g_N}}
+\]</span> As a result, the finite element form of the PDE is: <span class="math display">\[
+\int_0^1 \frac{\partial \psi}{\partial \xi} \frac{\partial \tilde{u}^\mathcal{H}}{\partial \xi} d \xi =\int_0^1 \psi f d \xi+\underbrace{\psi(1) {\mathcal{g_N}}}_{Neumann} - \underbrace{\int_0^1 \frac{\partial \psi}{\partial \xi} \frac{\partial \tilde{u}^\mathcal{D}}{\partial \xi} d\xi }_{Dirichlet}
+\]</span> And the <span class="math inline">\(\tilde{u}\)</span> can be solved by solving the ODE.</p>
+<div class="note note-info">
+            <p>In the <span class="math inline">\(h-type\)</span> method a fixed order polynomial is used in every element and convergence is achieved by reducing the size of the elements. <span class="math inline">\(h\)</span> represents the characteristic size of an element.</p><p>In the <span class="math inline">\(p-type\)</span> method a fixed mesh is used and convergence is achieved by increasing the order of the polynomial every element. <span class="math inline">\(p\)</span> represents the polynomial order in the elements.</p><p>In the <span class="math inline">\(spectral\)</span> method is the <span class="math inline">\(p-type\)</span> method but the whole solution domain is treated as a single element.</p><p>The <span class="math inline">\(hp-element\)</span> method combines attributes from both of these methods.</p>
+          </div>
+<h2 id="reference">Reference</h2>
+<section class="footnotes">
+<div class="footnote-list">
+<ol>
+<li>
+<span id="fn:1" class="footnote-text"><span>Taira, K., Brunton, S. L., Dawson, S. T., Rowley, C. W., Colonius, T., McKeon, B. J., ... &amp; Ukeiley, L. S. (2017). Modal analysis of fluid flows: An overview. <em>Aiaa Journal</em>, <em>55</em>(12), 4013-4041. <a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:2" class="footnote-text"><span>Taira, K., Hemati, M. S., Brunton, S. L., Sun, Y., Duraisamy, K., Bagheri, S., ... &amp; Yeh, C. A. (2020). Modal analysis of fluid flows: Applications and outlook. <em>AIAA journal</em>, <em>58</em>(3), 998-1022. Archive V2 <a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:3" class="footnote-text"><span>Rowley, C. W., &amp; Dawson, S. T. (2017). Model reduction for flow analysis and control. <em>Annu. Rev. Fluid Mech</em>, <em>49</em>(1), 387-417. <a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:4" class="footnote-text"><span>Taira, K. and Colonius, T., “Three-dimensional flows around low-aspect-ratio flat-plate wings at low Reynolds numbers,” J. Fluid Mech., Vol. 623, 2009, pp. 187–207. 26 <a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:5" class="footnote-text"><span>Colonius, T. and Taira, K., “A fast immersed boundary method using a nullspace approach and multi-domain far-field boundary conditions,” Comput. Methods Appl. Mech. Engrg., Vol. 197, 2008, pp. 2131–2146. <a href="#fnref:5" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:6" class="footnote-text"><span>Kajishima, T. and Taira, K., Computational fluid dynamics: incompressible turbulent flows, Springer, 2017. <a href="#fnref:6" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:7" class="footnote-text"><span>Munday, P. M. and Taira, K., “Quantifying wall-normal and angular momentum injections in airfoil separation control,” AIAA J., 2017 (in review). <a href="#fnref:7" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:8" class="footnote-text"><span>Holmes, P., Lumley, J. L., Berkooz, G., and Rowley, C. W., Turbulence, coherent structures, dynamical systems and symmetry, Cambridge Univ. Press, 2nd ed., 2012. <a href="#fnref:8" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+<li>
+<span id="fn:9" class="footnote-text"><span>Berkooz, G., Holmes, P., and Lumley, J. L., “The proper orthogonal decomposition in the analysis of turbulent flows,” Annu. Rev. Fluid Mech., Vol. 25, 1993, pp. 539–575. <a href="#fnref:9" rev="footnote" class="footnote-backref"> ↩︎</a></span></span>
+</li>
+</ol>
+</div>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/fluid-dynamics/">#fluid dynamics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>from ROMs to Discretization Methods</div>
+      <div>https://daydreamatnight.github.io/2022/10/21/from-Reduce-Order-Models-to-Discretization-Methods/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 21, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/02/Autoencoder-identical-to-POD/" title="Autoencoder identical to POD">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Autoencoder identical to POD</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/02/paraview-web-server/" title="paraview web server">
+                        <span class="hidden-mobile">paraview web server</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

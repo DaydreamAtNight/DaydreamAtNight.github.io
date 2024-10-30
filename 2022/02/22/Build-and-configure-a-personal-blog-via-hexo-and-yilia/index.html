@@ -1,0 +1,1581 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Technical blog has a hundred benefits and no harm This blog records the process of building and customizing this personal blog from 0 to 1   Unfortunately, the yilia theme has been no longer updating">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build and configure a personal blog via hexo and yilia on github">
+<meta property="og:url" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Technical blog has a hundred benefits and no harm This blog records the process of building and customizing this personal blog from 0 to 1   Unfortunately, the yilia theme has been no longer updating">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/node%20js%20install.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/github%20page.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/typora%20setting.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/check%20google%20search.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/google%20search%20console.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/google%20console%20varification.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/can">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Google%20sitemap%20inspect.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Google%20sitemap%20inspect%202.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Google%20sitemap%20inspect%203.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/bing%20sitemap.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/being%20sitemap%20connect%20google.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/bing%20search%20console%20success.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu%20console.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu%20console%20varification.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu%20console%20sitemap.png">
+<meta property="og:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Last%20snapshot.png">
+<meta property="article:published_time" content="2022-02-22T08:15:03.000Z">
+<meta property="article:modified_time" content="2022-05-28T03:51:04.561Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/node%20js%20install.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Build and configure a personal blog via hexo and yilia on github - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/marble1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Build and configure a personal blog via hexo and yilia on github"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-22 16:15" pubdate>
+          February 22, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          30k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          100 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Build and configure a personal blog via hexo and yilia on github</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>Technical blog has a hundred benefits and no harm</p>
+<p>This blog records the process of building and customizing this personal blog from 0 to 1</p>
+</blockquote>
+<blockquote>
+<p>Unfortunately, the yilia theme has been no longer updating and it is too buggy right now. I switch to <a href="/2022/04/30/Switch-blog-theme-to-FLUID/">other theme.</a></p>
+</blockquote>
+<span id="more"></span>
+<h2 id="preliminary">Preliminary</h2>
+<h3 id="why-personal-blog">Why personal blog</h3>
+<blockquote>
+<p>Keeping a technical blog can be <strong>a great way of documenting your growth as a developer</strong>. This documentation can be particularly useful on a professional level. All software companies want to hire smart, thoughtful, communicative developers who can easily assimilate into a team, and who are ready to both teach and learn</p>
+</blockquote>
+<h3 id="static-vs-dynamic-blog">Static vs dynamic blog</h3>
+<p>there are 2 types of mainstream personal blog: static and dynamic.</p>
+<p>Static is recommended considering its simplicity, 0 maintenance and 0 safety worry.</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Static blog</th>
+<th style="text-align: left;">Dynamic blog</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Price</td>
+<td style="text-align: left;">low, 0 cost when the traffic is relatively low</td>
+<td style="text-align: left;">High, server is needed, cloud server of high performance is usually very expensive.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Features</td>
+<td style="text-align: left;">Limited, only third-party services can be used to complete certain "dynamic" functions, such as comments</td>
+<td style="text-align: left;">Rich, in WordPress for example, basically any kind of plugins can be found. Featuers such as auto-resizing, media players, multiple authors, scheduled posts, user analysis can be easily realize.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Speed</td>
+<td style="text-align: left;">Fast</td>
+<td style="text-align: left;">Slow</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Maintainance</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Need to care about the sever</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Markdown</td>
+<td style="text-align: left;">Supported yet it's the only choice</td>
+<td style="text-align: left;">not supported</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Geeky</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;">No</td>
+</tr>
+</tbody>
+</table>
+<p>And I also chose static because I'm geeky (poor of money) and results-driven (lazy to spend time on maintaining).</p>
+<h2 id="build-a-static-blog-via-hexo">Build a static blog via hexo</h2>
+<h3 id="set-environment">Set environment</h3>
+<p>1.check machine information: macOS on M1 MacBook</p>
+<p>2.Install Nodejs, including node and npm</p>
+<p>open https://nodejs.org/en/download/ and click download</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/node js install.png" srcset="/img/loading.gif" lazyload alt="node js install" style="zoom:50%;"></p>
+<p>3.Install Git</p>
+<p>Aready installed</p>
+<p>4.Open terminal, check node, npm and git versions</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">npm -v</span>
+<span class="hljs-meta">$ </span><span class="language-bash">node -v</span>
+<span class="hljs-meta">$ </span><span class="language-bash">git --version</span>
+8.3.1
+v16.14.0
+git version 2.32.0 (Apple Git-132)</code></pre></div>
+<h3 id="initialize-blog">Initialize blog</h3>
+<p>1.install hexo via npm</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">sudo npm install -g hexo-cli</span>
+<span class="hljs-meta">$ </span><span class="language-bash">hexo -v</span>
+INFO  Validating config
+hexo: 6.0.0
+hexo-cli: 4.3.0
+os: darwin 21.2.0 12.1
+
+node: 16.14.0
+v8: 9.4.146.24-node.20
+uv: 1.43.0
+zlib: 1.2.11
+brotli: 1.0.9
+ares: 1.18.1
+modules: 93
+nghttp2: 1.45.1
+napi: 8
+llhttp: 6.0.4
+openssl: 1.1.1m+quic
+cldr: 40.0
+icu: 70.1
+tz: 2021a3
+unicode: 14.0
+ngtcp2: 0.1.0-DEV
+nghttp3: 0.1.0-DEV</code></pre></div>
+<p>2.create a new folder in terminal and initialize the blog</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> ~/Documents/</span>
+<span class="hljs-meta">$ </span><span class="language-bash">makedir self_blog</span>
+<span class="hljs-meta">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> self_blog/</span>
+<span class="hljs-meta">$ </span><span class="language-bash">hexo init</span>
+INFO  Cloning hexo-starter https://github.com/hexojs/hexo-starter.gitINFO  Install dependencies⸨#########⠂⠂⠂⠂⠂⠂⠂⠂⠂⸩ ⠹ idealTree:hexo-front-matter: timing idealTree:node_modules/hexo-front-matter Completed in 212msINFO  Start blogging with Hexo!</code></pre></div>
+<p>3.view the blog on localhost, s for start</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">hexo s</span>
+INFO  Validating config
+INFO  Start processing
+INFO  Hexo is running at http://localhost:4000/ . Press Ctrl+C to stop.</code></pre></div>
+<h3 id="write-first-blog">Write first blog</h3>
+<p>1.write a new blog, n for new</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">hexo n <span class="hljs-string">&#x27;Hello ShouRou&#x27;</span></span>
+INFO  Validating config
+INFO  Created: ~/Documents/self_blog/source/_posts/Hello-ShouRou.md</code></pre></div>
+<p>the blog can be written on any editor, Typora in use.</p>
+<div class="code-wrapper"><pre><code class="hljs shell">open ~/Documents/self_blog/source/_posts/Hello-ShouRou.md</code></pre></div>
+<p>2.clean cache(not necessary)</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">hexo clean</span></code></pre></div>
+<p>3.generate the blog, g for generate</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">hexo g</span>
+INFO  Validating config
+INFO  Start processing
+INFO  Files loaded in 61 ms
+(node:10719) Warning: Accessing non-existent property &#x27;lineno&#x27; of module exports inside circular dependency
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10719) Warning: Accessing non-existent property &#x27;column&#x27; of module exports inside circular dependency
+(node:10719) Warning: Accessing non-existent property &#x27;filename&#x27; of module exports inside circular dependency
+(node:10719) Warning: Accessing non-existent property &#x27;lineno&#x27; of module exports inside circular dependency
+(node:10719) Warning: Accessing non-existent property &#x27;column&#x27; of module exports inside circular dependency
+(node:10719) Warning: Accessing non-existent property &#x27;filename&#x27; of module exports inside circular dependency
+INFO  Generated: archives/2022/index.html
+INFO  Generated: archives/index.html
+INFO  Generated: js/script.js
+INFO  Generated: fancybox/jquery.fancybox.min.css
+INFO  Generated: index.html
+INFO  Generated: css/style.css
+INFO  Generated: css/fonts/fontawesome-webfont.woff2
+INFO  Generated: fancybox/jquery.fancybox.min.js
+INFO  Generated: js/jquery-3.4.1.min.js
+INFO  Generated: archives/2022/02/index.html
+INFO  Generated: css/fonts/FontAwesome.otf
+INFO  Generated: css/fonts/fontawesome-webfont.woff
+INFO  Generated: css/fonts/fontawesome-webfont.eot
+INFO  Generated: css/fonts/fontawesome-webfont.ttf
+INFO  Generated: css/images/banner.jpg
+INFO  Generated: 2022/02/22/hello-world/index.html
+INFO  Generated: css/fonts/fontawesome-webfont.svg
+INFO  Generated: 2022/02/22/Hello-ShouRou/index.html
+INFO  18 files generated in 161 ms</code></pre></div>
+<h3 id="deploy-to-remote-github">Deploy to remote (GitHub)</h3>
+<p>1.Create a new repository with the name of $username.github.io</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/github page.png" srcset="/img/loading.gif" lazyload alt="github page" style="zoom:50%;"></p>
+<p>use default setting</p>
+<p>2.open terminal, install plugin of deploying to git</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">npm install --save hexo-deployer-git</span></code></pre></div>
+<p>3.Open the <code>_config.yml</code> file in the blog <code>root</code> directory, add these lines afterwards</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-attr">deploy:</span>
+ <span class="hljs-attr">type:</span> <span class="hljs-string">git</span>
+ <span class="hljs-attr">repo:</span> <span class="hljs-string">git@github.com:DaydreamAtNight/DaydreamAtNight.github.io.git</span>
+ <span class="hljs-attr">branch:</span> <span class="hljs-string">master</span></code></pre></div>
+<p>4.Go to the blog <code>root</code>, deploy the blog to remote, d for deploy</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">hexo clean</span>
+<span class="hljs-meta">$ </span><span class="language-bash">hexo g</span>
+<span class="hljs-meta">$ </span><span class="language-bash">hexo d</span></code></pre></div>
+<p>Open https://daydreamatnight.github.io/ to see if it works</p>
+<h2 id="change-theme-to-yilia">Change theme to yilia</h2>
+<p>default theme of hexo is called landscape and it's not beautiful enough to most of the people. Yilia is a fast, simple, elegant and popular theme. Thought it has not been updated since Nov 2017, it still a good choice for fresh bloggers.</p>
+<h3 id="download-and-deploy-yilia">Download and deploy yilia</h3>
+<p>1.go to the blog <code>root</code></p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/litten/hexo-theme-yilia theme/yilia</span></code></pre></div>
+<p>2.eidt the <code>_config.yml</code> file, add</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-attr">theme:</span> <span class="hljs-string">yilia</span></code></pre></div>
+<p>3.clean and deploy hexo</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">hexo clean</span>
+<span class="hljs-meta">$ </span><span class="language-bash">hexo g</span>
+<span class="hljs-meta">$ </span><span class="language-bash">hexo d</span></code></pre></div>
+<h3 id="basic-customize-yillia">Basic customize yillia</h3>
+<h4 id="activate-aboutme-left-slider-button">Activate <code>aboutme</code> ‘left slider’ button</h4>
+<p>1.go to terminal run</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">npm i hexo-generator-json-content --save</span></code></pre></div>
+<p>2.go to the blog <code>root</code> directory, add these lines to the <code>_config.yml</code> file</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-attr">jsonContent:</span>
+    <span class="hljs-attr">meta:</span> <span class="hljs-literal">false</span>
+    <span class="hljs-attr">pages:</span> <span class="hljs-literal">false</span>
+    <span class="hljs-attr">posts:</span>
+      <span class="hljs-attr">title:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">date:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">path:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">text:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">raw:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">content:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">slug:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">updated:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">comments:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">link:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">permalink:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">excerpt:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">categories:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">tags:</span> <span class="hljs-literal">true</span></code></pre></div>
+<h4 id="customize-avatar">Customize avatar</h4>
+<p>put the avatar file in directory <code>themes/yilia/source/img</code></p>
+<blockquote>
+<p>do not add to the public repository directly, or the img get cleaned every time running <code>hexo clean</code> , need to upload to the same dir again after this command.</p>
+</blockquote>
+<h4 id="set-favicon-icon-on-the-tab-of-website">Set favicon (icon on the tab of website)</h4>
+<p>put the favicon img in directory <code>themes/yilia/source/img</code></p>
+<p><a target="_blank" rel="noopener" href="https://www.bitbug.net/">Bitbug</a> is a way of converting image into .ico file.</p>
+<h4 id="other-configuration">Other configuration</h4>
+<p>Set file of yillia is in <code>themes/yilia/_config.yml</code> as:</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-comment"># Header</span>
+<span class="hljs-attr">author:</span> <span class="hljs-string">Ryan</span> <span class="hljs-string">LI</span>
+<span class="hljs-attr">subtitle:</span> <span class="hljs-string">&#x27;Daydreaming at night&#x27;</span>
+<span class="hljs-attr">menu:</span>
+  <span class="hljs-attr">main:</span> <span class="hljs-string">/</span>
+  <span class="hljs-attr">archives:</span> <span class="hljs-string">/archives/index.html</span>
+  <span class="hljs-attr">learn:</span> <span class="hljs-string">/tags/learn/</span>
+
+<span class="hljs-comment"># SubNav</span>
+<span class="hljs-attr">subnav:</span>
+  <span class="hljs-attr">github:</span> <span class="hljs-string">&quot;https://github.com/DaydreamAtNight&quot;</span>
+  <span class="hljs-comment"># weibo: &quot;#&quot;</span>
+  <span class="hljs-comment"># rss: &quot;#&quot;</span>
+  <span class="hljs-comment"># zhihu: &quot;#&quot;</span>
+  <span class="hljs-comment">#qq: &quot;#&quot;</span>
+  <span class="hljs-comment">#weixin: &quot;#&quot;</span>
+  <span class="hljs-comment">#jianshu: &quot;#&quot;</span>
+  <span class="hljs-comment">#douban: &quot;#&quot;</span>
+  <span class="hljs-comment">#segmentfault: &quot;#&quot;</span>
+  <span class="hljs-comment">#bilibili: &quot;#&quot;</span>
+  <span class="hljs-comment">#acfun: &quot;#&quot;</span>
+  <span class="hljs-attr">mail:</span> <span class="hljs-string">&quot;mailto:lishoushou2019@gmail.com&quot;</span>
+  <span class="hljs-comment">#facebook: &quot;#&quot;</span>
+  <span class="hljs-comment">#google: &quot;#&quot;</span>
+  <span class="hljs-comment">#twitter: &quot;#&quot;</span>
+  <span class="hljs-comment">#linkedin: &quot;#&quot;</span>
+
+<span class="hljs-attr">rss:</span> <span class="hljs-string">/atom.xml</span>
+
+<span class="hljs-comment"># 是否需要修改 root 路径</span>
+<span class="hljs-comment"># 如果您的网站存放在子目录中，例如 http://yoursite.com/blog，</span>
+<span class="hljs-comment"># 请将您的 url 设为 http://yoursite.com/blog 并把 root 设为 /blog/。</span>
+<span class="hljs-attr">root:</span> <span class="hljs-string">/</span>
+
+<span class="hljs-comment"># Content</span>
+
+<span class="hljs-comment"># 文章太长，截断按钮文字</span>
+<span class="hljs-comment"># excerpt_link: more</span>
+<span class="hljs-comment"># 文章卡片右下角常驻链接，不需要请设置为false</span>
+<span class="hljs-attr">show_all_link:</span> <span class="hljs-string">&#x27;show all&#x27;</span>
+<span class="hljs-comment"># 数学公式</span>
+<span class="hljs-attr">mathjax:</span> <span class="hljs-literal">false</span>
+<span class="hljs-comment"># 是否在新窗口打开链接</span>
+<span class="hljs-attr">open_in_new:</span> <span class="hljs-literal">false</span>
+
+<span class="hljs-comment"># 打赏</span>
+<span class="hljs-comment"># 打赏type设定：0-关闭打赏； 1-文章对应的md文件里有reward:true属性，才有打赏； 2-所有文章均有打赏</span>
+<span class="hljs-attr">reward_type:</span> <span class="hljs-number">0</span>
+<span class="hljs-comment"># # 打赏wording</span>
+<span class="hljs-comment"># reward_wording: &#x27;谢谢你请我吃糖果&#x27;</span>
+<span class="hljs-comment"># # 支二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg</span>
+<span class="hljs-comment"># alipay: </span>
+<span class="hljs-comment"># # 微信二维码图片地址</span>
+<span class="hljs-comment"># weixin: </span>
+
+<span class="hljs-comment"># 目录</span>
+<span class="hljs-comment"># 目录设定：0-不显示目录； 1-文章对应的md文件里有toc:true属性，才有目录； 2-所有文章均显示目录</span>
+<span class="hljs-attr">toc:</span> <span class="hljs-number">1</span>
+<span class="hljs-comment"># 根据自己的习惯来设置，如果你的目录标题习惯有标号，置为true即可隐藏hexo重复的序号；否则置为false</span>
+<span class="hljs-attr">toc_hide_index:</span> <span class="hljs-literal">true</span>
+<span class="hljs-comment"># 目录为空时的提示</span>
+<span class="hljs-attr">toc_empty_wording:</span> <span class="hljs-string">&#x27;directery none exist&#x27;</span>
+
+<span class="hljs-comment"># 是否有快速回到顶部的按钮</span>
+<span class="hljs-attr">top:</span> <span class="hljs-literal">true</span>
+
+<span class="hljs-comment"># Miscellaneous</span>
+<span class="hljs-attr">baidu_analytics:</span> <span class="hljs-string">&#x27;&#x27;</span>
+<span class="hljs-attr">google_analytics:</span> <span class="hljs-string">&#x27;&#x27;</span>
+<span class="hljs-attr">favicon:</span> <span class="hljs-string">/img/favicon.ico</span>
+
+<span class="hljs-comment">#你的头像url</span>
+<span class="hljs-attr">avatar:</span> <span class="hljs-string">/img/avatar.jpeg</span>
+
+<span class="hljs-comment">#是否开启分享</span>
+<span class="hljs-comment"># share_jia: true</span>
+
+<span class="hljs-comment"># #评论：1、多说；2、网易云跟帖；3、畅言；4、Disqus；5、Gitment</span>
+<span class="hljs-comment"># #不需要使用某项，直接设置值为false，或注释掉</span>
+<span class="hljs-comment"># #具体请参考wiki：https://github.com/litten/hexo-theme-yilia/wiki/</span>
+
+<span class="hljs-comment"># #1、多说</span>
+<span class="hljs-comment"># duoshuo: false</span>
+
+<span class="hljs-comment"># #2、网易云跟帖</span>
+<span class="hljs-comment"># wangyiyun: false</span>
+
+<span class="hljs-comment"># #3、畅言</span>
+<span class="hljs-comment"># changyan_appid: false</span>
+<span class="hljs-comment"># changyan_conf: false</span>
+
+<span class="hljs-comment"># #4、Disqus 在hexo根目录的config里也有disqus_shortname字段，优先使用yilia的</span>
+<span class="hljs-comment"># disqus: false</span>
+
+<span class="hljs-comment"># #5、Gitment</span>
+<span class="hljs-comment"># gitment_owner: false      #你的 GitHub ID</span>
+<span class="hljs-comment"># gitment_repo: &#x27;&#x27;          #存储评论的 repo</span>
+<span class="hljs-comment"># gitment_oauth:</span>
+<span class="hljs-comment">#   client_id: &#x27;&#x27;           #client ID</span>
+<span class="hljs-comment">#   client_secret: &#x27;&#x27;       #client secret</span>
+
+<span class="hljs-comment"># 样式定制 - 一般不需要修改，除非有很强的定制欲望…</span>
+<span class="hljs-attr">style:</span>
+  <span class="hljs-comment"># 头像上面的背景颜色</span>
+  <span class="hljs-attr">header:</span> <span class="hljs-string">&#x27;#ece0cf&#x27;</span>
+  <span class="hljs-comment"># 右滑板块背景</span>
+  <span class="hljs-attr">slider:</span> <span class="hljs-string">&#x27;linear-gradient(45deg,#b4a698,#ece0cf)&#x27;</span>
+
+<span class="hljs-comment"># slider的设置</span>
+<span class="hljs-attr">slider:</span>
+  <span class="hljs-comment"># 是否默认展开tags板块</span>
+  <span class="hljs-attr">showTags:</span> <span class="hljs-literal">false</span>
+
+<span class="hljs-comment"># 智能菜单</span>
+<span class="hljs-comment"># 如不需要，将该对应项置为false</span>
+<span class="hljs-comment"># 比如</span>
+<span class="hljs-comment">#smart_menu:</span>
+<span class="hljs-comment">#  friends: false</span>
+<span class="hljs-attr">smart_menu:</span>
+  <span class="hljs-attr">innerArchive:</span> <span class="hljs-string">&#x27;All articles&#x27;</span>
+  <span class="hljs-comment"># friends: &#x27;友链&#x27;</span>
+  <span class="hljs-attr">aboutme:</span> <span class="hljs-string">&#x27;About me&#x27;</span>
+
+<span class="hljs-comment"># friends:</span>
+<span class="hljs-comment">#   友情链接1: http://localhost:4000/</span>
+<span class="hljs-comment">#   友情链接2: http://localhost:4000/</span>
+<span class="hljs-comment">#   友情链接3: http://localhost:4000/</span>
+<span class="hljs-comment">#   友情链接4: http://localhost:4000/</span>
+<span class="hljs-comment">#   友情链接5: http://localhost:4000/</span>
+<span class="hljs-comment">#   友情链接6: http://localhost:4000/</span>
+
+<span class="hljs-attr">aboutme:</span> <span class="hljs-string">Stay</span> <span class="hljs-string">hungry,</span> <span class="hljs-string">stay</span> <span class="hljs-string">fullish</span></code></pre></div>
+<h2 id="advance-customize">Advance customize</h2>
+<h3 id="stop-visit-litten.me9005">Stop visit litten.me:9005</h3>
+<p>Sometimes the user's client information is collected, see <a target="_blank" rel="noopener" href="https://github.com/litten/hexo-theme-yilia/issues/528">here</a> for details.</p>
+<p>Stop reporting by clear the contents in <code>themes/yilia/source-src/js/report.js</code></p>
+<h3 id="limit-display-numbers-on-the-main-page">Limit display numbers on the main page</h3>
+<p>Simply insert <code>&lt;! -- more --&gt;</code> to show only what comes before it while collapse the afterwards, click on the article title to read it in full.</p>
+<h3 id="easily-add-pics-to-blogs-via-hexo-renderer-marked-plugin">Easily add pics to blogs via hexo-renderer-marked plugin</h3>
+<p>1.find <code>post_asset_folder</code> in <code>_config.yml</code> file in the blog <code>root</code> directory, set to be true</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-string">post_asset_folder:true</span></code></pre></div>
+<p>2.Install plugin</p>
+<div class="code-wrapper"><pre><code class="hljs shell">npm install hexo-renderer-marked --save</code></pre></div>
+<p>3.change <code>_config.yml</code> in blog <code>root</code> directory as</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-attr">post_asset_folder:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">marked:</span>
+  <span class="hljs-attr">prependRoot:</span> <span class="hljs-literal">true</span>
+  <span class="hljs-attr">postAsset:</span> <span class="hljs-literal">true</span></code></pre></div>
+<p>then img can be easily add with <code>![img description](img.png)</code> after add the image to the folder with the same name as the article in <code>/source/_posts/</code></p>
+<p>4.change Typora pereference as</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/typora setting.png" srcset="/img/loading.gif" lazyload alt="typora setting" style="zoom:50%;"></p>
+<p>img can drag into typro, yet blogname need to be deleted before deploying</p>
+<h3 id="show-number-of-articles-and-words-on-the-left-panel">Show number of articles and words on the left panel</h3>
+<p>1.add wordcount plugin in terminal</p>
+<div class="code-wrapper"><pre><code class="hljs shell">npm i --save hexo-wordcount</code></pre></div>
+<p>2.change <code>themes/yilia/layout/_partial/left-col.ejs</code></p>
+<p>after</p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">nav</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;header-menu&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+    &lt;% for (var i in theme.menu)&#123; %&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%- url_for(theme.menu[i]) %&gt;&quot;</span>&gt;</span>&lt;%= i %&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    &lt;%&#125;%&gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">nav</span>&gt;</span></code></pre></div>
+<p>add</p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;post-count&quot;</span>&gt;</span>&lt;%=site.posts.length%&gt; articles
+			<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>&lt;%= totalcount(site, &#x27;0,0.0a&#x27;) %&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> words<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></code></pre></div>
+<p>add style sheet in <code>themes/yilia/source/main.0cf68a.css</code></p>
+<div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-class">.post-count</span>&#123;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#696969</span>;
+&#125;</code></pre></div>
+<h3 id="show-number-of-visits-in-the-footer">Show number of visits in the footer</h3>
+<p><a target="_blank" rel="noopener" href="https://busuanzi.ibruce.info/">busuanzi</a> is in use, which is super easy to deploy</p>
+<p>change <code>themes/yilia/layout/_partial/footer.ejs</code> as</p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">footer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;outer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;footer-info&quot;</span>&gt;</span>
+    	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;footer-left&quot;</span>&gt;</span>
+    		<span class="hljs-comment">&lt;!-- total visits number --&gt;</span>
+          &lt;% if (theme.busuanzi &amp;&amp; theme.busuanzi.enable)&#123; %&gt;
+            <span class="hljs-comment">&lt;!-- busuanzi statistics --&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;busuanzi_value_site_pv&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-symbol">&amp;nbsp;</span>visits in total
+            <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">async</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+          &lt;% &#125; %&gt;
+        <span class="hljs-comment">&lt;!-- end --&gt;</span>
+    	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;footer-right&quot;</span>&gt;</span>
+      		<span class="hljs-symbol">&amp;copy;</span> &lt;%= date(new Date(), &#x27;YYYY&#x27;) %&gt; &lt;%= config.author || config.title %&gt;
+      	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span></code></pre></div>
+<p>and add</p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-attr">busuanzi:</span>
+  <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span></code></pre></div>
+<h3 id="add-button-of-hiding-the-left-panel">Add button of hiding the left panel</h3>
+<p>Refer to <a target="_blank" rel="noopener" href="https://cqh-i.github.io/2019/08/07/hexo-yilia%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E9%9A%90%E8%97%8F%E5%B7%A6%E8%BE%B9%E6%A0%8F%E7%9B%AE%E6%8C%89%E9%92%AE/">hexo yilia主题添加隐藏左边栏目按钮</a></p>
+<p>1.add style list to file <code>/themes/yilia/source/main.0cf68a.css</code></p>
+<div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-comment">/*stylesheet for hide the left panel*/</span>
+<span class="hljs-selector-class">.mymenucontainer</span> &#123;
+	<span class="hljs-attribute">display</span>:block;
+	<span class="hljs-attribute">cursor</span>:pointer;
+	<span class="hljs-attribute">left</span>:<span class="hljs-number">0</span>;
+	<span class="hljs-attribute">top</span>:<span class="hljs-number">0</span>;
+	<span class="hljs-attribute">width</span>:<span class="hljs-number">35px</span>;
+	<span class="hljs-attribute">height</span>:<span class="hljs-number">35px</span>;
+	<span class="hljs-attribute">z-index</span>:<span class="hljs-number">9999</span>;
+	<span class="hljs-attribute">position</span>:fixed;
+&#125;
+<span class="hljs-selector-class">.bar1</span> &#123;
+	<span class="hljs-attribute">width</span>:<span class="hljs-number">35px</span>;
+	<span class="hljs-attribute">height</span>:<span class="hljs-number">3px</span>;
+	<span class="hljs-attribute">border-radius</span>:<span class="hljs-number">3px</span>;
+	<span class="hljs-attribute">background-color</span>:<span class="hljs-number">#8E6D51</span>;
+	<span class="hljs-attribute">margin</span>:<span class="hljs-number">6px</span> <span class="hljs-number">0</span>;
+	<span class="hljs-attribute">transition</span>:<span class="hljs-number">0.1s</span>;
+	-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(-<span class="hljs-number">45deg</span>) <span class="hljs-built_in">translate</span>(-<span class="hljs-number">8px</span>,<span class="hljs-number">8px</span>);
+	<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(-<span class="hljs-number">45deg</span>) <span class="hljs-built_in">translate</span>(-<span class="hljs-number">8px</span>,<span class="hljs-number">8px</span>);
+&#125;
+<span class="hljs-selector-class">.bar2</span> &#123;
+	<span class="hljs-attribute">width</span>:<span class="hljs-number">35px</span>;
+	<span class="hljs-attribute">height</span>:<span class="hljs-number">3px</span>;
+	<span class="hljs-attribute">border-radius</span>:<span class="hljs-number">3px</span>;
+	<span class="hljs-attribute">background-color</span>:<span class="hljs-number">#8E6D51</span>;
+	<span class="hljs-attribute">margin</span>:<span class="hljs-number">6px</span> <span class="hljs-number">0</span>;
+	<span class="hljs-attribute">transition</span>:<span class="hljs-number">0.1s</span>;
+	<span class="hljs-attribute">opacity</span>:<span class="hljs-number">0</span>;
+&#125;
+<span class="hljs-selector-class">.bar3</span> &#123;
+	<span class="hljs-attribute">width</span>:<span class="hljs-number">35px</span>;
+	<span class="hljs-attribute">height</span>:<span class="hljs-number">3px</span>;
+	<span class="hljs-attribute">border-radius</span>:<span class="hljs-number">3px</span>;
+	<span class="hljs-attribute">background-color</span>:<span class="hljs-number">#8E6D51</span>;
+	<span class="hljs-attribute">margin</span>:<span class="hljs-number">6px</span> <span class="hljs-number">0</span>;
+	<span class="hljs-attribute">transition</span>:<span class="hljs-number">0.1s</span>;
+	-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(<span class="hljs-number">45deg</span>) <span class="hljs-built_in">translate</span>(-<span class="hljs-number">4px</span>,-<span class="hljs-number">6px</span>);
+	<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(<span class="hljs-number">45deg</span>) <span class="hljs-built_in">translate</span>(-<span class="hljs-number">4px</span>,-<span class="hljs-number">6px</span>);
+&#125;
+<span class="hljs-selector-class">.change</span> <span class="hljs-selector-class">.bar1</span> &#123;
+	-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(<span class="hljs-number">0deg</span>) <span class="hljs-built_in">translate</span>(<span class="hljs-number">0px</span>,<span class="hljs-number">0px</span>);
+	<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(<span class="hljs-number">0deg</span>) <span class="hljs-built_in">translate</span>(<span class="hljs-number">0px</span>,<span class="hljs-number">0px</span>);
+&#125;
+<span class="hljs-selector-class">.change</span> <span class="hljs-selector-class">.bar2</span> &#123;
+	<span class="hljs-attribute">opacity</span>:<span class="hljs-number">1</span>;
+&#125;
+<span class="hljs-selector-class">.change</span> <span class="hljs-selector-class">.bar3</span> &#123;
+	-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(<span class="hljs-number">0deg</span>) <span class="hljs-built_in">translate</span>(<span class="hljs-number">0px</span>,<span class="hljs-number">0px</span>);
+	<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">rotate</span>(<span class="hljs-number">0deg</span>) <span class="hljs-built_in">translate</span>(<span class="hljs-number">0px</span>,<span class="hljs-number">0px</span>);
+&#125;
+<span class="hljs-comment">/*stylesheet for hide the left panel end*/</span></code></pre></div>
+<p>2.go to <code>/themes/yilia/layout/layout.ejs</code> add before <code>&lt;div class="left-col"</code></p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;mymenucontainer&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;myFunction(this)&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bar1&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bar2&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bar3&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<p>3.add between <code>&lt;/body&gt;</code> and <code>&lt;/html&gt;</code></p>
+<div class="code-wrapper"><pre><code class="hljs js">&lt;script&gt;
+    <span class="hljs-keyword">var</span> hide = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">myFunction</span>(<span class="hljs-params">x</span>) &#123;
+        x.<span class="hljs-property">classList</span>.<span class="hljs-title function_">toggle</span>(<span class="hljs-string">&quot;change&quot;</span>);
+        <span class="hljs-keyword">if</span>(hide == <span class="hljs-literal">false</span>)&#123;
+            $(<span class="hljs-string">&quot;.left-col&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&#x27;display&#x27;</span>, <span class="hljs-string">&#x27;none&#x27;</span>);
+            $(<span class="hljs-string">&quot;.mid-col&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&quot;left&quot;</span>, <span class="hljs-number">6</span>);
+            $(<span class="hljs-string">&quot;.tools-col&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&#x27;display&#x27;</span>, <span class="hljs-string">&#x27;none&#x27;</span>);
+            $(<span class="hljs-string">&quot;.tools-col.hide&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&#x27;display&#x27;</span>, <span class="hljs-string">&#x27;none&#x27;</span>);
+            hide = <span class="hljs-literal">true</span>;
+        &#125;<span class="hljs-keyword">else</span>&#123;
+            $(<span class="hljs-string">&quot;.left-col&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&#x27;display&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+            $(<span class="hljs-string">&quot;.mid-col&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&quot;left&quot;</span>, <span class="hljs-number">300</span>);
+            $(<span class="hljs-string">&quot;.tools-col&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&#x27;display&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+            $(<span class="hljs-string">&quot;.tools-col.hide&quot;</span>).<span class="hljs-title function_">css</span>(<span class="hljs-string">&#x27;display&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+            hide = <span class="hljs-literal">false</span>;
+        &#125;
+    &#125;
+&lt;/script&gt;</code></pre></div>
+<h3 id="beautiful-contents-navigation-in-articles">Beautiful contents navigation in articles</h3>
+<p>Default navigator is kind of ugly so found a more beautiful version, to use default version, simply change <code>toc: 2</code> in file <code>themes/yilia/_config.yml</code></p>
+<p>1.add this block at the end of <code>themes/yilia/source/main.0cf68a.css</code></p>
+<div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-comment">/* navigator */</span>
+<span class="hljs-selector-id">#container</span> <span class="hljs-selector-class">.show-toc-btn</span>,<span class="hljs-selector-id">#container</span> <span class="hljs-selector-class">.toc-article</span>&#123;<span class="hljs-attribute">display</span>:block&#125;
+<span class="hljs-selector-class">.toc-article</span>&#123;<span class="hljs-attribute">z-index</span>:<span class="hljs-number">100</span>;<span class="hljs-attribute">background</span>:<span class="hljs-number">#fff</span>;<span class="hljs-attribute">border</span>:<span class="hljs-number">1px</span> solid <span class="hljs-number">#ccc</span>;<span class="hljs-attribute">max-width</span>:<span class="hljs-number">250px</span>;<span class="hljs-attribute">min-width</span>:<span class="hljs-number">150px</span>;<span class="hljs-attribute">max-height</span>:<span class="hljs-number">500px</span>;<span class="hljs-attribute">overflow-y</span>:auto;-webkit-<span class="hljs-attribute">box-shadow</span>:<span class="hljs-number">5px</span> <span class="hljs-number">5px</span> <span class="hljs-number">2px</span> <span class="hljs-number">#ccc</span>;<span class="hljs-attribute">box-shadow</span>:<span class="hljs-number">5px</span> <span class="hljs-number">5px</span> <span class="hljs-number">2px</span> <span class="hljs-number">#ccc</span>;<span class="hljs-attribute">font-size</span>:<span class="hljs-number">12px</span>;<span class="hljs-attribute">padding</span>:<span class="hljs-number">10px</span>;<span class="hljs-attribute">position</span>:fixed;<span class="hljs-attribute">right</span>:<span class="hljs-number">35px</span>;<span class="hljs-attribute">top</span>:<span class="hljs-number">129px</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc-close</span>&#123;<span class="hljs-attribute">font-weight</span>:<span class="hljs-number">700</span>;<span class="hljs-attribute">font-size</span>:<span class="hljs-number">20px</span>;<span class="hljs-attribute">cursor</span>:pointer;<span class="hljs-attribute">float</span><span class="hljs-selector-pseudo">:right</span>;<span class="hljs-attribute">color</span>:<span class="hljs-number">#ccc</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc-close</span><span class="hljs-selector-pseudo">:hover</span>&#123;<span class="hljs-attribute">color</span>:<span class="hljs-number">#000</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc</span>&#123;<span class="hljs-attribute">font-size</span>:<span class="hljs-number">12px</span>;<span class="hljs-attribute">padding</span>:<span class="hljs-number">0</span>;<span class="hljs-attribute">line-height</span>:<span class="hljs-number">20px</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc</span> <span class="hljs-selector-class">.toc-number</span>&#123;<span class="hljs-attribute">color</span>:<span class="hljs-number">#333</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc</span> <span class="hljs-selector-class">.toc-text</span><span class="hljs-selector-pseudo">:hover</span>&#123;<span class="hljs-attribute">text-decoration</span>:underline;<span class="hljs-attribute">color</span>:<span class="hljs-number">#2a6496</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-tag">li</span>&#123;<span class="hljs-attribute">list-style-type</span>:none&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc-level-1</span>&#123;<span class="hljs-attribute">margin</span>:<span class="hljs-number">4px</span> <span class="hljs-number">0</span>&#125;<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-class">.toc-child</span>&#123;&#125;<span class="hljs-keyword">@-moz-keyframes</span> cd-bounce-<span class="hljs-number">1</span>&#123;<span class="hljs-number">0%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">0</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;<span class="hljs-number">60%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">1</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>)&#125;<span class="hljs-number">100%</span>&#123;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;&#125;<span class="hljs-keyword">@-webkit-keyframes</span> cd-bounce-<span class="hljs-number">1</span>&#123;<span class="hljs-number">0%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">0</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;<span class="hljs-number">60%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">1</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>)&#125;<span class="hljs-number">100%</span>&#123;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;&#125;<span class="hljs-keyword">@-o-keyframes</span> cd-bounce-<span class="hljs-number">1</span>&#123;<span class="hljs-number">0%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">0</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;<span class="hljs-number">60%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">1</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>)&#125;<span class="hljs-number">100%</span>&#123;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;&#125;<span class="hljs-keyword">@keyframes</span> cd-bounce-<span class="hljs-number">1</span>&#123;<span class="hljs-number">0%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">0</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;<span class="hljs-number">60%</span>&#123;<span class="hljs-attribute">opacity</span>:<span class="hljs-number">1</span>;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1.01</span>)&#125;<span class="hljs-number">100%</span>&#123;-o-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-webkit-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-moz-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);-ms-<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>);<span class="hljs-attribute">transform</span>:<span class="hljs-built_in">scale</span>(<span class="hljs-number">1</span>)&#125;&#125;<span class="hljs-selector-class">.show-toc-btn</span>&#123;<span class="hljs-attribute">display</span>:none;<span class="hljs-attribute">z-index</span>:<span class="hljs-number">10</span>;<span class="hljs-attribute">width</span>:<span class="hljs-number">30px</span>;<span class="hljs-attribute">min-height</span>:<span class="hljs-number">14px</span>;<span class="hljs-attribute">overflow</span>:hidden;<span class="hljs-attribute">padding</span>:<span class="hljs-number">4px</span> <span class="hljs-number">6px</span> <span class="hljs-number">8px</span> <span class="hljs-number">5px</span>;<span class="hljs-attribute">border</span>:<span class="hljs-number">1px</span> solid <span class="hljs-number">#ddd</span>;<span class="hljs-attribute">border-right</span>:none;<span class="hljs-attribute">position</span>:fixed;<span class="hljs-attribute">right</span>:<span class="hljs-number">40px</span>;<span class="hljs-attribute">text-align</span>:center;<span class="hljs-attribute">background-color</span>:<span class="hljs-number">#f9f9f9</span>&#125;<span class="hljs-selector-class">.show-toc-btn</span> <span class="hljs-selector-class">.btn-bg</span>&#123;<span class="hljs-attribute">margin-top</span>:<span class="hljs-number">2px</span>;<span class="hljs-attribute">display</span>:block;<span class="hljs-attribute">width</span>:<span class="hljs-number">16px</span>;<span class="hljs-attribute">height</span>:<span class="hljs-number">14px</span>;<span class="hljs-attribute">background</span>:<span class="hljs-built_in">url</span>(<span class="hljs-string">http://7xtawy.com1.z0.glb.clouddn.com/show.png</span>) no-repeat;-webkit-<span class="hljs-attribute">background-size</span>:<span class="hljs-number">100%</span>;-moz-<span class="hljs-attribute">background-size</span>:<span class="hljs-number">100%</span>;<span class="hljs-attribute">background-size</span>:<span class="hljs-number">100%</span>&#125;<span class="hljs-selector-class">.show-toc-btn</span> <span class="hljs-selector-class">.btn-text</span>&#123;<span class="hljs-attribute">color</span>:<span class="hljs-number">#999</span>;<span class="hljs-attribute">font-size</span>:<span class="hljs-number">12px</span>&#125;<span class="hljs-selector-class">.show-toc-btn</span><span class="hljs-selector-pseudo">:hover</span>&#123;<span class="hljs-attribute">cursor</span>:pointer&#125;<span class="hljs-selector-class">.show-toc-btn</span><span class="hljs-selector-pseudo">:hover</span> <span class="hljs-selector-class">.btn-bg</span>&#123;<span class="hljs-attribute">background-position</span>:<span class="hljs-number">0</span> -<span class="hljs-number">16px</span>&#125;<span class="hljs-selector-class">.show-toc-btn</span><span class="hljs-selector-pseudo">:hover</span> <span class="hljs-selector-class">.btn-text</span>&#123;<span class="hljs-attribute">font-size</span>:<span class="hljs-number">12px</span>;<span class="hljs-attribute">color</span>:<span class="hljs-number">#ea8010</span>&#125;
+<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-tag">li</span> <span class="hljs-selector-tag">ol</span>, <span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-tag">li</span> <span class="hljs-selector-tag">ul</span> &#123;
+    <span class="hljs-attribute">margin-left</span>: <span class="hljs-number">30px</span>;
+&#125;
+<span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-tag">ol</span>, <span class="hljs-selector-class">.toc-article</span> <span class="hljs-selector-tag">ul</span> &#123;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">10px</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></div>
+<p>2.after <code>&lt;/header&gt;&lt;% &#125; %&gt;</code> in file <code>themes/yilia/layout/_partial/article.ejs</code> add</p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- navigator --&gt;</span>
+&lt;% if (!index &amp;&amp; post.toc)&#123; %&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;show-toc-btn&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;show-toc-btn&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;showToc();&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:none&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-bg&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-text&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;toc-article&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;toc-article&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;toc-close&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;toc-close&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;hide navigator&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;showBtn();&quot;</span>&gt;</span>×<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;toc-title&quot;</span>&gt;</span>navigator<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+        &lt;%- toc(post.content) %&gt;
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span>
+<span class="language-javascript">  <span class="hljs-keyword">function</span> <span class="hljs-title function_">showToc</span>(<span class="hljs-params"></span>)&#123;</span>
+<span class="language-javascript">      <span class="hljs-keyword">var</span> toc_article = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;toc-article&quot;</span>);</span>
+<span class="language-javascript">      <span class="hljs-keyword">var</span> show_toc_btn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;show-toc-btn&quot;</span>);</span>
+<span class="language-javascript">      toc_article.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;style&quot;</span>,<span class="hljs-string">&quot;display:block&quot;</span>);</span>
+<span class="language-javascript">      show_toc_btn.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;style&quot;</span>,<span class="hljs-string">&quot;display:none&quot;</span>);</span>
+<span class="language-javascript">      &#125;;</span>
+<span class="language-javascript">  <span class="hljs-keyword">function</span> <span class="hljs-title function_">showBtn</span>(<span class="hljs-params"></span>)&#123;</span>
+<span class="language-javascript">      <span class="hljs-keyword">var</span> toc_article = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;toc-article&quot;</span>);</span>
+<span class="language-javascript">      <span class="hljs-keyword">var</span> show_toc_btn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;show-toc-btn&quot;</span>);</span>
+<span class="language-javascript">      toc_article.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;style&quot;</span>,<span class="hljs-string">&quot;display:none&quot;</span>);</span>
+<span class="language-javascript">      show_toc_btn.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;style&quot;</span>,<span class="hljs-string">&quot;display:block&quot;</span>);</span>
+<span class="language-javascript">      &#125;;</span>
+<span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    &lt;% &#125; %&gt;
+<span class="hljs-comment">&lt;!-- navigator end --&gt;</span></code></pre></div>
+<p>3.add <code>toc:true</code> to the articles that need the navigator.</p>
+<h3 id="add-custormize-header-to-articles">Add custormize header to articles</h3>
+<p>when run <code>hexo new</code> to initiate a new blog, a defaul head would generate, change it by</p>
+<p>change the <code>scaffolds/post.md</code> in the <code>root</code> directory</p>
+<div class="code-wrapper"><pre><code class="hljs txt">---
+title: &#123;&#123; title &#125;&#125;
+date: &#123;&#123; date &#125;&#125;
+author: daydreamatnight
+toc: true
+declare: true
+tags:
+---</code></pre></div>
+<h4 id="more-headers-to-choose-when-writing-a-blog">more headers to choose when writing a blog</h4>
+<p>before a blog, more paras can be chosen to add</p>
+<div class="code-wrapper"><pre><code class="hljs txt">--- 
+title: #你的博客文章名 
+toc: ture #toc 
+date: 2020-09-07 09:25:00 #文章时间 
+author: GavenLee #作者 
+img: /source/images/xxx.jpg #图片 
+top: true #是否顶置 
+cover: true #是否在引导页轮播 
+coverImg: /images/1.jpg #轮播图片 
+password: #阅读密码这里被加密 
+mathjax: false #mathjax 
+summary: 这是你自定义的文章摘要内容，如果这个属性有值，文章卡片摘要就显示这段文字，否则程序会自动截取文章的部分内容作为摘要 
+categories: Markdown #分类 
+tags: #标签 
+abbrlink: HexoLearn #链接 
+---</code></pre></div>
+<h3 id="disable-auto-wrap-in-code-block">Disable auto wrap in code block</h3>
+<p>locate and delete <code>white-space:pre-wrap</code> in file <code>themes/yilia/source/main.0cf68a.css</code></p>
+<h3 id="add-copy-button-to-code-block">Add copy button to code block</h3>
+<p>1.create a <code>clipboard_use.js</code> file in directory <code>themes/yilia/source</code></p>
+<div class="code-wrapper"><pre><code class="hljs js">$(<span class="hljs-string">&quot;.highlight&quot;</span>).<span class="hljs-title function_">wrap</span>(<span class="hljs-string">&quot;&lt;div class=&#x27;code-wrapper&#x27; style=&#x27;position:relative&#x27;&gt;&lt;/div&gt;&quot;</span>);
+<span class="hljs-comment">/*create copy button after page loaded*/</span>
+!<span class="hljs-keyword">function</span> (<span class="hljs-params">e, t, a</span>) &#123;
+    <span class="hljs-comment">/* code */</span>
+    <span class="hljs-keyword">var</span> initCopyCode = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;
+        <span class="hljs-keyword">var</span> copyHtml = <span class="hljs-string">&#x27;&#x27;</span>;
+        copyHtml += <span class="hljs-string">&#x27;&lt;button class=&quot;btn-copy&quot; data-clipboard-snippet=&quot;&quot;&gt;&#x27;</span>;
+        copyHtml += <span class="hljs-string">&#x27;  &lt;i class=&quot;fa fa-clipboard&quot;&gt;&lt;/i&gt;&lt;span&gt;copy&lt;/span&gt;&#x27;</span>;
+        copyHtml += <span class="hljs-string">&#x27;&lt;/button&gt;&#x27;</span>;
+        $(<span class="hljs-string">&quot;.highlight .code&quot;</span>).<span class="hljs-title function_">before</span>(copyHtml);
+        <span class="hljs-keyword">var</span> clipboard = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClipboardJS</span>(<span class="hljs-string">&#x27;.btn-copy&#x27;</span>, &#123;
+            <span class="hljs-attr">target</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">trigger</span>) &#123;
+                <span class="hljs-keyword">return</span> trigger.<span class="hljs-property">nextElementSibling</span>;
+            &#125;
+        &#125;);
+        clipboard.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;success&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) &#123;
+            e.<span class="hljs-property">trigger</span>.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&quot;&lt;i class=&#x27;fa fa-check&#x27; style=&#x27;color:green&#x27;&gt;&lt;/i&gt;&lt;span style=&#x27;color:green&#x27;&gt;copy success&lt;/span&gt;&quot;</span>
+            <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;
+                e.<span class="hljs-property">trigger</span>.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&quot;&lt;i class=&#x27;fa fa-clipboard&#x27;&gt;&lt;/i&gt;&lt;span&gt;copy&lt;/span&gt;&quot;</span>
+            &#125;, <span class="hljs-number">1000</span>)
+            e.<span class="hljs-title function_">clearSelection</span>();
+        &#125;);
+        clipboard.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) &#123;
+            e.<span class="hljs-property">trigger</span>.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&quot;&lt;i class=&#x27;fa fa-exclamation&#x27; style=&#x27;color:red&#x27;&gt;&lt;/i&gt;&lt;span style=&#x27;color:red&#x27;&gt;copy success&lt;/span&gt;&quot;</span>
+            <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;
+                e.<span class="hljs-property">trigger</span>.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&quot;&lt;i class=&#x27;fa fa-clipboard&#x27;&gt;&lt;/i&gt;&lt;span&gt;copy&lt;/span&gt;&quot;</span>
+            &#125;, <span class="hljs-number">1000</span>)
+            e.<span class="hljs-title function_">clearSelection</span>();
+        &#125;);
+    &#125;
+    <span class="hljs-title function_">initCopyCode</span>();
+&#125;(<span class="hljs-variable language_">window</span>, <span class="hljs-variable language_">document</span>);</code></pre></div>
+<p>2.load .js file, edit <code>themes/yilia/layout/layout.ejs</code> file, add before <code>&lt;/body&gt;</code>.</p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- copy button in code block--&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/clipboard_use.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<p>3.add stylesheet the end of <code>themes/yilia/source/main.0cf68a.css</code></p>
+<div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-comment">/* code copy button */</span>
+<span class="hljs-selector-class">.btn-copy</span> &#123;
+  <span class="hljs-attribute">display</span>: inline-block;
+  <span class="hljs-attribute">cursor</span>: pointer;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#eee</span>;
+  <span class="hljs-attribute">background-image</span>: <span class="hljs-built_in">linear-gradient</span>(<span class="hljs-number">#fcfcfc</span>, <span class="hljs-number">#eee</span>);
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#d5d5d5</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">3px</span>;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">13px</span>;
+  <span class="hljs-attribute">font-weight</span>: <span class="hljs-number">700</span>;
+  <span class="hljs-attribute">line-height</span>: <span class="hljs-number">20px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#333</span>;
+  -webkit-<span class="hljs-attribute">transition</span>: opacity .<span class="hljs-number">3s</span> ease-in-out;
+  -o-<span class="hljs-attribute">transition</span>: opacity .<span class="hljs-number">3s</span> ease-in-out;
+  <span class="hljs-attribute">transition</span>: opacity .<span class="hljs-number">3s</span> ease-in-out;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">2px</span> <span class="hljs-number">6px</span>;
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">right</span>: <span class="hljs-number">5px</span>;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">5px</span>;
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+&#125;
+<span class="hljs-selector-class">.btn-copy</span> <span class="hljs-selector-tag">span</span> &#123;
+  <span class="hljs-attribute">margin-left</span>: <span class="hljs-number">5px</span>;
+&#125;
+<span class="hljs-selector-class">.highlight</span><span class="hljs-selector-pseudo">:hover</span> <span class="hljs-selector-class">.btn-copy</span> &#123;
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>;
+&#125;
+<span class="hljs-comment">/* code copy button end */</span></code></pre></div>
+<p>4.add copy button icon, edit <code>themes/yilia/layout/_partia/head.ejs</code> add before <code>&lt;/head&gt;</code></p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- copy button icon --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css&quot;</span>&gt;</span></code></pre></div>
+<h3 id="allow-search-engines-to-index-this-blog">Allow search engines to index this Blog</h3>
+<h4 id="index-google-to-this-blog">index Google to this Blog</h4>
+<p>check if google can find you, enter <code>site:daydreamatnight.github.io</code> to see</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/check google search.png" srcset="/img/loading.gif" lazyload alt="check google search" style="zoom:50%;"></p>
+<h5 id="add-url-to-goole-search-console">Add url to goole search console</h5>
+<p>1.open <a target="_blank" rel="noopener" href="https://search.google.com/search-console/welcome">google console</a> , add URL link of the blog (https://daydreamatnight.github.io), in the <code>URL prefix</code> block, click <code>CONTINUE</code></p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/google search console.png" srcset="/img/loading.gif" lazyload alt="google console" style="zoom:50%;"></p>
+<p>2.upload the html file to the blog <code>root</code> directory and deploy the website, then clicke verify.</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/google console varification.png" srcset="/img/loading.gif" lazyload alt="google console varification" style="zoom:50%;"></p>
+<p>little buggy here, see <a target="_blank" rel="noopener" href="https://hilyy.xyz/how-to-allow-google-to-index-your-hexo-blog-website-google-search-console-verification-methods/"><strong>don’t upload</strong> the file <strong>using hexo</strong> command</a></p>
+<h5 id="add-sitemap-for-google">add sitemap for google</h5>
+<p>add sitemap for google and baidu together</p>
+<blockquote>
+<p>A <em>sitemap</em> is a file where you provide information about the pages, videos, and other files on your site, and the relationships between them. Search engines like Google read this file to more intelligently crawl your site. A sitemap tells Google which pages and files you think are important in your site, and also provides valuable information about these files: for example, for pages, when the page was last updated, how often the page is changed, and any alternate language versions of a page.</p>
+</blockquote>
+<p>1.install sitemap plugins</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$ </span><span class="language-bash">npm install hexo-generator-sitemap --save</span>
+<span class="hljs-meta">$ </span><span class="language-bash">npm install hexo-generator-baidu-sitemap --save</span></code></pre></div>
+<p>2.add to the <code>_config.yml</code> in the blog <code>root</code></p>
+<div class="code-wrapper"><pre><code class="hljs yml"><span class="hljs-comment"># hexo sitemap</span>
+<span class="hljs-attr">sitemap:</span>
+  <span class="hljs-attr">path:</span> <span class="hljs-string">sitemap.xml</span>
+<span class="hljs-attr">baidusitemap:</span>
+  <span class="hljs-attr">path:</span> <span class="hljs-string">baidusitemap.xml</span></code></pre></div>
+<p>3.Deploy the blog, go to https://daydreamatnight.github.io/sitemap.xml and https://daydreamatnight.github.io/baidusitemap.xml to see if sitemaps are uploaded</p>
+<p>4.Go to Google Search Console, in the left panel, click <code>Sitemaps</code>, enter your sitemap URL <code>sitemap.xml</code></p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/can't fetch sitemap.png" srcset="/img/loading.gif" lazyload alt="can't fetch sitemap" style="zoom:50%;"></p>
+<p>Googlebot won't download the sitemap immediately. Give it time.</p>
+<h5 id="add-robots.txt">add robots.txt</h5>
+<blockquote>
+<p>A robots.txt file tells search engine crawlers which URLs the crawler can access on your site. This is used mainly to avoid overloading your site with requests; <strong>it is not a mechanism for keeping a web page out of Google</strong>. To keep a web page out of Google, <a target="_blank" rel="noopener" href="https://developers.google.com/search/docs/advanced/crawling/block-indexing">block indexing with <code>noindex</code></a> or password-protect the page.</p>
+<p>A robots.txt file is used primarily to manage crawler traffic to your site, and <em>usually</em> to keep a file off Google, depending on the file type:</p>
+</blockquote>
+<div class="code-wrapper"><pre><code class="hljs txt">User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /tags/
+Allow: /categories/
+Allow: /about/
+Allow: /guestbook/
+Allow: /others/
+
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /lib/
+
+Sitemap: https://daydreamatnight.github.io/sitemap.xml
+Sitemap: https://daydreamatnight.github.io/baidusitemap.xml</code></pre></div>
+<p>deploy the blog and wait.</p>
+<h5 id="check-if-sitemap-is-available">check if sitemap is available</h5>
+<p>After uploaded several updates, my sitemap still didn't fetched by google. So I went to check, it turns out my url setting in <code>_config.yml</code> is wrong. So I changed it to be my home url. And check it with <a target="_blank" rel="noopener" href="https://www.jcchouinard.com/url-inspection-tool/">URL Inspection Tool</a>.</p>
+<p>1.Open <a target="_blank" rel="noopener" href="https://search.google.com/search-console">google search console</a>, add the url of sitemap in the upper url inspecting box.</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Google%20sitemap%20inspect.png" srcset="/img/loading.gif" lazyload alt="Google sitemap inspect URL is not on Google " style="zoom:22%;"></p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Google%20sitemap%20inspect%202.png" srcset="/img/loading.gif" lazyload alt="Google sitemap inspect 2" style="zoom:22%;"></p>
+<p>It's normal it shows <code>URL is not on Google</code> because it shouldn't as a sitemap.</p>
+<p>2.click <code>live test</code> to check the availability.</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Google%20sitemap%20inspect%203.png" srcset="/img/loading.gif" lazyload alt="Google sitemap inspect 3" style="zoom:75%;"></p>
+<p>It should be available, then just wait.</p>
+<h4 id="index-bing-to-this-blog">index Bing to this Blog</h4>
+<p>1.go to <a target="_blank" rel="noopener" href="https://www.bing.com/webmasters/">Bing webmaster</a> and login</p>
+<p>2.connect with google webmaster.</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/bing%20sitemap.png" srcset="/img/loading.gif" lazyload alt="bing sitemap" style="zoom:75%;"></p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/being%20sitemap%20connect%20google.png" srcset="/img/loading.gif" lazyload alt="being sitemap connect google" style="zoom:75%;"></p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/bing%20search%20console%20success.png" srcset="/img/loading.gif" lazyload alt="bing search console success" style="zoom:75%;"></p>
+<h4 id="index-baidu-to-this-blognot-possibly-working">index baidu to this Blog(not possibly working)</h4>
+<p>go to the <a target="_blank" rel="noopener" href="https://ziyuan.baidu.com/site/index">baidu search console</a> ,</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu console.png" srcset="/img/loading.gif" lazyload alt="baidu console" style="zoom:50%;"></p>
+<p>Click <code>添加网站</code> and input every thing, do similar thing</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu console varification.png" srcset="/img/loading.gif" lazyload alt="baidu console varification" style="zoom:50%;"></p>
+<p>add sitemap</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/baidu console sitemap.png" srcset="/img/loading.gif" lazyload alt="baidu console sitemap" style="zoom:50%;"></p>
+<p>just wait forever, this could take 2000 years, so give up</p>
+<h3 id="add-copyright-statement">Add copyright statement</h3>
+<p>1.open file <code>themes/yilia/layout/_partial/article.ejs</code> add before <code>&lt;% if ((theme.reward_type === 2 || (theme.reward_type === 1 &amp;&amp; post.reward)) &amp;&amp; !index)&#123; %&gt;</code></p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- add copyright statement --&gt;</span>
+&lt;% if(theme.declare)&#123;%&gt;
+    &lt;%- partial(&#x27;post/declare&#x27;) %&gt;
+&lt;% &#125; %&gt;
+<span class="hljs-comment">&lt;!-- end --&gt;</span></code></pre></div>
+<p>2.create new file <code>declare.ejs</code> under <code>themes/yilia/layout/_partial/post/</code> with:</p>
+<div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-comment">&lt;!--add copyright statement https://github.com/JoeyBling/hexo-theme-yilia-plus/commit/c1215e132f6d5621c5fea83d3c4f7ccbcca074a3--&gt;</span>
+&lt;%
+  var sUrl = url.replace(/index\.html$/, &#x27;&#x27;);
+  sUrl = /^(http:|https:)\/\//.test(sUrl) ? sUrl : &#x27;https:&#x27; + sUrl;
+%&gt;
+
+<span class="hljs-comment">&lt;!-- #copyright setting：0-close statement; 1-declare statement if declare: true in the article header; 2-always declare the copyright --&gt;</span>
+&lt;% if ((theme.declare.declare_type === 2 || (theme.declare.declare_type === 1 &amp;&amp; post.declare)) &amp;&amp; !index)&#123; %&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;declare&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;author&quot;</span>&gt;</span>author: <span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    &lt;% if(config.author != undefined)&#123; %&gt;
+      &lt;%= config.author%&gt;
+    &lt;% &#125;else&#123;%&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">font</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;red&quot;</span>&gt;</span>please add right &quot;author&quot; name in &quot;_config.yml&quot; in the blog root<span class="hljs-tag">&lt;/<span class="hljs-name">font</span>&gt;</span>
+    &lt;%&#125;%&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;create-time&quot;</span>&gt;</span>posting date: <span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    &lt;%- date(post.date, &#x27;YYYY-MM-DD HH:MM:SS&#x27;) %&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;update-time&quot;</span>&gt;</span>last update: <span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    &lt;%- date(post.updated, &#x27;YYYY-MM-DD HH:MM:SS&#x27;) %&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;article-titles&quot;</span>&gt;</span>article title: <span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= config.url %&gt;/&lt;%= post.path %&gt;&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;&lt;%= post.title %&gt;&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;_blank&quot;</span>&gt;</span>&lt;%= post.title %&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;article-url&quot;</span>&gt;</span>article link: <span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= config.url %&gt;/&lt;%= post.path %&gt;&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;&lt;%= post.title %&gt;&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;_blank&quot;</span>&gt;</span>&lt;%= config.url %&gt;/&lt;%= post.path %&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;copyright&quot;</span>&gt;</span>copyright:<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    This work is licensed under a
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;license&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= theme.declare.licensee_url%&gt;&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;&lt;%= theme.declare.licensee_alias %&gt;&quot;</span>&gt;</span>&lt;%= theme.declare.licensee_name%&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    licience 
+    &lt;% if(theme.declare.licensee_img != undefined)&#123; %&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;license&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= theme.declare.licensee_url%&gt;&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;知识共享许可协议&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border-width:0&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;&lt;%= theme.declare.licensee_img%&gt;&quot;</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    &lt;% &#125; %&gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+&lt;% &#125; else &#123;%&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;declare&quot;</span> <span class="hljs-attr">hidden</span>=<span class="hljs-string">&quot;hidden&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+&lt;% &#125; %&gt;
+<span class="hljs-comment">&lt;!-- add copyright statement --&gt;</span></code></pre></div>
+<p>3.add stylesheet the end of <code>themes/yilia/source/main.0cf68a.css</code></p>
+<div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-comment">/*stylesheet for the delcare*/</span>
+<span class="hljs-selector-class">.declare</span> &#123;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#eaeaea</span>;
+  <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">2em</span>;
+  <span class="hljs-attribute">border-left</span>: <span class="hljs-number">3px</span> solid <span class="hljs-number">#ff1700</span>;
+  <span class="hljs-attribute">padding</span>: .<span class="hljs-number">5em</span> <span class="hljs-number">1em</span>; 
+&#125;
+<span class="hljs-comment">/*stylesheet for the delcare end*/</span></code></pre></div>
+<p>4.add at the end of <code>themes/yilia/_config.yml</code> file:</p>
+<div class="code-wrapper"><pre><code class="hljs awk">declare:
+  declare_type: <span class="hljs-number">1</span>
+  licensee_url: http:<span class="hljs-regexp">//</span>creativecommons.org<span class="hljs-regexp">/licenses/</span>by-nc-sa<span class="hljs-regexp">/4.0/</span>      
+  licensee_name: <span class="hljs-string">&#x27;CC BY-NC-SA 4.0&#x27;</span>                              
+  licensee_alias: <span class="hljs-string">&#x27;CC BY-NC-SA 4.0&#x27;</span>     
+  licensee_img: https:<span class="hljs-regexp">//i</span>.creativecommons.org<span class="hljs-regexp">/l/</span>by-nc-sa<span class="hljs-regexp">/4.0/</span><span class="hljs-number">80</span>x15.png</code></pre></div>
+<h3 id="add-mind-map-support">Add mind-map support</h3>
+<div class="code-wrapper"><pre><code class="hljs shell">npm install hexo-markmap</code></pre></div>
+<p>Detailed in its <a target="_blank" rel="noopener" href="https://github.com/MaxChang3/hexo-markmap">Github</a></p>
+<p>Example:</p>
+<div class="code-wrapper"><pre><code class="hljs markdown">&#123;% markmap 300px %&#125;
+<span class="hljs-bullet">-</span> Testa
+<span class="hljs-bullet">  -</span> test1
+<span class="hljs-bullet">  -</span> test2
+<span class="hljs-bullet">-</span> Testb
+<span class="hljs-bullet">  -</span> test1
+<span class="hljs-bullet">  -</span> test2
+&#123;%endmarkmap%&#125;</code></pre></div>
+<h3 id="add-latex-math-support">Add Latex math support</h3>
+<p>Change the renderer to the more powerful pandoc:</p>
+<p>1.Install pandoc on macOS:</p>
+<div class="code-wrapper"><pre><code class="hljs cmake">copybrew <span class="hljs-keyword">install</span> pandoc</code></pre></div>
+<p>2.in the blog root directory uninstall the default renderer then install the pandoc renderer:</p>
+<div class="code-wrapper"><pre><code class="hljs ada">copynpm uninstall hexo-renderer-marked <span class="hljs-comment">--save</span>
+npm install hexo-renderer-pandoc <span class="hljs-comment">--save</span></code></pre></div>
+<p>3.install the hexo math plugin</p>
+<div class="code-wrapper"><pre><code class="hljs cmake">copynpm <span class="hljs-keyword">install</span> hexo-<span class="hljs-keyword">math</span> --save</code></pre></div>
+<p>4.add these lines to the hexo <code>_config</code> file</p>
+<div class="code-wrapper"><pre><code class="hljs nestedtext"><span class="hljs-attribute">copymarkdown</span><span class="hljs-punctuation">:</span>
+  <span class="hljs-attribute">plugins</span><span class="hljs-punctuation">:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">markdown-it-footnote</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">markdown-it-sup</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">markdown-it-sub</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">markdown-it-abbr</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">markdown-it-emoji</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">hexo-math</span></code></pre></div>
+<p>5.add these lines to the theme <code>_config</code> file</p>
+<div class="code-wrapper"><pre><code class="hljs yaml"><span class="hljs-string">copy#</span> <span class="hljs-string">MathJax</span> <span class="hljs-string">Support</span>
+<span class="hljs-attr">mathjax:</span>
+  <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span>
+  <span class="hljs-attr">per_page:</span> <span class="hljs-literal">true</span></code></pre></div>
+<p>6.rebuild the to blog see changes</p>
+<p>7.Examples: <span class="math inline">\(this_{is}an\frac{inline}{equation}\)</span> <span class="math display">\[
+\begin{equation}
+    \mathbf{K}_\mathbf{1}=\frac{1}{\Delta r}\ \left[\begin{matrix}\begin{matrix}-1&amp;1\\-1&amp;1\\\end{matrix}&amp;\ &amp;\ \\\begin{matrix}\ &amp;\ddots\\\end{matrix}&amp;\begin{matrix}\ddots&amp;\ \\\end{matrix}&amp;\ \\\ &amp;-1\ &amp;1\\\end{matrix}\right],\ \ {\ \mathbf{K}}_\mathbf{2}=\frac{1}{\Delta r}\ \left[\begin{matrix}\begin{matrix}-1&amp;1\\\ &amp;\ddots\\\end{matrix}&amp;\begin{matrix}\\\ddots\\\end{matrix}&amp;\ \\\begin{matrix}\ &amp;\ \\\end{matrix}&amp;-1&amp;1\ \\\ &amp;-1\ &amp;1\\\end{matrix}\right]
+    \label{K2}
+\end{equation}
+\]</span></p>
+<h3 id="the-last-snapshot">The last snapshot</h3>
+<p>Ok, never spend time on a no-longer maintained project. Here's the last figure of it.</p>
+<p><img src="/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/Last snapshot.png" srcset="/img/loading.gif" lazyload alt="Last snapshot" style="zoom:80%;"></p>
+<h2 id="reference">Reference</h2>
+<p>https://flatironschool.com/blog/the-benefits-of-blogging-how-and-why-to-keep-a-technical-blog/</p>
+<p>https://weblog.masukomi.org/2015/10/18/static-vs-dynamic-blogging/</p>
+<p>https://www.cnblogs.com/aoguai/p/11781505.html</p>
+<p>https://www.kblog.top/post/30452.html</p>
+<p>https://wkzqn.gitee.io/2020/02/16/typora%E7%BC%96%E5%86%99hexo%E5%8D%9A%E5%AE%A2%E6%97%B6%E7%9A%84%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA/</p>
+<p>https://segmentfault.com/a/1190000009478837#articleHeader5</p>
+<p>https://hilyy.xyz/how-to-allow-google-to-index-your-hexo-blog-website-google-search-console-verification-methods/</p>
+<p>https://busuanzi.ibruce.info/</p>
+<p>https://creativecommons.org/choose/results-one?license_code=by-nc-sa&amp;jurisdiction=&amp;version=4.0&amp;lang=en</p>
+<p>https://www.jcchouinard.com/sitemap-could-not-be-read-couldnt-fetch-in-google-search-console/</p>
+<p>https://cqh-i.github.io/2019/08/07/hexo-yilia%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E9%9A%90%E8%97%8F%E5%B7%A6%E8%BE%B9%E6%A0%8F%E7%9B%AE%E6%8C%89%E9%92%AE/</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/hexo/">#hexo</a>
+      
+        <a href="/tags/blog/">#blog</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Build and configure a personal blog via hexo and yilia on github</div>
+      <div>https://daydreamatnight.github.io/2022/02/22/Build-and-configure-a-personal-blog-via-hexo-and-yilia/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 22, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/28/install-d2l-moudule-on-apple-m1-chip-for-deep-learning/" title="install d2l module on apple m1 chip for deep learning">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">install d2l module on apple m1 chip for deep learning</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/22/Hello-ShouRou/" title="Hello ShouRou">
+                        <span class="hidden-mobile">Hello ShouRou</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://lsongrui.github.io/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://jingyicc.github.io/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js".js"></script>
+<script src="/%3Cscript%20src=%22https:/cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
