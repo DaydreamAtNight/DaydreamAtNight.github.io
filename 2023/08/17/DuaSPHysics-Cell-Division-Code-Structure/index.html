@@ -1,0 +1,1003 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#84674f">
+  <meta name="author" content="Ryan LI">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Try to straight up the cell division part of DuaSPHysics’s tricky code. A structure map is shown.             Class inheriting        JSphGpuSingle::Run        ConfigCellDivision(); void">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DuaSPHysics Cell Division Code Structure">
+<meta property="og:url" content="https://daydreamatnight.github.io/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/index.html">
+<meta property="og:site_name" content="ShouRou">
+<meta property="og:description" content="Try to straight up the cell division part of DuaSPHysics’s tricky code. A structure map is shown.             Class inheriting        JSphGpuSingle::Run        ConfigCellDivision(); void">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://daydreamatnight.github.io/index/DS_structure.png">
+<meta property="article:published_time" content="2023-08-16T22:03:42.000Z">
+<meta property="article:modified_time" content="2023-09-16T21:00:23.890Z">
+<meta property="article:author" content="Ryan LI">
+<meta property="article:tag" content="CUDA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daydreamatnight.github.io/index/DS_structure.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>DuaSPHysics Cell Division Code Structure - ShouRou</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/banner-video.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"daydreamatnight.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":1,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ShouRou</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>Home</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>Archives</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>Tags</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>About</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/fluid_ai.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">DuaSPHysics Cell Division Code Structure</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Ryan LI
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-17 01:03" pubdate>
+          August 17, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          14 minutes
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">DuaSPHysics Cell Division Code Structure</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <html><head></head><body><div class="note note-primary">
+            <p>Try to straight up the cell division part of DuaSPHysics’s tricky code. A structure map is shown.</p> 
+          </div>
+<h4 id="class-inheriting">Class inheriting</h4>
+
+<div class="markmap-container" style="height:100px">
+  <svg data="{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;<strong>JObject</strong>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;<strong>JSph</strong>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;<strong>JSphGpu</strong>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;<strong>JSphGpuSingle</strong>&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;<strong>JObjectGpu</strong>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;<strong>JCellDivGpu</strong>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;<strong>JCellDivGpuSingle</strong>&quot;}]}]}]}"></svg>
+</div>
+
+<h4 id="jsphgpusinglerun">JSphGpuSingle::Run</h4>
+
+<div class="markmap-container" style="height:900px">
+  <svg data="{&quot;t&quot;:&quot;root&quot;,&quot;d&quot;:0,&quot;v&quot;:&quot;&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[1,2]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>ConfigDomain</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[2,3]},&quot;v&quot;:&quot;<em>// Alloc Gpu Cpu Memories</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[3,4]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>AllocGpuMemoryFixed</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[4,5]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>AllocGpuMemoryParticles</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[5,6]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>AllocCpuMemoryFixed</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[6,7]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>AllocCpuMemoryParticles</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[7,8]},&quot;v&quot;:&quot;<em>// particle data up to GPU: AuxPos, Idp, Velrhop</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[8,9]},&quot;v&quot;:&quot;<em>// 3 memcpy functions</em>&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[9,10]},&quot;v&quot;:&quot;Code = LoadCodeParticles <em>// Load particles' codes</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[10,11]},&quot;v&quot;:&quot;for all particles, GetCodeById&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[11,12]},&quot;v&quot;:&quot;GetMkBlockById&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[12,13]},&quot;v&quot;:&quot;<u>MkList</u>&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[13,14]},&quot;v&quot;:&quot;<em>// other initializations</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[14,15]},&quot;v&quot;:&quot;<em>// cell domain calculation</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[15,16]},&quot;v&quot;:&quot;<a href=\&quot;#configcelldivision\&quot;>ConfigCellDivision</a>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[16,17]},&quot;v&quot;:&quot;Map_Size&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[17,18]},&quot;v&quot;:&quot;Map_Cells&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[18,19]},&quot;v&quot;:&quot;<a href=\&quot;#selecdomaintuint3000map_cells\&quot;>SelecDomain</a>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[19,20]},&quot;v&quot;:&quot;DomCells&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[20,21]},&quot;v&quot;:&quot;DomPosMin/DomPosMax&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[21,22]},&quot;v&quot;:&quot;DomRealPosMin/DomRealPosMax&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[22,23]},&quot;v&quot;:&quot;DomCellCode&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[23,24]},&quot;v&quot;:&quot;<a href=\&quot;#loaddcellparticlesnpcodeauxposdcell\&quot;>Dcell = LoadDcellParticles();</a>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[24,25]},&quot;v&quot;:&quot;for(unsigned p=0;p&amp;lt;n;p++){&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[25,26]},&quot;v&quot;:&quot; unsigned cx/y/z=dx/y/z <em>// temp var cell index, not the same as Ncx/y/z below</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[26,27]},&quot;v&quot;:&quot; <a href=\&quot;#dcellppc__celldomcellcodecxcycz\&quot;>dcell[p]=PC__Cell(DomCellCode,cx,cy,cz);</a>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[27,28]},&quot;v&quot;:&quot;}&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[28,29]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>ReserveBasicArraysGpu</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[29,30]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>ParticlesDataUp</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[30,31]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>ConstantDataUp</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[31,32]},&quot;v&quot;:&quot;<em>// cp domain config</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[32,33]},&quot;v&quot;:&quot;<em>// cp domain config from <u>class JSph</u> to <u>JCellDivGpuSingle CellDivSingle</u> (member of <u>class JSphGpu</u> )</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[33,34]},&quot;v&quot;:&quot;<a href=\&quot;#celldivsingle-new-jcelldivgpusingle\&quot;>CellDivSingle = new JCellDivGpuSingle</a>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[34,35]},&quot;v&quot;:&quot;CellDivSingle-&amp;gt;DefineDomain  <em>// cp config</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[35,36]},&quot;v&quot;:&quot;ConfigCellDiv <em>// cp CellDivSingle to <u>JCellDivGpu *CellDiv</u> (member of <u>class JSphGpu</u> )</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[36,37]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>ConfigBlockSizes</font>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[37,38]},&quot;v&quot;:&quot;ConfigSaveData <em>// save data file</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[38,39]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>RunCellDivide</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[39,40]},&quot;v&quot;:&quot;DivData=DivDataGpuNull(); <em>// set <u>StDivDataGpu DivData</u> (member of <u>class JSphGpu</u>) as null</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[40,41]},&quot;v&quot;:&quot;RunPeriodic (if true)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[41,42]},&quot;v&quot;:&quot;<a href=\&quot;#celldivsingle-dividenpbnp-npb-npbper-npfpernpbpernpfperboundchangeddcellgcodegtimersposxygposzgidpg\&quot;>CellDivSingle-&amp;gt;Divide <em>// init  divide</em></a>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[42,43]},&quot;v&quot;:&quot;CheckMemoryNp&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[43,44]},&quot;v&quot;:&quot;AllocMemoryNp <em>//check &amp;amp; allocate particle memory (CellPart, SortPart, AuxMem)</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[44,45]},&quot;v&quot;:&quot;CalcCellDomain <em>//Calculate domain limits</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[45,46]},&quot;v&quot;:&quot;if(CellDomFixed)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[46,47]},&quot;v&quot;:&quot;CellDomainMin=(0,0,0)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[47,48]},&quot;v&quot;:&quot;CellDomainMax=(DomCells.x-1,DomCells.y-1,DomCells.z-1)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[48,49]},&quot;v&quot;:&quot;if(BoundLimitOk)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[49,50]},&quot;v&quot;:&quot;...&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[50,51]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[51,52]},&quot;v&quot;:&quot;...&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[52,53]},&quot;v&quot;:&quot;PrepareNct&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[53,54]},&quot;v&quot;:&quot;Ncx,Ncy,Ncz <em>// number of cells in x y z dir</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[54,55]},&quot;v&quot;:&quot;Nct <em>// number of cells in total</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[55,56]},&quot;v&quot;:&quot;Nctt <em>// Total number of special cells</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[56,57]},&quot;v&quot;:&quot;check reservation of cells (if Nct == Nctt)&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[57,58]},&quot;v&quot;:&quot;<em>// etc.</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[58,59]},&quot;v&quot;:&quot;CheckMemoryNct <em>//check &amp;amp; allocate cell memory (BeginEndCell)</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[59,60]},&quot;v&quot;:&quot;PreSort&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[60,61]},&quot;v&quot;:&quot;if(DivideFull)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[61,62]},&quot;v&quot;:&quot;cudiv::PreSortFull&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[62,63]},&quot;v&quot;:&quot;<font color=\&quot;DarkRed\&quot;>KerPreSortFull</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[63,64]},&quot;v&quot;:&quot;sortpart[p]=p;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[64,65]},&quot;v&quot;:&quot;<em>//-Computes cell according position.</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[65,66]},&quot;v&quot;:&quot;cx=PC__Cellx(cellcode,dcell[p])-cellzero.x;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[66,67]},&quot;v&quot;:&quot;cy=PC__Celly(cellcode,dcell[p])-cellzero.y;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[67,68]},&quot;v&quot;:&quot;cz=PC__Cellz(cellcode,dcell[p])-cellzero.z;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[68,69]},&quot;v&quot;:&quot;cellsort=cx+cy*ncells.x+cz*nsheet;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[69,70]},&quot;v&quot;:&quot;<em>//-Checks particle code. (more complicated)</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[70,71]},&quot;v&quot;:&quot;<em>Assigns box according code.</em>&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[71,72]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[72,73]},&quot;v&quot;:&quot;cudiv::PreSortFluid&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[73,74]},&quot;v&quot;:&quot;<font color=\&quot;DarkRed\&quot;>KerPreSortFluid</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[74,75]},&quot;v&quot;:&quot;<em>//-Computes cell according position.</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[75,76]},&quot;v&quot;:&quot;cx=PC__Cellx(cellcode,dcell[p])-cellzero.x;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[76,77]},&quot;v&quot;:&quot;cy=PC__Celly(cellcode,dcell[p])-cellzero.y;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[77,78]},&quot;v&quot;:&quot;cz=PC__Cellz(cellcode,dcell[p])-cellzero.z;&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:18,&quot;p&quot;:{&quot;lines&quot;:[78,79]},&quot;v&quot;:&quot;cellsortfluid=cellfluid+cx+cy<em>ncells.x+cz</em>nsheet;&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[79,80]},&quot;v&quot;:&quot;<em>// Checks particle code.</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[80,81]},&quot;v&quot;:&quot;<em>//-Assigns box according code.</em>&quot;}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[81,82]},&quot;v&quot;:&quot;<em>// Sort</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[82,83]},&quot;v&quot;:&quot;if(DivideFull)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[83,84]},&quot;v&quot;:&quot;<a href=\&quot;#cudivsort\&quot;>cudiv::Sort</a>(CellPart,SortPart,Nptot,Stable);&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[84,85]},&quot;v&quot;:&quot;thrust::stable_sort_by_key&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[85,86]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[86,87]},&quot;v&quot;:&quot;<a href=\&quot;#cudivsort\&quot;>cudiv::Sort</a>(CellPart+Npb1,SortPart+Npb1,Nptot-Npb1,Stable);&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[87,88]},&quot;v&quot;:&quot;thrust::stable_sort_by_key&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[88,89]},&quot;v&quot;:&quot;cudiv::CalcBeginEndCell&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[89,90]},&quot;v&quot;:&quot;if(DivideFull)&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[90,91]},&quot;v&quot;:&quot;begcell = 0&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[91,92]},&quot;v&quot;:&quot;<font color=\&quot;DarkRed\&quot;>KerCalcBeginEndCell</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[92,93]},&quot;v&quot;:&quot;<em>// put neighbor(index -1) in share mem scell[]</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[93,94]},&quot;v&quot;:&quot;<em>// handle first index per block</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[94,95]},&quot;v&quot;:&quot;__syncthreads&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[95,96]},&quot;v&quot;:&quot;<em>cal start if same as before</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[96,97]},&quot;v&quot;:&quot;<em>scatter write to begcell</em>&quot;}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[97,98]},&quot;v&quot;:&quot;else&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:12,&quot;p&quot;:{&quot;lines&quot;:[98,99]},&quot;v&quot;:&quot;begcell+cellfluid,0&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:14,&quot;p&quot;:{&quot;lines&quot;:[99,100]},&quot;v&quot;:&quot;<font color=\&quot;DarkRed\&quot;>KerCalcBeginEndCell</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:16,&quot;p&quot;:{&quot;lines&quot;:[100,101]},&quot;v&quot;:&quot;...&quot;}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[101,102]},&quot;v&quot;:&quot;<em>// Calculate number of particles.</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[102,103]},&quot;v&quot;:&quot;DivData<strong>=</strong>CellDivSingle-&amp;gt;GetCellDivData();&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[103,104]},&quot;v&quot;:&quot;<em>// Sorts particle <u>data</u></em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[104,105]},&quot;v&quot;:&quot;CellDivSingle-&amp;gt;SortBasicArrays&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[105,106]},&quot;v&quot;:&quot;Idpg, Codeg, Dcellg, Posxyg, Poszg, Velrhopg <em>// (member of <u>class JSphGpu</u>)</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[106,107]},&quot;v&quot;:&quot;CellDivSingle-&amp;gt;SortDataArrays&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[107,108]},&quot;v&quot;:&quot;VelrhopM1g (if STEP_Verlet) <em>// (member of <u>class JSphGpu</u>)</em>&quot;}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[108,109]},&quot;v&quot;:&quot;<em>// Collect divide data</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[109,110]},&quot;v&quot;:&quot;Np, Npb, NpbOk <em>// (member of <u>class JSphGpu</u>)</em>&quot;}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:6,&quot;p&quot;:{&quot;lines&quot;:[110,111]},&quot;v&quot;:&quot;cusphs::UpdatePosCell <em>// Update PosCellg[] according to current position of particles.</em>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:8,&quot;p&quot;:{&quot;lines&quot;:[111,112]},&quot;v&quot;:&quot;<font color=\&quot;DarkRed\&quot;>KerUpdatePosCell</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:10,&quot;p&quot;:{&quot;lines&quot;:[112,113]},&quot;v&quot;:&quot;<em>PosCellg: ///&amp;lt; Relative position and cell coordiantes for particle interaction {posx,posy,posz,cellxyz}</em>&quot;}]}]}]}]},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:2,&quot;p&quot;:{&quot;lines&quot;:[113,114]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>MAIN LOOP</font>&quot;,&quot;c&quot;:[{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[114,115]},&quot;v&quot;:&quot;<em>// updating</em>&quot;},{&quot;t&quot;:&quot;list_item&quot;,&quot;d&quot;:4,&quot;p&quot;:{&quot;lines&quot;:[115,116]},&quot;v&quot;:&quot;<font color=\&quot;Green\&quot;>RunCellDivide</font> <em>// same as before</em>&quot;}]}],&quot;p&quot;:{}}"></svg>
+</div>
+
+<h5 id="configcelldivision">ConfigCellDivision();</h5>
+<p><code>void JSph::ConfigCellDivision()</code></p>
+<p><strong><code>Map_Size</code></strong>: Maximum number of cells
+within case limits,
+<code>=KernelSize/ScellDiv (KernelSize or KernelSize/2).</code></p>
+<p><strong><code>Map_Cells</code></strong>: Maximum number of cells
+within case limits.
+<code>=TUint3(unsigned(ceil(Map_Size.xyz/Scell)</code></p>
+<p>Output <code>CfgInit_MapCells.vtk</code> looks like blow:</p>
+<p><img src="/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/image-20230603181359017.png" srcset="/img/loading.gif" lazyload alt="JSph::ConfigCellDivision() saved MapCells" style="zoom:67%;"></p>
+<h5 id="selecdomaintuint3000map_cells">SelecDomain(TUint3(0,0,0),Map_Cells);</h5>
+<p><code>void JSph::SelecDomain(tuint3 celini,tuint3 celfin)</code></p>
+<p>sets local domain of simulation within <code>Map_Cells</code></p>
+<p>Cal these parms below (defined in class JSph):</p>
+<p><strong><code>DomCells</code></strong>: actual Number of cells in
+each direction</p>
+<p><strong><code>DomPosMin</code></strong>: Lower limit of simulation +
+edge (KernelSize) if periodic conditions.
+DomPosMin=Map_PosMin+(DomCelIni*Scell);</p>
+<p><strong><code>DomPosMax</code></strong>: Upper limit of simulation +
+edge (KernelSize) if periodic conditions.</p>
+<p>DomPosMax=min(Map_PosMax,Map_PosMin+(DomCelFin*Scell));</p>
+<p><strong><code>DomRealPosMin/DomRealPosMax</code></strong>: actual
+limits of local simulation according to DomCelIni/Fin (without periodic
+condition borders)</p>
+<p>DomRealPosMin=max(DomPosMin,MapRealPosMin)</p>
+<p>DomRealPosMax=min(DomPosMax,MapRealPosMax)</p>
+<p><strong><code>DomCellCode</code></strong>: Indicator of group of
+particles &amp; other special markers.</p>
+<h5 id="loaddcellparticlesnpcodeauxposdcell">LoadDcellParticles(Np,Code,AuxPos,Dcell);</h5>
+<p><code>void JSph::LoadDcellParticles(unsigned n,const typecode *code,const tdouble3 *pos,unsigned *dcell)const{</code></p>
+<p>traverse all the particles, computes the initial cell, store in
+dcell</p>
+<p>checks if there are unexpected excluded particles</p>
+<p><strong><code>cx,cy,cz</code></strong>: the cell index of the
+particle belongs to,</p>
+<p>dx=pos[p].x-DomPosMin.x, dy=pos[p].y-DomPosMin.y, double
+dz=pos[p].z-DomPosMin.</p>
+<p>cx=dx/Scell, cy=dy/Scell, cz=dz/Scell;</p>
+<h5 id="dcellppc__celldomcellcodecxcycz">dcell[p]=PC__Cell(DomCellCode,cx,cy,cz);</h5>
+<p><strong><code>PC__Cell</code></strong> packs all three indexes into a
+single integer in different method according to different
+<code>DomCellCode</code></p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> PC__Cell(cc,cx,cy,cz) ((cx<span class="hljs-string">&lt;&lt;((cc&gt;</span>&gt;10)&amp;31))|(cy<span class="hljs-string">&lt;&lt;((cc&gt;</span>&gt;15)&amp;31))|cz)  <span class="hljs-comment">//-Cell value for cx,cy and cz.</span></span></code></pre></div>
+<h5 id="celldivsingle-new-jcelldivgpusingle">CellDivSingle = new
+JCellDivGpuSingle</h5>
+<p>Note that CellDivSingle is a member variable of class JSphGpuSingle.
+Initilized in the constructor. Deleted in the destructor.</p>
+<p>It news at the above line.</p>
+<p>And all the configs should be passed in because of the <a href="#class-inheriting">class inheriting</a></p>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">JSphGpuSingle</span> : <span class="hljs-keyword">public</span> JSphGpu
+{
+<span class="hljs-keyword">protected</span>:
+  JCellDivGpuSingle* CellDivSingle;
+  <span class="hljs-comment">// ...</span>
+    
+<span class="hljs-keyword">public</span>:
+  <span class="hljs-built_in">JSphGpuSingle</span>();
+  ~<span class="hljs-built_in">JSphGpuSingle</span>();
+  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Run</span><span class="hljs-params">(std::string appname,<span class="hljs-type">const</span> JSphCfgRun *cfg,JLog2 *log)</span></span>;
+
+  <span class="hljs-comment">// ...</span>
+}
+
+JSphGpuSingle::<span class="hljs-built_in">JSphGpuSingle</span>():<span class="hljs-built_in">JSphGpu</span>(<span class="hljs-literal">false</span>){
+  ClassName=<span class="hljs-string">"JSphGpuSingle"</span>;
+  CellDivSingle=<span class="hljs-literal">NULL</span>;
+}
+
+JSphGpuSingle::~<span class="hljs-built_in">JSphGpuSingle</span>(){
+  DestructorActive=<span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">delete</span> CellDivSingle; CellDivSingle=<span class="hljs-literal">NULL</span>;
+}</code></pre></div>
+<h5 id="celldivsingle-dividenpbnp-npb-npbper-npfpernpbpernpfperboundchangeddcellgcodegtimersposxygposzgidpg">CellDivSingle-&gt;<strong>Divide</strong>(Npb,Np-Npb-NpbPer-NpfPer,NpbPer,NpfPer,BoundChanged,Dcellg,Codeg,Timers,Posxyg,Poszg,Idpg);</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">JCellDivGpuSingle::Divide</span><span class="hljs-params">(</span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npb1  		<span class="hljs-comment">// Npb;   *///&lt; Number of boundary particles*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npf1 		<span class="hljs-comment">// Np-Npb-NpbPer-NpfPer</span></span></span>
+<span class="hljs-params"><span class="hljs-function">                        <span class="hljs-comment">// unsigned Np;    *///&lt; Total number of particles*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">                        <span class="hljs-comment">// unsigned NpbPer;   *///&lt; Number of periodic boundary particles.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">                        <span class="hljs-comment">// unsigned NpfPer;   *///&lt; Number of periodic particles (fluid-floating).* </span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npb2 		<span class="hljs-comment">// unsigned NpbPer;   *///&lt; Number of periodic boundary particles.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">unsigned</span> npf2 		<span class="hljs-comment">// unsigned NpfPer;   *///&lt; Number of periodic particles (fluid-floating).* </span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">bool</span> boundchanged; 	<span class="hljs-comment">// bool BoundChanged   *///&lt; Indicates if a selected boundary particle has changed since the last time step.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span>*dcellg 	<span class="hljs-comment">// unsigned *Dcellg; *///&lt; Cells inside DomCells coded with DomCellCode.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> typecode*codeg 	<span class="hljs-comment">// typecode *Codeg;  *///&lt; Indicator of group of particles &amp; other special markers.*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    TimersGpu timers</span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> double2 *posxy  	<span class="hljs-comment">// double2 *Posxyg;</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> <span class="hljs-type">double</span> *posz   	<span class="hljs-comment">// double *Poszg;</span></span></span>
+<span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> *idp 	<span class="hljs-comment">// unsigned *Idpg;   *///&lt; Identifier of particle*</span></span></span>
+<span class="hljs-params"><span class="hljs-function">)</span></span></code></pre></div>
+<p>Initial processing of Divide: Calculate the limits of the domain and
+compute the new position of each particle (SortPart).</p>
+<p>The <em>value</em> for np includes periodic boundary and fluid
+particles (npbper and npfper).</p>
+<p>The floating bodies are treated as fluids (both to be ignored as
+excluded).</p>
+<h5 id="cudivsort">cudiv::Sort</h5>
+<div class="code-wrapper"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Sort</span><span class="hljs-params">(<span class="hljs-type">unsigned</span>* keys,<span class="hljs-type">unsigned</span>* values,<span class="hljs-type">unsigned</span> size,<span class="hljs-type">bool</span> stable)</span></span>{
+  <span class="hljs-keyword">if</span>(size){
+    <span class="hljs-function">thrust::device_ptr&lt;<span class="hljs-type">unsigned</span>&gt; <span class="hljs-title">dev_keysg</span><span class="hljs-params">(keys)</span></span>;
+    <span class="hljs-function">thrust::device_ptr&lt;<span class="hljs-type">unsigned</span>&gt; <span class="hljs-title">dev_valuesg</span><span class="hljs-params">(values)</span></span>;
+    <span class="hljs-keyword">if</span>(stable)thrust::<span class="hljs-built_in">stable_sort_by_key</span>(dev_keysg,dev_keysg+size,dev_valuesg);
+    <span class="hljs-keyword">else</span> thrust::<span class="hljs-built_in">sort_by_key</span>(dev_keysg,dev_keysg+size,dev_valuesg);
+  }
+}</code></pre></div>
+<p>Last arg always stable</p>
+<p>Different key, values, list length for
+<code>if(DivideFull)</code></p>
+</body></html>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CUDA/" class="print-no-link">#CUDA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DuaSPHysics Cell Division Code Structure</div>
+      <div>https://daydreamatnight.github.io/2023/08/17/DuaSPHysics-Cell-Division-Code-Structure/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Ryan LI</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 17, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/18/Build-and-train-an-opensource-chatGPT-locally/" title="Build and train an opensource chatGPT locally">
+                        <span class="hidden-mobile">Build and train an opensource chatGPT locally</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Shoushou</span></a> <i class="iconfont icon-love"></i> <a href="https://daydreamatnight.github.io/about/" target="_blank" rel="nofollow noopener"><span>Rourou</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Toal views: 
+        <span id="busuanzi_value_site_pv"></span>
+         
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visiters: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/echarts-gl@2.0.9/dist/echarts-gl.min.js"></script>
+<script src="/js/banner-video.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+<script src="/js/markmap.js"></script></body>
+</html>
